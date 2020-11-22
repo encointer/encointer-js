@@ -1,0 +1,10 @@
+{
+  "npmClient": "yarn",
+  "packages": [
+    "packages/*"
+  ],
+  "publishConfig": {
+    "directory": "build"
+  },
+  "version": "0.1.0"
+}
