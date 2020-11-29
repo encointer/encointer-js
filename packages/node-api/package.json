@@ -1,0 +1,23 @@
+{
+  "name": "@encointer/node-api",
+  "version": "0.1.0",
+  "description": "Encointer Node API",
+  "author": "Encointer authors & contributors",
+  "homepage": "https://github.com/encointer/encointer-js#readme",
+  "license": "GPL-3.0-or-later",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/encointer/encointer-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/encointer/encointer-js/issues"
+  },
+  "dependencies": {
+    "@encointer/types": "^0.1.0",
+    "@polkadot/api": "^2.8.1"
+  }
+}

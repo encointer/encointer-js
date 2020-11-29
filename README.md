@@ -17,11 +17,13 @@ yarn add @encointer/node-api @encointer/worker-api
 # Usage example
 
 ```js
-import {useApi} from '@encointer/node-api';
+import {ApiPromise} from '@polkadot/api';
+import {WsProvider} from '@polkadot/rpc-provider';
+import {options} from '@encointer/node-api';
 import {useWorker} from '@encointer/worker-api';
 
-const api = useApi({
-  url: 'wss://encointer-node.tld',
+const api = await ApiPromise(options, {
+  provider: new WsProvider('wss://cantillon.encointer.org');
   types: {
     /// additional types
   }
@@ -31,5 +33,6 @@ const worker = useWorker(api, 'wss://worker.encointer-worker.tld');
 
 const bob = keyring.addFromUri('//Bob', { name: 'Bob default' });
 
+// Query balance from worker
 const balance = worker.getBalance(bob, '3LjCHdiNbNLKEtwGtBf6qHGZnfKFyjLu9v3uxVgDL35C');
 ```

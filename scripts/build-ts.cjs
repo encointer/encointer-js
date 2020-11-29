@@ -34,6 +34,7 @@ async function buildBabel (dir) {
   });
 
   [...CPX]
+    .concat('README.md')
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
     .forEach((src) => copySync(src, 'build'));
 }

@@ -2,6 +2,10 @@ import {ToFixPointFn, toFixPoint} from './toFixPoint';
 import {ParserFixPointFn, parserFixPoint} from './parserFixPoint';
 import {EncodeFloatToFixPointFn, encodeFloatToFixPoint} from './encodeFloatToFixPoint';
 
+export * from './toFixPoint';
+export * from './parserFixPoint';
+export * from './encodeFloatToFixPoint';
+
 export const parseI4F4: ParserFixPointFn = parserFixPoint(4, 4);
 
 export const parseI8F8: ParserFixPointFn = parserFixPoint(8, 8);

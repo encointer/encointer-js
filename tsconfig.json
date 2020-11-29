@@ -10,8 +10,12 @@
     {
       "@encointer/util": ["packages/util/src"],
       "@encointer/util/*": ["packages/util/src/*"],
+      "@encointer/types": ["packages/types/src"],
+      "@encointer/types/*": ["packages/types/src/*"],
       "@encointer/worker-api": ["packages/worker-api/src"],
-      "@encointer/worker-api/*": ["packages/worker-api/src/*"]
+      "@encointer/worker-api/*": ["packages/worker-api/src/*"],
+      "@polkadot/api/augment": ["packages/types/src/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["packages/types/src/interfaces/augment-types.ts"]
     },
     "skipLibCheck": true,
     "typeRoots": [
