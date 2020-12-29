@@ -2,9 +2,10 @@
 /* eslint-disable */
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
-import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { BalanceEntry, BalanceType, CurrencyCeremony, CurrencyIdentifier, CurrencyPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/currency';
-import type { ClientRequest, Enclave, Getter, PublicGetter, Request, ShardIdentifier, TrustedGetter, TrustedGetterSigned } from '@encointer/types/interfaces/worker';
+import type { ClientRequest, Enclave, Getter, GetterArgs, PublicGetter, Request, ShardIdentifier, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { AssetBalance, AssetDetails, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
 import type { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
 import type { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
@@ -21,7 +22,6 @@ import type { ContractConstructorSpec, ContractContractSpec, ContractCryptoHashe
 import type { AccountVote, AccountVoteSplit, AccountVoteStandard, Conviction, Delegations, PreimageStatus, PreimageStatusAvailable, PriorLock, PropIndex, Proposal, ProxyState, ReferendumIndex, ReferendumInfo, ReferendumInfoFinished, ReferendumInfoTo239, ReferendumStatus, Tally, Voting, VotingDelegating, VotingDirect, VotingDirectVote } from '@polkadot/types/interfaces/democracy';
 import type { ApprovalFlag, DefunctVoter, Renouncing, SetIndex, Vote, VoteIndex, VoteThreshold, VoterInfo } from '@polkadot/types/interfaces/elections';
 import type { CreatedBlock, ImportedAux } from '@polkadot/types/interfaces/engine';
-import type { EthereumAccountId, EthereumLookupSource } from '@polkadot/types/interfaces/ethereum';
 import type { Account, Log, Vicinity } from '@polkadot/types/interfaces/evm';
 import type { AnySignature, EcdsaSignature, Ed25519Signature, Extrinsic, ExtrinsicEra, ExtrinsicPayload, ExtrinsicPayloadUnknown, ExtrinsicPayloadV4, ExtrinsicSignature, ExtrinsicSignatureV4, ExtrinsicUnknown, ExtrinsicV4, ImmortalEra, MortalEra, MultiSignature, Signature, SignerPayload, Sr25519Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AssetOptions, Owner, PermissionLatest, PermissionVersions, PermissionsV1 } from '@polkadot/types/interfaces/genericAsset';
@@ -31,7 +31,7 @@ import type { AuthIndex, AuthoritySignature, Heartbeat, HeartbeatTo244, OpaqueMu
 import type { DoubleMapTypeLatest, DoubleMapTypeV10, DoubleMapTypeV11, DoubleMapTypeV12, DoubleMapTypeV9, ErrorMetadataV10, ErrorMetadataV11, ErrorMetadataV12, ErrorMetadataV9, EventMetadataLatest, EventMetadataV10, EventMetadataV11, EventMetadataV12, EventMetadataV9, ExtrinsicMetadataLatest, ExtrinsicMetadataV11, ExtrinsicMetadataV12, FunctionArgumentMetadataLatest, FunctionArgumentMetadataV10, FunctionArgumentMetadataV11, FunctionArgumentMetadataV12, FunctionArgumentMetadataV9, FunctionMetadataLatest, FunctionMetadataV10, FunctionMetadataV11, FunctionMetadataV12, FunctionMetadataV9, MapTypeLatest, MapTypeV10, MapTypeV11, MapTypeV12, MapTypeV9, MetadataAll, MetadataLatest, MetadataV10, MetadataV11, MetadataV12, MetadataV9, ModuleConstantMetadataLatest, ModuleConstantMetadataV10, ModuleConstantMetadataV11, ModuleConstantMetadataV12, ModuleConstantMetadataV9, ModuleMetadataLatest, ModuleMetadataV10, ModuleMetadataV11, ModuleMetadataV12, ModuleMetadataV9, StorageEntryMetadataLatest, StorageEntryMetadataV10, StorageEntryMetadataV11, StorageEntryMetadataV12, StorageEntryMetadataV9, StorageEntryModifierLatest, StorageEntryModifierV10, StorageEntryModifierV11, StorageEntryModifierV12, StorageEntryModifierV9, StorageEntryTypeLatest, StorageEntryTypeV10, StorageEntryTypeV11, StorageEntryTypeV12, StorageEntryTypeV9, StorageHasher, StorageHasherV10, StorageHasherV11, StorageHasherV12, StorageHasherV9, StorageMetadataLatest, StorageMetadataV10, StorageMetadataV11, StorageMetadataV12, StorageMetadataV9 } from '@polkadot/types/interfaces/metadata';
 import type { StorageKind } from '@polkadot/types/interfaces/offchain';
 import type { DeferredOffenceOf, Kind, OffenceDetails, Offender, OpaqueTimeSlot, ReportIdOf, Reporter } from '@polkadot/types/interfaces/offences';
-import type { AbridgedCandidateReceipt, AttestedCandidate, AuctionIndex, Bidder, CandidateCommitments, CandidateReceipt, CollatorId, CollatorSignature, DoubleVoteReport, DownwardMessage, GlobalValidationSchedule, HeadData, IncomingParachain, IncomingParachainDeploy, IncomingParachainFixed, LeasePeriod, LeasePeriodOf, LocalValidationData, NewBidder, ParaId, ParaInfo, ParaPastCodeMeta, ParaScheduling, ParachainDispatchOrigin, ParachainProposal, RegisteredParachainInfo, RelayChainBlockNumber, Remark, Retriable, Scheduling, SigningContext, SlotRange, Statement, SubId, UpwardMessage, ValidationCode, ValidationFunctionParams, ValidatorSignature, ValidityAttestation, WinningData, WinningDataEntry } from '@polkadot/types/interfaces/parachains';
+import type { AbridgedCandidateReceipt, AttestedCandidate, AuctionIndex, BackedCandidate, Bidder, CandidateCommitments, CandidateDescriptor, CandidatePendingAvailability, CandidateReceipt, CollatorId, CollatorSignature, CommittedCandidateReceipt, DoubleVoteReport, DownwardMessage, GlobalValidationSchedule, HeadData, HrmpChannelId, IncomingParachain, IncomingParachainDeploy, IncomingParachainFixed, LeasePeriod, LeasePeriodOf, LocalValidationData, NewBidder, OutboundHrmpMessage, ParaId, ParaInfo, ParaPastCodeMeta, ParaScheduling, ParachainDispatchOrigin, ParachainProposal, RegisteredParachainInfo, RelayChainBlockNumber, Remark, Retriable, Scheduling, SignedAvailabilityBitfield, SignedAvailabilityBitfields, SigningContext, SlotRange, Statement, SubId, UpwardMessage, ValidationCode, ValidationFunctionParams, ValidatorSignature, ValidityAttestation, WinningData, WinningDataEntry } from '@polkadot/types/interfaces/parachains';
 import type { RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
 import type { Approvals } from '@polkadot/types/interfaces/poll';
 import type { ProxyAnnouncement, ProxyDefinition, ProxyType } from '@polkadot/types/interfaces/proxy';
@@ -399,6 +399,20 @@ declare module '@polkadot/types/types/registry' {
     Consensus: Consensus;
     'Option<Consensus>': Option<Consensus>;
     'Vec<Consensus>': Vec<Consensus>;
+    AssetBalance: AssetBalance;
+    'Option<AssetBalance>': Option<AssetBalance>;
+    'Vec<AssetBalance>': Vec<AssetBalance>;
+    AssetDetails: AssetDetails;
+    'Option<AssetDetails>': Option<AssetDetails>;
+    'Vec<AssetDetails>': Vec<AssetDetails>;
+    TAssetBalance: TAssetBalance;
+    'Compact<TAssetBalance>': Compact<TAssetBalance>;
+    'Option<TAssetBalance>': Option<TAssetBalance>;
+    'Vec<TAssetBalance>': Vec<TAssetBalance>;
+    TAssetDepositBalance: TAssetDepositBalance;
+    'Compact<TAssetDepositBalance>': Compact<TAssetDepositBalance>;
+    'Option<TAssetDepositBalance>': Option<TAssetDepositBalance>;
+    'Vec<TAssetDepositBalance>': Vec<TAssetDepositBalance>;
     UncleEntryItem: UncleEntryItem;
     'Option<UncleEntryItem>': Option<UncleEntryItem>;
     'Vec<UncleEntryItem>': Vec<UncleEntryItem>;
@@ -1355,12 +1369,21 @@ declare module '@polkadot/types/types/registry' {
     'Compact<AuctionIndex>': Compact<AuctionIndex>;
     'Option<AuctionIndex>': Option<AuctionIndex>;
     'Vec<AuctionIndex>': Vec<AuctionIndex>;
+    BackedCandidate: BackedCandidate;
+    'Option<BackedCandidate>': Option<BackedCandidate>;
+    'Vec<BackedCandidate>': Vec<BackedCandidate>;
     Bidder: Bidder;
     'Option<Bidder>': Option<Bidder>;
     'Vec<Bidder>': Vec<Bidder>;
     CandidateCommitments: CandidateCommitments;
     'Option<CandidateCommitments>': Option<CandidateCommitments>;
     'Vec<CandidateCommitments>': Vec<CandidateCommitments>;
+    CandidateDescriptor: CandidateDescriptor;
+    'Option<CandidateDescriptor>': Option<CandidateDescriptor>;
+    'Vec<CandidateDescriptor>': Vec<CandidateDescriptor>;
+    CandidatePendingAvailablility: CandidatePendingAvailability;
+    'Option<CandidatePendingAvailablility>': Option<CandidatePendingAvailability>;
+    'Vec<CandidatePendingAvailablility>': Vec<CandidatePendingAvailability>;
     CandidateReceipt: CandidateReceipt;
     'Option<CandidateReceipt>': Option<CandidateReceipt>;
     'Vec<CandidateReceipt>': Vec<CandidateReceipt>;
@@ -1370,6 +1393,9 @@ declare module '@polkadot/types/types/registry' {
     CollatorSignature: CollatorSignature;
     'Option<CollatorSignature>': Option<CollatorSignature>;
     'Vec<CollatorSignature>': Vec<CollatorSignature>;
+    CommittedCandidateReceipt: CommittedCandidateReceipt;
+    'Option<CommittedCandidateReceipt>': Option<CommittedCandidateReceipt>;
+    'Vec<CommittedCandidateReceipt>': Vec<CommittedCandidateReceipt>;
     DoubleVoteReport: DoubleVoteReport;
     'Option<DoubleVoteReport>': Option<DoubleVoteReport>;
     'Vec<DoubleVoteReport>': Vec<DoubleVoteReport>;
@@ -1382,6 +1408,9 @@ declare module '@polkadot/types/types/registry' {
     HeadData: HeadData;
     'Option<HeadData>': Option<HeadData>;
     'Vec<HeadData>': Vec<HeadData>;
+    HrmpChannelId: HrmpChannelId;
+    'Option<HrmpChannelId>': Option<HrmpChannelId>;
+    'Vec<HrmpChannelId>': Vec<HrmpChannelId>;
     IncomingParachain: IncomingParachain;
     'Option<IncomingParachain>': Option<IncomingParachain>;
     'Vec<IncomingParachain>': Vec<IncomingParachain>;
@@ -1405,6 +1434,9 @@ declare module '@polkadot/types/types/registry' {
     NewBidder: NewBidder;
     'Option<NewBidder>': Option<NewBidder>;
     'Vec<NewBidder>': Vec<NewBidder>;
+    OutboundHrmpMessage: OutboundHrmpMessage;
+    'Option<OutboundHrmpMessage>': Option<OutboundHrmpMessage>;
+    'Vec<OutboundHrmpMessage>': Vec<OutboundHrmpMessage>;
     ParachainDispatchOrigin: ParachainDispatchOrigin;
     'Option<ParachainDispatchOrigin>': Option<ParachainDispatchOrigin>;
     'Vec<ParachainDispatchOrigin>': Vec<ParachainDispatchOrigin>;
@@ -1434,6 +1466,12 @@ declare module '@polkadot/types/types/registry' {
     Scheduling: Scheduling;
     'Option<Scheduling>': Option<Scheduling>;
     'Vec<Scheduling>': Vec<Scheduling>;
+    SignedAvailabilityBitfield: SignedAvailabilityBitfield;
+    'Option<SignedAvailabilityBitfield>': Option<SignedAvailabilityBitfield>;
+    'Vec<SignedAvailabilityBitfield>': Vec<SignedAvailabilityBitfield>;
+    SignedAvailabilityBitfields: SignedAvailabilityBitfields;
+    'Option<SignedAvailabilityBitfields>': Option<SignedAvailabilityBitfields>;
+    'Vec<SignedAvailabilityBitfields>': Vec<SignedAvailabilityBitfields>;
     SigningContext: SigningContext;
     'Option<SigningContext>': Option<SigningContext>;
     'Vec<SigningContext>': Vec<SigningContext>;
@@ -1584,12 +1622,6 @@ declare module '@polkadot/types/types/registry' {
     SiVariant: SiVariant;
     'Option<SiVariant>': Option<SiVariant>;
     'Vec<SiVariant>': Vec<SiVariant>;
-    EthereumAccountId: EthereumAccountId;
-    'Option<EthereumAccountId>': Option<EthereumAccountId>;
-    'Vec<EthereumAccountId>': Vec<EthereumAccountId>;
-    EthereumLookupSource: EthereumLookupSource;
-    'Option<EthereumLookupSource>': Option<EthereumLookupSource>;
-    'Vec<EthereumLookupSource>': Vec<EthereumLookupSource>;
     DoubleMapTypeV9: DoubleMapTypeV9;
     'Option<DoubleMapTypeV9>': Option<DoubleMapTypeV9>;
     'Vec<DoubleMapTypeV9>': Vec<DoubleMapTypeV9>;
@@ -1870,6 +1902,9 @@ declare module '@polkadot/types/types/registry' {
     Location: Location;
     'Option<Location>': Option<Location>;
     'Vec<Location>': Vec<Location>;
+    MeetupAssignment: MeetupAssignment;
+    'Option<MeetupAssignment>': Option<MeetupAssignment>;
+    'Vec<MeetupAssignment>': Vec<MeetupAssignment>;
     ClaimOfAttendance: ClaimOfAttendance;
     'Option<ClaimOfAttendance>': Option<ClaimOfAttendance>;
     'Vec<ClaimOfAttendance>': Vec<ClaimOfAttendance>;
@@ -1903,6 +1938,9 @@ declare module '@polkadot/types/types/registry' {
     ShardIdentifier: ShardIdentifier;
     'Option<ShardIdentifier>': Option<ShardIdentifier>;
     'Vec<ShardIdentifier>': Vec<ShardIdentifier>;
+    GetterArgs: GetterArgs;
+    'Option<GetterArgs>': Option<GetterArgs>;
+    'Vec<GetterArgs>': Vec<GetterArgs>;
     Enclave: Enclave;
     'Option<Enclave>': Option<Enclave>;
     'Vec<Enclave>': Vec<Enclave>;
@@ -1921,6 +1959,9 @@ declare module '@polkadot/types/types/registry' {
     ClientRequest: ClientRequest;
     'Option<ClientRequest>': Option<ClientRequest>;
     'Vec<ClientRequest>': Vec<ClientRequest>;
+    WorkerEncoded: WorkerEncoded;
+    'Option<WorkerEncoded>': Option<WorkerEncoded>;
+    'Vec<WorkerEncoded>': Vec<WorkerEncoded>;
     Request: Request;
     'Option<Request>': Option<Request>;
     'Vec<Request>': Vec<Request>;

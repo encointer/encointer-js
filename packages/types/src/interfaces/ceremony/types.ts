@@ -1,7 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Struct, i64, u32, u64 } from '@polkadot/types';
+import type { Enum, Option, Struct, i64, u32, u64 } from '@polkadot/types';
+import type { ITuple } from '@polkadot/types/types';
 import type { CurrencyIdentifier } from '@encointer/types/interfaces/currency';
 import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
@@ -42,6 +43,9 @@ export interface Location extends Struct {
   readonly lat: i64;
   readonly lon: i64;
 }
+
+/** @name MeetupAssignment */
+export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
 
 /** @name MeetupIndexType */
 export interface MeetupIndexType extends u64 {}

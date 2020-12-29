@@ -16,3 +16,4 @@ function typesFromDefs(
 export * from './interfaces/index';
 const encointerTypes = typesFromDefs(encointerDefs);
 export default encointerTypes;
+export { createType } from '@polkadot/types';

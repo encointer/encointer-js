@@ -31,6 +31,9 @@ export interface Getter extends Enum {
   readonly asTrusted: TrustedGetterSigned;
 }
 
+/** @name GetterArgs */
+export interface GetterArgs extends ITuple<[AccountId, CurrencyIdentifier]> {}
+
 /** @name PublicGetter */
 export interface PublicGetter extends Enum {
   readonly isTotalIssuance: boolean;
@@ -50,7 +53,7 @@ export interface PublicGetter extends Enum {
 /** @name Request */
 export interface Request extends Struct {
   readonly shard: ShardIdentifier;
-  readonly cyphertext: Bytes;
+  readonly cyphertext: WorkerEncoded;
 }
 
 /** @name ShardIdentifier */
@@ -73,5 +76,8 @@ export interface TrustedGetterSigned extends Struct {
   readonly getter: TrustedGetter;
   readonly signature: Signature;
 }
+
+/** @name WorkerEncoded */
+export interface WorkerEncoded extends Bytes {}
 
 export type PHANTOM_WORKER = 'worker';

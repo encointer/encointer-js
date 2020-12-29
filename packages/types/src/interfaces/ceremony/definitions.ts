@@ -16,6 +16,7 @@ export default {
       lat: 'i64',
       lon: 'i64'
     },
+    MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     ClaimOfAttendance: {
       claimant_public: 'AccountId',
       ceremony_index: 'CeremonyIndexType',

@@ -13,7 +13,9 @@
     "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces --input ./src/interfaces"
   },
   "dependencies": {
-    "@polkadot/api": "^2.3.1"
+    "@polkadot/api": "^2.8.1",
+    "@polkadot/types": "^3.2.4-2",
+    "@polkadot/util": "^5.1.1"
   },
   "devDependencies": {
     "@polkadot/typegen": "^2.3.1",

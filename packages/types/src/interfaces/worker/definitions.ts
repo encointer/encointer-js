@@ -2,6 +2,7 @@ export default {
   rpc: {},
   types: {
     ShardIdentifier: 'Hash',
+    GetterArgs: '(AccountId, CurrencyIdentifier)',
     Enclave: {
       pubkey: 'AccountId',
       mrenclave: 'Hash',
@@ -43,9 +44,10 @@ export default {
         StfState: '(Getter, ShardIdentifier)'
       }
     },
+    WorkerEncoded: 'Vec<u8>',
     Request: {
       shard: 'ShardIdentifier',
-      cyphertext: 'Vec<u8>'
+      cyphertext: 'WorkerEncoded'
     }
   }
 }
