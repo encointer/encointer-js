@@ -4,13 +4,15 @@ import { u8aToHex } from '@polkadot/util';
 import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, GetterArgs, CallOptions, WorkerMethod } from './interface';
 import  { GetterType } from './interface';
 
-const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>
-  self.sendRequest(
-  clientRequest, {
-    timeout: options.timeout,
-    requestId: self.rqStack.push(parserType) + self.rsCount
-  }
-);
+const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
+  const requestId = self.rqStack.push(parserType) + self.rsCount;
+  return self.sendRequest(
+    clientRequest, {
+      timeout: options.timeout,
+      requestId
+    }
+  )
+}
 
 const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
   const {cid}=args;
@@ -46,23 +48,29 @@ const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, arg
   }
 }
 
-const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
-  sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
-
-const sendPublicRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
+const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestTrustedGetter(self, method, args), parser, options)
 
+const sendPublicRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
+  sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
+
 export const callGetter = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: GetterArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
-  await self.apiPromise;
+  if( !self.isOpened ) {
+    await self.open();
+  }
   const [getterType, method, parser] = workerMethod;
   let result: Promise<any>;
+  let parserType: string = options.debug ? 'raw': parser;
   switch (getterType) {
     case GetterType.Trusted:
-      result = sendTrustedRequest(self, method, parser, args, options)
+      result = sendTrustedRequest(self, method, parserType, args as TrustedGetterArgs, options)
+      break;
     case GetterType.Public:
-      result = sendPublicRequest(self, method, parser, args as TrustedGetterArgs, options)
+      result = sendPublicRequest(self, method, parserType, args, options)
+      break;
     default:
-      result = sendPublicRequest(self, method, parser, args as TrustedGetterArgs, options)
+      result = sendPublicRequest(self, method, parserType, args, options)
+      break;
   }
   return result as Promise<T>
 }

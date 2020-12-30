@@ -1,37 +1,33 @@
-import type { ApiPromise } from '@polkadot/api';
 import type { KeyringPair } from '@polkadot/keyring/types';
+import WebSocketAsPromised from 'websocket-as-promised';
 
-interface RequestOptions {
-    requestId?: number;
-    timeout?: number;
-}
-
-export interface IEncointerWorker {
-  rsCount: number,
-  rqStack: string[],
-  createType: (apiType: string, obj: any) => any,
-  apiPromise: Promise<ApiPromise>,
-  sendRequest: (data: any, options?: RequestOptions) => Promise<any>;
+export interface IEncointerWorker extends WebSocketAsPromised {
+  rsCount: number;
+  rqStack: string[];
+  createType: (apiType: string, obj: any) => any;
+  open: () => Promise<Event>;
 }
 
 export interface WorkerOptions {
-  api: any,
-  types: any
+  api: any;
+  types: any;
+  createWebSocket?: (url: string) => WebSocket;
 }
 
 export interface TrustedGetterArgs {
-  cid: string,
-  account: KeyringPair,
+  cid: string;
+  account: KeyringPair;
 }
 
 export interface PublicGetterArgs {
-  cid: string,
+  cid: string;
 }
 
 export type GetterArgs = PublicGetterArgs | TrustedGetterArgs
 
 export interface CallOptions {
-  timeout: number,
+  timeout: number;
+  debug: boolean;
 }
 
 export enum GetterType {
