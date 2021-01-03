@@ -15,7 +15,7 @@ const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserTyp
 }
 
 const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
-  const {cid}=args;
+  const { cid } = args;
   const cidBin = u8aToHex(bs58.decode(cid));
   const getter = self.createType('PublicGetter', {
     [request]: cidBin

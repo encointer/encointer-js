@@ -16,6 +16,10 @@ export const parseI32F32: ParserFixPointFn = parserFixPoint(32, 32);
 
 export const parseI64F64: ParserFixPointFn = parserFixPoint(64, 64);
 
+export const toI4F4: ToFixPointFn = toFixPoint(4, 4);
+
+export const toI8F8: ToFixPointFn = toFixPoint(8, 8);
+
 export const toI16F16: ToFixPointFn = toFixPoint(16, 16);
 
 export const toI32F32: ToFixPointFn = toFixPoint(32, 32);

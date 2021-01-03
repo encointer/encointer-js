@@ -29,18 +29,30 @@ const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   return unwrappedData
 }
 
-const parseGetterResponse = (self: IEncointerWorker, data: string, responseType: string) => {
-  const unwrappedData = unwrapWorkerResponse(self, data);
-  switch (responseType) {
-    case 'Balance':
-      return parseBalance(self, unwrappedData)
-    case 'I64F64':
-      return parseI64F64((unwrappedData))
-    case 'raw':
-      return data;
-    default:
-      return self.createType(responseType, unwrappedData)
+const parseGetterResponse = (self: IEncointerWorker, responseType: string, data: string) => {
+  if (data === 'Could not decode request') {
+    throw new Error(`Worker error: ${data}`);
   }
+  let parsedData:any;
+  try {
+    parsedData = unwrapWorkerResponse(self, data);
+    switch (responseType) {
+      case 'raw':
+        break;
+      case 'Balance':
+        parsedData = parseBalance(self, parsedData);
+        break;
+      case 'I64F64':
+        parsedData = parseI64F64(parsedData);
+        break;
+      default:
+        parsedData = self.createType(responseType, parsedData);
+        break;
+    }
+  } catch (err) {
+        throw new Error(`Can't parse into ${responseType}:\n${err}`);
+  }
+  return parsedData;
 }
 
 export class EncointerWorker extends WebSocketAsPromised implements IEncointerWorker {
@@ -54,7 +66,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   constructor(url: string, options: WorkerOptions = {} as WorkerOptions) {
     super(url, {
       createWebSocket: (options.createWebSocket || undefined),
-      packMessage: (data: any) => this.createType('ClientRequest', data).toU8a().buffer,
+      packMessage: (data: any) => this.createType('ClientRequest', data).toU8a(),
       unpackMessage: (data: any) => parseGetterResponse(this, this.rqStack.shift() || '', data),
       attachRequestId: (data: any, requestId: string | number): any => data,
       extractRequestId: (data: any) => this.rsCount = ++this.rsCount
@@ -77,42 +89,42 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   }
 
   public async getTotalIssuance(cid: string, options: CallOptions = {} as  CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Public, 'total_issuance', 'Balance'], {cid}, options)
+    return await callGetter<number>(this, [GetterType.Public, 'total_issuance', 'Balance'], {cid}, options)
   }
 
   public async getParticipantCount(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Public, 'participant_count', 'u64'], {cid}, options)
+    return await callGetter<number>(this, [GetterType.Public, 'participant_count', 'u64'], {cid}, options)
   }
 
   public async getMeetupCount(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Public, 'meetup_count', 'u64'], {cid}, options)
+    return await callGetter<number>(this, [GetterType.Public, 'meetup_count', 'u64'], {cid}, options)
   }
 
   public async getCeremonyReward (cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Public, 'ceremony_reward', 'I64F64'], {cid}, options)
+    return await callGetter<number>(this, [GetterType.Public, 'ceremony_reward', 'I64F64'], {cid}, options)
   }
 
   public async getLocationTolerance (cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Public, 'location_tolerance', 'u32'], {cid}, options)
+    return await callGetter<number>(this, [GetterType.Public, 'location_tolerance', 'u32'], {cid}, options)
   }
 
   public async getTimeTolerance (cid: string, options: CallOptions = {} as CallOptions): Promise<Moment> {
-    return callGetter<Moment>(this, [GetterType.Public, 'time_tolerance', 'Moment'], {cid}, options)
+    return await callGetter<Moment>(this, [GetterType.Public, 'time_tolerance', 'Moment'], {cid}, options)
   }
 
   public async getBalance (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return callGetter<number>(this, [GetterType.Trusted, 'balance', 'Balance'], {cid, account}, options)
+    return await callGetter<number>(this, [GetterType.Trusted, 'balance', 'Balance'], {cid, account}, options)
   }
 
   public async getRegistration(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
-    return callGetter<ParticipantIndexType>(this, [GetterType.Trusted, 'registration', 'ParticipantIndexType' ], {cid, account}, options)
+    return await callGetter<ParticipantIndexType>(this, [GetterType.Trusted, 'registration', 'ParticipantIndexType' ], {cid, account}, options)
   }
 
   public async getMeetupIndexAndLocation (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupAssignment> {
-    return callGetter<MeetupAssignment>(this, [GetterType.Trusted, 'meetup_index_and_location', 'MeetupAssignment'], {cid, account}, options)
+    return await callGetter<MeetupAssignment>(this, [GetterType.Trusted, 'meetup_index_and_location', 'MeetupAssignment'], {cid, account}, options)
   }
 
   public async getAttestations (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
-    return callGetter<Vec<Attestation>>(this, [GetterType.Trusted, 'attestations', 'Vec<Attestation>'], {cid, account}, options)
+    return await callGetter<Vec<Attestation>>(this, [GetterType.Trusted, 'attestations', 'Vec<Attestation>'], {cid, account}, options)
   }
 }
