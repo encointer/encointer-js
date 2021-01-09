@@ -8,8 +8,8 @@ import { parseI64F64 } from '@encointer/util';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import type { KeyringPair } from '@polkadot/keyring/types';
-import type { Vec } from '@polkadot/types';
-import type { Moment } from '@polkadot/types/interfaces/runtime';
+import type { Vec, u32, u64 } from '@polkadot/types';
+import type { Balance, Moment } from '@polkadot/types/interfaces/runtime';
 import type { Attestation, MeetupAssignment, ParticipantIndexType } from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface';
@@ -43,7 +43,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         parsedData = parseBalance(self, parsedData);
         break;
       case 'I64F64':
-        parsedData = parseI64F64(parsedData);
+        parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
       default:
         parsedData = self.createType(responseType, parsedData);
@@ -88,43 +88,43 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return this.#registry.createType(apiType as never, obj)
   }
 
-  public async getTotalIssuance(cid: string, options: CallOptions = {} as  CallOptions): Promise<number> {
-    return await callGetter<number>(this, [GetterType.Public, 'total_issuance', 'Balance'], {cid}, options)
+  public async getTotalIssuance(cid: string, options: CallOptions = {} as  CallOptions): Promise<Balance> {
+    return await callGetter<Balance>(this, [GetterType.Public, 'total_issuance', 'Balance'], {cid}, options)
   }
 
   public async getParticipantCount(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return await callGetter<number>(this, [GetterType.Public, 'participant_count', 'u64'], {cid}, options)
+    return (await callGetter<u64>(this, [GetterType.Public, 'participant_count', 'u64'], {cid}, options)).toNumber()
   }
 
   public async getMeetupCount(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return await callGetter<number>(this, [GetterType.Public, 'meetup_count', 'u64'], {cid}, options)
+    return (await callGetter<u64>(this, [GetterType.Public, 'meetup_count', 'u64'], {cid}, options)).toNumber()
   }
 
-  public async getCeremonyReward (cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
+  public async getCeremonyReward(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
     return await callGetter<number>(this, [GetterType.Public, 'ceremony_reward', 'I64F64'], {cid}, options)
   }
 
-  public async getLocationTolerance (cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return await callGetter<number>(this, [GetterType.Public, 'location_tolerance', 'u32'], {cid}, options)
+  public async getLocationTolerance(cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
+    return (await callGetter<u32>(this, [GetterType.Public, 'location_tolerance', 'u32'], {cid}, options)).toNumber()
   }
 
-  public async getTimeTolerance (cid: string, options: CallOptions = {} as CallOptions): Promise<Moment> {
+  public async getTimeTolerance(cid: string, options: CallOptions = {} as CallOptions): Promise<Moment> {
     return await callGetter<Moment>(this, [GetterType.Public, 'time_tolerance', 'Moment'], {cid}, options)
   }
 
-  public async getBalance (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<number> {
-    return await callGetter<number>(this, [GetterType.Trusted, 'balance', 'Balance'], {cid, account}, options)
+  public async getBalance(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    return await callGetter<Balance>(this, [GetterType.Trusted, 'balance', 'Balance'], {cid, account}, options)
   }
 
   public async getRegistration(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
     return await callGetter<ParticipantIndexType>(this, [GetterType.Trusted, 'registration', 'ParticipantIndexType' ], {cid, account}, options)
   }
 
-  public async getMeetupIndexAndLocation (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupAssignment> {
+  public async getMeetupIndexAndLocation(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupAssignment> {
     return await callGetter<MeetupAssignment>(this, [GetterType.Trusted, 'meetup_index_and_location', 'MeetupAssignment'], {cid, account}, options)
   }
 
-  public async getAttestations (account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
+  public async getAttestations(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
     return await callGetter<Vec<Attestation>>(this, [GetterType.Trusted, 'attestations', 'Vec<Attestation>'], {cid, account}, options)
   }
 }
