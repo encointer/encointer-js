@@ -10,7 +10,7 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type { Balance, Moment } from '@polkadot/types/interfaces/runtime';
-import type { Attestation, MeetupAssignment, ParticipantIndexType } from '@encointer/types';
+import type {Attestation, MeetupAssignment, ParticipantIndexType, SchedulerState} from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface';
 import  { GetterType } from './interface';
@@ -110,6 +110,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public async getTimeTolerance(cid: string, options: CallOptions = {} as CallOptions): Promise<Moment> {
     return await callGetter<Moment>(this, [GetterType.Public, 'time_tolerance', 'Moment'], {cid}, options)
+  }
+
+  public async getSchedulerState(cid: string, options: CallOptions = {} as CallOptions): Promise<SchedulerState> {
+    return await callGetter<SchedulerState>(this, [GetterType.Public, 'scheduler_state', 'SchedulerState'], {cid}, options)
   }
 
   public async getBalance(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {

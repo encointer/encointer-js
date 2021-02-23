@@ -16,7 +16,8 @@ export default {
         meetup_count: 'CurrencyIdentifier',
         ceremony_reward: 'CurrencyIdentifier',
         location_tolerance: 'CurrencyIdentifier',
-        time_tolerance: 'CurrencyIdentifier'
+        time_tolerance: 'CurrencyIdentifier',
+        scheduler_state: 'CurrencyIdentifier'
       }
     },
     TrustedGetter: {

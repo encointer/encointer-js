@@ -48,6 +48,8 @@ export interface PublicGetter extends Enum {
   readonly asLocationTolerance: CurrencyIdentifier;
   readonly isTimeTolerance: boolean;
   readonly asTimeTolerance: CurrencyIdentifier;
+  readonly isSchedulerState: boolean;
+  readonly asSchedulerState: CurrencyIdentifier;
 }
 
 /** @name Request */

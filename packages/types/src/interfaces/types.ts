@@ -3,5 +3,6 @@
 
 export * from './common/types';
 export * from './ceremony/types';
+export * from './scheduler/types';
 export * from './currency/types';
 export * from './worker/types';
