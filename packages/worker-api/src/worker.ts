@@ -6,6 +6,7 @@ import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
 import { parseI64F64 } from '@encointer/util';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
+// @ts-ignore
 import NodeRSA from 'node-rsa';
 
 

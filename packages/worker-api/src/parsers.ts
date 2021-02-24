@@ -1,5 +1,7 @@
 import { parseI64F64 } from '@encointer/util';
 import { u8aToBn, u8aToBuffer } from '@polkadot/util';
+
+// @ts-ignore
 import NodeRSA from 'node-rsa';
 
 import type { IEncointerWorker } from './interface';
