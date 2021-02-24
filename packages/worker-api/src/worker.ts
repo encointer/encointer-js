@@ -6,13 +6,14 @@ import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
 import { parseI64F64 } from '@encointer/util';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
+import NodeRSA from 'node-rsa';
+
 
 import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type {AccountId, Balance, Moment} from '@polkadot/types/interfaces/runtime';
 import type {
   Attestation,
-  MeetupAssignment,
   MeetupIndexType,
   ParticipantIndexType,
   SchedulerState
@@ -20,7 +21,7 @@ import type {
 
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface';
 import  { GetterType } from './interface';
-import { parseBalance } from './parsers';
+import {parseBalance, parseNodeRSA} from './parsers';
 import { callGetter } from './getterApi';
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
@@ -39,19 +40,25 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
   if (data === 'Could not decode request') {
     throw new Error(`Worker error: ${data}`);
   }
-  let parsedData:any;
+  let parsedData: any;
   try {
-    parsedData = unwrapWorkerResponse(self, data);
     switch (responseType) {
       case 'raw':
+        parsedData = unwrapWorkerResponse(self, data);
         break;
       case 'Balance':
+        parsedData = unwrapWorkerResponse(self, data);
         parsedData = parseBalance(self, parsedData);
         break;
       case 'I64F64':
+        parsedData = unwrapWorkerResponse(self, data);
         parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
+      case 'NodeRSA':
+        parsedData = parseNodeRSA(data);
+        break
       default:
+        parsedData = unwrapWorkerResponse(self, data);
         parsedData = self.createType(responseType, parsedData);
         break;
     }
@@ -92,6 +99,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public createType(apiType: string, obj: any): any {
     return this.#registry.createType(apiType as never, obj)
+  }
+
+  public async getShieldingKey(cid: string, options: CallOptions = {} as  CallOptions): Promise<NodeRSA> {
+    return await callGetter<NodeRSA>(this, [GetterType.Request, 'PubKeyWorker', 'NodeRSA'], {}, options)
   }
 
   public async getTotalIssuance(cid: string, options: CallOptions = {} as  CallOptions): Promise<Balance> {

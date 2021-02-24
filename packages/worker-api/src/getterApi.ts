@@ -14,6 +14,12 @@ const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserTyp
   )
 }
 
+const clientRequest = (self: IEncointerWorker, request: string) => {
+  return self.createType( 'ClientRequest', {
+    [request]: null
+  });
+}
+
 const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
   const { cid } = args;
   const cidBin = u8aToHex(bs58.decode(cid));
@@ -66,10 +72,13 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
       result = sendTrustedRequest(self, method, parserType, args as TrustedGetterArgs, options)
       break;
     case GetterType.Public:
-      result = sendPublicRequest(self, method, parserType, args, options)
+      result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
+      break;
+    case GetterType.Request:
+      result = sendWorkerRequest(self, clientRequest(self, method), parserType, options)
       break;
     default:
-      result = sendPublicRequest(self, method, parserType, args, options)
+      result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
   }
   return result as Promise<T>
