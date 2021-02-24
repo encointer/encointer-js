@@ -3,7 +3,7 @@
 
 import type { Enum, Option, Struct, i64, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { CurrencyIdentifier } from '@encointer/types/interfaces/community';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
 
@@ -31,7 +31,7 @@ export interface CeremonyPhaseType extends Enum {
 export interface ClaimOfAttendance extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
-  readonly currency_identifier: CurrencyIdentifier;
+  readonly community_identifier: CommunityIdentifier;
   readonly meetup_index: MeetupIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
@@ -57,7 +57,7 @@ export interface ParticipantIndexType extends u64 {}
 export interface ProofOfAttendance extends Struct {
   readonly prover_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
-  readonly currency_identifier: CurrencyIdentifier;
+  readonly community_identifier: CommunityIdentifier;
   readonly attendee_public: AccountId;
   readonly attendee_signature: Signature;
 }

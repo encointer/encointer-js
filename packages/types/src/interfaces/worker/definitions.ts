@@ -2,7 +2,7 @@ export default {
   rpc: {},
   types: {
     ShardIdentifier: 'Hash',
-    GetterArgs: '(AccountId, CurrencyIdentifier)',
+    GetterArgs: '(AccountId, CommunityIdentifier)',
     Enclave: {
       pubkey: 'AccountId',
       mrenclave: 'Hash',
@@ -11,22 +11,22 @@ export default {
     },
     PublicGetter: {
       _enum: {
-        total_issuance: 'CurrencyIdentifier',
-        participant_count: 'CurrencyIdentifier',
-        meetup_count: 'CurrencyIdentifier',
-        ceremony_reward: 'CurrencyIdentifier',
-        location_tolerance: 'CurrencyIdentifier',
-        time_tolerance: 'CurrencyIdentifier',
-        scheduler_state: 'CurrencyIdentifier'
+        total_issuance: 'CommunityIdentifier',
+        participant_count: 'CommunityIdentifier',
+        meetup_count: 'CommunityIdentifier',
+        ceremony_reward: 'CommunityIdentifier',
+        location_tolerance: 'CommunityIdentifier',
+        time_tolerance: 'CommunityIdentifier',
+        scheduler_state: 'CommunityIdentifier'
       }
     },
     TrustedGetter: {
       _enum: {
-        balance: '(AccountId, CurrencyIdentifier)',
-        participant_index: '(AccountId, CurrencyIdentifier)',
-        meetup_index: '(AccountId, CurrencyIdentifier)',
-        attestations: '(AccountId, CurrencyIdentifier)',
-        meetup_registry: '(AccountId, CurrencyIdentifier)'
+        balance: '(AccountId, CommunityIdentifier)',
+        participant_index: '(AccountId, CommunityIdentifier)',
+        meetup_index: '(AccountId, CommunityIdentifier)',
+        attestations: '(AccountId, CommunityIdentifier)',
+        meetup_registry: '(AccountId, CommunityIdentifier)'
       }
     },
     TrustedGetterSigned: {

@@ -31,7 +31,7 @@ const clientRequestGetter = (self: IEncointerWorker, request: string, args: Publ
   }
 }
 const requestParams = (self: IEncointerWorker, address: string, shard: string) =>
-  self.createType('(AccountId, CurrencyIdentifier)', [address, shard]);
+  self.createType('(AccountId, CommunityIdentifier)', [address, shard]);
 
 const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, args: TrustedGetterArgs) => {
   const {cid, account} = args;

@@ -15,14 +15,14 @@ export interface BalanceEntry extends Struct {
 /** @name BalanceType */
 export interface BalanceType extends i128 {}
 
-/** @name CurrencyCeremony */
-export interface CurrencyCeremony extends ITuple<[CurrencyIdentifier, CeremonyIndexType]> {}
+/** @name CommunityCeremony */
+export interface CommunityCeremony extends ITuple<[CommunityIdentifier, CeremonyIndexType]> {}
 
-/** @name CurrencyIdentifier */
-export interface CurrencyIdentifier extends Hash {}
+/** @name CommunityIdentifier */
+export interface CommunityIdentifier extends Hash {}
 
-/** @name CurrencyPropertiesType */
-export interface CurrencyPropertiesType extends Struct {
+/** @name CommunityPropertiesType */
+export interface CommunityPropertiesType extends Struct {
   readonly name_utf8: Bytes;
   readonly demurrage_per_block: Demurrage;
 }
@@ -38,4 +38,4 @@ export interface Reputation extends Enum {
   readonly isVerifiedLinked: boolean;
 }
 
-export type PHANTOM_CURRENCY = 'currency';
+export type PHANTOM_COMMUNITY = 'community';

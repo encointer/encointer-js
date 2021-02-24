@@ -3,7 +3,7 @@
 
 import type { Bytes, Enum, Struct, Text, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { CurrencyIdentifier } from '@encointer/types/interfaces/community';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
@@ -32,24 +32,24 @@ export interface Getter extends Enum {
 }
 
 /** @name GetterArgs */
-export interface GetterArgs extends ITuple<[AccountId, CurrencyIdentifier]> {}
+export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}
 
 /** @name PublicGetter */
 export interface PublicGetter extends Enum {
   readonly isTotalIssuance: boolean;
-  readonly asTotalIssuance: CurrencyIdentifier;
+  readonly asTotalIssuance: CommunityIdentifier;
   readonly isParticipantCount: boolean;
-  readonly asParticipantCount: CurrencyIdentifier;
+  readonly asParticipantCount: CommunityIdentifier;
   readonly isMeetupCount: boolean;
-  readonly asMeetupCount: CurrencyIdentifier;
+  readonly asMeetupCount: CommunityIdentifier;
   readonly isCeremonyReward: boolean;
-  readonly asCeremonyReward: CurrencyIdentifier;
+  readonly asCeremonyReward: CommunityIdentifier;
   readonly isLocationTolerance: boolean;
-  readonly asLocationTolerance: CurrencyIdentifier;
+  readonly asLocationTolerance: CommunityIdentifier;
   readonly isTimeTolerance: boolean;
-  readonly asTimeTolerance: CurrencyIdentifier;
+  readonly asTimeTolerance: CommunityIdentifier;
   readonly isSchedulerState: boolean;
-  readonly asSchedulerState: CurrencyIdentifier;
+  readonly asSchedulerState: CommunityIdentifier;
 }
 
 /** @name Request */
@@ -64,13 +64,15 @@ export interface ShardIdentifier extends Hash {}
 /** @name TrustedGetter */
 export interface TrustedGetter extends Enum {
   readonly isBalance: boolean;
-  readonly asBalance: ITuple<[AccountId, CurrencyIdentifier]>;
-  readonly isRegistration: boolean;
-  readonly asRegistration: ITuple<[AccountId, CurrencyIdentifier]>;
-  readonly isMeetupIndexAndLocation: boolean;
-  readonly asMeetupIndexAndLocation: ITuple<[AccountId, CurrencyIdentifier]>;
+  readonly asBalance: ITuple<[AccountId, CommunityIdentifier]>;
+  readonly isParticipantIndex: boolean;
+  readonly asParticipantIndex: ITuple<[AccountId, CommunityIdentifier]>;
+  readonly isMeetupIndex: boolean;
+  readonly asMeetupIndex: ITuple<[AccountId, CommunityIdentifier]>;
   readonly isAttestations: boolean;
-  readonly asAttestations: ITuple<[AccountId, CurrencyIdentifier]>;
+  readonly asAttestations: ITuple<[AccountId, CommunityIdentifier]>;
+  readonly isMeetupRegistry: boolean;
+  readonly asMeetupRegistry: ITuple<[AccountId, CommunityIdentifier]>;
 }
 
 /** @name TrustedGetterSigned */

@@ -17,7 +17,7 @@ import { options } from '@encointer/node-api'
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 
-currencyId = '3LjCHdiNbNLKEtwGtBf6qHGZnfKFyjLu9v3uxVgDL35C';
+communityId = '3LjCHdiNbNLKEtwGtBf6qHGZnfKFyjLu9v3uxVgDL35C';
 
 // In async function
 const api = await ApiPromise.create({
@@ -29,7 +29,7 @@ const workerEndpoint = await api.query.substrateeRegistry.enclaveRegistry(1)
 
 const worker = new EncointerWorker(workerEndpoint, { api });
 
-const total = await worker.getTotalIssuance(currencyId);
+const total = await worker.getTotalIssuance(communityId);
 
 console.log('Total issuance:', total);
 ```

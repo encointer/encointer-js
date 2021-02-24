@@ -24,7 +24,7 @@ import { options } from '@encointer/node-api'
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 
-currencyId = '3LjCHdiNbNLKEtwGtBf6qHGZnfKFyjLu9v3uxVgDL35C';
+communityId = '3LjCHdiNbNLKEtwGtBf6qHGZnfKFyjLu9v3uxVgDL35C';
 
 /// In async function
 // connect to Encointer node
@@ -42,14 +42,14 @@ const workerEndpoint = await api.query.substrateeRegistry.enclaveRegistry(1)
 const worker = new EncointerWorker(workerEndpoint, { api });
 
 // Get public data from worker
-const total = await worker.getTotalIssuance(currencyId);
+const total = await worker.getTotalIssuance(communityId);
 
 console.log('Total issuance:', total);
 
 const bob = keyring.addFromUri('//Bob', { name: 'Bob default' });
 
 // Query balance from worker
-const balance = worker.getBalance(bob, currencyId);
+const balance = worker.getBalance(bob, communityId);
 
 console.log('Bob owns:', balance);
 ```
