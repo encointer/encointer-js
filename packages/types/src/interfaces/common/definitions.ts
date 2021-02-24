@@ -1,8 +1,8 @@
 export default {
   rpc: {},
   types: {
-    Address: 'AccountId',
-    LookupSource: 'AccountId',
+    Address: 'MultiAddress',
+    LookupSource: 'MultiAddress',
     Weight: 'u64'
   }
 };

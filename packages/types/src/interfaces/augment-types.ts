@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
+import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { BalanceEntry, BalanceType, CommunityCeremony, CommunityIdentifier, CommunityPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
@@ -1864,6 +1865,12 @@ declare module '@polkadot/types/types/registry' {
     StorageChangeSet: StorageChangeSet;
     'Option<StorageChangeSet>': Option<StorageChangeSet>;
     'Vec<StorageChangeSet>': Vec<StorageChangeSet>;
+    ShopIdentifier: ShopIdentifier;
+    'Option<ShopIdentifier>': Option<ShopIdentifier>;
+    'Vec<ShopIdentifier>': Vec<ShopIdentifier>;
+    ArticleIdentifier: ArticleIdentifier;
+    'Option<ArticleIdentifier>': Option<ArticleIdentifier>;
+    'Vec<ArticleIdentifier>': Vec<ArticleIdentifier>;
     CeremonyIndexType: CeremonyIndexType;
     'Compact<CeremonyIndexType>': Compact<CeremonyIndexType>;
     'Option<CeremonyIndexType>': Option<CeremonyIndexType>;
@@ -1898,13 +1905,6 @@ declare module '@polkadot/types/types/registry' {
     ProofOfAttendance: ProofOfAttendance;
     'Option<ProofOfAttendance>': Option<ProofOfAttendance>;
     'Vec<ProofOfAttendance>': Vec<ProofOfAttendance>;
-    SystemNumber: SystemNumber;
-    'Compact<SystemNumber>': Compact<SystemNumber>;
-    'Option<SystemNumber>': Option<SystemNumber>;
-    'Vec<SystemNumber>': Vec<SystemNumber>;
-    SchedulerState: SchedulerState;
-    'Option<SchedulerState>': Option<SchedulerState>;
-    'Vec<SchedulerState>': Vec<SchedulerState>;
     CommunityIdentifier: CommunityIdentifier;
     'Option<CommunityIdentifier>': Option<CommunityIdentifier>;
     'Vec<CommunityIdentifier>': Vec<CommunityIdentifier>;
@@ -1926,6 +1926,13 @@ declare module '@polkadot/types/types/registry' {
     Reputation: Reputation;
     'Option<Reputation>': Option<Reputation>;
     'Vec<Reputation>': Vec<Reputation>;
+    SystemNumber: SystemNumber;
+    'Compact<SystemNumber>': Compact<SystemNumber>;
+    'Option<SystemNumber>': Option<SystemNumber>;
+    'Vec<SystemNumber>': Vec<SystemNumber>;
+    SchedulerState: SchedulerState;
+    'Option<SchedulerState>': Option<SchedulerState>;
+    'Vec<SchedulerState>': Vec<SchedulerState>;
     ShardIdentifier: ShardIdentifier;
     'Option<ShardIdentifier>': Option<ShardIdentifier>;
     'Vec<ShardIdentifier>': Vec<ShardIdentifier>;

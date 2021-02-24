@@ -2,13 +2,13 @@
 /* eslint-disable */
 
 import type { u64 } from '@polkadot/types';
-import type { AccountId } from '@polkadot/types/interfaces/runtime';
+import type { MultiAddress } from '@polkadot/types/interfaces/runtime';
 
 /** @name Address */
-export interface Address extends AccountId {}
+export interface Address extends MultiAddress {}
 
 /** @name LookupSource */
-export interface LookupSource extends AccountId {}
+export interface LookupSource extends MultiAddress {}
 
 /** @name Weight */
 export interface Weight extends u64 {}
