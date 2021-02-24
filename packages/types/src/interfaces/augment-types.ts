@@ -3,7 +3,7 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
-import type { BalanceEntry, BalanceType, CurrencyCeremony, CurrencyIdentifier, CurrencyPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/currency';
+import type { BalanceEntry, BalanceType, CurrencyCeremony, CurrencyIdentifier, CurrencyPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { ClientRequest, Enclave, Getter, GetterArgs, PublicGetter, Request, ShardIdentifier, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';

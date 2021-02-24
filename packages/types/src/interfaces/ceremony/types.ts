@@ -3,7 +3,7 @@
 
 import type { Enum, Option, Struct, i64, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { CurrencyIdentifier } from '@encointer/types/interfaces/currency';
+import type { CurrencyIdentifier } from '@encointer/types/interfaces/community';
 import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
 
