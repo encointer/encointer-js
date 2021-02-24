@@ -9,8 +9,14 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
-import type { Balance, Moment } from '@polkadot/types/interfaces/runtime';
-import type {Attestation, MeetupAssignment, ParticipantIndexType, SchedulerState} from '@encointer/types';
+import type {AccountId, Balance, Moment} from '@polkadot/types/interfaces/runtime';
+import type {
+  Attestation,
+  MeetupAssignment,
+  MeetupIndexType,
+  ParticipantIndexType,
+  SchedulerState
+} from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface';
 import  { GetterType } from './interface';
@@ -120,15 +126,19 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return await callGetter<Balance>(this, [GetterType.Trusted, 'balance', 'Balance'], {cid, account}, options)
   }
 
-  public async getRegistration(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
-    return await callGetter<ParticipantIndexType>(this, [GetterType.Trusted, 'registration', 'ParticipantIndexType' ], {cid, account}, options)
+  public async getParticipantIndex(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
+    return await callGetter<ParticipantIndexType>(this, [GetterType.Trusted, 'participant_index', 'ParticipantIndexType' ], {cid, account}, options)
   }
 
-  public async getMeetupIndexAndLocation(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupAssignment> {
-    return await callGetter<MeetupAssignment>(this, [GetterType.Trusted, 'meetup_index_and_location', 'MeetupAssignment'], {cid, account}, options)
+  public async getMeetupIndex(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
+    return await callGetter<MeetupIndexType>(this, [GetterType.Trusted, 'meetup_index', 'MeetupIndexType'], {cid, account}, options)
   }
 
   public async getAttestations(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
     return await callGetter<Vec<Attestation>>(this, [GetterType.Trusted, 'attestations', 'Vec<Attestation>'], {cid, account}, options)
+  }
+
+  public async getMeetupRegistry(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<AccountId>> {
+    return await callGetter<Vec<AccountId>>(this, [GetterType.Trusted, 'meetup_registry', 'Vec<AccountId>'], {cid, account}, options)
   }
 }

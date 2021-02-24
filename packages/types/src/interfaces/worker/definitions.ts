@@ -23,9 +23,10 @@ export default {
     TrustedGetter: {
       _enum: {
         balance: '(AccountId, CurrencyIdentifier)',
-        registration: '(AccountId, CurrencyIdentifier)',
-        meetup_index_and_location: '(AccountId, CurrencyIdentifier)',
-        attestations: '(AccountId, CurrencyIdentifier)'
+        participant_index: '(AccountId, CurrencyIdentifier)',
+        meetup_index: '(AccountId, CurrencyIdentifier)',
+        attestations: '(AccountId, CurrencyIdentifier)',
+        meetup_registry: '(AccountId, CurrencyIdentifier)'
       }
     },
     TrustedGetterSigned: {
