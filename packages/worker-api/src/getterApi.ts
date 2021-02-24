@@ -1,8 +1,8 @@
 import * as bs58 from 'bs58';
 import { u8aToHex } from '@polkadot/util';
 
-import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, GetterArgs, CallOptions, WorkerMethod } from './interface';
-import  { GetterType } from './interface';
+import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, RequestArgs, CallOptions, WorkerMethod } from './interface';
+import  { Request } from './interface';
 
 const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
@@ -60,7 +60,7 @@ const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: stri
 const sendPublicRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
 
-export const callGetter = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: GetterArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const callGetter = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
@@ -68,13 +68,13 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
   let result: Promise<any>;
   let parserType: string = options.debug ? 'raw': parser;
   switch (getterType) {
-    case GetterType.Trusted:
+    case Request.TrustedGetter:
       result = sendTrustedRequest(self, method, parserType, args as TrustedGetterArgs, options)
       break;
-    case GetterType.Public:
+    case Request.PublicGetter:
       result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
-    case GetterType.Request:
+    case Request.Worker:
       result = sendWorkerRequest(self, clientRequest(self, method), parserType, options)
       break;
     default:

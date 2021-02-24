@@ -23,17 +23,17 @@ export interface PublicGetterArgs {
   cid: string;
 }
 
-export type GetterArgs = PublicGetterArgs | TrustedGetterArgs | { }
+export type RequestArgs = PublicGetterArgs | TrustedGetterArgs | { }
 
 export interface CallOptions {
   timeout: number;
   debug: boolean;
 }
 
-export enum GetterType {
-  Trusted,
-  Public,
-  Request
+export enum Request {
+  TrustedGetter,
+  PublicGetter,
+  Worker
 }
 
-export type WorkerMethod = [ GetterType, string, string ]
+export type WorkerMethod = [ Request, string, string ]
