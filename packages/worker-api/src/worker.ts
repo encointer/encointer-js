@@ -102,7 +102,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return this.#registry.createType(apiType as never, obj)
   }
 
-  public async getShieldingKey(cid: string, options: CallOptions = {} as  CallOptions): Promise<NodeRSA> {
+  public async getShieldingKey(options: CallOptions = {} as  CallOptions): Promise<NodeRSA> {
     return await callGetter<NodeRSA>(this, [Request.Worker, 'PubKeyWorker', 'NodeRSA'], {}, options)
   }
 
