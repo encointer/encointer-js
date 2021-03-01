@@ -1,6 +1,3 @@
-import * as bs58 from 'bs58';
-import { u8aToHex } from '@polkadot/util';
-
 import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, RequestArgs, CallOptions, WorkerMethod } from './interface';
 import  { Request } from './interface';
 
@@ -22,12 +19,11 @@ const clientRequest = (self: IEncointerWorker, request: string) => {
 
 const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
   const { cid } = args;
-  const cidBin = u8aToHex(bs58.decode(cid));
   const getter = self.createType('PublicGetter', {
-    [request]: cidBin
+    [request]: cid
   });
   return {
-    StfState: [{ public: getter }, cidBin]
+    StfState: [{ public: getter }, cid]
   }
 }
 const requestParams = (self: IEncointerWorker, address: string, shard: string) =>
@@ -36,9 +32,8 @@ const requestParams = (self: IEncointerWorker, address: string, shard: string) =
 const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, args: TrustedGetterArgs) => {
   const {cid, account} = args;
   const address = account.address;
-  const cidBin = u8aToHex(bs58.decode(cid));
   const getter = self.createType('TrustedGetter', {
-    [request]: requestParams(self, address, cidBin)
+    [request]: requestParams(self, address, cid)
   });
   const signature = account.sign(getter.toU8a());
   return {
@@ -49,7 +44,7 @@ const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, arg
           signature
         }
       },
-      cidBin
+      cid
     ]
   }
 }
