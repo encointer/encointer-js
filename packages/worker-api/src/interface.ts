@@ -1,5 +1,6 @@
 import type { KeyringPair } from '@polkadot/keyring/types';
 import WebSocketAsPromised from 'websocket-as-promised';
+import {Keyring} from "@polkadot/keyring";
 
 export interface IEncointerWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -9,9 +10,19 @@ export interface IEncointerWorker extends WebSocketAsPromised {
 }
 
 export interface WorkerOptions {
+  keyring: Keyring;
   api: any;
   types: any;
   createWebSocket?: (url: string) => WebSocket;
+}
+
+export interface PubKeyPinPair {
+  pubKey: string,
+  pin: string,
+}
+
+export function isPubKeyPinPair(pair: KeyringPair | PubKeyPinPair) {
+  return (pair as PubKeyPinPair).pin !== undefined;
 }
 
 export interface TrustedGetterArgs {

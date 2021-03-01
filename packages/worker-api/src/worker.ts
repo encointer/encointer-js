@@ -4,6 +4,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { options as encointerOptions} from '@encointer/node-api';
 import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
+import { Keyring } from '@polkadot/keyring'
 import { parseI64F64 } from '@encointer/util';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 // @ts-ignore
@@ -20,8 +21,8 @@ import type {
   SchedulerState
 } from '@encointer/types';
 
-import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface';
-import  { Request } from './interface';
+import type {IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair} from './interface';
+import {isPubKeyPinPair, Request} from './interface';
 import {parseBalance, parseNodeRSA} from './parsers';
 import { callGetter } from './getterApi';
 
@@ -73,6 +74,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   #registry: TypeRegistry;
 
+  #keyring: Keyring;
+
   rsCount: number;
 
   rqStack: string[];
@@ -86,6 +89,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       extractRequestId: (data: any) => this.rsCount = ++this.rsCount
     });
     const {api, types} = options;
+    this.#keyring = options.keyring;
     this.#registry = new TypeRegistry();
     this.rsCount = 0;
     this.rqStack = [] as string[]
@@ -134,23 +138,48 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return await callGetter<SchedulerState>(this, [Request.PublicGetter, 'scheduler_state', 'SchedulerState'], {cid}, options)
   }
 
-  public async getBalance(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+  public async getBalance(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    if (isPubKeyPinPair(account)) {
+      account = this.unlockKeypair(account as PubKeyPinPair);
+    }
     return await callGetter<Balance>(this, [Request.TrustedGetter, 'balance', 'Balance'], {cid, account}, options)
   }
 
-  public async getParticipantIndex(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
+  public async getParticipantIndex(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
+    if (isPubKeyPinPair(account)) {
+      account = this.unlockKeypair(account as PubKeyPinPair);
+    }
     return await callGetter<ParticipantIndexType>(this, [Request.TrustedGetter, 'participant_index', 'ParticipantIndexType' ], {cid, account}, options)
   }
 
-  public async getMeetupIndex(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
+  public async getMeetupIndex(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
+    if (isPubKeyPinPair(account)) {
+      account = this.unlockKeypair(account as PubKeyPinPair);
+    }
     return await callGetter<MeetupIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupIndexType'], {cid, account}, options)
   }
 
-  public async getAttestations(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
+  public async getAttestations(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
+    if (isPubKeyPinPair(account)) {
+      account = this.unlockKeypair(account as PubKeyPinPair);
+    }
     return await callGetter<Vec<Attestation>>(this, [Request.TrustedGetter, 'attestations', 'Vec<Attestation>'], {cid, account}, options)
   }
 
-  public async getMeetupRegistry(account: KeyringPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<AccountId>> {
+  public async getMeetupRegistry(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<AccountId>> {
+    if (isPubKeyPinPair(account)) {
+      account = this.unlockKeypair(account as PubKeyPinPair);
+    }
     return await callGetter<Vec<AccountId>>(this, [Request.TrustedGetter, 'meetup_registry', 'Vec<AccountId>'], {cid, account}, options)
+  }
+
+  unlockKeypair(pair: PubKeyPinPair): KeyringPair {
+    /// Todo: error handling
+    const keyPair = this.#keyring.getPair(pair.pubKey);
+      if (!keyPair.isLocked) {
+        keyPair.lock();
+      }
+      keyPair.decodePkcs8(pair.pin);
+    return keyPair;
   }
 }
