@@ -1,9 +1,10 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Bytes, Enum, Struct, Text, u64 } from '@polkadot/types';
+import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
+import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { BalanceType, CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
@@ -60,6 +61,25 @@ export interface Request extends Struct {
 
 /** @name ShardIdentifier */
 export interface ShardIdentifier extends Hash {}
+
+/** @name TrustedCall */
+export interface TrustedCall extends Enum {
+  readonly isBalanceTransfer: boolean;
+  readonly asBalanceTransfer: ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]>;
+  readonly isCeremoniesRegisterParticipant: boolean;
+  readonly asCeremoniesRegisterParticipant: ITuple<[AccountId, CommunityIdentifier, Option<ProofOfAttendance>]>;
+  readonly isCeremoniesRegisterAttestations: boolean;
+  readonly asCeremoniesRegisterAttestations: ITuple<[AccountId, Vec<Attestation>]>;
+  readonly isCeremoniesGrantReputation: boolean;
+  readonly asCeremoniesGrantReputation: ITuple<[AccountId, CommunityIdentifier, AccountId]>;
+}
+
+/** @name TrustedCallSigned */
+export interface TrustedCallSigned extends Struct {
+  readonly call: TrustedCall;
+  readonly nonce: u32;
+  readonly signature: Signature;
+}
 
 /** @name TrustedGetter */
 export interface TrustedGetter extends Enum {

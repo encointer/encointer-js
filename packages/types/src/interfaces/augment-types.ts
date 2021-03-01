@@ -6,7 +6,7 @@ import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfa
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { BalanceEntry, BalanceType, CommunityCeremony, CommunityIdentifier, CommunityPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { ClientRequest, Enclave, Getter, GetterArgs, PublicGetter, Request, ShardIdentifier, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { ClientRequest, Enclave, Getter, GetterArgs, PublicGetter, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
 import type { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
@@ -823,6 +823,8 @@ declare module '@polkadot/types/types/registry' {
     'Option<TransientValidationData>': Option<TransientValidationData>;
     'Option<TreasuryProposal>': Option<TreasuryProposal>;
     'Option<TrieId>': Option<TrieId>;
+    'Option<TrustedCall>': Option<TrustedCall>;
+    'Option<TrustedCallSigned>': Option<TrustedCallSigned>;
     'Option<TrustedGetter>': Option<TrustedGetter>;
     'Option<TrustedGetterSigned>': Option<TrustedGetterSigned>;
     'Option<Type>': Option<Type>;
@@ -1578,6 +1580,8 @@ declare module '@polkadot/types/types/registry' {
     'Vec<TransientValidationData>': Vec<TransientValidationData>;
     'Vec<TreasuryProposal>': Vec<TreasuryProposal>;
     'Vec<TrieId>': Vec<TrieId>;
+    'Vec<TrustedCall>': Vec<TrustedCall>;
+    'Vec<TrustedCallSigned>': Vec<TrustedCallSigned>;
     'Vec<TrustedGetter>': Vec<TrustedGetter>;
     'Vec<TrustedGetterSigned>': Vec<TrustedGetterSigned>;
     'Vec<Type>': Vec<Type>;
@@ -2333,6 +2337,8 @@ declare module '@polkadot/types/types/registry' {
     TransientValidationData: TransientValidationData;
     TreasuryProposal: TreasuryProposal;
     TrieId: TrieId;
+    TrustedCall: TrustedCall;
+    TrustedCallSigned: TrustedCallSigned;
     TrustedGetter: TrustedGetter;
     TrustedGetterSigned: TrustedGetterSigned;
     Type: Type;
