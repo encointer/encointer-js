@@ -15,7 +15,7 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type {AccountId, Balance, Moment} from '@polkadot/types/interfaces/runtime';
 import type {
-  Attestation,
+  Attestation, BalanceEntry,
   MeetupIndexType,
   ParticipantIndexType,
   SchedulerState
@@ -48,7 +48,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
       case 'raw':
         parsedData = unwrapWorkerResponse(self, data);
         break;
-      case 'Balance':
+      case 'BalanceEntry':
         parsedData = unwrapWorkerResponse(self, data);
         parsedData = parseBalance(self, parsedData);
         break;
@@ -138,11 +138,11 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return await callGetter<SchedulerState>(this, [Request.PublicGetter, 'scheduler_state', 'SchedulerState'], {cid}, options)
   }
 
-  public async getBalance(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+  public async getBalance(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<BalanceEntry> {
     if (isPubKeyPinPair(account)) {
       account = this.unlockKeypair(account as PubKeyPinPair);
     }
-    return await callGetter<Balance>(this, [Request.TrustedGetter, 'balance', 'Balance'], {cid, account}, options)
+    return await callGetter<BalanceEntry>(this, [Request.TrustedGetter, 'balance', 'BalanceEntry'], {cid, account}, options)
   }
 
   public async getParticipantIndex(account: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
