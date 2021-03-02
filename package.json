@@ -14,11 +14,12 @@
     "clean": "polkadot-dev-clean-build"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.61.27",
-    "@polkadot/types": "^3.2.4-2",
+    "@polkadot/dev": "^0.61.31",
+    "@polkadot/types": "^3.11.1",
     "@types/jest": "^26.0.15",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "typescript": "4.2.2"
   }
 }

@@ -29,6 +29,7 @@ import type { EthAccount, EthBlock, EthBloom, EthCallRequest, EthFilter, EthFilt
 import type { EvmAccount, EvmLog, EvmVicinity, ExitError, ExitFatal, ExitReason, ExitRevert, ExitSucceed } from '@polkadot/types/interfaces/evm';
 import type { AnySignature, EcdsaSignature, Ed25519Signature, Extrinsic, ExtrinsicEra, ExtrinsicPayload, ExtrinsicPayloadUnknown, ExtrinsicPayloadV4, ExtrinsicSignature, ExtrinsicSignatureV4, ExtrinsicUnknown, ExtrinsicV4, ImmortalEra, MortalEra, MultiSignature, Signature, SignerPayload, Sr25519Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AssetOptions, Owner, PermissionLatest, PermissionVersions, PermissionsV1 } from '@polkadot/types/interfaces/genericAsset';
+import type { ActiveGilt, ActiveGiltsTotal, ActiveIndex, GiltBid } from '@polkadot/types/interfaces/gilt';
 import type { AuthorityIndex, AuthorityList, AuthorityWeight, EncodedFinalityProofs, GrandpaEquivocation, GrandpaEquivocationProof, GrandpaEquivocationValue, GrandpaPrevote, JustificationNotification, KeyOwnerProof, NextAuthority, PendingPause, PendingResume, Precommits, Prevotes, ReportedRoundStates, RoundState, SetId, StoredPendingChange, StoredState } from '@polkadot/types/interfaces/grandpa';
 import type { IdentityFields, IdentityInfo, IdentityInfoAdditional, IdentityJudgement, RegistrarIndex, RegistrarInfo, Registration, RegistrationJudgement } from '@polkadot/types/interfaces/identity';
 import type { AuthIndex, AuthoritySignature, Heartbeat, HeartbeatTo244, OpaqueMultiaddr, OpaqueNetworkState, OpaquePeerId } from '@polkadot/types/interfaces/imOnline';
@@ -43,11 +44,11 @@ import type { ProxyAnnouncement, ProxyDefinition, ProxyType } from '@polkadot/ty
 import type { AccountStatus, AccountValidity } from '@polkadot/types/interfaces/purchase';
 import type { ActiveRecovery, RecoveryConfig } from '@polkadot/types/interfaces/recovery';
 import type { RpcMethods } from '@polkadot/types/interfaces/rpc';
-import type { AccountId, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, Call, CallHash, CallHashOf, ChangesTrieConfiguration, Consensus, ConsensusEngineId, Digest, DigestItem, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, H1024, H128, H160, H2048, H256, H512, H64, Hash, Header, I32F32, Index, IndicesLookupSource, Justification, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, MultiAddress, OpaqueCall, Origin, OriginCaller, PalletVersion, PalletsOrigin, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, Slot, StorageData, StorageProof, TransactionPriority, U32F32, ValidatorId, ValidatorIdOf, Weight, WeightMultiplier } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, Call, CallHash, CallHashOf, ChangesTrieConfiguration, CodecHash, Consensus, ConsensusEngineId, Digest, DigestItem, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, H1024, H128, H160, H2048, H256, H512, H64, Hash, Header, I32F32, Index, IndicesLookupSource, Justification, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, MultiAddress, OpaqueCall, Origin, OriginCaller, PalletVersion, PalletsOrigin, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, Slot, StorageData, StorageProof, TransactionPriority, U32F32, ValidatorId, ValidatorIdOf, Weight, WeightMultiplier } from '@polkadot/types/interfaces/runtime';
 import type { SiField, SiLookupTypeId, SiPath, SiType, SiTypeDef, SiTypeDefArray, SiTypeDefComposite, SiTypeDefPrimitive, SiTypeDefSequence, SiTypeDefTuple, SiTypeDefVariant, SiVariant } from '@polkadot/types/interfaces/scaleInfo';
 import type { FullIdentification, IdentificationTuple, Keys, MembershipProof, SessionIndex, SessionKeys1, SessionKeys2, SessionKeys3, SessionKeys4, SessionKeys5, SessionKeys6, SessionKeys7, SessionKeys8, SessionKeys9, ValidatorCount } from '@polkadot/types/interfaces/session';
 import type { Bid, BidKind, SocietyJudgement, SocietyVote, StrikeCount, VouchingStatus } from '@polkadot/types/interfaces/society';
-import type { ActiveEraInfo, CompactAssignments, CompactAssignmentsTo257, CompactScore, CompactScoreCompact, ElectionCompute, ElectionResult, ElectionScore, ElectionSize, ElectionStatus, EraIndex, EraPoints, EraRewardPoints, EraRewards, Exposure, Forcing, IndividualExposure, KeyType, MomentOf, Nominations, NominatorIndex, NominatorIndexCompact, OffchainAccuracy, OffchainAccuracyCompact, PhragmenScore, Points, RewardDestination, RewardDestinationTo257, RewardPoint, SeatHolder, SlashJournalEntry, SlashingSpans, SlashingSpansTo204, SpanIndex, SpanRecord, StakingLedger, StakingLedgerTo223, StakingLedgerTo240, UnappliedSlash, UnappliedSlashOther, UnlockChunk, ValidatorIndex, ValidatorIndexCompact, ValidatorPrefs, ValidatorPrefsTo145, ValidatorPrefsTo196, ValidatorPrefsWithBlocked, ValidatorPrefsWithCommission, Voter } from '@polkadot/types/interfaces/staking';
+import type { ActiveEraInfo, CompactAssignments, CompactAssignmentsTo257, CompactScore, CompactScoreCompact, ElectionCompute, ElectionResult, ElectionScore, ElectionSize, ElectionStatus, EraIndex, EraPoints, EraRewardPoints, EraRewards, Exposure, ExtendedBalance, Forcing, IndividualExposure, KeyType, MomentOf, Nominations, NominatorIndex, NominatorIndexCompact, OffchainAccuracy, OffchainAccuracyCompact, PhragmenScore, Points, RawSolution, ReadySolution, RewardDestination, RewardDestinationTo257, RewardPoint, RoundSnapshot, SeatHolder, SlashJournalEntry, SlashingSpans, SlashingSpansTo204, SolutionOrSnapshotSize, SolutionSupport, SolutionSupports, SpanIndex, SpanRecord, StakingLedger, StakingLedgerTo223, StakingLedgerTo240, UnappliedSlash, UnappliedSlashOther, UnlockChunk, ValidatorIndex, ValidatorIndexCompact, ValidatorPrefs, ValidatorPrefsTo145, ValidatorPrefsTo196, ValidatorPrefsWithBlocked, ValidatorPrefsWithCommission, VoteWeight, Voter } from '@polkadot/types/interfaces/staking';
 import type { ApiId, KeyValueOption, ReadProof, RuntimeVersion, RuntimeVersionApi, StorageChangeSet } from '@polkadot/types/interfaces/state';
 import type { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
 import type { AccountInfo, AccountInfoWithProviders, AccountInfoWithRefCount, ApplyExtrinsicResult, BlockLength, BlockWeights, ChainProperties, ChainType, ConsumedWeight, DigestOf, DispatchClass, DispatchError, DispatchErrorModule, DispatchErrorTo198, DispatchInfo, DispatchInfoTo190, DispatchInfoTo244, DispatchOutcome, DispatchResult, DispatchResultOf, DispatchResultTo198, Event, EventId, EventIndex, EventRecord, Health, InvalidTransaction, Key, LastRuntimeUpgradeInfo, NetworkState, NetworkStatePeerset, NetworkStatePeersetInfo, NodeRole, NotConnectedPeer, Peer, PeerEndpoint, PeerEndpointAddr, PeerInfo, PeerPing, PerDispatchClassU32, PerDispatchClassWeight, PerDispatchClassWeightsPerClass, Phase, RawOrigin, RefCount, RefCountTo259, SyncState, SystemOrigin, TransactionValidityError, UnknownTransaction, WeightPerClass } from '@polkadot/types/interfaces/system';
@@ -59,6 +60,7 @@ import type { VestingInfo } from '@polkadot/types/interfaces/vesting';
 declare module '@polkadot/types/types/registry' {
   export interface InterfaceTypes {
     'Compact<AccountIndex>': Compact<AccountIndex>;
+    'Compact<ActiveIndex>': Compact<ActiveIndex>;
     'Compact<ApprovalFlag>': Compact<ApprovalFlag>;
     'Compact<AssetId>': Compact<AssetId>;
     'Compact<AttestationIndexType>': Compact<AttestationIndexType>;
@@ -79,6 +81,7 @@ declare module '@polkadot/types/types/registry' {
     'Compact<CoreIndex>': Compact<CoreIndex>;
     'Compact<EraIndex>': Compact<EraIndex>;
     'Compact<EventIndex>': Compact<EventIndex>;
+    'Compact<ExtendedBalance>': Compact<ExtendedBalance>;
     'Compact<FixedU128>': Compact<FixedU128>;
     'Compact<FixedU64>': Compact<FixedU64>;
     'Compact<FundIndex>': Compact<FundIndex>;
@@ -142,6 +145,7 @@ declare module '@polkadot/types/types/registry' {
     'Compact<ValidatorCount>': Compact<ValidatorCount>;
     'Compact<ValidatorIndex>': Compact<ValidatorIndex>;
     'Compact<VoteIndex>': Compact<VoteIndex>;
+    'Compact<VoteWeight>': Compact<VoteWeight>;
     'Compact<Weight>': Compact<Weight>;
     'Option<AbridgedCandidateReceipt>': Option<AbridgedCandidateReceipt>;
     'Option<AbridgedHostConfiguration>': Option<AbridgedHostConfiguration>;
@@ -164,6 +168,9 @@ declare module '@polkadot/types/types/registry' {
     'Option<AccountVoteSplit>': Option<AccountVoteSplit>;
     'Option<AccountVoteStandard>': Option<AccountVoteStandard>;
     'Option<ActiveEraInfo>': Option<ActiveEraInfo>;
+    'Option<ActiveGilt>': Option<ActiveGilt>;
+    'Option<ActiveGiltsTotal>': Option<ActiveGiltsTotal>;
+    'Option<ActiveIndex>': Option<ActiveIndex>;
     'Option<ActiveRecovery>': Option<ActiveRecovery>;
     'Option<Address>': Option<Address>;
     'Option<AliveContractInfo>': Option<AliveContractInfo>;
@@ -244,6 +251,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<ChangesTrieConfiguration>': Option<ChangesTrieConfiguration>;
     'Option<ClaimOfAttendance>': Option<ClaimOfAttendance>;
     'Option<ClientRequest>': Option<ClientRequest>;
+    'Option<CodecHash>': Option<CodecHash>;
     'Option<CodeHash>': Option<CodeHash>;
     'Option<CollatorId>': Option<CollatorId>;
     'Option<CollatorSignature>': Option<CollatorSignature>;
@@ -401,6 +409,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<ExitRevert>': Option<ExitRevert>;
     'Option<ExitSucceed>': Option<ExitSucceed>;
     'Option<Exposure>': Option<Exposure>;
+    'Option<ExtendedBalance>': Option<ExtendedBalance>;
     'Option<Extrinsic>': Option<Extrinsic>;
     'Option<ExtrinsicEra>': Option<ExtrinsicEra>;
     'Option<ExtrinsicMetadataLatest>': Option<ExtrinsicMetadataLatest>;
@@ -440,6 +449,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<Gas>': Option<Gas>;
     'Option<Getter>': Option<Getter>;
     'Option<GetterArgs>': Option<GetterArgs>;
+    'Option<GiltBid>': Option<GiltBid>;
     'Option<GlobalValidationSchedule>': Option<GlobalValidationSchedule>;
     'Option<GrandpaEquivocation>': Option<GrandpaEquivocation>;
     'Option<GrandpaEquivocationProof>': Option<GrandpaEquivocationProof>;
@@ -673,8 +683,10 @@ declare module '@polkadot/types/types/registry' {
     'Option<RawBabePreDigestSecondaryVRF>': Option<RawBabePreDigestSecondaryVRF>;
     'Option<RawBabePreDigestTo159>': Option<RawBabePreDigestTo159>;
     'Option<RawOrigin>': Option<RawOrigin>;
+    'Option<RawSolution>': Option<RawSolution>;
     'Option<RawVRFOutput>': Option<RawVRFOutput>;
     'Option<ReadProof>': Option<ReadProof>;
+    'Option<ReadySolution>': Option<ReadySolution>;
     'Option<Reasons>': Option<Reasons>;
     'Option<RecoveryConfig>': Option<RecoveryConfig>;
     'Option<RefCount>': Option<RefCount>;
@@ -706,6 +718,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<RewardDestination>': Option<RewardDestination>;
     'Option<RewardDestinationTo257>': Option<RewardDestinationTo257>;
     'Option<RewardPoint>': Option<RewardPoint>;
+    'Option<RoundSnapshot>': Option<RoundSnapshot>;
     'Option<RoundState>': Option<RoundState>;
     'Option<RpcMethods>': Option<RpcMethods>;
     'Option<RuntimeDbWeight>': Option<RuntimeDbWeight>;
@@ -764,6 +777,9 @@ declare module '@polkadot/types/types/registry' {
     'Option<SlotRange>': Option<SlotRange>;
     'Option<SocietyJudgement>': Option<SocietyJudgement>;
     'Option<SocietyVote>': Option<SocietyVote>;
+    'Option<SolutionOrSnapshotSize>': Option<SolutionOrSnapshotSize>;
+    'Option<SolutionSupport>': Option<SolutionSupport>;
+    'Option<SolutionSupports>': Option<SolutionSupports>;
     'Option<SpanIndex>': Option<SpanIndex>;
     'Option<SpanRecord>': Option<SpanRecord>;
     'Option<Sr25519Signature>': Option<Sr25519Signature>;
@@ -878,6 +894,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<Votes>': Option<Votes>;
     'Option<VotesTo230>': Option<VotesTo230>;
     'Option<VoteThreshold>': Option<VoteThreshold>;
+    'Option<VoteWeight>': Option<VoteWeight>;
     'Option<Voting>': Option<Voting>;
     'Option<VotingDelegating>': Option<VotingDelegating>;
     'Option<VotingDirect>': Option<VotingDirect>;
@@ -921,6 +938,9 @@ declare module '@polkadot/types/types/registry' {
     'Vec<AccountVoteSplit>': Vec<AccountVoteSplit>;
     'Vec<AccountVoteStandard>': Vec<AccountVoteStandard>;
     'Vec<ActiveEraInfo>': Vec<ActiveEraInfo>;
+    'Vec<ActiveGilt>': Vec<ActiveGilt>;
+    'Vec<ActiveGiltsTotal>': Vec<ActiveGiltsTotal>;
+    'Vec<ActiveIndex>': Vec<ActiveIndex>;
     'Vec<ActiveRecovery>': Vec<ActiveRecovery>;
     'Vec<Address>': Vec<Address>;
     'Vec<AliveContractInfo>': Vec<AliveContractInfo>;
@@ -1001,6 +1021,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ChangesTrieConfiguration>': Vec<ChangesTrieConfiguration>;
     'Vec<ClaimOfAttendance>': Vec<ClaimOfAttendance>;
     'Vec<ClientRequest>': Vec<ClientRequest>;
+    'Vec<CodecHash>': Vec<CodecHash>;
     'Vec<CodeHash>': Vec<CodeHash>;
     'Vec<CollatorId>': Vec<CollatorId>;
     'Vec<CollatorSignature>': Vec<CollatorSignature>;
@@ -1158,6 +1179,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ExitRevert>': Vec<ExitRevert>;
     'Vec<ExitSucceed>': Vec<ExitSucceed>;
     'Vec<Exposure>': Vec<Exposure>;
+    'Vec<ExtendedBalance>': Vec<ExtendedBalance>;
     'Vec<Extrinsic>': Vec<Extrinsic>;
     'Vec<ExtrinsicEra>': Vec<ExtrinsicEra>;
     'Vec<ExtrinsicMetadataLatest>': Vec<ExtrinsicMetadataLatest>;
@@ -1197,6 +1219,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<Gas>': Vec<Gas>;
     'Vec<Getter>': Vec<Getter>;
     'Vec<GetterArgs>': Vec<GetterArgs>;
+    'Vec<GiltBid>': Vec<GiltBid>;
     'Vec<GlobalValidationSchedule>': Vec<GlobalValidationSchedule>;
     'Vec<GrandpaEquivocation>': Vec<GrandpaEquivocation>;
     'Vec<GrandpaEquivocationProof>': Vec<GrandpaEquivocationProof>;
@@ -1430,8 +1453,10 @@ declare module '@polkadot/types/types/registry' {
     'Vec<RawBabePreDigestSecondaryVRF>': Vec<RawBabePreDigestSecondaryVRF>;
     'Vec<RawBabePreDigestTo159>': Vec<RawBabePreDigestTo159>;
     'Vec<RawOrigin>': Vec<RawOrigin>;
+    'Vec<RawSolution>': Vec<RawSolution>;
     'Vec<RawVRFOutput>': Vec<RawVRFOutput>;
     'Vec<ReadProof>': Vec<ReadProof>;
+    'Vec<ReadySolution>': Vec<ReadySolution>;
     'Vec<Reasons>': Vec<Reasons>;
     'Vec<RecoveryConfig>': Vec<RecoveryConfig>;
     'Vec<RefCount>': Vec<RefCount>;
@@ -1463,6 +1488,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<RewardDestination>': Vec<RewardDestination>;
     'Vec<RewardDestinationTo257>': Vec<RewardDestinationTo257>;
     'Vec<RewardPoint>': Vec<RewardPoint>;
+    'Vec<RoundSnapshot>': Vec<RoundSnapshot>;
     'Vec<RoundState>': Vec<RoundState>;
     'Vec<RpcMethods>': Vec<RpcMethods>;
     'Vec<RuntimeDbWeight>': Vec<RuntimeDbWeight>;
@@ -1521,6 +1547,9 @@ declare module '@polkadot/types/types/registry' {
     'Vec<SlotRange>': Vec<SlotRange>;
     'Vec<SocietyJudgement>': Vec<SocietyJudgement>;
     'Vec<SocietyVote>': Vec<SocietyVote>;
+    'Vec<SolutionOrSnapshotSize>': Vec<SolutionOrSnapshotSize>;
+    'Vec<SolutionSupport>': Vec<SolutionSupport>;
+    'Vec<SolutionSupports>': Vec<SolutionSupports>;
     'Vec<SpanIndex>': Vec<SpanIndex>;
     'Vec<SpanRecord>': Vec<SpanRecord>;
     'Vec<Sr25519Signature>': Vec<Sr25519Signature>;
@@ -1635,6 +1664,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<Votes>': Vec<Votes>;
     'Vec<VotesTo230>': Vec<VotesTo230>;
     'Vec<VoteThreshold>': Vec<VoteThreshold>;
+    'Vec<VoteWeight>': Vec<VoteWeight>;
     'Vec<Voting>': Vec<Voting>;
     'Vec<VotingDelegating>': Vec<VotingDelegating>;
     'Vec<VotingDirect>': Vec<VotingDirect>;
@@ -1678,6 +1708,9 @@ declare module '@polkadot/types/types/registry' {
     AccountVoteSplit: AccountVoteSplit;
     AccountVoteStandard: AccountVoteStandard;
     ActiveEraInfo: ActiveEraInfo;
+    ActiveGilt: ActiveGilt;
+    ActiveGiltsTotal: ActiveGiltsTotal;
+    ActiveIndex: ActiveIndex;
     ActiveRecovery: ActiveRecovery;
     Address: Address;
     AliveContractInfo: AliveContractInfo;
@@ -1758,6 +1791,7 @@ declare module '@polkadot/types/types/registry' {
     ChangesTrieConfiguration: ChangesTrieConfiguration;
     ClaimOfAttendance: ClaimOfAttendance;
     ClientRequest: ClientRequest;
+    CodecHash: CodecHash;
     CodeHash: CodeHash;
     CollatorId: CollatorId;
     CollatorSignature: CollatorSignature;
@@ -1915,6 +1949,7 @@ declare module '@polkadot/types/types/registry' {
     ExitRevert: ExitRevert;
     ExitSucceed: ExitSucceed;
     Exposure: Exposure;
+    ExtendedBalance: ExtendedBalance;
     Extrinsic: Extrinsic;
     ExtrinsicEra: ExtrinsicEra;
     ExtrinsicMetadataLatest: ExtrinsicMetadataLatest;
@@ -1954,6 +1989,7 @@ declare module '@polkadot/types/types/registry' {
     Gas: Gas;
     Getter: Getter;
     GetterArgs: GetterArgs;
+    GiltBid: GiltBid;
     GlobalValidationSchedule: GlobalValidationSchedule;
     GrandpaEquivocation: GrandpaEquivocation;
     GrandpaEquivocationProof: GrandpaEquivocationProof;
@@ -2187,8 +2223,10 @@ declare module '@polkadot/types/types/registry' {
     RawBabePreDigestSecondaryVRF: RawBabePreDigestSecondaryVRF;
     RawBabePreDigestTo159: RawBabePreDigestTo159;
     RawOrigin: RawOrigin;
+    RawSolution: RawSolution;
     RawVRFOutput: RawVRFOutput;
     ReadProof: ReadProof;
+    ReadySolution: ReadySolution;
     Reasons: Reasons;
     RecoveryConfig: RecoveryConfig;
     RefCount: RefCount;
@@ -2220,6 +2258,7 @@ declare module '@polkadot/types/types/registry' {
     RewardDestination: RewardDestination;
     RewardDestinationTo257: RewardDestinationTo257;
     RewardPoint: RewardPoint;
+    RoundSnapshot: RoundSnapshot;
     RoundState: RoundState;
     RpcMethods: RpcMethods;
     RuntimeDbWeight: RuntimeDbWeight;
@@ -2278,6 +2317,9 @@ declare module '@polkadot/types/types/registry' {
     SlotRange: SlotRange;
     SocietyJudgement: SocietyJudgement;
     SocietyVote: SocietyVote;
+    SolutionOrSnapshotSize: SolutionOrSnapshotSize;
+    SolutionSupport: SolutionSupport;
+    SolutionSupports: SolutionSupports;
     SpanIndex: SpanIndex;
     SpanRecord: SpanRecord;
     Sr25519Signature: Sr25519Signature;
@@ -2392,6 +2434,7 @@ declare module '@polkadot/types/types/registry' {
     Votes: Votes;
     VotesTo230: VotesTo230;
     VoteThreshold: VoteThreshold;
+    VoteWeight: VoteWeight;
     Voting: Voting;
     VotingDelegating: VotingDelegating;
     VotingDirect: VotingDirect;
