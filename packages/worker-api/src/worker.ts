@@ -74,7 +74,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   #registry: TypeRegistry;
 
-  #keyring: Keyring;
+  #keyring?: Keyring;
 
   rsCount: number;
 
@@ -89,7 +89,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       extractRequestId: (data: any) => this.rsCount = ++this.rsCount
     });
     const {api, types} = options;
-    this.#keyring = options.keyring;
+    this.#keyring = (options.keyring || undefined);
     this.#registry = new TypeRegistry();
     this.rsCount = 0;
     this.rqStack = [] as string[]
@@ -104,6 +104,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public createType(apiType: string, obj: any): any {
     return this.#registry.createType(apiType as never, obj)
+  }
+
+  public setKeyring(keyring: Keyring): void {
+    this.#keyring = keyring;
   }
 
   public async getShieldingKey(options: CallOptions = {} as  CallOptions): Promise<NodeRSA> {
@@ -174,12 +178,15 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   }
 
   unlockKeypair(pair: PubKeyPinPair): KeyringPair {
-    /// Todo: error handling
-    const keyPair = this.#keyring.getPair(pair.pubKey);
+    if (this.#keyring !== undefined) {
+      const keyPair = this.#keyring.getPair(pair.pubKey);
       if (!keyPair.isLocked) {
         keyPair.lock();
       }
       keyPair.decodePkcs8(pair.pin);
-    return keyPair;
+      return keyPair;
+    } else {
+      throw  new Error(`Can only use trusted getter with 'PubKeyPinPair' if a keyring is set.`);
+    }
   }
 }
