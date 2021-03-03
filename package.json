@@ -10,7 +10,7 @@
   "scripts": {
     "build": "./scripts/build-ts.cjs",
     "publish": "lerna publish",
-    "publish:next": "lerna publish --canary --preid next",
+    "version:prerelease": "lerna version prerelease --preid next",
     "test": "polkadot-dev-run-test",
     "clean": "polkadot-dev-clean-build"
   },
