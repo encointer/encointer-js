@@ -1,5 +1,6 @@
-// Some network configs to run
+// Some network configs to run tests agains
 
+// Todo: move this to separate package `dev`
 export const gesellNetwork = () => {
   return {
     chain: 'wss://gesell.encointer.org',
@@ -32,6 +33,7 @@ export const chainbrickNetwork = () => {
   };
 };
 
+// Note: `mrenclave` is not deterministic, this needs to be edited for every worker build.
 export const localDockerNetwork = () => {
   return {
     chain: 'ws://127.0.0.1:9979',
@@ -44,6 +46,7 @@ export const localDockerNetwork = () => {
   };
 };
 
+// Type overrides needed for the v3.8 tag of the encointer-node repo.
 const TypeOverrides_V3_8 = {
   CurrencyIdentifier: 'Hash',
   BalanceType: 'i128',
@@ -79,6 +82,7 @@ const TypeOverrides_V3_8 = {
   }
 };
 
+// Pallet overrides for the v3.8 tag of the encointer-node repo
 const PalletOverrides_V3_8 = {
   encointerCommunities: {
     name: 'encointerCurrencies',
