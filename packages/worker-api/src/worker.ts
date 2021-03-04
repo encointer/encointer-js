@@ -1,6 +1,7 @@
 import '@polkadot/types/augment';
 import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
+import { Hash } from '@polkadot/types/interfaces';
 import { Keyring } from '@polkadot/keyring'
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
@@ -17,16 +18,17 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runtime';
 import type {
-  Attestation, BalanceEntry,
+  Attestation, BalanceEntry, BalanceTransferArgs, GrantReputationArgs,
   MeetupIndexType,
-  ParticipantIndexType,
-  SchedulerState
+  ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
+  SchedulerState, TrustedCallSigned
 } from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface';
 import { Request } from './interface';
 import { parseBalance, parseNodeRSA } from './parsers';
 import { callGetter } from './getterApi';
+import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
 import { toAccount } from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
@@ -182,5 +184,21 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       cid,
       account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
+  }
+
+  public trustedCallBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: BalanceTransferArgs): TrustedCallSigned {
+    return createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
+  }
+
+  public trustedCallRegisterParticipant(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: RegisterParticipantArgs): TrustedCallSigned {
+    return createTrustedCall(this, ['ceremonies_register_participant', 'RegisterParticipantArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
+  }
+
+  public trustedCallRegisterAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: RegisterAttestationsArgs): TrustedCallSigned {
+    return createTrustedCall(this, ['ceremonies_register_attestations', 'RegisterAttestationsArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
+  }
+
+  public trustedCallGrantReputation(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: GrantReputationArgs): TrustedCallSigned {
+    return createTrustedCall(this, ['ceremonies_grant_reputation', 'GrantReputationArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
   }
 }
