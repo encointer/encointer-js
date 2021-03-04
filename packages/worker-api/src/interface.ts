@@ -5,12 +5,13 @@ import {Keyring} from "@polkadot/keyring";
 export interface IEncointerWorker extends WebSocketAsPromised {
   rsCount: number;
   rqStack: string[];
+  keyring: () => Keyring | undefined;
   createType: (apiType: string, obj: any) => any;
   open: () => Promise<Event>;
 }
 
 export interface WorkerOptions {
-  keyring: Keyring;
+  keyring?: Keyring;
   api: any;
   types: any;
   createWebSocket?: (url: string) => WebSocket;

@@ -1,12 +1,14 @@
 import '@polkadot/types/augment';
-
-import WebSocketAsPromised from 'websocket-as-promised';
-import { options as encointerOptions } from '@encointer/node-api';
 import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
 import { Keyring } from '@polkadot/keyring'
-import { parseI64F64 } from '@encointer/util';
 import { hexToU8a, u8aToHex } from '@polkadot/util';
+
+import WebSocketAsPromised from 'websocket-as-promised';
+
+import { options as encointerOptions } from '@encointer/node-api';
+import { parseI64F64 } from '@encointer/util';
+
 // @ts-ignore
 import NodeRSA from 'node-rsa';
 
@@ -17,14 +19,15 @@ import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runt
 import type {
   Attestation, BalanceEntry,
   MeetupIndexType,
-  ParticipantIndexType, RegisterParticipantArgs,
-  SchedulerState, TrustedCallSigned
+  ParticipantIndexType,
+  SchedulerState
 } from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface';
-import { isPubKeyPinPair, Request } from './interface';
+import { Request } from './interface';
 import { parseBalance, parseNodeRSA } from './parsers';
 import { callGetter } from './getterApi';
+import { toAccount } from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Unwraps the value that is wrapped in all the Options and encoding from the worker.
@@ -72,7 +75,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
 
 export class EncointerWorker extends WebSocketAsPromised implements IEncointerWorker {
 
-  #registry: TypeRegistry;
+  readonly #registry: TypeRegistry;
 
   #keyring?: Keyring;
 
@@ -104,6 +107,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public createType(apiType: string, obj: any): any {
     return this.#registry.createType(apiType as never, obj)
+  }
+
+  public keyring(): Keyring | undefined {
+    return this.#keyring;
   }
 
   public setKeyring(keyring: Keyring): void {
@@ -145,54 +152,35 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<BalanceEntry> {
     return await callGetter<BalanceEntry>(this, [Request.TrustedGetter, 'balance', 'BalanceEntry'], {
       cid,
-      account: this.toAccount(accountOrPubKey)
+      account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
   }
 
   public async getParticipantIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
     return await callGetter<ParticipantIndexType>(this, [Request.TrustedGetter, 'participant_index', 'ParticipantIndexType'], {
       cid,
-      account: this.toAccount(accountOrPubKey)
+      account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
   }
 
   public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
     return await callGetter<MeetupIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupIndexType'], {
       cid,
-      account: this.toAccount(accountOrPubKey)
+      account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
   }
 
   public async getAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
     return await callGetter<Vec<Attestation>>(this, [Request.TrustedGetter, 'attestations', 'Vec<Attestation>'], {
       cid,
-      account: this.toAccount(accountOrPubKey)
+      account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
   }
 
   public async getMeetupRegistry(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<AccountId>> {
     return await callGetter<Vec<AccountId>>(this, [Request.TrustedGetter, 'meetup_registry', 'Vec<AccountId>'], {
       cid,
-      account: this.toAccount(accountOrPubKey)
+      account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
-  }
-
-  toAccount(accountOrPubKey: (KeyringPair | PubKeyPinPair)): KeyringPair {
-    return isPubKeyPinPair(accountOrPubKey) ?
-      this.unlockKeypair(accountOrPubKey as PubKeyPinPair) :
-      accountOrPubKey as KeyringPair
-  }
-
-  unlockKeypair(pair: PubKeyPinPair): KeyringPair {
-    if (this.#keyring !== undefined) {
-      const keyPair = this.#keyring.getPair(pair.pubKey);
-      if (!keyPair.isLocked) {
-        keyPair.lock();
-      }
-      keyPair.decodePkcs8(pair.pin);
-      return keyPair;
-    } else {
-      throw  new Error(`Can only use trusted getter with 'PubKeyPinPair' if a keyring is set.`);
-    }
   }
 }
