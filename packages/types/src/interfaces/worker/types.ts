@@ -59,8 +59,8 @@ export interface PublicGetter extends Enum {
   readonly asSchedulerState: CommunityIdentifier;
 }
 
-/** @name RegisterAttestationArgs */
-export interface RegisterAttestationArgs extends ITuple<[AccountId, Vec<Attestation>]> {}
+/** @name RegisterAttestationsArgs */
+export interface RegisterAttestationsArgs extends ITuple<[AccountId, Vec<Attestation>]> {}
 
 /** @name RegisterParticipantArgs */
 export interface RegisterParticipantArgs extends ITuple<[AccountId, CommunityIdentifier, Option<ProofOfAttendance>]> {}
@@ -81,7 +81,7 @@ export interface TrustedCall extends Enum {
   readonly isCeremoniesRegisterParticipant: boolean;
   readonly asCeremoniesRegisterParticipant: RegisterParticipantArgs;
   readonly isCeremoniesRegisterAttestations: boolean;
-  readonly asCeremoniesRegisterAttestations: RegisterAttestationArgs;
+  readonly asCeremoniesRegisterAttestations: RegisterAttestationsArgs;
   readonly isCeremoniesGrantReputation: boolean;
   readonly asCeremoniesGrantReputation: GrantReputationArgs;
 }

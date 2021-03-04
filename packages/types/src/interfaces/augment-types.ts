@@ -6,7 +6,7 @@ import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfa
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { BalanceEntry, BalanceType, CommunityCeremony, CommunityIdentifier, CommunityPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
 import type { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
@@ -698,7 +698,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<ReferendumInfoFinished>': Option<ReferendumInfoFinished>;
     'Option<ReferendumInfoTo239>': Option<ReferendumInfoTo239>;
     'Option<ReferendumStatus>': Option<ReferendumStatus>;
-    'Option<RegisterAttestationArgs>': Option<RegisterAttestationArgs>;
+    'Option<RegisterAttestationsArgs>': Option<RegisterAttestationsArgs>;
     'Option<RegisteredParachainInfo>': Option<RegisteredParachainInfo>;
     'Option<RegisterParticipantArgs>': Option<RegisterParticipantArgs>;
     'Option<RegistrarIndex>': Option<RegistrarIndex>;
@@ -1472,7 +1472,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ReferendumInfoFinished>': Vec<ReferendumInfoFinished>;
     'Vec<ReferendumInfoTo239>': Vec<ReferendumInfoTo239>;
     'Vec<ReferendumStatus>': Vec<ReferendumStatus>;
-    'Vec<RegisterAttestationArgs>': Vec<RegisterAttestationArgs>;
+    'Vec<RegisterAttestationsArgs>': Vec<RegisterAttestationsArgs>;
     'Vec<RegisteredParachainInfo>': Vec<RegisteredParachainInfo>;
     'Vec<RegisterParticipantArgs>': Vec<RegisterParticipantArgs>;
     'Vec<RegistrarIndex>': Vec<RegistrarIndex>;
@@ -2246,7 +2246,7 @@ declare module '@polkadot/types/types/registry' {
     ReferendumInfoFinished: ReferendumInfoFinished;
     ReferendumInfoTo239: ReferendumInfoTo239;
     ReferendumStatus: ReferendumStatus;
-    RegisterAttestationArgs: RegisterAttestationArgs;
+    RegisterAttestationsArgs: RegisterAttestationsArgs;
     RegisteredParachainInfo: RegisteredParachainInfo;
     RegisterParticipantArgs: RegisterParticipantArgs;
     RegistrarIndex: RegistrarIndex;

@@ -60,13 +60,13 @@ export default {
       _enum: {
         balance_transfer: 'BalanceTransferArgs',
         ceremonies_register_participant: 'RegisterParticipantArgs',
-        ceremonies_register_attestations: 'RegisterAttestationArgs',
+        ceremonies_register_attestations: 'RegisterAttestationsArgs',
         ceremonies_grant_reputation: 'GrantReputationArgs'
       }
     },
     BalanceTransferArgs: '(AccountId, AccountId, CommunityIdentifier, BalanceType)',
     RegisterParticipantArgs: '(AccountId, CommunityIdentifier, Option<ProofOfAttendance<MultiSignature, AccountId>>)',
-    RegisterAttestationArgs: '(AccountId, Vec<Attestation<MultiSignature, AccountId, u64>>)',
+    RegisterAttestationsArgs: '(AccountId, Vec<Attestation<MultiSignature, AccountId, u64>>)',
     GrantReputationArgs: '(AccountId, CommunityIdentifier, AccountId)'
   }
 }
