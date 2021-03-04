@@ -8,6 +8,9 @@ import type { BalanceType, CommunityIdentifier } from '@encointer/types/interfac
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
+/** @name BalanceTransferArgs */
+export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]> {}
+
 /** @name ClientRequest */
 export interface ClientRequest extends Enum {
   readonly isPubKeyWorker: boolean;
@@ -35,6 +38,9 @@ export interface Getter extends Enum {
 /** @name GetterArgs */
 export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}
 
+/** @name GrantReputationArgs */
+export interface GrantReputationArgs extends ITuple<[AccountId, CommunityIdentifier, AccountId]> {}
+
 /** @name PublicGetter */
 export interface PublicGetter extends Enum {
   readonly isTotalIssuance: boolean;
@@ -53,6 +59,12 @@ export interface PublicGetter extends Enum {
   readonly asSchedulerState: CommunityIdentifier;
 }
 
+/** @name RegisterAttestationArgs */
+export interface RegisterAttestationArgs extends ITuple<[AccountId, Vec<Attestation>]> {}
+
+/** @name RegisterParticipantArgs */
+export interface RegisterParticipantArgs extends ITuple<[AccountId, CommunityIdentifier, Option<ProofOfAttendance>]> {}
+
 /** @name Request */
 export interface Request extends Struct {
   readonly shard: ShardIdentifier;
@@ -65,13 +77,13 @@ export interface ShardIdentifier extends Hash {}
 /** @name TrustedCall */
 export interface TrustedCall extends Enum {
   readonly isBalanceTransfer: boolean;
-  readonly asBalanceTransfer: ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]>;
+  readonly asBalanceTransfer: BalanceTransferArgs;
   readonly isCeremoniesRegisterParticipant: boolean;
-  readonly asCeremoniesRegisterParticipant: ITuple<[AccountId, CommunityIdentifier, Option<ProofOfAttendance>]>;
+  readonly asCeremoniesRegisterParticipant: RegisterParticipantArgs;
   readonly isCeremoniesRegisterAttestations: boolean;
-  readonly asCeremoniesRegisterAttestations: ITuple<[AccountId, Vec<Attestation>]>;
+  readonly asCeremoniesRegisterAttestations: RegisterAttestationArgs;
   readonly isCeremoniesGrantReputation: boolean;
-  readonly asCeremoniesGrantReputation: ITuple<[AccountId, CommunityIdentifier, AccountId]>;
+  readonly asCeremoniesGrantReputation: GrantReputationArgs;
 }
 
 /** @name TrustedCallSigned */

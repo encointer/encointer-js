@@ -6,7 +6,7 @@ import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfa
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { BalanceEntry, BalanceType, CommunityCeremony, CommunityIdentifier, CommunityPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { ClientRequest, Enclave, Getter, GetterArgs, PublicGetter, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
 import type { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
@@ -214,6 +214,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<BalanceOf>': Option<BalanceOf>;
     'Option<Balances>': Option<Balances>;
     'Option<BalanceStatus>': Option<BalanceStatus>;
+    'Option<BalanceTransferArgs>': Option<BalanceTransferArgs>;
     'Option<BalanceType>': Option<BalanceType>;
     'Option<Bid>': Option<Bid>;
     'Option<Bidder>': Option<Bidder>;
@@ -455,6 +456,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<GrandpaEquivocationProof>': Option<GrandpaEquivocationProof>;
     'Option<GrandpaEquivocationValue>': Option<GrandpaEquivocationValue>;
     'Option<GrandpaPrevote>': Option<GrandpaPrevote>;
+    'Option<GrantReputationArgs>': Option<GrantReputationArgs>;
     'Option<GroupIndex>': Option<GroupIndex>;
     'Option<H1024>': Option<H1024>;
     'Option<H128>': Option<H128>;
@@ -696,7 +698,9 @@ declare module '@polkadot/types/types/registry' {
     'Option<ReferendumInfoFinished>': Option<ReferendumInfoFinished>;
     'Option<ReferendumInfoTo239>': Option<ReferendumInfoTo239>;
     'Option<ReferendumStatus>': Option<ReferendumStatus>;
+    'Option<RegisterAttestationArgs>': Option<RegisterAttestationArgs>;
     'Option<RegisteredParachainInfo>': Option<RegisteredParachainInfo>;
+    'Option<RegisterParticipantArgs>': Option<RegisterParticipantArgs>;
     'Option<RegistrarIndex>': Option<RegistrarIndex>;
     'Option<RegistrarInfo>': Option<RegistrarInfo>;
     'Option<Registration>': Option<Registration>;
@@ -984,6 +988,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<BalanceOf>': Vec<BalanceOf>;
     'Vec<Balances>': Vec<Balances>;
     'Vec<BalanceStatus>': Vec<BalanceStatus>;
+    'Vec<BalanceTransferArgs>': Vec<BalanceTransferArgs>;
     'Vec<BalanceType>': Vec<BalanceType>;
     'Vec<Bid>': Vec<Bid>;
     'Vec<Bidder>': Vec<Bidder>;
@@ -1225,6 +1230,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<GrandpaEquivocationProof>': Vec<GrandpaEquivocationProof>;
     'Vec<GrandpaEquivocationValue>': Vec<GrandpaEquivocationValue>;
     'Vec<GrandpaPrevote>': Vec<GrandpaPrevote>;
+    'Vec<GrantReputationArgs>': Vec<GrantReputationArgs>;
     'Vec<GroupIndex>': Vec<GroupIndex>;
     'Vec<H1024>': Vec<H1024>;
     'Vec<H128>': Vec<H128>;
@@ -1466,7 +1472,9 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ReferendumInfoFinished>': Vec<ReferendumInfoFinished>;
     'Vec<ReferendumInfoTo239>': Vec<ReferendumInfoTo239>;
     'Vec<ReferendumStatus>': Vec<ReferendumStatus>;
+    'Vec<RegisterAttestationArgs>': Vec<RegisterAttestationArgs>;
     'Vec<RegisteredParachainInfo>': Vec<RegisteredParachainInfo>;
+    'Vec<RegisterParticipantArgs>': Vec<RegisterParticipantArgs>;
     'Vec<RegistrarIndex>': Vec<RegistrarIndex>;
     'Vec<RegistrarInfo>': Vec<RegistrarInfo>;
     'Vec<Registration>': Vec<Registration>;
@@ -1754,6 +1762,7 @@ declare module '@polkadot/types/types/registry' {
     BalanceOf: BalanceOf;
     Balances: Balances;
     BalanceStatus: BalanceStatus;
+    BalanceTransferArgs: BalanceTransferArgs;
     BalanceType: BalanceType;
     Bid: Bid;
     Bidder: Bidder;
@@ -1995,6 +2004,7 @@ declare module '@polkadot/types/types/registry' {
     GrandpaEquivocationProof: GrandpaEquivocationProof;
     GrandpaEquivocationValue: GrandpaEquivocationValue;
     GrandpaPrevote: GrandpaPrevote;
+    GrantReputationArgs: GrantReputationArgs;
     GroupIndex: GroupIndex;
     H1024: H1024;
     H128: H128;
@@ -2236,7 +2246,9 @@ declare module '@polkadot/types/types/registry' {
     ReferendumInfoFinished: ReferendumInfoFinished;
     ReferendumInfoTo239: ReferendumInfoTo239;
     ReferendumStatus: ReferendumStatus;
+    RegisterAttestationArgs: RegisterAttestationArgs;
     RegisteredParachainInfo: RegisteredParachainInfo;
+    RegisterParticipantArgs: RegisterParticipantArgs;
     RegistrarIndex: RegistrarIndex;
     RegistrarInfo: RegistrarInfo;
     Registration: Registration;

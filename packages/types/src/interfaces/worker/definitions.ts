@@ -58,11 +58,15 @@ export default {
     },
     TrustedCall: {
       _enum: {
-        balance_transfer: '(AccountId, AccountId, CommunityIdentifier, BalanceType)',
-        ceremonies_register_participant: '(AccountId, CommunityIdentifier, Option<ProofOfAttendance<MultiSignature, AccountId>>)',
-        ceremonies_register_attestations: '(AccountId, Vec<Attestation<MultiSignature, AccountId, u64>>)',
-        ceremonies_grant_reputation: '(AccountId, CommunityIdentifier, AccountId)'
+        balance_transfer: 'BalanceTransferArgs',
+        ceremonies_register_participant: 'RegisterParticipantArgs',
+        ceremonies_register_attestations: 'RegisterAttestationArgs',
+        ceremonies_grant_reputation: 'GrantReputationArgs'
       }
-    }
+    },
+    BalanceTransferArgs: '(AccountId, AccountId, CommunityIdentifier, BalanceType)',
+    RegisterParticipantArgs: '(AccountId, CommunityIdentifier, Option<ProofOfAttendance<MultiSignature, AccountId>>)',
+    RegisterAttestationArgs: '(AccountId, Vec<Attestation<MultiSignature, AccountId, u64>>)',
+    GrantReputationArgs: '(AccountId, CommunityIdentifier, AccountId)'
   }
 }
