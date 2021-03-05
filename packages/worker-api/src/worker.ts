@@ -107,7 +107,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }
   }
 
-  public createType(apiType: string, obj: any): any {
+  public createType(apiType: string, obj?: any): any {
     return this.#registry.createType(apiType as never, obj)
   }
 
