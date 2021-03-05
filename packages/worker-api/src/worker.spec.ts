@@ -3,17 +3,19 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks';
 import { EncointerWorker } from './worker';
 import WS from 'websocket';
+import bs58 from 'bs58';
+import { CommunityIdentifier } from "@encointer/types";
 
-const { w3cwebsocket: WebSocket } = WS;
+const {w3cwebsocket: WebSocket} = WS;
 
-describe.skip('worker', () => {
+describe('worker', () => {
   const network = localDockerNetwork();
   let keyring: Keyring;
   let worker: EncointerWorker;
   beforeAll(async () => {
     jest.setTimeout(90000);
     await cryptoWaitReady();
-    keyring = new Keyring({ type: 'sr25519' });
+    keyring = new Keyring({type: 'sr25519'});
     const keypair = keyring.addFromUri('//Bob');
     const json = keypair.toJson('1234');
     keypair.lock();
@@ -26,6 +28,30 @@ describe.skip('worker', () => {
       createWebSocket: (url) => new WebSocket(url)
     });
   });
+
+  describe('trusted call', () => {
+    it('ceremonies_register_participant is valid', () => {
+      const alice = keyring.addFromUri('//Alice');
+      const proof = worker.createType('Option<ProofOfAttendance<MultiSignature, AccountId>>');
+      const cid: CommunityIdentifier = worker.createType('CommunityIdentifier', bs58.decode(network.chosenCid));
+      const nonce = worker.createType('u32', 0)
+      const args = worker.createType('RegisterParticipantArgs', [alice.publicKey, cid, proof])
+
+      // trustedCall from the previous js-implementation that is known to work
+      const tCallHex = '0x01d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d346f79784344767047366f5a3933566d4237337245365036656e6664445a39500000000000940cf3e675d8bd25066ad8a15af580ca9a41d3b13f840f43647f51869875fb62232086204dffc8ee67d959e2e3135eae214dd6296e76706459f6c9c8f2b3be86'
+
+      const call = worker.trustedCallRegisterParticipant(
+        alice,
+        cid,
+        network.mrenclave,
+        nonce,
+        args
+      );
+
+      // the last 64 bytes are from the non-deterministic signature
+      expect(call.toHex().slice(0, -128)).toEqual(tCallHex.slice(0, -128));
+    })
+  })
 
   // skip it, as this requires a worker (and hence a node) to be running
   // To my knowledge jest does not have an option to run skipped tests specifically, does it?
