@@ -17,20 +17,22 @@ export const assertLength: assertLengthFunc = function (upper, lower) {
 };
 
 export const toAccount = (accountOrPubKey: (KeyringPair | PubKeyPinPair), keyring?: Keyring): KeyringPair => {
-  return isPubKeyPinPair(accountOrPubKey) ?
-    unlockKeypair(accountOrPubKey as PubKeyPinPair, keyring) :
-    accountOrPubKey as KeyringPair
+  if (isPubKeyPinPair(accountOrPubKey)) {
+    if (keyring !== undefined) {
+      return unlockKeypair(accountOrPubKey as PubKeyPinPair, keyring)
+    } else {
+      throw  new Error(`Can only use trusted stuff with 'PubKeyPinPair' if a keyring is set.`);
+    }
+  }
+
+  return accountOrPubKey as KeyringPair
 }
 
-export const unlockKeypair = (pair: PubKeyPinPair, keyring?: Keyring): KeyringPair => {
-  if (keyring !== undefined) {
-    const keyPair = keyring.getPair(pair.pubKey);
-    if (!keyPair.isLocked) {
-      keyPair.lock();
-    }
-    keyPair.decodePkcs8(pair.pin);
-    return keyPair;
-  } else {
-    throw  new Error(`Can only use trusted getter with 'PubKeyPinPair' if a keyring is set.`);
+export const unlockKeypair = (pair: PubKeyPinPair, keyring: Keyring): KeyringPair => {
+  const keyPair = keyring.getPair(pair.pubKey);
+  if (!keyPair.isLocked) {
+    keyPair.lock();
   }
+  keyPair.decodePkcs8(pair.pin);
+  return keyPair;
 }
