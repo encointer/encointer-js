@@ -53,3 +53,18 @@ const balance = worker.getBalance(bob, communityId);
 
 console.log('Bob owns:', balance);
 ```
+
+# Publish to npm
+
+```
+// will prompt you to select version to increase, e.g. major, minor, patch etc. (Creates git tag!)
+lerna version --force-publish
+
+// apply changes from package.json to */build/package.json 
+yarn build
+
+// publish all changes from the build directory to npm
+lerna publish from-package --contents build
+```
+
+The lerna commands have been added as scripts to the `package.json`.
