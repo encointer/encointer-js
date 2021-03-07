@@ -20,7 +20,7 @@ export default {
     ClaimOfAttendance: {
       claimant_public: 'AccountId',
       ceremony_index: 'CeremonyIndexType',
-      currency_identifier: 'CurrencyIdentifier',
+      community_identifier: 'CommunityIdentifier',
       meetup_index: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
@@ -34,7 +34,7 @@ export default {
     ProofOfAttendance: {
       prover_public: 'AccountId',
       ceremony_index: 'CeremonyIndexType',
-      currency_identifier: 'CurrencyIdentifier',
+      community_identifier: 'CommunityIdentifier',
       attendee_public: 'AccountId',
       attendee_signature: 'Signature'
     }

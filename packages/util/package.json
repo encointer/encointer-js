@@ -1,6 +1,6 @@
 {
   "name": "@encointer/util",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Encointer JS utilities",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@polkadot/util": "^4.1.1",
+    "@polkadot/util": "^5.9.2",
     "@types/bn.js": "^4.11.6",
     "assert": "^2.0.0",
-    "bn.js": "^5.1.3"
+    "bn.js": "^4.12.0"
   }
 }
