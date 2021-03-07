@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "build": "./scripts/build-ts.cjs",
-    "publish": "lerna publish",
-    "version:prerelease": "lerna version prerelease --preid next",
+    "publish:git": "lerna version --force-publish",
+    "publish:npm": "lerna publish from-package --contents build",
     "test": "polkadot-dev-run-test",
     "clean": "polkadot-dev-clean-build"
   },
