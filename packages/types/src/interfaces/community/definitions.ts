@@ -3,7 +3,7 @@ export default {
   types: {
     CommunityIdentifier: 'Hash',
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
-    NominalIncome: 'BalanceType',
+    NominalIncomeType: 'BalanceType',
     Degree: 'i128',
     Location: {
       lat: 'Degree',
@@ -17,7 +17,7 @@ export default {
         'VerifiedLinked'
       ]
     },
-    CommunityMetadata: {
+    CommunityMetadataType: {
       name: 'Text',
       symbol: 'Text',
       icons: 'Text',

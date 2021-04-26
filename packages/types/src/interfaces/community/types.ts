@@ -13,8 +13,8 @@ export interface CommunityCeremony extends ITuple<[CommunityIdentifier, Ceremony
 /** @name CommunityIdentifier */
 export interface CommunityIdentifier extends Hash {}
 
-/** @name CommunityMetadata */
-export interface CommunityMetadata extends Struct {
+/** @name CommunityMetadataType */
+export interface CommunityMetadataType extends Struct {
   readonly name: Text;
   readonly symbol: Text;
   readonly icons: Text;
@@ -31,8 +31,8 @@ export interface Location extends Struct {
   readonly lon: Degree;
 }
 
-/** @name NominalIncome */
-export interface NominalIncome extends BalanceType {}
+/** @name NominalIncomeType */
+export interface NominalIncomeType extends BalanceType {}
 
 /** @name Reputation */
 export interface Reputation extends Enum {

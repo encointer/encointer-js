@@ -5,7 +5,7 @@ import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I25
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
-import type { CommunityCeremony, CommunityIdentifier, CommunityMetadata, Degree, Location, NominalIncome, Reputation, Theme } from '@encointer/types/interfaces/community';
+import type { CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -256,7 +256,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<CommittedCandidateReceipt>': Option<CommittedCandidateReceipt>;
     'Option<CommunityCeremony>': Option<CommunityCeremony>;
     'Option<CommunityIdentifier>': Option<CommunityIdentifier>;
-    'Option<CommunityMetadata>': Option<CommunityMetadata>;
+    'Option<CommunityMetadataType>': Option<CommunityMetadataType>;
     'Option<CompactAssignments>': Option<CompactAssignments>;
     'Option<CompactAssignmentsTo257>': Option<CompactAssignmentsTo257>;
     'Option<CompactScore>': Option<CompactScore>;
@@ -585,7 +585,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<NextConfigDescriptor>': Option<NextConfigDescriptor>;
     'Option<NextConfigDescriptorV1>': Option<NextConfigDescriptorV1>;
     'Option<NodeRole>': Option<NodeRole>;
-    'Option<NominalIncome>': Option<NominalIncome>;
+    'Option<NominalIncomeType>': Option<NominalIncomeType>;
     'Option<Nominations>': Option<Nominations>;
     'Option<NominatorIndex>': Option<NominatorIndex>;
     'Option<NominatorIndexCompact>': Option<NominatorIndexCompact>;
@@ -1026,7 +1026,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<CommittedCandidateReceipt>': Vec<CommittedCandidateReceipt>;
     'Vec<CommunityCeremony>': Vec<CommunityCeremony>;
     'Vec<CommunityIdentifier>': Vec<CommunityIdentifier>;
-    'Vec<CommunityMetadata>': Vec<CommunityMetadata>;
+    'Vec<CommunityMetadataType>': Vec<CommunityMetadataType>;
     'Vec<CompactAssignments>': Vec<CompactAssignments>;
     'Vec<CompactAssignmentsTo257>': Vec<CompactAssignmentsTo257>;
     'Vec<CompactScore>': Vec<CompactScore>;
@@ -1355,7 +1355,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<NextConfigDescriptor>': Vec<NextConfigDescriptor>;
     'Vec<NextConfigDescriptorV1>': Vec<NextConfigDescriptorV1>;
     'Vec<NodeRole>': Vec<NodeRole>;
-    'Vec<NominalIncome>': Vec<NominalIncome>;
+    'Vec<NominalIncomeType>': Vec<NominalIncomeType>;
     'Vec<Nominations>': Vec<Nominations>;
     'Vec<NominatorIndex>': Vec<NominatorIndex>;
     'Vec<NominatorIndexCompact>': Vec<NominatorIndexCompact>;
@@ -1796,7 +1796,7 @@ declare module '@polkadot/types/types/registry' {
     CommittedCandidateReceipt: CommittedCandidateReceipt;
     CommunityCeremony: CommunityCeremony;
     CommunityIdentifier: CommunityIdentifier;
-    CommunityMetadata: CommunityMetadata;
+    CommunityMetadataType: CommunityMetadataType;
     CompactAssignments: CompactAssignments;
     CompactAssignmentsTo257: CompactAssignmentsTo257;
     CompactScore: CompactScore;
@@ -2125,7 +2125,7 @@ declare module '@polkadot/types/types/registry' {
     NextConfigDescriptor: NextConfigDescriptor;
     NextConfigDescriptorV1: NextConfigDescriptorV1;
     NodeRole: NodeRole;
-    NominalIncome: NominalIncome;
+    NominalIncomeType: NominalIncomeType;
     Nominations: Nominations;
     NominatorIndex: NominatorIndex;
     NominatorIndexCompact: NominatorIndexCompact;
