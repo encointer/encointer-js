@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup
+      run: yarn install
     - name: Build
       run: yarn build
     - name: Run tests
