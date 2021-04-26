@@ -1,19 +1,11 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Bytes, Enum, Struct, i128 } from '@polkadot/types';
+import type { Enum, Option, Struct, Text, i128, u32 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
+import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
-import type { BlockNumber, Hash } from '@polkadot/types/interfaces/runtime';
-
-/** @name BalanceEntry */
-export interface BalanceEntry extends Struct {
-  readonly principal: i128;
-  readonly last_update: BlockNumber;
-}
-
-/** @name BalanceType */
-export interface BalanceType extends i128 {}
+import type { Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name CommunityCeremony */
 export interface CommunityCeremony extends ITuple<[CommunityIdentifier, CeremonyIndexType]> {}
@@ -21,14 +13,26 @@ export interface CommunityCeremony extends ITuple<[CommunityIdentifier, Ceremony
 /** @name CommunityIdentifier */
 export interface CommunityIdentifier extends Hash {}
 
-/** @name CommunityPropertiesType */
-export interface CommunityPropertiesType extends Struct {
-  readonly name_utf8: Bytes;
-  readonly demurrage_per_block: Demurrage;
+/** @name CommunityMetadata */
+export interface CommunityMetadata extends Struct {
+  readonly name: Text;
+  readonly symbol: Text;
+  readonly icons: Text;
+  readonly theme: Option<Theme>;
+  readonly url: Option<Text>;
 }
 
-/** @name Demurrage */
-export interface Demurrage extends i128 {}
+/** @name Degree */
+export interface Degree extends i128 {}
+
+/** @name Location */
+export interface Location extends Struct {
+  readonly lat: Degree;
+  readonly lon: Degree;
+}
+
+/** @name NominalIncome */
+export interface NominalIncome extends BalanceType {}
 
 /** @name Reputation */
 export interface Reputation extends Enum {
@@ -36,6 +40,11 @@ export interface Reputation extends Enum {
   readonly isUnverifiedReputable: boolean;
   readonly isVerifiedUnlinked: boolean;
   readonly isVerifiedLinked: boolean;
+}
+
+/** @name Theme */
+export interface Theme extends Struct {
+  readonly primary_swatch: u32;
 }
 
 export type PHANTOM_COMMUNITY = 'community';

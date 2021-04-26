@@ -2,17 +2,13 @@ export default {
   rpc: {},
   types: {
     CommunityIdentifier: 'Hash',
-    BalanceType: 'i128',
-    BalanceEntry: {
-      principal: 'i128',
-      last_update: 'BlockNumber'
-    },
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
-    CommunityPropertiesType: {
-      name_utf8: 'Vec<u8>',
-      demurrage_per_block: 'Demurrage'
+    NominalIncome: 'BalanceType',
+    Degree: 'i128',
+    Location: {
+      lat: 'Degree',
+      lon: 'Degree'
     },
-    Demurrage: 'i128',
     Reputation: {
       _enum: [
         'Unverified',
@@ -20,6 +16,16 @@ export default {
         'VerifiedUnlinked',
         'VerifiedLinked'
       ]
+    },
+    CommunityMetadata: {
+      name: 'Text',
+      symbol: 'Text',
+      icons: 'Text',
+      theme: 'Option<Theme>',
+      url: 'Option<Text>'
+    },
+    Theme: {
+      primary_swatch: 'u32'
     }
   }
 };
