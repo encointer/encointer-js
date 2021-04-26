@@ -12,10 +12,6 @@ export default {
     ParticipantIndexType: 'u64',
     MeetupIndexType: 'u64',
     AttestationIndexType: 'u64',
-    Location: {
-      lat: 'i64',
-      lon: 'i64'
-    },
     MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     ClaimOfAttendance: {
       claimant_public: 'AccountId',

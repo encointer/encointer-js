@@ -1,3 +1,4 @@
+export { default as balances } from './balances/definitions';
 export { default as bazaar } from './bazaar/definitions';
 export { default as common } from './common/definitions';
 export { default as ceremony } from './ceremony/definitions';

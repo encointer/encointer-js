@@ -2,9 +2,10 @@
 /* eslint-disable */
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
+import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
-import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, Location, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
-import type { BalanceEntry, BalanceType, CommunityCeremony, CommunityIdentifier, CommunityPropertiesType, Demurrage, Reputation } from '@encointer/types/interfaces/community';
+import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -13,7 +14,6 @@ import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
 import type { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
 import type { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import type { AllowedSlots, BabeAuthorityWeight, BabeBlockWeight, BabeEquivocationProof, BabeWeight, EpochAuthorship, MaybeRandomness, MaybeVrf, NextConfigDescriptor, NextConfigDescriptorV1, Randomness, RawBabePreDigest, RawBabePreDigestCompat, RawBabePreDigestPrimary, RawBabePreDigestPrimaryTo159, RawBabePreDigestSecondaryPlain, RawBabePreDigestSecondaryTo159, RawBabePreDigestSecondaryVRF, RawBabePreDigestTo159, SlotNumber, VrfData, VrfOutput, VrfProof } from '@polkadot/types/interfaces/babe';
-import type { AccountData, BalanceLock, BalanceLockTo212, BalanceStatus, Reasons, VestingSchedule, WithdrawReasons } from '@polkadot/types/interfaces/balances';
 import type { BlockHash } from '@polkadot/types/interfaces/chain';
 import type { PrefixedStorageKey } from '@polkadot/types/interfaces/childstate';
 import type { EthereumAddress, StatementKind } from '@polkadot/types/interfaces/claims';
@@ -152,7 +152,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<AbridgedHrmpChannel>': Option<AbridgedHrmpChannel>;
     'Option<AbstractFungible>': Option<AbstractFungible>;
     'Option<AbstractNonFungible>': Option<AbstractNonFungible>;
-    'Option<AccountData>': Option<AccountData>;
     'Option<AccountId>': Option<AccountId>;
     'Option<AccountId32Junction>': Option<AccountId32Junction>;
     'Option<AccountIdOf>': Option<AccountIdOf>;
@@ -209,11 +208,8 @@ declare module '@polkadot/types/types/registry' {
     'Option<BackedCandidate>': Option<BackedCandidate>;
     'Option<Balance>': Option<Balance>;
     'Option<BalanceEntry>': Option<BalanceEntry>;
-    'Option<BalanceLock>': Option<BalanceLock>;
-    'Option<BalanceLockTo212>': Option<BalanceLockTo212>;
     'Option<BalanceOf>': Option<BalanceOf>;
     'Option<Balances>': Option<Balances>;
-    'Option<BalanceStatus>': Option<BalanceStatus>;
     'Option<BalanceTransferArgs>': Option<BalanceTransferArgs>;
     'Option<BalanceType>': Option<BalanceType>;
     'Option<Bid>': Option<Bid>;
@@ -260,7 +256,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<CommittedCandidateReceipt>': Option<CommittedCandidateReceipt>;
     'Option<CommunityCeremony>': Option<CommunityCeremony>;
     'Option<CommunityIdentifier>': Option<CommunityIdentifier>;
-    'Option<CommunityPropertiesType>': Option<CommunityPropertiesType>;
+    'Option<CommunityMetadataType>': Option<CommunityMetadataType>;
     'Option<CompactAssignments>': Option<CompactAssignments>;
     'Option<CompactAssignmentsTo257>': Option<CompactAssignmentsTo257>;
     'Option<CompactScore>': Option<CompactScore>;
@@ -313,6 +309,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<Data>': Option<Data>;
     'Option<DeferredOffenceOf>': Option<DeferredOffenceOf>;
     'Option<DefunctVoter>': Option<DefunctVoter>;
+    'Option<Degree>': Option<Degree>;
     'Option<Delegations>': Option<Delegations>;
     'Option<DeletedContract>': Option<DeletedContract>;
     'Option<Demurrage>': Option<Demurrage>;
@@ -588,6 +585,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<NextConfigDescriptor>': Option<NextConfigDescriptor>;
     'Option<NextConfigDescriptorV1>': Option<NextConfigDescriptorV1>;
     'Option<NodeRole>': Option<NodeRole>;
+    'Option<NominalIncomeType>': Option<NominalIncomeType>;
     'Option<Nominations>': Option<Nominations>;
     'Option<NominatorIndex>': Option<NominatorIndex>;
     'Option<NominatorIndexCompact>': Option<NominatorIndexCompact>;
@@ -689,7 +687,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<RawVRFOutput>': Option<RawVRFOutput>;
     'Option<ReadProof>': Option<ReadProof>;
     'Option<ReadySolution>': Option<ReadySolution>;
-    'Option<Reasons>': Option<Reasons>;
     'Option<RecoveryConfig>': Option<RecoveryConfig>;
     'Option<RefCount>': Option<RefCount>;
     'Option<RefCountTo259>': Option<RefCountTo259>;
@@ -835,6 +832,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<TAssetDepositBalance>': Option<TAssetDepositBalance>;
     'Option<TeleportAsset>': Option<TeleportAsset>;
     'Option<Text>': Option<Text>;
+    'Option<Theme>': Option<Theme>;
     'Option<Timepoint>': Option<Timepoint>;
     'Option<TombstoneContractInfo>': Option<TombstoneContractInfo>;
     'Option<Transact>': Option<Transact>;
@@ -890,7 +888,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<VersionedMultiLocation>': Option<VersionedMultiLocation>;
     'Option<VersionedXcm>': Option<VersionedXcm>;
     'Option<VestingInfo>': Option<VestingInfo>;
-    'Option<VestingSchedule>': Option<VestingSchedule>;
     'Option<Vote>': Option<Vote>;
     'Option<VoteIndex>': Option<VoteIndex>;
     'Option<Voter>': Option<Voter>;
@@ -916,7 +913,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<WinningData>': Option<WinningData>;
     'Option<WinningDataEntry>': Option<WinningDataEntry>;
     'Option<WithdrawAsset>': Option<WithdrawAsset>;
-    'Option<WithdrawReasons>': Option<WithdrawReasons>;
     'Option<WorkerEncoded>': Option<WorkerEncoded>;
     'Option<Xcm>': Option<Xcm>;
     'Option<XcmError>': Option<XcmError>;
@@ -926,7 +922,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<AbridgedHrmpChannel>': Vec<AbridgedHrmpChannel>;
     'Vec<AbstractFungible>': Vec<AbstractFungible>;
     'Vec<AbstractNonFungible>': Vec<AbstractNonFungible>;
-    'Vec<AccountData>': Vec<AccountData>;
     'Vec<AccountId>': Vec<AccountId>;
     'Vec<AccountId32Junction>': Vec<AccountId32Junction>;
     'Vec<AccountIdOf>': Vec<AccountIdOf>;
@@ -983,11 +978,8 @@ declare module '@polkadot/types/types/registry' {
     'Vec<BackedCandidate>': Vec<BackedCandidate>;
     'Vec<Balance>': Vec<Balance>;
     'Vec<BalanceEntry>': Vec<BalanceEntry>;
-    'Vec<BalanceLock>': Vec<BalanceLock>;
-    'Vec<BalanceLockTo212>': Vec<BalanceLockTo212>;
     'Vec<BalanceOf>': Vec<BalanceOf>;
     'Vec<Balances>': Vec<Balances>;
-    'Vec<BalanceStatus>': Vec<BalanceStatus>;
     'Vec<BalanceTransferArgs>': Vec<BalanceTransferArgs>;
     'Vec<BalanceType>': Vec<BalanceType>;
     'Vec<Bid>': Vec<Bid>;
@@ -1034,7 +1026,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<CommittedCandidateReceipt>': Vec<CommittedCandidateReceipt>;
     'Vec<CommunityCeremony>': Vec<CommunityCeremony>;
     'Vec<CommunityIdentifier>': Vec<CommunityIdentifier>;
-    'Vec<CommunityPropertiesType>': Vec<CommunityPropertiesType>;
+    'Vec<CommunityMetadataType>': Vec<CommunityMetadataType>;
     'Vec<CompactAssignments>': Vec<CompactAssignments>;
     'Vec<CompactAssignmentsTo257>': Vec<CompactAssignmentsTo257>;
     'Vec<CompactScore>': Vec<CompactScore>;
@@ -1087,6 +1079,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<Data>': Vec<Data>;
     'Vec<DeferredOffenceOf>': Vec<DeferredOffenceOf>;
     'Vec<DefunctVoter>': Vec<DefunctVoter>;
+    'Vec<Degree>': Vec<Degree>;
     'Vec<Delegations>': Vec<Delegations>;
     'Vec<DeletedContract>': Vec<DeletedContract>;
     'Vec<Demurrage>': Vec<Demurrage>;
@@ -1362,6 +1355,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<NextConfigDescriptor>': Vec<NextConfigDescriptor>;
     'Vec<NextConfigDescriptorV1>': Vec<NextConfigDescriptorV1>;
     'Vec<NodeRole>': Vec<NodeRole>;
+    'Vec<NominalIncomeType>': Vec<NominalIncomeType>;
     'Vec<Nominations>': Vec<Nominations>;
     'Vec<NominatorIndex>': Vec<NominatorIndex>;
     'Vec<NominatorIndexCompact>': Vec<NominatorIndexCompact>;
@@ -1463,7 +1457,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<RawVRFOutput>': Vec<RawVRFOutput>;
     'Vec<ReadProof>': Vec<ReadProof>;
     'Vec<ReadySolution>': Vec<ReadySolution>;
-    'Vec<Reasons>': Vec<Reasons>;
     'Vec<RecoveryConfig>': Vec<RecoveryConfig>;
     'Vec<RefCount>': Vec<RefCount>;
     'Vec<RefCountTo259>': Vec<RefCountTo259>;
@@ -1609,6 +1602,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<TAssetDepositBalance>': Vec<TAssetDepositBalance>;
     'Vec<TeleportAsset>': Vec<TeleportAsset>;
     'Vec<Text>': Vec<Text>;
+    'Vec<Theme>': Vec<Theme>;
     'Vec<Timepoint>': Vec<Timepoint>;
     'Vec<TombstoneContractInfo>': Vec<TombstoneContractInfo>;
     'Vec<Transact>': Vec<Transact>;
@@ -1664,7 +1658,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<VersionedMultiLocation>': Vec<VersionedMultiLocation>;
     'Vec<VersionedXcm>': Vec<VersionedXcm>;
     'Vec<VestingInfo>': Vec<VestingInfo>;
-    'Vec<VestingSchedule>': Vec<VestingSchedule>;
     'Vec<Vote>': Vec<Vote>;
     'Vec<VoteIndex>': Vec<VoteIndex>;
     'Vec<Voter>': Vec<Voter>;
@@ -1690,7 +1683,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<WinningData>': Vec<WinningData>;
     'Vec<WinningDataEntry>': Vec<WinningDataEntry>;
     'Vec<WithdrawAsset>': Vec<WithdrawAsset>;
-    'Vec<WithdrawReasons>': Vec<WithdrawReasons>;
     'Vec<WorkerEncoded>': Vec<WorkerEncoded>;
     'Vec<Xcm>': Vec<Xcm>;
     'Vec<XcmError>': Vec<XcmError>;
@@ -1700,7 +1692,6 @@ declare module '@polkadot/types/types/registry' {
     AbridgedHrmpChannel: AbridgedHrmpChannel;
     AbstractFungible: AbstractFungible;
     AbstractNonFungible: AbstractNonFungible;
-    AccountData: AccountData;
     AccountId: AccountId;
     AccountId32Junction: AccountId32Junction;
     AccountIdOf: AccountIdOf;
@@ -1757,11 +1748,8 @@ declare module '@polkadot/types/types/registry' {
     BackedCandidate: BackedCandidate;
     Balance: Balance;
     BalanceEntry: BalanceEntry;
-    BalanceLock: BalanceLock;
-    BalanceLockTo212: BalanceLockTo212;
     BalanceOf: BalanceOf;
     Balances: Balances;
-    BalanceStatus: BalanceStatus;
     BalanceTransferArgs: BalanceTransferArgs;
     BalanceType: BalanceType;
     Bid: Bid;
@@ -1808,7 +1796,7 @@ declare module '@polkadot/types/types/registry' {
     CommittedCandidateReceipt: CommittedCandidateReceipt;
     CommunityCeremony: CommunityCeremony;
     CommunityIdentifier: CommunityIdentifier;
-    CommunityPropertiesType: CommunityPropertiesType;
+    CommunityMetadataType: CommunityMetadataType;
     CompactAssignments: CompactAssignments;
     CompactAssignmentsTo257: CompactAssignmentsTo257;
     CompactScore: CompactScore;
@@ -1861,6 +1849,7 @@ declare module '@polkadot/types/types/registry' {
     Data: Data;
     DeferredOffenceOf: DeferredOffenceOf;
     DefunctVoter: DefunctVoter;
+    Degree: Degree;
     Delegations: Delegations;
     DeletedContract: DeletedContract;
     Demurrage: Demurrage;
@@ -2136,6 +2125,7 @@ declare module '@polkadot/types/types/registry' {
     NextConfigDescriptor: NextConfigDescriptor;
     NextConfigDescriptorV1: NextConfigDescriptorV1;
     NodeRole: NodeRole;
+    NominalIncomeType: NominalIncomeType;
     Nominations: Nominations;
     NominatorIndex: NominatorIndex;
     NominatorIndexCompact: NominatorIndexCompact;
@@ -2237,7 +2227,6 @@ declare module '@polkadot/types/types/registry' {
     RawVRFOutput: RawVRFOutput;
     ReadProof: ReadProof;
     ReadySolution: ReadySolution;
-    Reasons: Reasons;
     RecoveryConfig: RecoveryConfig;
     RefCount: RefCount;
     RefCountTo259: RefCountTo259;
@@ -2383,6 +2372,7 @@ declare module '@polkadot/types/types/registry' {
     TAssetDepositBalance: TAssetDepositBalance;
     TeleportAsset: TeleportAsset;
     Text: Text;
+    Theme: Theme;
     Timepoint: Timepoint;
     TombstoneContractInfo: TombstoneContractInfo;
     Transact: Transact;
@@ -2438,7 +2428,6 @@ declare module '@polkadot/types/types/registry' {
     VersionedMultiLocation: VersionedMultiLocation;
     VersionedXcm: VersionedXcm;
     VestingInfo: VestingInfo;
-    VestingSchedule: VestingSchedule;
     Vote: Vote;
     VoteIndex: VoteIndex;
     Voter: Voter;
@@ -2464,7 +2453,6 @@ declare module '@polkadot/types/types/registry' {
     WinningData: WinningData;
     WinningDataEntry: WinningDataEntry;
     WithdrawAsset: WithdrawAsset;
-    WithdrawReasons: WithdrawReasons;
     WorkerEncoded: WorkerEncoded;
     Xcm: Xcm;
     XcmError: XcmError;

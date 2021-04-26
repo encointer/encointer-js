@@ -1,9 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Option, Struct, i64, u32, u64 } from '@polkadot/types';
+import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
+import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
 import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
 
@@ -36,12 +36,6 @@ export interface ClaimOfAttendance extends Struct {
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
-}
-
-/** @name Location */
-export interface Location extends Struct {
-  readonly lat: i64;
-  readonly lon: i64;
 }
 
 /** @name MeetupAssignment */
