@@ -17,6 +17,10 @@ export default {
         'VerifiedLinked'
       ]
     },
+    CidName: {
+      cid: 'CommunityIdentifier',
+      name: 'Text',
+    },
     CommunityMetadataType: {
       name: 'Text',
       symbol: 'Text',

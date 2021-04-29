@@ -5,7 +5,7 @@ import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I25
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
-import type { CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
+import type { CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { AssetBalance, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -246,6 +246,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<ChainProperties>': Option<ChainProperties>;
     'Option<ChainType>': Option<ChainType>;
     'Option<ChangesTrieConfiguration>': Option<ChangesTrieConfiguration>;
+    'Option<CidName>': Option<CidName>;
     'Option<ClaimOfAttendance>': Option<ClaimOfAttendance>;
     'Option<ClientRequest>': Option<ClientRequest>;
     'Option<CodecHash>': Option<CodecHash>;
@@ -1016,6 +1017,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ChainProperties>': Vec<ChainProperties>;
     'Vec<ChainType>': Vec<ChainType>;
     'Vec<ChangesTrieConfiguration>': Vec<ChangesTrieConfiguration>;
+    'Vec<CidName>': Vec<CidName>;
     'Vec<ClaimOfAttendance>': Vec<ClaimOfAttendance>;
     'Vec<ClientRequest>': Vec<ClientRequest>;
     'Vec<CodecHash>': Vec<CodecHash>;
@@ -1786,6 +1788,7 @@ declare module '@polkadot/types/types/registry' {
     ChainProperties: ChainProperties;
     ChainType: ChainType;
     ChangesTrieConfiguration: ChangesTrieConfiguration;
+    CidName: CidName;
     ClaimOfAttendance: ClaimOfAttendance;
     ClientRequest: ClientRequest;
     CodecHash: CodecHash;
