@@ -2,7 +2,7 @@ export default {
   rpc: {
     communities: {
       getCidNames: {
-        description: 'Get the names of all Communities as Vec<CidNames>',
+        description: 'Get the name of all communities as Vec<CidNames>',
         params: [
           {
             name: 'at',
