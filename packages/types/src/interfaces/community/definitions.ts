@@ -1,5 +1,19 @@
 export default {
-  rpc: {},
+  rpc: {
+    communities: {
+      getAll: {
+        description: 'Get the name of all communities as Vec<CidNames>',
+        params: [
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<CidName>'
+      }
+    }
+  },
   types: {
     CommunityIdentifier: 'Hash',
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
@@ -16,6 +30,10 @@ export default {
         'VerifiedUnlinked',
         'VerifiedLinked'
       ]
+    },
+    CidName: {
+      cid: 'CommunityIdentifier',
+      name: 'Text',
     },
     CommunityMetadataType: {
       name: 'Text',

@@ -7,6 +7,12 @@ import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
 import type { Hash } from '@polkadot/types/interfaces/runtime';
 
+/** @name CidName */
+export interface CidName extends Struct {
+  readonly cid: CommunityIdentifier;
+  readonly name: Text;
+}
+
 /** @name CommunityCeremony */
 export interface CommunityCeremony extends ITuple<[CommunityIdentifier, CeremonyIndexType]> {}
 
