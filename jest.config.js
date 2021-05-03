@@ -14,5 +14,4 @@ module.exports = Object.assign({}, config, {
     '<rootDir>/packages/util/build',
     '<rootDir>/packages/types/build'
   ],
-  resolver: '@polkadot/dev/config/jest-resolver.cjs'
 });
