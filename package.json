@@ -15,7 +15,7 @@
     "clean": "polkadot-dev-clean-build"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.62.11",
+    "@polkadot/dev": "^0.61.31",
     "@polkadot/types": "^4.8.1",
     "@types/jest": "^26.0.15",
     "babel-cli": "^6.26.0",
