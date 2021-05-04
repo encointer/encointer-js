@@ -12,7 +12,7 @@ const { EXT_CJS, EXT_ESM } = require('@polkadot/dev/config/babel-extensions.cjs'
 const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
-const BL_CONFIGS = ['babel.config-cjs.js', 'babel.config-esm.js'];
+const BL_CONFIGS = ['babel.config.js', 'babel.config-esm.js'];
 const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
   .map((ext) => `src/**/*.${ext}`)
   .concat('package.json');
