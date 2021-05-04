@@ -6,6 +6,7 @@
   "homepage": "https://github.com/encointer/encointer-js#readme",
   "license": "GPL-3.0-or-later",
   "main": "index.js",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
