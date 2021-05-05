@@ -149,11 +149,10 @@ function relativePath (value) {
 }
 
 async function main () {
-  mkdirp.sync('build');
-
-  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ./build');
+  execSync('yarn polkadot-dev-clean-build');
 
   process.chdir('packages');
+  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ./build');
 
   const dirs = fs
     .readdirSync('.')
@@ -168,9 +167,9 @@ async function main () {
 
     mkdirp.sync('build');
 
-      await buildBabel(dir, 'cjs');
-      await buildBabel(dir, 'esm');
-      buildExports();
+    await buildBabel(dir, 'cjs');
+    await buildBabel(dir, 'esm');
+    buildExports();
 
     console.log();
 
