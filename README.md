@@ -68,3 +68,7 @@ lerna publish from-package --contents build
 ```
 
 The lerna commands have been added as scripts to the `package.json`.
+
+**WARN** When the packages are linked in the `js_encointer_service` and yarn install is run, it will create a 
+`node_modules` folder inside the build folder. Do NOT publish this one. However, with the above sequence, this will be
+fine, as `yarn build` cleans the build directory first.
