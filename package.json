@@ -15,12 +15,14 @@
     "clean": "polkadot-dev-clean-build"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.61.31",
-    "@polkadot/types": "^3.11.1",
-    "@types/jest": "^26.0.15",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "lerna": "^3.22.1",
-    "typescript": "4.2.2"
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.0",
+    "@babel/register": "^7.13.16",
+    "@babel/runtime": "^7.14.0",
+    "@polkadot/dev": "^0.62.11",
+    "@polkadot/types": "^4.8.1",
+    "@types/jest": "^26.0.23",
+    "lerna": "^4.0.0",
+    "typescript": "4.2.4"
   }
 }

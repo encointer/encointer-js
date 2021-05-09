@@ -1,12 +1,13 @@
 {
   "name": "@encointer/util",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Encointer JS utilities",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
   "license": "MIT",
   "main": "index.js",
   "types": "./index.d.ts",
+  "type": "module",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -20,7 +21,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@polkadot/util": "^5.9.2",
+    "@polkadot/util": "^6.3.1",
     "@types/bn.js": "^4.11.6",
     "assert": "^2.0.0",
     "bn.js": "^4.12.0"

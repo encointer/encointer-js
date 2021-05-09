@@ -1,12 +1,13 @@
 {
   "name": "@encointer/worker-api",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Encointer Worker API",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
   "license": "GPL-3.0-or-later",
   "main": "index.js",
   "types": "./index.d.ts",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
@@ -18,12 +19,12 @@
     "url": "https://github.com/encointer/encointer-js/issues"
   },
   "dependencies": {
-    "@encointer/node-api": "^0.1.2",
-    "@encointer/types": "^0.1.2",
-    "@encointer/util": "^0.1.2",
-    "@polkadot/api": "^3.11.1",
-    "@polkadot/types": "^3.11.1",
-    "@polkadot/util": "^5.9.2",
+    "@encointer/node-api": "^0.2.0",
+    "@encointer/types": "^0.2.0",
+    "@encointer/util": "^0.2.0",
+    "@polkadot/api": "^4.8.1",
+    "@polkadot/types": "^4.8.1",
+    "@polkadot/util": "^6.3.1",
     "bs58": "^4.0.1",
     "node-rsa": "^1.1.1",
     "websocket-as-promised": "^2.0.1"
