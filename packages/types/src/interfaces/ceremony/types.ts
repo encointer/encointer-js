@@ -39,6 +39,17 @@ export interface ClaimOfAttendance extends Struct {
   readonly claimant_signature: Option<MultiSignature>;
 }
 
+/** @name ClaimOfAttendanceSigningPayload */
+export interface ClaimOfAttendanceSigningPayload extends Struct {
+  readonly claimant_public: AccountId;
+  readonly ceremony_index: CeremonyIndexType;
+  readonly community_identifier: CommunityIdentifier;
+  readonly meetup_index: MeetupIndexType;
+  readonly location: Location;
+  readonly timestamp: Moment;
+  readonly number_of_participants_confirmed: u32;
+}
+
 /** @name MeetupAssignment */
 export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
 

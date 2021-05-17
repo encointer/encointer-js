@@ -4,7 +4,7 @@
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
-import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
@@ -266,6 +266,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<ChangesTrieConfiguration>': Option<ChangesTrieConfiguration>;
     'Option<CidName>': Option<CidName>;
     'Option<ClaimOfAttendance>': Option<ClaimOfAttendance>;
+    'Option<ClaimOfAttendanceSigningPayload>': Option<ClaimOfAttendanceSigningPayload>;
     'Option<ClientRequest>': Option<ClientRequest>;
     'Option<CodecHash>': Option<CodecHash>;
     'Option<CodeHash>': Option<CodeHash>;
@@ -1087,6 +1088,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ChangesTrieConfiguration>': Vec<ChangesTrieConfiguration>;
     'Vec<CidName>': Vec<CidName>;
     'Vec<ClaimOfAttendance>': Vec<ClaimOfAttendance>;
+    'Vec<ClaimOfAttendanceSigningPayload>': Vec<ClaimOfAttendanceSigningPayload>;
     'Vec<ClientRequest>': Vec<ClientRequest>;
     'Vec<CodecHash>': Vec<CodecHash>;
     'Vec<CodeHash>': Vec<CodeHash>;
@@ -1908,6 +1910,7 @@ declare module '@polkadot/types/types/registry' {
     ChangesTrieConfiguration: ChangesTrieConfiguration;
     CidName: CidName;
     ClaimOfAttendance: ClaimOfAttendance;
+    ClaimOfAttendanceSigningPayload: ClaimOfAttendanceSigningPayload;
     ClientRequest: ClientRequest;
     CodecHash: CodecHash;
     CodeHash: CodeHash;
