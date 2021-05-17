@@ -36,6 +36,7 @@ export interface ClaimOfAttendance extends Struct {
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
+  readonly claimant_signature: Option<MultiSignature>;
 }
 
 /** @name MeetupAssignment */
