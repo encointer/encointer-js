@@ -20,8 +20,19 @@ export default {
       meetup_index: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
-      number_of_participants_confirmed: 'u32'
+      number_of_participants_confirmed: 'u32',
+      claimant_signature: 'Option<MultiSignature>'
     },
+    ClaimOfAttendanceSigningPayload: {
+      claimant_public: 'AccountId',
+      ceremony_index: 'CeremonyIndexType',
+      community_identifier: 'CommunityIdentifier',
+      meetup_index: 'MeetupIndexType',
+      location: 'Location',
+      timestamp: 'Moment',
+      number_of_participants_confirmed: 'u32',
+    },
+    // Todo: remove this type does no longer exist in ceremonies, but it still exists in the trusted stuff.
     Attestation: {
       claim: 'ClaimOfAttendance',
       signature: 'MultiSignature',
