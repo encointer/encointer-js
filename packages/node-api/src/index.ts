@@ -1,2 +1,2 @@
-export * from './options';
+export { options } from './options';
 export { ApiOptions } from '@polkadot/api/types';

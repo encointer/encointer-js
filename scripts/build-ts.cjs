@@ -12,7 +12,8 @@ const { EXT_CJS, EXT_ESM } = require('@polkadot/dev/config/babel-extensions.cjs'
 const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
-const BL_CONFIGS = ['babel.config.js', 'babel.config-esm.js'];
+const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
+const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];
 const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
   .map((ext) => `src/**/*.${ext}`)
   .concat('package.json');
@@ -20,6 +21,7 @@ const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
 const isTypeModule = EXT_ESM === '.js';
 const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 
+// compile via babel, either via supplied config or default
 async function buildBabel (dir, type) {
     const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
     const outDir = path.join(process.cwd(), 'build');
