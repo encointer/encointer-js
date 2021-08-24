@@ -3,7 +3,7 @@ export default {
     types: {
         BusinessIdentifier: {
             community_identifier: 'CommunityIdentifier',
-            controller: 'bid'
+            controller: 'AccountId'
         },
         OfferingIdentifier: 'u32',
         BusinessData: {

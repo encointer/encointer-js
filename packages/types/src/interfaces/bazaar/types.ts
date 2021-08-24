@@ -3,6 +3,7 @@
 
 import type { Struct, Text, u32 } from '@polkadot/types';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
+import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name BusinessData */
 export interface BusinessData extends Struct {
@@ -13,7 +14,7 @@ export interface BusinessData extends Struct {
 /** @name BusinessIdentifier */
 export interface BusinessIdentifier extends Struct {
   readonly community_identifier: CommunityIdentifier;
-  readonly controller: bid;
+  readonly controller: AccountId;
 }
 
 /** @name OfferingData */
