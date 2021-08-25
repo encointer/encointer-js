@@ -3,7 +3,7 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
-import type { ArticleIdentifier, ShopIdentifier } from '@encointer/types/interfaces/bazaar';
+import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
@@ -107,6 +107,7 @@ declare module '@polkadot/types/types/registry' {
     'Compact<MomentOf>': Compact<MomentOf>;
     'Compact<NominatorIndex>': Compact<NominatorIndex>;
     'Compact<OffchainAccuracy>': Compact<OffchainAccuracy>;
+    'Compact<OfferingIdentifier>': Compact<OfferingIdentifier>;
     'Compact<OverweightIndex>': Compact<OverweightIndex>;
     'Compact<PageCounter>': Compact<PageCounter>;
     'Compact<ParaId>': Compact<ParaId>;
@@ -195,7 +196,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<ApprovalFlag>': Option<ApprovalFlag>;
     'Option<Approvals>': Option<Approvals>;
     'Option<ArithmeticError>': Option<ArithmeticError>;
-    'Option<ArticleIdentifier>': Option<ArticleIdentifier>;
     'Option<AssetApproval>': Option<AssetApproval>;
     'Option<AssetApprovalKey>': Option<AssetApprovalKey>;
     'Option<AssetBalance>': Option<AssetBalance>;
@@ -270,6 +270,8 @@ declare module '@polkadot/types/types/registry' {
     'Option<BridgedBlockNumber>': Option<BridgedBlockNumber>;
     'Option<BridgedHeader>': Option<BridgedHeader>;
     'Option<BufferedSessionChange>': Option<BufferedSessionChange>;
+    'Option<BusinessData>': Option<BusinessData>;
+    'Option<BusinessIdentifier>': Option<BusinessIdentifier>;
     'Option<Bytes>': Option<Bytes>;
     'Option<Call>': Option<Call>;
     'Option<CallHash>': Option<CallHash>;
@@ -689,6 +691,8 @@ declare module '@polkadot/types/types/registry' {
     'Option<OffchainAccuracyCompact>': Option<OffchainAccuracyCompact>;
     'Option<OffenceDetails>': Option<OffenceDetails>;
     'Option<Offender>': Option<Offender>;
+    'Option<OfferingData>': Option<OfferingData>;
+    'Option<OfferingIdentifier>': Option<OfferingIdentifier>;
     'Option<OpaqueCall>': Option<OpaqueCall>;
     'Option<OpaqueMultiaddr>': Option<OpaqueMultiaddr>;
     'Option<OpaqueNetworkState>': Option<OpaqueNetworkState>;
@@ -861,7 +865,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<SetId>': Option<SetId>;
     'Option<SetIndex>': Option<SetIndex>;
     'Option<ShardIdentifier>': Option<ShardIdentifier>;
-    'Option<ShopIdentifier>': Option<ShopIdentifier>;
     'Option<SiField>': Option<SiField>;
     'Option<Signature>': Option<Signature>;
     'Option<SignedAvailabilityBitfield>': Option<SignedAvailabilityBitfield>;
@@ -1094,7 +1097,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ApprovalFlag>': Vec<ApprovalFlag>;
     'Vec<Approvals>': Vec<Approvals>;
     'Vec<ArithmeticError>': Vec<ArithmeticError>;
-    'Vec<ArticleIdentifier>': Vec<ArticleIdentifier>;
     'Vec<AssetApproval>': Vec<AssetApproval>;
     'Vec<AssetApprovalKey>': Vec<AssetApprovalKey>;
     'Vec<AssetBalance>': Vec<AssetBalance>;
@@ -1169,6 +1171,8 @@ declare module '@polkadot/types/types/registry' {
     'Vec<BridgedBlockNumber>': Vec<BridgedBlockNumber>;
     'Vec<BridgedHeader>': Vec<BridgedHeader>;
     'Vec<BufferedSessionChange>': Vec<BufferedSessionChange>;
+    'Vec<BusinessData>': Vec<BusinessData>;
+    'Vec<BusinessIdentifier>': Vec<BusinessIdentifier>;
     'Vec<Bytes>': Vec<Bytes>;
     'Vec<Call>': Vec<Call>;
     'Vec<CallHash>': Vec<CallHash>;
@@ -1588,6 +1592,8 @@ declare module '@polkadot/types/types/registry' {
     'Vec<OffchainAccuracyCompact>': Vec<OffchainAccuracyCompact>;
     'Vec<OffenceDetails>': Vec<OffenceDetails>;
     'Vec<Offender>': Vec<Offender>;
+    'Vec<OfferingData>': Vec<OfferingData>;
+    'Vec<OfferingIdentifier>': Vec<OfferingIdentifier>;
     'Vec<OpaqueCall>': Vec<OpaqueCall>;
     'Vec<OpaqueMultiaddr>': Vec<OpaqueMultiaddr>;
     'Vec<OpaqueNetworkState>': Vec<OpaqueNetworkState>;
@@ -1760,7 +1766,6 @@ declare module '@polkadot/types/types/registry' {
     'Vec<SetId>': Vec<SetId>;
     'Vec<SetIndex>': Vec<SetIndex>;
     'Vec<ShardIdentifier>': Vec<ShardIdentifier>;
-    'Vec<ShopIdentifier>': Vec<ShopIdentifier>;
     'Vec<SiField>': Vec<SiField>;
     'Vec<Signature>': Vec<Signature>;
     'Vec<SignedAvailabilityBitfield>': Vec<SignedAvailabilityBitfield>;
@@ -1993,7 +1998,6 @@ declare module '@polkadot/types/types/registry' {
     ApprovalFlag: ApprovalFlag;
     Approvals: Approvals;
     ArithmeticError: ArithmeticError;
-    ArticleIdentifier: ArticleIdentifier;
     AssetApproval: AssetApproval;
     AssetApprovalKey: AssetApprovalKey;
     AssetBalance: AssetBalance;
@@ -2068,6 +2072,8 @@ declare module '@polkadot/types/types/registry' {
     BridgedBlockNumber: BridgedBlockNumber;
     BridgedHeader: BridgedHeader;
     BufferedSessionChange: BufferedSessionChange;
+    BusinessData: BusinessData;
+    BusinessIdentifier: BusinessIdentifier;
     Bytes: Bytes;
     Call: Call;
     CallHash: CallHash;
@@ -2487,6 +2493,8 @@ declare module '@polkadot/types/types/registry' {
     OffchainAccuracyCompact: OffchainAccuracyCompact;
     OffenceDetails: OffenceDetails;
     Offender: Offender;
+    OfferingData: OfferingData;
+    OfferingIdentifier: OfferingIdentifier;
     OpaqueCall: OpaqueCall;
     OpaqueMultiaddr: OpaqueMultiaddr;
     OpaqueNetworkState: OpaqueNetworkState;
@@ -2659,7 +2667,6 @@ declare module '@polkadot/types/types/registry' {
     SetId: SetId;
     SetIndex: SetIndex;
     ShardIdentifier: ShardIdentifier;
-    ShopIdentifier: ShopIdentifier;
     SiField: SiField;
     Signature: Signature;
     SignedAvailabilityBitfield: SignedAvailabilityBitfield;
