@@ -3,7 +3,7 @@ import {options} from "@encointer/node-api/options";
 
 describe('node-api', () => {
     // let keyring: Keyring;
-    let api: ApiPromise;
+    let api: any;
     const chain = 'ws://127.0.0.1:9944';
     beforeAll(async () => {
         jest.setTimeout(90000);
@@ -26,5 +26,38 @@ describe('node-api', () => {
             console.log(result);
             expect(result).toBeDefined();
         });
+    });
+
+    describe('rpc', () => {
+        it('communities.GetAll should return empty vec', async () => {
+            const result = await api.rpc.communities.getAll();
+            // console.log(result);
+            expect(result.length).toBe(0);
+        });
+
+        it('communities.GetBusinesses should return empty vec', async () => {
+            // random cid
+            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            const result = await api.rpc.bazaar.getBusinesses(cid);
+            // console.log(result);
+            expect(result.length).toBe(0);
+        });
+
+        it('communities.GetOfferings should return empty vec', async () => {
+            // random cid
+            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            const result = await api.rpc.bazaar.getOfferings(cid);
+            // console.log(result);
+            expect(result.length).toBe(0);
+        });
+
+        it('communities.GetOfferingsForBusiness should return empty vec', async () => {
+            // default bid
+            const bid= api.createType('BusinessIdentifier', {});
+            const result = await api.rpc.bazaar.getOfferingsForBusiness(bid);
+            // console.log(result);
+            expect(result.length).toBe(0);
+        });
+
     });
 });

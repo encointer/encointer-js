@@ -13,7 +13,7 @@
     "publish:npm": "lerna publish from-package --contents build",
     "test": "polkadot-dev-run-test",
     "test:integration": "polkadot-dev-run-test --config jest.config-integration.js",
-    "clean": "polkadot-dev-clean-build"
+    "clean": "polkadot-dev-clean-build",
     "generate:types": "cd packages/types && yarn generate:defs"
   },
   "devDependencies": {
