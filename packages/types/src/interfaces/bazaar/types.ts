@@ -1,13 +1,14 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Struct, Text, u32 } from '@polkadot/types';
+import type { Struct, u32 } from '@polkadot/types';
+import type { PalletString } from '@encointer/types/interfaces/common';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name BusinessData */
 export interface BusinessData extends Struct {
-  readonly url: Text;
+  readonly url: PalletString;
   readonly last_oid: u32;
 }
 
@@ -19,7 +20,7 @@ export interface BusinessIdentifier extends Struct {
 
 /** @name OfferingData */
 export interface OfferingData extends Struct {
-  readonly url: Text;
+  readonly url: PalletString;
 }
 
 /** @name OfferingIdentifier */

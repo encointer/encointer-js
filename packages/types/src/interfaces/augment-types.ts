@@ -5,6 +5,7 @@ import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I25
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { PalletString } from '@encointer/types/interfaces/common';
 import type { CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
@@ -713,6 +714,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<PageIndexData>': Option<PageIndexData>;
     'Option<PalletId>': Option<PalletId>;
     'Option<PalletsOrigin>': Option<PalletsOrigin>;
+    'Option<PalletString>': Option<PalletString>;
     'Option<PalletVersion>': Option<PalletVersion>;
     'Option<ParachainDispatchOrigin>': Option<ParachainDispatchOrigin>;
     'Option<ParachainInherentData>': Option<ParachainInherentData>;
@@ -1614,6 +1616,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<PageIndexData>': Vec<PageIndexData>;
     'Vec<PalletId>': Vec<PalletId>;
     'Vec<PalletsOrigin>': Vec<PalletsOrigin>;
+    'Vec<PalletString>': Vec<PalletString>;
     'Vec<PalletVersion>': Vec<PalletVersion>;
     'Vec<ParachainDispatchOrigin>': Vec<ParachainDispatchOrigin>;
     'Vec<ParachainInherentData>': Vec<ParachainInherentData>;
@@ -2515,6 +2518,7 @@ declare module '@polkadot/types/types/registry' {
     PageIndexData: PageIndexData;
     PalletId: PalletId;
     PalletsOrigin: PalletsOrigin;
+    PalletString: PalletString;
     PalletVersion: PalletVersion;
     ParachainDispatchOrigin: ParachainDispatchOrigin;
     ParachainInherentData: ParachainInherentData;
