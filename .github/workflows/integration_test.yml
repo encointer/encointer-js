@@ -1,0 +1,39 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run yarn install
+        run: yarn install
+
+      - name: Download encointer-node
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build-and-test.yml
+          name: executables
+          # in fact this action should download the latest artifact, but sometimes fails. Then we need to
+          # set the `run_id` to force a download of an updated binary.
+          run_id: 1225957072
+          path: node
+          repo: encointer/encointer-node
+
+      - name: Run encointer-node
+        run: |
+          ls -alt node
+          chmod +x node/encointer-node-notee
+          ./node/encointer-node-notee --tmp --dev --enable-offchain-indexing true --rpc-methods unsafe &
+
+      - name: Run integration tests
+        run: yarn test:integration
