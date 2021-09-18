@@ -1,3 +1,7 @@
+
+# generated package info files
+**/packageInfo.ts
+
 # Logs
 build/
 logs
