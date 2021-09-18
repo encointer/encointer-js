@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "@encointer/types": "^0.4.0",
-    "@polkadot/api": "^4.13.1"
+    "@polkadot/api": "^4.17.2-20"
   }
 }
