@@ -1,6 +1,7 @@
 const config = require('@polkadot/dev/config/jest.cjs');
 
-module.exports = Object.assign({}, config, {
+module.exports = {
+  ...config,
   moduleNameMapper: {
     '@encointer/node-api(.*)$': '<rootDir>/packages/node-api/src/$1',
     '@encointer/worker-api(.*)$': '<rootDir>/packages/worker-api/src/$1',
@@ -15,4 +16,4 @@ module.exports = Object.assign({}, config, {
     '<rootDir>/packages/types/build'
   ],
   transformIgnorePatterns: ['/node_modules/(?!@polkadot|@encointer|@babel/runtime/helpers/esm/)']
-});
+};
