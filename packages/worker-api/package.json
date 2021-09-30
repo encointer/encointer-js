@@ -1,6 +1,6 @@
 {
   "name": "@encointer/worker-api",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Encointer Worker API",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
@@ -19,9 +19,9 @@
     "url": "https://github.com/encointer/encointer-js/issues"
   },
   "dependencies": {
-    "@encointer/node-api": "^0.4.2",
-    "@encointer/types": "^0.4.2",
-    "@encointer/util": "^0.4.2",
+    "@encointer/node-api": "^0.4.3",
+    "@encointer/types": "^0.4.3",
+    "@encointer/util": "^0.4.3",
     "@polkadot/api": "^5.9.1",
     "@polkadot/types": "^5.9.1",
     "@polkadot/util": "^7.4.1",
