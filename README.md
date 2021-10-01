@@ -16,7 +16,7 @@ yarn add @encointer/node-api @encointer/worker-api
 ```
 
 # Usage example
-There are some more examples in the `./node-api/src/e2e.ts` files.
+There are some more examples in `./node-api/src/e2e.ts`.
 
 ```js
 import { EncointerWorker } from '@encointer/worker-api';
