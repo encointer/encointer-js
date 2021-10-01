@@ -1,13 +1,13 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 
 describe('node-api', () => {
-    // let keyring: Keyring;
+    let keyring: Keyring;
     let api: any;
     const chain = 'ws://127.0.0.1:9944';
     beforeAll(async () => {
-        jest.setTimeout(90000);
-        // keyring = new Keyring({ type: 'sr25519' });
+        // jest.setTimeout(90000);
+        keyring = new Keyring({ type: 'sr25519' });
         const provider = new WsProvider('ws://127.0.0.1:9944');
         try {
             api = await ApiPromise.create({
@@ -53,7 +53,10 @@ describe('node-api', () => {
 
         it('communities.GetOfferingsForBusiness should return empty vec', async () => {
             // default bid
-            const bid= api.createType('BusinessIdentifier', {});
+            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            const alice = keyring.addFromUri('//Alice', { name: 'Alice default' })
+
+            const bid= api.createType('BusinessIdentifier', [cid, alice.publicKey]);
             const result = await api.rpc.bazaar.getOfferingsForBusiness(bid);
             // console.log(result);
             expect(result.length).toBe(0);
