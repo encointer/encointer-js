@@ -6,6 +6,9 @@ import type { BalanceType } from '@encointer/types/interfaces/balances';
   import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types';
   import type { ITuple } from '@polkadot/types/types';
 
+/** @name CidDigest */
+export interface CidDigest extends U8aFixed {}
+
 /** @name CidName */
 export interface CidName extends Struct {
   readonly cid: CommunityIdentifier;
@@ -17,8 +20,8 @@ export interface CommunityCeremony extends ITuple<[CommunityIdentifier, Ceremony
 
 /** @name CommunityIdentifier */
 export interface CommunityIdentifier extends Struct {
-  readonly geohash: U8aFixed;
-  readonly digest: U8aFixed;
+  readonly geo_hash: GeoHash;
+  readonly digest: CidDigest;
 }
 
 /** @name CommunityMetadataType */
@@ -32,6 +35,9 @@ export interface CommunityMetadataType extends Struct {
 
 /** @name Degree */
 export interface Degree extends i128 {}
+
+/** @name GeoHash */
+export interface GeoHash extends U8aFixed {}
 
 /** @name Location */
 export interface Location extends Struct {
