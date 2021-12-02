@@ -2,6 +2,7 @@ import {ToFixPointFn, toFixPoint} from './toFixPoint';
 import {ParserFixPointFn, parserFixPoint} from './parserFixPoint';
 import {EncodeFloatToFixPointFn, encodeFloatToFixPoint} from './encodeFloatToFixPoint';
 
+export * from './cidUtil';
 export * from './toFixPoint';
 export * from './parserFixPoint';
 export * from './encodeFloatToFixPoint';
