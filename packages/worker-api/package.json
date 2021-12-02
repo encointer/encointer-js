@@ -22,9 +22,9 @@
     "@encointer/node-api": "^0.4.3",
     "@encointer/types": "^0.4.3",
     "@encointer/util": "^0.4.3",
-    "@polkadot/api": "^5.9.1",
-    "@polkadot/types": "^5.9.1",
-    "@polkadot/util": "^7.4.1",
+    "@polkadot/api": "^6.10.3",
+    "@polkadot/types": "^6.10.3",
+    "@polkadot/util": "^8.0.5",
     "bs58": "^4.0.1",
     "node-rsa": "^1.1.1",
     "websocket-as-promised": "^2.0.1"

@@ -14,12 +14,12 @@
     "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces --input ./src/interfaces"
   },
   "dependencies": {
-    "@polkadot/api": "^5.9.1",
-    "@polkadot/types": "^5.9.1",
-    "@polkadot/util": "^7.4.1"
+    "@polkadot/api": "^6.10.3",
+    "@polkadot/types": "^6.10.3",
+    "@polkadot/util": "^8.0.5"
   },
   "devDependencies": {
-    "@polkadot/typegen": "5.9.1",
+    "@polkadot/typegen": "6.10.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
