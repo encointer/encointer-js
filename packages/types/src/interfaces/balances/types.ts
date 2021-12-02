@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { Struct, i128 } from '@polkadot/types';
-import type { BlockNumber } from '@polkadot/types/interfaces/runtime';
+  import type { BlockNumber } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceEntry */
 export interface BalanceEntry extends Struct {

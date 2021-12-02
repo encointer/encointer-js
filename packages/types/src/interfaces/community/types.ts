@@ -1,10 +1,10 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
+  import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
+  import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types';
+  import type { ITuple } from '@polkadot/types/types';
 
 /** @name CidName */
 export interface CidName extends Struct {

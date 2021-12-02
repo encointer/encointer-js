@@ -1,11 +1,11 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
 import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
-import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
+  import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
+  import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
+  import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
+  import type { ITuple } from '@polkadot/types/types';
 
 /** @name Attestation */
 export interface Attestation extends Struct {
