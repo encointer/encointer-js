@@ -15,7 +15,10 @@ export default {
     }
   },
   types: {
-    CommunityIdentifier: 'Hash',
+    CommunityIdentifier: {
+      geohash: "[u8; 5]",
+      digest: "[u8; 4']"
+    },
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
     NominalIncomeType: 'BalanceType',
     Degree: 'i128',

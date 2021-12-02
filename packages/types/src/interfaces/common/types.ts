@@ -3,6 +3,9 @@
 
 import type { Text } from '@polkadot/types';
 
+/** @name IpfsCid */
+export interface IpfsCid extends Text {}
+
 /** @name PalletString */
 export interface PalletString extends Text {}
 
