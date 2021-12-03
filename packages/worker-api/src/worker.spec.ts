@@ -36,8 +36,6 @@ describe('worker', () => {
       const nonce = worker.createType('u32', 0)
       const args = worker.createType('RegisterParticipantArgs', [alice.publicKey, cid, proof])
 
-      console.log(cid.toHex());
-
       // trustedCall from the previous js-implementation that is known to work.
       const tCallHex = '0x01d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d6762737576ffffffff0000000000940cf3e675d8bd25066ad8a15af580ca9a41d3b13f840f43647f51869875fb62232086204dffc8ee67d959e2e3135eae214dd6296e76706459f6c9c8f2b3be86'
 
