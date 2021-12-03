@@ -7,7 +7,7 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 import WebSocketAsPromised from 'websocket-as-promised';
 
 import { options as encointerOptions } from '@encointer/node-api';
-import { parseI64F64 } from '@encointer/util';
+import {communityIdentifierFromString, parseI64F64} from '@encointer/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
@@ -116,6 +116,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public setKeyring(keyring: Keyring): void {
     this.#keyring = keyring;
+  }
+
+  public cidFromStr(cidStr: String): CommunityIdentifier {
+    return communityIdentifierFromString(this.#registry, cidStr);
   }
 
   public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
