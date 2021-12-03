@@ -5,8 +5,8 @@ import {TypeRegistry} from "@polkadot/types";
 import {options as encointerOptions} from "@encointer/node-api";
 import {RegistryTypes} from "@polkadot/types/types";
 
-describe('encodeFloatToFixPoint', () => {
-    it('should encode integer to fixPoint', () => {
+describe('cidUtils', () => {
+    it('should parse string-formatted cid', () => {
         const cidStr = "gbsuv7YXq9G";
 
         // scale-encoded `CommunityIdentifier` generated in rust.
