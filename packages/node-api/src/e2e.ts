@@ -1,5 +1,6 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
+import {communityIdentifierFromString} from "../../util/src";
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -23,7 +24,7 @@ describe('node-api', () => {
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
             const result = await api.query.encointerScheduler.currentPhase();
-            console.log(result);
+            // console.log(result);
             expect(result).toBeDefined();
         });
     });
@@ -37,23 +38,24 @@ describe('node-api', () => {
 
         it('communities.GetBusinesses should return empty vec', async () => {
             // random cid
-            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
+            console.log(cid);
             const result = await api.rpc.bazaar.getBusinesses(cid);
-            // console.log(result);
+            console.log(result);
             expect(result.length).toBe(0);
         });
 
         it('communities.GetOfferings should return empty vec', async () => {
             // random cid
-            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
             const result = await api.rpc.bazaar.getOfferings(cid);
             // console.log(result);
             expect(result.length).toBe(0);
         });
 
         it('communities.GetOfferingsForBusiness should return empty vec', async () => {
-            // default bid
-            const cid = '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E'
+            // random cid
+            let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
             const alice = keyring.addFromUri('//Alice', { name: 'Alice default' })
 
             const bid= api.createType('BusinessIdentifier', [cid, alice.publicKey]);
