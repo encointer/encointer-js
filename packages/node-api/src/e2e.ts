@@ -37,10 +37,12 @@ describe('node-api', () => {
         });
 
         it('communities.GetBusinesses should return empty vec', async () => {
-            // random cid
-            let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
-            console.log(cid);
-            const result = await api.rpc.bazaar.getBusinesses(cid);
+            const cid = api.createType('CommunityIdentifier', {
+                geohash: [0x00,0x00,0x00,0x00,0x00],
+                digest: [0x00,0x00,0x00,0x00,],
+            });
+
+            const result = await api.rpc.bazaar.getBusinesses(cid.toHex());
             console.log(result);
             expect(result.length).toBe(0);
         });
