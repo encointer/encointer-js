@@ -4,7 +4,7 @@
 declare module '@polkadot/types/types/registry' {
   import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
   import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
-  import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+  import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupLocationIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
   import type { IpfsCid, PalletString } from '@encointer/types/interfaces/common';
   import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, GeoHash, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
   import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
@@ -569,7 +569,7 @@ declare module '@polkadot/types/types/registry' {
     MaybeRandomness: MaybeRandomness;
     MaybeVrf: MaybeVrf;
     MeetupAssignment: MeetupAssignment;
-    MeetupIndexType: MeetupIndexType;
+    MeetupLocationIndexType: MeetupLocationIndexType;
     MemberCount: MemberCount;
     MembershipProof: MembershipProof;
     MessageData: MessageData;

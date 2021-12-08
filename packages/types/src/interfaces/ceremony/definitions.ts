@@ -10,7 +10,7 @@ export default {
       ]
     },
     ParticipantIndexType: 'u64',
-    MeetupIndexType: 'u64',
+    MeetupLocationIndexType: 'u64',
     AttestationIndexType: 'u64',
     MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     ClaimOfAttendance: {

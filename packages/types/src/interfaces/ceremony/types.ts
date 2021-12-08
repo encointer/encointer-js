@@ -53,8 +53,8 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
 /** @name MeetupAssignment */
 export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
 
-/** @name MeetupIndexType */
-export interface MeetupIndexType extends u64 {}
+/** @name MeetupLocationIndexType */
+export interface MeetupLocationIndexType extends u64 {}
 
 /** @name ParticipantIndexType */
 export interface ParticipantIndexType extends u64 {}
