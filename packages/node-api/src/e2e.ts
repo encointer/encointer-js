@@ -21,6 +21,11 @@ describe('node-api', () => {
             await provider.disconnect();
         }
     });
+
+    afterAll(async () => {
+        api.disconnect();
+    });
+
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
             const result = await api.query.encointerScheduler.currentPhase();
