@@ -2,7 +2,7 @@ export default {
   rpc: {
     communities: {
       getAll: {
-        description: 'Get the name of all communities as Vec<CidNames>',
+        description: 'Get the cid and name of all communities as Vec<CidNames>',
         params: [
           {
             name: 'at',
@@ -11,6 +11,22 @@ export default {
           }
         ],
         type: 'Vec<CidName>'
+      },
+      getLocations: {
+        description: 'Get all registered locations of a community',
+        params: [
+          {
+            name: 'cid',
+            type: 'CommunityIdentifier',
+            isOptional: false
+          },
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<Location>'
       }
     }
   },
