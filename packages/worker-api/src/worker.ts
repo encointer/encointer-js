@@ -18,7 +18,7 @@ import type { Vec, u32, u64 } from '@polkadot/types';
 import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runtime';
 import type {
   Attestation, BalanceEntry, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
-  MeetupIndexType,
+  MeetupLocationIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
   SchedulerState, TrustedCallSigned
 } from '@encointer/types';
@@ -168,8 +168,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }, options)
   }
 
-  public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
-    return await callGetter<MeetupIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupIndexType'], {
+  public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupLocationIndexType> {
+    return await callGetter<MeetupLocationIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupLocationIndexType'], {
       cid,
       account: toAccount(accountOrPubKey, this.#keyring)
     }, options)

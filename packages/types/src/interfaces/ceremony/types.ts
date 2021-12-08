@@ -32,7 +32,7 @@ export interface ClaimOfAttendance extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupIndexType;
+  readonly meetup_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
@@ -44,14 +44,14 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupIndexType;
+  readonly meetup_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
 }
 
 /** @name MeetupAssignment */
-export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
+export interface MeetupAssignment extends ITuple<[MeetupLocationIndexType, Option<Location>]> {}
 
 /** @name MeetupLocationIndexType */
 export interface MeetupLocationIndexType extends u64 {}
