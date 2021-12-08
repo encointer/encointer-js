@@ -16,7 +16,7 @@ export default {
   },
   types: {
     CommunityIdentifier: {
-      geo_hash: 'GeoHash',
+      geohash: 'GeoHash',
       digest: 'CidDigest'
     },
     GeoHash: '[u8; 5]',

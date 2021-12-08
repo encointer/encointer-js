@@ -20,7 +20,7 @@ export interface CommunityCeremony extends ITuple<[CommunityIdentifier, Ceremony
 
 /** @name CommunityIdentifier */
 export interface CommunityIdentifier extends Struct {
-  readonly geo_hash: GeoHash;
+  readonly geohash: GeoHash;
   readonly digest: CidDigest;
 }
 
