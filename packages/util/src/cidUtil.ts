@@ -10,7 +10,7 @@ import {TypeRegistry} from "@polkadot/types";
  */
 export function communityIdentifierFromString(registry: TypeRegistry, cid: String): CommunityIdentifier {
     return registry.createType('CommunityIdentifier', {
-        geo_hash: registry.createType('GeoHash', u8aToU8a(cid.substring(0,5))),
+        geohash: registry.createType('GeoHash', u8aToU8a(cid.substring(0,5))),
         digest: registry.createType('CidDigest', base58Decode(cid.substring(5))),
     });
 }
