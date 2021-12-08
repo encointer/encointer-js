@@ -23,6 +23,7 @@ describe('node-api', () => {
     });
 
     afterAll(async () => {
+        // Jest fails to exit after the tests without this.
         api.disconnect();
     });
 
@@ -49,7 +50,7 @@ describe('node-api', () => {
                 try {
                     await api.rpc.communities.getLocations(cid)
                 } catch(e) {
-                    expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 0, 0, 0, 0, 0, 255, 255, 255, 255]");
+                    expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
 
             });
