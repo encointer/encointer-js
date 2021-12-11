@@ -1,9 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { u32 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
 import type { CeremonyIndexType, CeremonyPhaseType } from '@encointer/types/interfaces/ceremony';
+  import type { u32 } from '@polkadot/types';
+  import type { ITuple } from '@polkadot/types/types';
 
 /** @name SchedulerState */
 export interface SchedulerState extends ITuple<[CeremonyIndexType, CeremonyPhaseType, SystemNumber]> {}

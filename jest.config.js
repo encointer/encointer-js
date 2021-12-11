@@ -8,12 +8,4 @@ module.exports = {
     '@encointer/util(.*)$': '<rootDir>/packages/util/src/$1',
     '@encointer/types(.*)$': '<rootDir>/packages/types/src/$1'
   },
-  modulePathIgnorePatterns: [
-    '<rootDir>/build',
-    '<rootDir>/packages/node-api/build',
-    '<rootDir>/packages/worker-api/build',
-    '<rootDir>/packages/util/build',
-    '<rootDir>/packages/types/build'
-  ],
-  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@encointer|@babel/runtime/helpers/esm/)']
 };

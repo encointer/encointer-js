@@ -1,11 +1,11 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
 import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
-import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
+  import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
+  import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
+  import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
+  import type { ITuple } from '@polkadot/types/types';
 
 /** @name Attestation */
 export interface Attestation extends Struct {
@@ -32,7 +32,7 @@ export interface ClaimOfAttendance extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupIndexType;
+  readonly meetup_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
@@ -44,17 +44,17 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupIndexType;
+  readonly meetup_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
 }
 
 /** @name MeetupAssignment */
-export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
+export interface MeetupAssignment extends ITuple<[MeetupLocationIndexType, Option<Location>]> {}
 
-/** @name MeetupIndexType */
-export interface MeetupIndexType extends u64 {}
+/** @name MeetupLocationIndexType */
+export interface MeetupLocationIndexType extends u64 {}
 
 /** @name ParticipantIndexType */
 export interface ParticipantIndexType extends u64 {}

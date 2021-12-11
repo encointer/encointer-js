@@ -1,14 +1,13 @@
 import '@polkadot/types/augment';
 import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
-import { Hash } from '@polkadot/types/interfaces';
 import { Keyring } from '@polkadot/keyring'
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
 import { options as encointerOptions } from '@encointer/node-api';
-import { parseI64F64 } from '@encointer/util';
+import {communityIdentifierFromString, parseI64F64} from '@encointer/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
@@ -18,8 +17,8 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runtime';
 import type {
-  Attestation, BalanceEntry, BalanceTransferArgs, GrantReputationArgs,
-  MeetupIndexType,
+  Attestation, BalanceEntry, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
+  MeetupLocationIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
   SchedulerState, TrustedCallSigned
 } from '@encointer/types';
@@ -119,6 +118,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     this.#keyring = keyring;
   }
 
+  public cidFromStr(cidStr: String): CommunityIdentifier {
+    return communityIdentifierFromString(this.#registry, cidStr);
+  }
+
   public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
     return await callGetter<NodeRSA>(this, [Request.Worker, 'PubKeyWorker', 'NodeRSA'], {}, options)
   }
@@ -165,8 +168,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }, options)
   }
 
-  public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
-    return await callGetter<MeetupIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupIndexType'], {
+  public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupLocationIndexType> {
+    return await callGetter<MeetupLocationIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupLocationIndexType'], {
       cid,
       account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
@@ -186,19 +189,19 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }, options)
   }
 
-  public trustedCallBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: BalanceTransferArgs): TrustedCallSigned {
+  public trustedCallBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: BalanceTransferArgs): TrustedCallSigned {
     return createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
   }
 
-  public trustedCallRegisterParticipant(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: RegisterParticipantArgs): TrustedCallSigned {
+  public trustedCallRegisterParticipant(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: RegisterParticipantArgs): TrustedCallSigned {
     return createTrustedCall(this, ['ceremonies_register_participant', 'RegisterParticipantArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
   }
 
-  public trustedCallRegisterAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: RegisterAttestationsArgs): TrustedCallSigned {
+  public trustedCallRegisterAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: RegisterAttestationsArgs): TrustedCallSigned {
     return createTrustedCall(this, ['ceremonies_register_attestations', 'RegisterAttestationsArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
   }
 
-  public trustedCallGrantReputation(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: Hash, mrenclave: string, nonce: u32, params: GrantReputationArgs): TrustedCallSigned {
+  public trustedCallGrantReputation(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: GrantReputationArgs): TrustedCallSigned {
     return createTrustedCall(this, ['ceremonies_grant_reputation', 'GrantReputationArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
   }
 }

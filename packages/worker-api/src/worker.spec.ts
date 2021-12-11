@@ -3,7 +3,6 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks';
 import { EncointerWorker } from './worker';
 import WS from 'websocket';
-import bs58 from 'bs58';
 import { CommunityIdentifier } from "@encointer/types";
 
 const {w3cwebsocket: WebSocket} = WS;
@@ -33,12 +32,12 @@ describe('worker', () => {
     it('ceremonies_register_participant is valid', () => {
       const alice = keyring.addFromUri('//Alice');
       const proof = worker.createType('Option<ProofOfAttendance<MultiSignature, AccountId>>');
-      const cid: CommunityIdentifier = worker.createType('CommunityIdentifier', bs58.decode(network.chosenCid));
+      const cid: CommunityIdentifier = worker.cidFromStr('gbsuv7YXq9G');
       const nonce = worker.createType('u32', 0)
       const args = worker.createType('RegisterParticipantArgs', [alice.publicKey, cid, proof])
 
-      // trustedCall from the previous js-implementation that is known to work
-      const tCallHex = '0x01d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d346f79784344767047366f5a3933566d4237337245365036656e6664445a39500000000000940cf3e675d8bd25066ad8a15af580ca9a41d3b13f840f43647f51869875fb62232086204dffc8ee67d959e2e3135eae214dd6296e76706459f6c9c8f2b3be86'
+      // trustedCall from the previous js-implementation that is known to work.
+      const tCallHex = '0x01d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d6762737576ffffffff0000000000940cf3e675d8bd25066ad8a15af580ca9a41d3b13f840f43647f51869875fb62232086204dffc8ee67d959e2e3135eae214dd6296e76706459f6c9c8f2b3be86'
 
       const call = worker.trustedCallRegisterParticipant(
         alice,
