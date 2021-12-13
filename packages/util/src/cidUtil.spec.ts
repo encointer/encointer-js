@@ -2,7 +2,7 @@
 
 import {communityIdentifierFromString, communityIdentifierToString} from ".";
 import {TypeRegistry} from "@polkadot/types";
-import {options, options as encointerOptions} from "@encointer/node-api";
+import { options as encointerOptions} from "@encointer/node-api";
 import {RegistryTypes} from "@polkadot/types/types";
 
 describe('cidUtils', () => {
