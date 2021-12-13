@@ -16,8 +16,7 @@ export function communityIdentifierFromString(registry: TypeRegistry, cid: Strin
 }
 
 /***
- * Helper method to parse a string-formatted `CommunityIdentifier`.
- * @param registry
+ * String-format the `CommunityIdentifier` the same way as in rust.
  * @param cid
  */
 export function communityIdentifierToString(cid: CommunityIdentifier): String {
