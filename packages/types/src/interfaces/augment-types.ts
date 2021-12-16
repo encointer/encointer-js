@@ -6,7 +6,7 @@ declare module '@polkadot/types/types/registry' {
   import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
   import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupLocationIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
   import type { IpfsCid, PalletString } from '@encointer/types/interfaces/common';
-  import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, Degree, GeoHash, Location, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
+  import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
   import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
   import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
   import type { BitVec, Bool, Bytes, Data, I128, I16, I256, I32, I64, I8, Json, Null, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
@@ -282,7 +282,8 @@ declare module '@polkadot/types/types/registry' {
     Data: Data;
     DeferredOffenceOf: DeferredOffenceOf;
     DefunctVoter: DefunctVoter;
-    Degree: Degree;
+    DegreeFixed: DegreeFixed;
+    DegreeRpc: DegreeRpc;
     DelayKind: DelayKind;
     DelayKindBest: DelayKindBest;
     Delegations: Delegations;
@@ -562,6 +563,7 @@ declare module '@polkadot/types/types/registry' {
     LimitsTo264: LimitsTo264;
     LocalValidationData: LocalValidationData;
     Location: Location;
+    LocationRpc: LocationRpc;
     LockIdentifier: LockIdentifier;
     LookupSource: LookupSource;
     LookupTarget: LookupTarget;
