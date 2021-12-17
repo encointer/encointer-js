@@ -32,7 +32,7 @@ export interface ClaimOfAttendance extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupLocationIndexType;
+  readonly meetup_location_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
@@ -44,7 +44,7 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
   readonly claimant_public: AccountId;
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
-  readonly meetup_index: MeetupLocationIndexType;
+  readonly meetup_location_index: MeetupLocationIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
   readonly number_of_participants_confirmed: u32;
