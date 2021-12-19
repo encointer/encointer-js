@@ -1,4 +1,4 @@
-import {ToFixPointFn, toFixPoint} from './toFixPoint';
+import {ToFixPointFn, toFixPoint, stringToFixPoint, StringToFixPointFn} from './toFixPoint';
 import {ParserFixPointFn, parserFixPoint} from './parserFixPoint';
 
 export * from './cidUtil';
@@ -24,3 +24,13 @@ export const toI16F16: ToFixPointFn = toFixPoint(16, 16);
 export const toI32F32: ToFixPointFn = toFixPoint(32, 32);
 
 export const toI64F64: ToFixPointFn = toFixPoint(64, 64);
+
+export const stringToI4F4: StringToFixPointFn = stringToFixPoint(4, 4);
+
+export const stringToI8F8: StringToFixPointFn = stringToFixPoint(8, 8);
+
+export const stringToI16F16: StringToFixPointFn = stringToFixPoint(16, 16);
+
+export const stringToI32F32: StringToFixPointFn = stringToFixPoint(32, 32);
+
+export const stringToI64F64: StringToFixPointFn = stringToFixPoint(64, 64);
