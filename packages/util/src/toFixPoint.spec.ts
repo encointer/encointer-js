@@ -1,6 +1,6 @@
 'use strict';
 
-import { toI16F16, toI32F32 } from '.';
+import {parseI64F64, toI16F16, toI32F32, toI64F64} from '.';
 
 import BN from 'bn.js';
 
@@ -23,5 +23,13 @@ describe('toFixPoint', () => {
     expect(resultLat).toEqual(new BN(0x237bf1ac2a));
     const resultLon = toI32F32(location.lon);
     expect(resultLon).toEqual(new BN(0x128b260000));
+  });
+  it('should parse problematic fixed point number', async () => {
+    const number = 18.4062194824218714473;
+    const result = toI64F64(number);
+
+    expect(result).toEqual(new BN(0x1267fdffffffff0000));
+
+    expect(parseI64F64(result)).toBe(number)
   });
 });
