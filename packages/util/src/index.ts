@@ -1,4 +1,4 @@
-import {ToFixPointFn, toFixPoint} from './toFixPoint';
+import {ToFixPointFn, toFixPoint, stringToFixPoint, StringToFixPointFn} from './toFixPoint';
 import {ParserFixPointFn, parserFixPoint} from './parserFixPoint';
 import {EncodeFloatToFixPointFn, encodeFloatToFixPoint} from './encodeFloatToFixPoint';
 
@@ -36,3 +36,13 @@ export const encodeFloatToI16F16: EncodeFloatToFixPointFn = encodeFloatToFixPoin
 export const encodeFloatToI32F32: EncodeFloatToFixPointFn = encodeFloatToFixPoint(32, 32);
 
 export const encodeFloatToI64F64: EncodeFloatToFixPointFn = encodeFloatToFixPoint(64, 64);
+
+export const stringToI4F4: StringToFixPointFn = stringToFixPoint(4, 4);
+
+export const stringToI8F8: StringToFixPointFn = stringToFixPoint(8, 8);
+
+export const stringToI16F16: StringToFixPointFn = stringToFixPoint(16, 16);
+
+export const stringToI32F32: StringToFixPointFn = stringToFixPoint(32, 32);
+
+export const stringToI64F64: StringToFixPointFn = stringToFixPoint(64, 64);
