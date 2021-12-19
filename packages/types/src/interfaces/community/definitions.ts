@@ -40,10 +40,10 @@ export default {
     CidDigest: '[u8; 4]',
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
     NominalIncomeType: 'BalanceType',
-    // This is used when handling fixed-point numbers that have been serialized `serialize_fixed` on rusts end, which is
-    // the case when we call any rpc-getters
+    // This is used when handling fixed-point numbers that have been serialized with `serialize_fixed` on rusts end,
+    // which is the case when we call any rpc-getters.
     DegreeRpc: 'Text',
-    // This is used when we need to encode fixed-point numbers with scale-coded, e.g., when using it in an extrinsic.
+    // This is used when we need to encode fixed-point numbers with scale-codec, e.g., when using it in an extrinsic.
     DegreeFixed: 'i128',
     Location: {
       lat: 'DegreeFixed',
