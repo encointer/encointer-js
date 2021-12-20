@@ -69,7 +69,7 @@ const toFixed = function(integers: string, fractions: string, integer_count: num
 
 /**
  * Our fixed point integer values go until I64, which means that it may be > 53 bits.
- * So we can't just parse the whole number with `parseInt` as we would get an overflow.
+ * So we can't just parse the whole number with `parseInt`, as an overflow would occur.
  *
  * @param num Integer number with base 10 radix
  */

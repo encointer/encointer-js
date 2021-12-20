@@ -45,10 +45,12 @@ describe('stringToFixPoint', () => {
     const result = stringToI16F16('1');
     expect(result).toEqual(new BN(0x10000, 2));
   });
+
   it('should parse 0 to fixPoint', async () => {
     const result = stringToI16F16('0');
     expect(result).toEqual(new BN(0x0, 2));
   });
+
   it('should parse 1.1 to fixPoint', async () => {
     const result = stringToI16F16('1.1');
     expect(result).toEqual(new BN(0x011999));
@@ -57,20 +59,18 @@ describe('stringToFixPoint', () => {
   it('should parse 18.1 to fixPoint', async () => {
     const result = stringToI16F16('18.1');
     expect(result).toEqual(new BN(0x0121999));
-    expect(result).toEqual(new BN('121999', 16));
   });
 
   it('should parse problematic fixed point number', async () => {
-    // gave an error pre 0.5.0-alpha.5 being truncated due to > 53 bytes
-    const number = '18.4062194824218714473';
-    const result = stringToI64F64(number);
+    // This errored pre 0.5.0-alpha.5 due to being truncated as it was > 53 bytes
+    const result = stringToI64F64('18.4062194824218714473');
 
+    // need to pass big values as a hex-string as JS can't handle the number.
     expect(result).toEqual(new BN('1267fdffffffff0000', 16));
   });
 
   it('returns 0 on too small number', async () => {
-    const number = '0.000000000000000000000000000000000000001';
-    const result = stringToI64F64(number);
+    const result = stringToI64F64('0.000000000000000000000000000000000000001');
 
     expect(result).toEqual(new BN('0', 16));
   });
