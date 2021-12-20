@@ -75,13 +75,3 @@ describe('stringToFixPoint', () => {
     expect(result).toEqual(new BN('0', 16));
   });
 });
-
-
-describe('safeRadix10ToRadix2', () => {
-  it('should transform', async () => {
-    const result = safeIntegerToRadix2('8');
-    expect(result).toEqual('1000');
-  });
-});
-
-

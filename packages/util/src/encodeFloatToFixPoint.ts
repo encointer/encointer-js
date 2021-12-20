@@ -16,16 +16,33 @@ export const encodeFloatToFixPoint: EncodeFloatToFixPointFactory = function (upp
   assertLength(upper, lower);
   return (num: number): Uint8Array => {
     const [upperBits, lowerBits] = num.toString(2).split('.');
-    assert(upperBits.length <= upper, 'Number is larger than maximum in '.concat(upper.toString(), 'bit'));
-    if (lowerBits !== undefined) {
-      const lowerPadded = lowerBits.length > lower ? lowerBits.substr(0, lower) : lowerBits.padEnd(lower, '0');
-      const upperPadded = upperBits.padStart(upper, '0');
-      const upperBN = bnToU8a(new BN(upperPadded, 2), upper, true);
-      const lowerBN = bnToU8a(new BN(lowerPadded, 2), lower, true);
-      return Uint8Array.from([...lowerBN, ...upperBN]);
-    } else {
-      const bits = upperBits.padStart(upper, '0').padEnd(lower + upper, '0');
-      return bnToU8a(new BN(bits, 2), lower + upper, true);
-    }
+
+    return toFixed(upperBits, lowerBits, upper, lower)
   };
 }
+
+/**
+ * Encodes a fixed-point number ready for an extrinsic
+ *
+ * @param integers integer bits as string with radix 2.
+ * @param fractions fractional bits as string with radix 2.
+ * @param integer_count amount of integer bits in the fixed-point type.
+ * @param fractions_count amount of fractional bits in the fixed-point type.
+ */
+const toFixed = function(integers: string, fractions: string, integer_count: number, fractions_count: number): Uint8Array {
+  assertLength(integer_count, fractions_count);
+
+  assert(integers.length <= integer_count, 'Number is larger than maximum in '.concat(integer_count.toString(), 'bit'));
+  if (fractions !== undefined) {
+    const lowerPadded = fractions.length > fractions_count ? fractions.substr(0, fractions_count) : fractions.padEnd(fractions_count, '0');
+    const upperPadded = integers.padStart(integer_count, '0');
+    const upperBN = bnToU8a(new BN(upperPadded, 2), integer_count, true);
+    const lowerBN = bnToU8a(new BN(lowerPadded, 2), fractions_count, true);
+    return Uint8Array.from([...lowerBN, ...upperBN]);
+  } else {
+    const bits = integers.padStart(integer_count, '0').padEnd(fractions_count + integer_count, '0');
+    return bnToU8a(new BN(bits, 2), fractions_count + integer_count, true);
+  }
+}
+
+
