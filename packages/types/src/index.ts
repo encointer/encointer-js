@@ -36,12 +36,17 @@ const encointer = {
 export default encointer;
 export { createType } from '@polkadot/types';
 
-import {parseI64F64, toI64F64} from "@encointer/util";
+import {parseI64F64, stringToI64F64, toI64F64} from "@encointer/util";
+
+/**
+ * Converts a JS number to a fixed-point BN
+ */
+export const toEncointerBalance = toI64F64
 
 /**
  * Converts a fixed-point string representation to a fixed-point BN
  */
-export const toEncointerBalance = toI64F64
+export const stringToEncointerBalance = stringToI64F64
 
 /**
  * Parse encointer balance from a fixed-point BN to a JS number
@@ -49,9 +54,14 @@ export const toEncointerBalance = toI64F64
 export const parseEncointerBalance = parseI64F64
 
 /**
- * Converts a fixed-point string representation to a fixed-point BN
+ * Converts a JS number to a fixed-point BN
  */
 export const toDegree = toI64F64
+
+/**
+ * Converts a fixed-point string representation to a fixed-point BN
+ */
+export const stringToDegree = stringToI64F64
 
 /**
  * Parse a fixed-point BN to a JS number
