@@ -26,7 +26,7 @@ export default {
             isOptional: true
           }
         ],
-        type: 'Vec<Location>'
+        type: 'Vec<LocationRpc>'
       }
     }
   },
@@ -40,10 +40,18 @@ export default {
     CidDigest: '[u8; 4]',
     CommunityCeremony: '(CommunityIdentifier,CeremonyIndexType)',
     NominalIncomeType: 'BalanceType',
-    Degree: 'i128',
+    // This is used when handling fixed-point numbers that have been serialized with `serialize_fixed` on rusts end,
+    // which is the case when we call any rpc-getters.
+    DegreeRpc: 'Text',
+    // This is used when we need to encode fixed-point numbers with scale-codec, e.g., when using it in an extrinsic.
+    DegreeFixed: 'i128',
     Location: {
-      lat: 'Degree',
-      lon: 'Degree'
+      lat: 'DegreeFixed',
+      lon: 'DegreeFixed'
+    },
+    LocationRpc: {
+      lat: 'DegreeRpc',
+      lon: 'DegreeRpc'
     },
     Reputation: {
       _enum: [

@@ -33,16 +33,25 @@ export interface CommunityMetadataType extends Struct {
   readonly url: Option<Text>;
 }
 
-/** @name Degree */
-export interface Degree extends i128 {}
+/** @name DegreeFixed */
+export interface DegreeFixed extends i128 {}
+
+/** @name DegreeRpc */
+export interface DegreeRpc extends Text {}
 
 /** @name GeoHash */
 export interface GeoHash extends U8aFixed {}
 
 /** @name Location */
 export interface Location extends Struct {
-  readonly lat: Degree;
-  readonly lon: Degree;
+  readonly lat: DegreeFixed;
+  readonly lon: DegreeFixed;
+}
+
+/** @name LocationRpc */
+export interface LocationRpc extends Struct {
+  readonly lat: DegreeRpc;
+  readonly lon: DegreeRpc;
 }
 
 /** @name NominalIncomeType */

@@ -54,6 +54,16 @@ describe('node-api', () => {
                 }
 
             });
+            // Todo: register a community in the integration tests so we do better tests:
+            // https://github.com/encointer/encointer-js/issues/31
+            it.skip('communities.getLocations should get locations', async () => {
+                let cid = communityIdentifierFromString(api.registry, "sqm1v79dF6b")
+
+                let loc = await api.rpc.communities.getLocations(cid)
+
+                console.log(loc[0].toJSON())
+
+            });
         });
 
         describe('bazaar', () => {
