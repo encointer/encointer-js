@@ -2,7 +2,6 @@ import assert from 'assert';
 import BN from 'bn.js';
 
 import { assertLength } from './common';
-import {numberToHex} from "@polkadot/util";
 
 export interface ToFixPointFn {
   (num: number): BN;
