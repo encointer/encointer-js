@@ -2,6 +2,7 @@ import assert from 'assert';
 import BN from 'bn.js';
 
 import { assertLength } from './common';
+import {numberToHex} from "@polkadot/util";
 
 export interface ToFixPointFn {
   (num: number): BN;
@@ -31,7 +32,13 @@ export const toFixPoint: ToFixPointFactory = function (upper, lower) {
 export const stringToFixPoint: StringToFixPointFactory = function (upper, lower) {
   assertLength(upper, lower);
   return (num: string): BN => {
-    const [integers, fractions] = num.split('.').map((num) => safeRadix10ToRadix2(num));
+    let [integers, fractions] = num.split('.');
+
+    integers = safeIntegerToRadix2(integers);
+
+    if (fractions != undefined) {
+      fractions = fractionalToRadix2(fractions);
+    }
 
     return toFixed(integers, fractions, upper, lower)
   };
@@ -61,17 +68,21 @@ const toFixed = function(integers: string, fractions: string, integer_count: num
 
 
 /**
- * Our fixed point numbers go until I64F64, which means that both, the decimal and the fractional part may bey > 53 bits.
+ * Our fixed point integer values go until I64, which means that it may be > 53 bits.
  * So we can't just parse the whole number with `parseInt` as we would get an overflow.
  *
- * @param num
+ * @param num Integer number with base 10 radix
  */
-export const safeRadix10ToRadix2 = function(num: string): string {
-  let bin = '';
+export const safeIntegerToRadix2 = function(num: string): string {
+  return new BN(num, 10).toString(2)
+}
 
-  for (let digit of num) {
-    bin += parseInt(digit, 10).toString(2);
-  }
-
-  return bin
+/**
+ * Transforms the fractional value of a number to base 2.
+ *
+ * @param num Integer number with base 10 radix
+ */
+export const fractionalToRadix2 = function(num: string): string {
+  return parseFloat('0.' + num).toString(2)
+      .split('.')[1];
 }
