@@ -59,3 +59,13 @@ describe('stringToFixPoint', () => {
     expect(parseI64F64(result)).toBe(number)
   });
 });
+
+
+describe('safeRadix10ToRadix2', () => {
+  it('should transform', async () => {
+    const result = safeRadix10ToRadix2('8');
+    expect(result).toEqual('1000');
+  });
+});
+
+

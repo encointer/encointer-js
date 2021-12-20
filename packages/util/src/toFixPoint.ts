@@ -66,11 +66,11 @@ const toFixed = function(integers: string, fractions: string, integer_count: num
  *
  * @param num
  */
-const safeRadix10ToRadix2 = function(num: string): string {
+export const safeRadix10ToRadix2 = function(num: string): string {
   let bin = '';
 
   for (let digit of num) {
-    bin.concat(parseInt(digit, 10).toString(2))
+    bin += parseInt(digit, 10).toString(2);
   }
 
   return bin
