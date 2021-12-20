@@ -61,12 +61,12 @@ describe('stringToFixPoint', () => {
   });
 
   it('should parse problematic fixed point number', async () => {
+    // gave an error pre 0.5.0-alpha.5 being truncated due to > 53 bytes
     const number = '18.4062194824218714473';
     const result = stringToI64F64(number);
 
     expect(result).toEqual(new BN('1267fdffffffff0000', 16));
   });
-
 
   it('returns 0 on too small number', async () => {
     const number = '0.000000000000000000000000000000000000001';
