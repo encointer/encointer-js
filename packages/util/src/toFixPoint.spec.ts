@@ -1,7 +1,6 @@
 'use strict';
 
 import {
-  safeIntegerToRadix2,
   stringToI16F16,
   stringToI64F64,
   toI16F16,
