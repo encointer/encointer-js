@@ -3,6 +3,7 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { PubKeyPinPair } from "@encointer/worker-api";
 import { Keyring } from "@polkadot/keyring";
 import { isPubKeyPinPair } from "@encointer/worker-api/interface";
+import BN from "bn.js";
 
 interface assertLengthFunc {
   (upper: number, lower: number): number
@@ -35,4 +36,27 @@ export const unlockKeypair = (pair: PubKeyPinPair, keyring: Keyring): KeyringPai
   }
   keyPair.decodePkcs8(pair.pin);
   return keyPair;
+}
+
+
+/**
+ * Our fixed point integer values go until I64, which means that it may be > 53 bits.
+ * So we can't just parse the whole number with `parseInt`, as an overflow would occur.
+ *
+ * @param num Integer number with base 10 radix
+ */
+export const safeIntegerToRadix2 = function(num: string): string {
+  return new BN(num, 10).toString(2)
+}
+
+/**
+ * Transforms the fractional value of a number to base 2.
+ *
+ * **note:** This rounds the number if the fractional digits can't be represented with 53 bits.
+ *
+ * @param num Integer number with base 10 radix
+ */
+export const fractionalToRadix2 = function(num: string): string {
+  return parseFloat('0.' + num).toString(2)
+      .split('.')[1];
 }
