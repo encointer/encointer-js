@@ -52,6 +52,8 @@ export const safeIntegerToRadix2 = function(num: string): string {
 /**
  * Transforms the fractional value of a number to base 2.
  *
+ * **note:** This rounds the number if the fractional digits can't be represented with 53 bits.
+ *
  * @param num Integer number with base 10 radix
  */
 export const fractionalToRadix2 = function(num: string): string {
