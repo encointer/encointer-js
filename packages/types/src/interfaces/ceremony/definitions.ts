@@ -43,7 +43,7 @@ export default {
       ceremony_index: 'CeremonyIndexType',
       community_identifier: 'CommunityIdentifier',
       attendee_public: 'AccountId',
-      attendee_signature: 'Signature'
+      attendee_signature: 'MultiSignature'
     }
   }
 };

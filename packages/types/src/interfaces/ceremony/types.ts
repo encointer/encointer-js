@@ -3,7 +3,7 @@
 
 import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
   import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
-  import type { MultiSignature, Signature } from '@polkadot/types/interfaces/extrinsics';
+  import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
   import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
   import type { ITuple } from '@polkadot/types/types';
 
@@ -65,7 +65,7 @@ export interface ProofOfAttendance extends Struct {
   readonly ceremony_index: CeremonyIndexType;
   readonly community_identifier: CommunityIdentifier;
   readonly attendee_public: AccountId;
-  readonly attendee_signature: Signature;
+  readonly attendee_signature: MultiSignature;
 }
 
 export type PHANTOM_CEREMONY = 'ceremony';
