@@ -2,9 +2,9 @@
 /* eslint-disable */
 
 import type { PalletString } from '@encointer/types/interfaces/common';
-  import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-  import type { Struct, u32 } from '@polkadot/types';
-  import type { AccountId } from '@polkadot/types/interfaces/runtime';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
+import type { Struct, u32 } from '@polkadot/types-codec';
+import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name BusinessData */
 export interface BusinessData extends Struct {

@@ -2,10 +2,10 @@
 /* eslint-disable */
 
 import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
-  import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types';
-  import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-  import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
-  import type { ITuple } from '@polkadot/types/types';
+import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
+import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
+import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
 
 /** @name Attestation */
 export interface Attestation extends Struct {
@@ -25,6 +25,7 @@ export interface CeremonyPhaseType extends Enum {
   readonly isRegistering: boolean;
   readonly isAssigning: boolean;
   readonly isAttesting: boolean;
+  readonly type: 'Registering' | 'Assigning' | 'Attesting';
 }
 
 /** @name ClaimOfAttendance */
