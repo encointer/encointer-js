@@ -2,12 +2,12 @@
 /* eslint-disable */
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-  import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
-  import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-  import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types';
-  import type { Signature } from '@polkadot/types/interfaces/extrinsics';
-  import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
-  import type { ITuple } from '@polkadot/types/types';
+import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
+import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
+import type { Signature } from '@polkadot/types/interfaces/extrinsics';
+import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceTransferArgs */
 export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]> {}
@@ -18,6 +18,7 @@ export interface ClientRequest extends Enum {
   readonly isMuRaPortWorker: boolean;
   readonly isStfState: boolean;
   readonly asStfState: ITuple<[Getter, ShardIdentifier]>;
+  readonly type: 'PubKeyWorker' | 'MuRaPortWorker' | 'StfState';
 }
 
 /** @name Enclave */
@@ -34,6 +35,7 @@ export interface Getter extends Enum {
   readonly asPublic: PublicGetter;
   readonly isTrusted: boolean;
   readonly asTrusted: TrustedGetterSigned;
+  readonly type: 'Public' | 'Trusted';
 }
 
 /** @name GetterArgs */
@@ -58,6 +60,7 @@ export interface PublicGetter extends Enum {
   readonly asTimeTolerance: CommunityIdentifier;
   readonly isSchedulerState: boolean;
   readonly asSchedulerState: CommunityIdentifier;
+  readonly type: 'TotalIssuance' | 'ParticipantCount' | 'MeetupCount' | 'CeremonyReward' | 'LocationTolerance' | 'TimeTolerance' | 'SchedulerState';
 }
 
 /** @name RegisterAttestationsArgs */
@@ -85,6 +88,7 @@ export interface TrustedCall extends Enum {
   readonly asCeremoniesRegisterAttestations: RegisterAttestationsArgs;
   readonly isCeremoniesGrantReputation: boolean;
   readonly asCeremoniesGrantReputation: GrantReputationArgs;
+  readonly type: 'BalanceTransfer' | 'CeremoniesRegisterParticipant' | 'CeremoniesRegisterAttestations' | 'CeremoniesGrantReputation';
 }
 
 /** @name TrustedCallSigned */
@@ -106,6 +110,7 @@ export interface TrustedGetter extends Enum {
   readonly asAttestations: ITuple<[AccountId, CommunityIdentifier]>;
   readonly isMeetupRegistry: boolean;
   readonly asMeetupRegistry: ITuple<[AccountId, CommunityIdentifier]>;
+  readonly type: 'Balance' | 'ParticipantIndex' | 'MeetupIndex' | 'Attestations' | 'MeetupRegistry';
 }
 
 /** @name TrustedGetterSigned */

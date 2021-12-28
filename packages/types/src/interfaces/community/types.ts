@@ -2,9 +2,9 @@
 /* eslint-disable */
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-  import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
-  import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types';
-  import type { ITuple } from '@polkadot/types/types';
+import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
+import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name CidDigest */
 export interface CidDigest extends U8aFixed {}
@@ -63,6 +63,7 @@ export interface Reputation extends Enum {
   readonly isUnverifiedReputable: boolean;
   readonly isVerifiedUnlinked: boolean;
   readonly isVerifiedLinked: boolean;
+  readonly type: 'Unverified' | 'UnverifiedReputable' | 'VerifiedUnlinked' | 'VerifiedLinked';
 }
 
 /** @name Theme */

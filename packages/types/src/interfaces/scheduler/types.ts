@@ -2,8 +2,8 @@
 /* eslint-disable */
 
 import type { CeremonyIndexType, CeremonyPhaseType } from '@encointer/types/interfaces/ceremony';
-  import type { u32 } from '@polkadot/types';
-  import type { ITuple } from '@polkadot/types/types';
+import type { u32 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name SchedulerState */
 export interface SchedulerState extends ITuple<[CeremonyIndexType, CeremonyPhaseType, SystemNumber]> {}

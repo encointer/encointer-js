@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Struct, i128 } from '@polkadot/types';
-  import type { BlockNumber } from '@polkadot/types/interfaces/runtime';
+import type { Struct, i128 } from '@polkadot/types-codec';
+import type { BlockNumber } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceEntry */
 export interface BalanceEntry extends Struct {
