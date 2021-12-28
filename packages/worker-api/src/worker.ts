@@ -1,4 +1,3 @@
-import '@polkadot/types/augment';
 import { TypeRegistry } from '@polkadot/types';
 import { RegistryTypes } from '@polkadot/types/types';
 import { Keyring } from '@polkadot/keyring'
