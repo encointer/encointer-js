@@ -3,7 +3,7 @@
 
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
-import type { Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupLocationIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType, Reputation, Theme } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
@@ -112,8 +112,11 @@ declare module '@polkadot/types/types/registry' {
     AssetInstanceV2: AssetInstanceV2;
     AssetMetadata: AssetMetadata;
     AssetOptions: AssetOptions;
+    Assignment: Assignment;
+    AssignmentCount: AssignmentCount;
     AssignmentId: AssignmentId;
     AssignmentKind: AssignmentKind;
+    AssignmentParams: AssignmentParams;
     Attestation: Attestation;
     AttestationIndexType: AttestationIndexType;
     AttestedCandidate: AttestedCandidate;
@@ -584,7 +587,7 @@ declare module '@polkadot/types/types/registry' {
     MaybeRandomness: MaybeRandomness;
     MaybeVrf: MaybeVrf;
     MeetupAssignment: MeetupAssignment;
-    MeetupLocationIndexType: MeetupLocationIndexType;
+    MeetupIndexType: MeetupIndexType;
     MemberCount: MemberCount;
     MembershipProof: MembershipProof;
     MessageData: MessageData;

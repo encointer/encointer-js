@@ -10,14 +10,14 @@ export default {
       ]
     },
     ParticipantIndexType: 'u64',
-    MeetupLocationIndexType: 'u64',
+    MeetupIndexType: 'u64',
     AttestationIndexType: 'u64',
-    MeetupAssignment: '(MeetupLocationIndexType, Option<Location>)',
+    MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     ClaimOfAttendance: {
       claimant_public: 'AccountId',
       ceremony_index: 'CeremonyIndexType',
       community_identifier: 'CommunityIdentifier',
-      meetup_location_index: 'MeetupLocationIndexType',
+      meetup_location_index: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
       number_of_participants_confirmed: 'u32',
@@ -27,10 +27,27 @@ export default {
       claimant_public: 'AccountId',
       ceremony_index: 'CeremonyIndexType',
       community_identifier: 'CommunityIdentifier',
-      meetup_location_index: 'MeetupLocationIndexType',
+      meetup_location_index: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
       number_of_participants_confirmed: 'u32',
+    },
+    AssignmentCount: {
+      bootstrappers: 'ParticipantIndexType',
+      reputables: 'ParticipantIndexType',
+      endorsees: 'ParticipantIndexType',
+      newbies: 'ParticipantIndexType',
+    },
+    Assignment: {
+      bootstrappers_reputables: 'AssignmentParams',
+      endorsees: 'AssignmentParams',
+      newbies: 'AssignmentParams',
+      locations: 'AssignmentParams',
+    },
+    AssignmentParams: {
+      m: 'u64',
+      s1: 'u64',
+      s2: 'u64',
     },
     // Todo: remove this type does no longer exist in ceremonies, but it still exists in the trusted stuff.
     Attestation: {
