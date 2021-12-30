@@ -49,8 +49,13 @@ export function meetup_index(participantIndex: ParticipantIndexType, assignmentP
 export function meetup_location(meetupIndex: MeetupIndexType, locations: Vec<Location>, locationAssignmentParams: AssignmentParams): Option<Location> {
     const registry = meetupIndex.registry;
 
-    // need the explicit u64 cast here, otherwise we get an illegal argument in `assignment_fn`
+    // not sure why we need to specify the type here explicitly.
     const len: u64 = registry.createTypeUnsafe('u64', [locations.length]);
+
+    if (len.eq(0)) {
+        console.log(`[meetup_location]: Locations empty: ${len}`)
+        return registry.createTypeUnsafe('Option<Location>', [])
+    }
 
     const location_index = assignment_fn(meetupIndex, locationAssignmentParams, len)
 
