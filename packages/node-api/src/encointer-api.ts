@@ -9,7 +9,6 @@ import {
 } from "@encointer/types";
 import {meetup_index} from "@encointer/util/assignment";
 
-
 export class EncointerApi extends ApiPromise {
 
     constructor(options?: ApiOptions) {
@@ -40,18 +39,18 @@ export class EncointerApi extends ApiPromise {
         const assignments = await this.getAssignment(cid, cIndex, address);
 
         // helper query to make below code more readable
-        const index_query = (storage_key: String) => {
-            return this.query.encointerCeremonies.storage_key<ParticipantIndexType>([cid, cIndex], address)
+        const index_query = (storage_key: IndexRegistry) => {
+            return this.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
         }
 
         const meetupIndexFn =
             (pIndex: ParticipantIndexType, params: AssignmentParams) => meetup_index(pIndex, params, mCount);
 
         let pIndexes = await Promise.all([
-            index_query("BootstrapperIndex"),
-            index_query("ReputableIndex"),
-            index_query("EndorseeIndex"),
-            index_query("NewbieIndex"),
+            index_query(IndexRegistry.Bootstrapper),
+            index_query(IndexRegistry.Reputable),
+            index_query(IndexRegistry.Endorsee),
+            index_query(IndexRegistry.Newbie),
         ]);
 
         if (!pIndexes[0].eq(0)) {
@@ -71,4 +70,11 @@ export class EncointerApi extends ApiPromise {
 
         return this.createType('MeetupIndexType', 0);
     }
+}
+
+enum IndexRegistry {
+    Bootstrapper = "BootstrapperIndex",
+    Reputable = "ReputableIndex",
+    Endorsee = "EndorseeIndex",
+    Newbie = "NewbieIndex",
 }
