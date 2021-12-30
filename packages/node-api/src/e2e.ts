@@ -168,18 +168,19 @@ describe('node-api', () => {
 
 function _registerCommunity(api: ApiPromise, signer: Keypair): Promise<Hash> {
     return new Promise((resolve) => {
-        let unsub = () => {
-        };
+        let unsub = () => {};
 
         const loc_json = newCommunityParams.locations[0]
         const location = api.createType('Location', {
             lat: stringToDegree(loc_json.lat),
             lon: stringToDegree(loc_json.lon),
         });
+
         const meta = api.createType('CommunityMetadataType', newCommunityParams.meta);
         const bootstrappers = api.createType('Vec<AccountId>', newCommunityParams.bootstrappers);
 
-        const params = [location, bootstrappers, meta, {}, {}];
+        // (location, bootstrappers, metadata, demurrage, nominal_income)
+        const params = [location, bootstrappers, meta, null, null];
 
         const tx = api.tx.encointerCommunities.newCommunity(...params);
 
