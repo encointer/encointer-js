@@ -22,7 +22,7 @@ export function assignment_fn(participantIndex: ParticipantIndexType, assignment
 
     // We exploit the fact that all `Codec` types in polkadot-js have a registry attached, which points to the same
     // `api.registry` created at `Api` construction.
-    return participantIndex.registry.createTypeUnsafe('ParticipantIndex', [result]);
+    return participantIndex.registry.createTypeUnsafe('ParticipantIndexType', [result]);
 }
 
 /**
