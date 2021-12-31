@@ -6,7 +6,7 @@ import {ApiPromise} from "@polkadot/api";
 import {ISubmittableResult} from "@polkadot/types/types";
 import {SubmittableExtrinsic} from "@polkadot/api/promise/types";
 import {KeyringPair} from "@polkadot/keyring/types";
-import {IExtractEventResult} from "@encointer/node-api/interface";
+import {IExtractEventResult, ISubmitAndWatchResult} from "@encointer/node-api/interface";
 
 /**
  * Send `tx` and watch until it is included in a block returning the execution result.
@@ -15,7 +15,7 @@ import {IExtractEventResult} from "@encointer/node-api/interface";
  * @param signer
  * @param tx
  */
-export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: SubmittableExtrinsic): Promise<any> {
+export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: SubmittableExtrinsic): Promise<ISubmitAndWatchResult> {
     return new Promise((resolve => {
         let unsub = () => {
         };
@@ -23,15 +23,21 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
         const onStatusChange = (result: ISubmittableResult) => {
             if (result.status.isInBlock || result.status.isFinalized) {
                 const {success, error} = extractEvents(api, result);
+
                 if (success) {
                     resolve({
-                        hash: tx.hash.toString(),
+                        hash: tx.hash,
                         time: new Date().getTime(),
                         params: tx.args
                     });
                 }
                 if (error) {
-                    resolve({error});
+                    resolve({
+                        hash: tx.hash,
+                        time: new Date().getTime(),
+                        params: tx.args,
+                        error: error
+                    });
                 }
                 unsub();
             } else {
