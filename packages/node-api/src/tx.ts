@@ -7,9 +7,10 @@ import {Keypair} from "@polkadot/util-crypto/types";
 import {ISubmittableResult} from "@polkadot/types/types";
 import {SubmittableExtrinsics} from "@polkadot/api/types";
 import {SubmittableExtrinsic} from "@polkadot/api/promise/types";
+import {KeyringPair} from "@polkadot/keyring/types";
 
-export interface ISendAndWatchTx<R extends ISubmittableResult> {
-    sendAndWatchTx(signer: Keypair, xt: SubmittableExtrinsics<"promise">): R
+export interface ISubmitAndWatchTx {
+    sendAndWatchTx(signer: Keypair, xt: SubmittableExtrinsics<"promise">): ISubmittableResult
 }
 
 /**
@@ -19,12 +20,12 @@ export interface ISendAndWatchTx<R extends ISubmittableResult> {
  * @param signer
  * @param tx
  */
-export function sendAndWatchTx<R extends ISubmittableResult>(api: ApiPromise, signer: Keypair, tx: SubmittableExtrinsic): Promise<any> {
+export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: SubmittableExtrinsic): Promise<any> {
     return new Promise((resolve => {
         let unsub = () => {
         };
 
-        const onStatusChange = (result: R) => {
+        const onStatusChange = (result: ISubmittableResult) => {
             if (result.status.isInBlock || result.status.isFinalized) {
                 const {success, error} = _extractEvents(api, result);
                 if (success) {
@@ -58,11 +59,7 @@ export function sendAndWatchTx<R extends ISubmittableResult>(api: ApiPromise, si
  * @param api
  * @param result
  */
-function _extractEvents<R extends ISubmittableResult>(api: ApiPromise, result: R): IEventResult {
-    if (!result || !result.events) {
-        return;
-    }
-
+function _extractEvents(api: ApiPromise, result: ISubmittableResult): IEventResult {
     let success = false;
     let error;
     result.events
