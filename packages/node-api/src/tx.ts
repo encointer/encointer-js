@@ -3,15 +3,10 @@
  */
 
 import {ApiPromise} from "@polkadot/api";
-import {Keypair} from "@polkadot/util-crypto/types";
 import {ISubmittableResult} from "@polkadot/types/types";
-import {SubmittableExtrinsics} from "@polkadot/api/types";
 import {SubmittableExtrinsic} from "@polkadot/api/promise/types";
 import {KeyringPair} from "@polkadot/keyring/types";
-
-export interface ISubmitAndWatchTx {
-    sendAndWatchTx(signer: Keypair, xt: SubmittableExtrinsics<"promise">): ISubmittableResult
-}
+import {IExtractEventResult} from "@encointer/node-api/interface";
 
 /**
  * Send `tx` and watch until it is included in a block returning the execution result.
@@ -27,7 +22,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
 
         const onStatusChange = (result: ISubmittableResult) => {
             if (result.status.isInBlock || result.status.isFinalized) {
-                const {success, error} = _extractEvents(api, result);
+                const {success, error} = extractEvents(api, result);
                 if (success) {
                     resolve({
                         hash: tx.hash.toString(),
@@ -59,7 +54,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
  * @param api
  * @param result
  */
-function _extractEvents(api: ApiPromise, result: ISubmittableResult): IEventResult {
+function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEventResult {
     let success = false;
     let error;
     result.events
@@ -100,9 +95,4 @@ function _extractEvents(api: ApiPromise, result: ISubmittableResult): IEventResu
             }
         });
     return {success, error};
-}
-
-interface IEventResult {
-    success: boolean,
-    error: string | undefined
 }
