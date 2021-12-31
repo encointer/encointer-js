@@ -19,12 +19,12 @@ export interface ISendAndWatchTx<R extends ISubmittableResult> {
  * @param signer
  * @param tx
  */
-export function sendAndWatchTx(api: ApiPromise, signer: Keypair, tx: SubmittableExtrinsic): Promise<any> {
+export function sendAndWatchTx<R extends ISubmittableResult>(api: ApiPromise, signer: Keypair, tx: SubmittableExtrinsic): Promise<any> {
     return new Promise((resolve => {
         let unsub = () => {
         };
 
-        const onStatusChange = (result) => {
+        const onStatusChange = (result: R) => {
             if (result.status.isInBlock || result.status.isFinalized) {
                 const {success, error} = _extractEvents(api, result);
                 if (success) {
@@ -58,7 +58,7 @@ export function sendAndWatchTx(api: ApiPromise, signer: Keypair, tx: Submittable
  * @param api
  * @param result
  */
-function _extractEvents(api: ApiPromise, result) {
+function _extractEvents<R extends ISubmittableResult>(api: ApiPromise, result: R): IEventResult {
     if (!result || !result.events) {
         return;
     }
@@ -69,26 +69,29 @@ function _extractEvents(api: ApiPromise, result) {
         .filter((event) => !!event.event)
         .map(({event: {data, method, section}}) => {
             if (section === 'system' && method === 'ExtrinsicFailed') {
-                const [dispatchError] = data;
-                let message = dispatchError.type;
+                if (result.dispatchError !== undefined) {
+                    const dispatchError = result.dispatchError;
+                    let message = dispatchError.type.toString();
 
-                if (dispatchError.isModule) {
-                    try {
-                        const mod = dispatchError.asModule;
-                        const error = api.registry.findMetaError(
-                            new Uint8Array([mod.index.toNumber(), mod.error.toNumber()])
-                        );
+                    if (dispatchError.isModule) {
+                        try {
+                            const mod = dispatchError.asModule;
+                            const error = api.registry.findMetaError(
+                                new Uint8Array([mod.index.toNumber(), mod.error.toNumber()])
+                            );
 
-                        message = `${error.section}.${error.name}`;
-                    } catch (error) {
-                        // swallow error
+                            message = `${error.section}.${error.name}`;
+                        } catch (error) {
+                            // swallow error
+                        }
                     }
+                    console.log('txUpdateEvent', {
+                        title: `${section}.${method}`,
+                        message
+                    });
+                    error = message;
                 }
-                console.log('txUpdateEvent', {
-                    title: `${section}.${method}`,
-                    message
-                });
-                error = message;
+
             } else {
                 console.log('txUpdateEvent', {
                     title: `${section}.${method}`,
@@ -100,4 +103,9 @@ function _extractEvents(api: ApiPromise, result) {
             }
         });
     return {success, error};
+}
+
+interface IEventResult {
+    success: boolean,
+    error: string | undefined
 }
