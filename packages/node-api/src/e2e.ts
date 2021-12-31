@@ -3,9 +3,10 @@ import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
 import {stringToDegree} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
-import {Keypair} from "@polkadot/util-crypto/types";
-import {Hash} from "@polkadot/types/interfaces";
-import {sendAndWatchTx} from "./tx";
+
+import {submitAndWatchTx} from "./tx";
+import {ISubmitAndWatchResult} from "./interface";
+import {KeyringPair} from "@polkadot/keyring/types";
 
 // Corresponds the community of in the encointer-node
 const newCommunityParams = {
@@ -84,9 +85,11 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        const res = await _registerCommunity(api, alice);
+        const res = await _registerTestCommunity(api, alice);
 
-        console.log(`result: ${JSON.stringify(res)}`);
+        if (res.error !== undefined) {
+            console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        }
     });
 
     afterAll(async () => {
@@ -167,20 +170,20 @@ describe('node-api', () => {
     });
 });
 
-function _registerCommunity(api: ApiPromise, signer: Keypair): Promise<Hash> {
+function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
     const loc_json = newCommunityParams.locations[0]
-        const location = api.createType('Location', {
-            lat: stringToDegree(loc_json.lat),
-            lon: stringToDegree(loc_json.lon),
-        });
+    const location = api.createType('Location', {
+        lat: stringToDegree(loc_json.lat),
+        lon: stringToDegree(loc_json.lon),
+    });
 
-        const meta = api.createType('CommunityMetadataType', newCommunityParams.meta);
-        const bootstrappers = api.createType('Vec<AccountId>', newCommunityParams.bootstrappers);
+    const meta = api.createType('CommunityMetadataType', newCommunityParams.meta);
+    const bootstrappers = api.createType('Vec<AccountId>', newCommunityParams.bootstrappers);
 
-        // (location, bootstrappers, metadata, demurrage, nominal_income)
-        const params = [location, bootstrappers, meta, null, null];
+    // (location, bootstrappers, metadata, demurrage, nominal_income)
+    const params = [location, bootstrappers, meta, {}, null];
 
-        const tx = api.tx.encointerCommunities.newCommunity(...params);
+    const tx = api.tx.encointerCommunities.newCommunity(...params);
 
-        return sendAndWatchTx(api, signer, tx);
+    return submitAndWatchTx(api, signer, tx);
 }
