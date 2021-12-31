@@ -8,61 +8,6 @@ import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
 
-// Corresponds the community of in the encointer-node
-const newCommunityParams = {
-    meta: {
-        "name": "Mediterranea",
-        "symbol": "MTA",
-        "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
-    },
-    bootstrappers: [
-        "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-        "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-        "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
-        "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
-        "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL"
-    ],
-    locations: [
-        {
-            lon: "18.543548583984375",
-            lat: "35.48415637985317"
-        },
-        {
-            lon: "18.40484619140625",
-            lat: "35.480801595828616"
-        },
-        {
-            lon: "18.40621948242187",
-            lat: "35.357696204467516"
-        },
-        {
-            lon: "18.544921875",
-            lat: "35.35993616287676"
-        },
-        {
-            lon: "18.68087768554687",
-            lat: "35.48751102385376"
-        },
-        {
-            lon: "18.689117431640625",
-            lat: "35.37001520672124"
-        },
-        {
-            lon: "18.4075927734375",
-            lat: "35.232159412017154"
-        },
-        {
-            lon: "18.551788330078125",
-            lat: "35.238889532322595"
-        },
-        {
-            lon: "18.700103759765625",
-            lat: "35.24898366572645"
-        },
-    ]
-}
-
 describe('node-api', () => {
     let keyring: Keyring;
     let api: any;
@@ -171,19 +116,74 @@ describe('node-api', () => {
 });
 
 function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
-    const loc_json = newCommunityParams.locations[0]
+    const loc_json = testCommunityParams.locations[0]
     const location = api.createType('Location', {
         lat: stringToDegree(loc_json.lat),
         lon: stringToDegree(loc_json.lon),
     });
 
-    const meta = api.createType('CommunityMetadataType', newCommunityParams.meta);
-    const bootstrappers = api.createType('Vec<AccountId>', newCommunityParams.bootstrappers);
+    const meta = api.createType('CommunityMetadataType', testCommunityParams.meta);
+    const bootstrappers = api.createType('Vec<AccountId>', testCommunityParams.bootstrappers);
 
     // (location, bootstrappers, metadata, demurrage, nominal_income)
-    const params = [location, bootstrappers, meta, {}, null];
+    const params = [location, bootstrappers, meta, null, null];
 
     const tx = api.tx.encointerCommunities.newCommunity(...params);
 
     return submitAndWatchTx(api, signer, tx);
+}
+
+// Corresponds the community of in the encointer-node
+const testCommunityParams = {
+    meta: {
+        "name": "Mediterranea",
+        "symbol": "MTA",
+        "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
+    },
+    bootstrappers: [
+        "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+        "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+        "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
+        "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
+        "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL"
+    ],
+    locations: [
+        {
+            lon: "18.543548583984375",
+            lat: "35.48415637985317"
+        },
+        {
+            lon: "18.40484619140625",
+            lat: "35.480801595828616"
+        },
+        {
+            lon: "18.40621948242187",
+            lat: "35.357696204467516"
+        },
+        {
+            lon: "18.544921875",
+            lat: "35.35993616287676"
+        },
+        {
+            lon: "18.68087768554687",
+            lat: "35.48751102385376"
+        },
+        {
+            lon: "18.689117431640625",
+            lat: "35.37001520672124"
+        },
+        {
+            lon: "18.4075927734375",
+            lat: "35.232159412017154"
+        },
+        {
+            lon: "18.551788330078125",
+            lat: "35.238889532322595"
+        },
+        {
+            lon: "18.700103759765625",
+            lat: "35.24898366572645"
+        },
+    ]
 }
