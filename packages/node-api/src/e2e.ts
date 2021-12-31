@@ -1,7 +1,7 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
-import {stringToDegree} from "../../types/src";
+import {CommunityIdentifier, stringToDegree} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 
 import {submitAndWatchTx} from "./tx";
@@ -30,12 +30,15 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        const res = await _registerTestCommunity(api, alice);
+        let res = await _registerTestCommunity(api, alice);
 
         if (res.error !== undefined) {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
-    });
+
+        await registerAliceBobCharlieAndGoToAttesting(api, communityIdentifierFromString(api.registry, testCommunityParams.cid))
+
+    }, 40000);
 
     afterAll(async () => {
         // Jest fails to exit after the tests without this.
@@ -133,6 +136,60 @@ function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<I
     return submitAndWatchTx(api, signer, tx);
 }
 
+async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: CommunityIdentifier): Promise<void> {
+
+    const tx = api.tx.encointerCeremonies.registerParticipant(cid, null)
+
+    const keyring = new Keyring({type: 'sr25519'});
+    const alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
+    const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+    const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
+
+    // Charlie does not have funds
+    const transfer_tx = api.tx.balances.transfer(charlie.address, 10000000000000);
+    await submitAndWatchTx(api, alice, transfer_tx)
+        .then((result) => {
+            if (result.error !== undefined) {
+                console.log(`failed fund Charlie: ${JSON.stringify(result)}`);
+            }
+        })
+
+    let results = await Promise.all([
+        submitAndWatchTx(api, alice, tx),
+        submitAndWatchTx(api, bob, tx),
+        submitAndWatchTx(api, charlie, tx),
+    ])
+
+    const signers = [alice, bob, charlie];
+    results.forEach((result, index) => {
+        if (result.error !== undefined) {
+            console.log(`failed register ${signers[index]}: ${JSON.stringify(result)}`);
+        }
+    })
+
+
+    // go to assigning phase
+    await nextPhase(api, alice)
+        .then((result) => {
+            if (result.error !== undefined) {
+                console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
+            }
+        });
+
+    // go to attesting phase
+    await nextPhase(api, alice)
+        .then((result) => {
+            if (result.error !== undefined) {
+                console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
+            }
+        });
+}
+
+function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
+    const tx = api.tx.encointerScheduler.nextPhase()
+    return submitAndWatchTx(api, signer, tx);
+}
+
 // Corresponds the community of in the encointer-node
 const testCommunityParams = {
     meta: {
@@ -140,6 +197,7 @@ const testCommunityParams = {
         "symbol": "MTA",
         "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
+    cid: "sqm1v79dF6b",
     bootstrappers: [
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
