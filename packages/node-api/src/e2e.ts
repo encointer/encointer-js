@@ -5,6 +5,7 @@ import {stringToDegree} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {Keypair} from "@polkadot/util-crypto/types";
 import {Hash} from "@polkadot/types/interfaces";
+import {sendAndWatchTx} from "./tx";
 
 // Corresponds the community of in the encointer-node
 const newCommunityParams = {
@@ -167,10 +168,7 @@ describe('node-api', () => {
 });
 
 function _registerCommunity(api: ApiPromise, signer: Keypair): Promise<Hash> {
-    return new Promise((resolve) => {
-        let unsub = () => {};
-
-        const loc_json = newCommunityParams.locations[0]
+    const loc_json = newCommunityParams.locations[0]
         const location = api.createType('Location', {
             lat: stringToDegree(loc_json.lat),
             lon: stringToDegree(loc_json.lon),
@@ -184,75 +182,5 @@ function _registerCommunity(api: ApiPromise, signer: Keypair): Promise<Hash> {
 
         const tx = api.tx.encointerCommunities.newCommunity(...params);
 
-        const onStatusChange = (result) => {
-            if (result.status.isInBlock || result.status.isFinalized) {
-                const {success, error} = _extractEvents(api, result);
-                if (success) {
-                    resolve({
-                        hash: tx.hash.toString(),
-                        time: new Date().getTime(),
-                        params: params
-                    });
-                }
-                if (error) {
-                    resolve({error});
-                }
-                unsub();
-            } else {
-                console.log('txStatusChange', result.status.type)
-            }
-        }
-
-        tx.signAndSend(signer, {}, onStatusChange)
-            .then((res) => {
-                unsub = res;
-            })
-            .catch((err) => {
-                console.log(`{error: ${err.message}}`);
-            });
-    });
-}
-
-function _extractEvents(api: ApiPromise, result) {
-    if (!result || !result.events) {
-        return;
-    }
-
-    let success = false;
-    let error;
-    result.events
-        .filter((event) => !!event.event)
-        .map(({event: {data, method, section}}) => {
-            if (section === 'system' && method === 'ExtrinsicFailed') {
-                const [dispatchError] = data;
-                let message = dispatchError.type;
-
-                if (dispatchError.isModule) {
-                    try {
-                        const mod = dispatchError.asModule;
-                        const error = api.registry.findMetaError(
-                            new Uint8Array([mod.index.toNumber(), mod.error.toNumber()])
-                        );
-
-                        message = `${error.section}.${error.name}`;
-                    } catch (error) {
-                        // swallow error
-                    }
-                }
-                console.log('txUpdateEvent', {
-                    title: `${section}.${method}`,
-                    message
-                });
-                error = message;
-            } else {
-                console.log('txUpdateEvent', {
-                    title: `${section}.${method}`,
-                    message: 'ok'
-                });
-                if (section == 'system' && method == 'ExtrinsicSuccess') {
-                    success = true;
-                }
-            }
-        });
-    return {success, error};
+        return sendAndWatchTx(api, signer, tx);
 }
