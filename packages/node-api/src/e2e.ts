@@ -1,24 +1,26 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
-import {CommunityIdentifier, stringToDegree} from "../../types/src";
+import {CeremonyIndexType, CommunityIdentifier, stringToDegree} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
-import { getMeetupCount } from './encointer-api';
+import {getAssignmentCount, getMeetupCount} from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
     let api: ApiPromise;
     let testCid: CommunityIdentifier;
+    let testCIndex: CeremonyIndexType;
+    let alice: KeyringPair;
     const chain = 'ws://127.0.0.1:9944';
     beforeAll(async () => {
         await cryptoWaitReady();
 
         keyring = new Keyring({type: 'sr25519'});
-        const alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
+        alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
 
         const provider = new WsProvider('ws://127.0.0.1:9944');
         try {
@@ -39,6 +41,7 @@ describe('node-api', () => {
         }
 
         testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
+        testCIndex = api.createType('CeremonyIndexType', 1)
 
         await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
@@ -59,9 +62,17 @@ describe('node-api', () => {
 
     describe('assignment', () => {
         it('should get meetupCount', async () => {
-            const cIndex = api.createType('CeremonyIndexType', 1)
-            const result = await getMeetupCount(api, testCid, cIndex);
+            const result = await getMeetupCount(api, testCid, testCIndex);
             expect(result.toNumber()).toBe(1);
+        });
+
+        it('should get assignmentCount', async () => {
+            const result = await getAssignmentCount(api, testCid, testCIndex);
+
+            // [bootstrappers, reputables, endorsees, newbies]
+            // Todo: Check shouldn't this be [3,0,0,0]?
+            let expected = api.createType('AssignmentCount', [1, 0, 0, 0])
+            expect(result.toJSON()).toStrictEqual(expected.toJSON());
         });
     });
 

@@ -13,8 +13,8 @@ export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, c
     return api.query.encointerCeremonies.assignments<Assignment>([cid, cIndex], address);
 }
 
-export async function getAssignmentCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<AssignmentCount> {
-    return api.query.encointerCeremonies.assignmentCounts<AssignmentCount>([cid, cIndex], address);
+export async function getAssignmentCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<AssignmentCount> {
+    return api.query.encointerCeremonies.assignmentCounts<AssignmentCount>([cid, cIndex]);
 }
 
 export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<MeetupIndexType> {
