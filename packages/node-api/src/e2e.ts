@@ -69,8 +69,8 @@ describe('node-api', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
-                const result = await api.rpc.communities.getAll();
-                expect(result[0].cid).toBe(testCid);
+                const cidNames = await api.rpc.communities.getAll();
+                expect(cidNames[0].cid).toStrictEqual(testCid);
             });
 
             it('communities.getLocations should return error on unknown community', async () => {
