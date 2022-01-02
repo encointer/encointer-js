@@ -7,7 +7,7 @@ import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
-import {getAssignmentCount, getMeetupCount} from './encointer-api';
+import {getAssignment, getAssignmentCount, getMeetupCount} from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -15,12 +15,16 @@ describe('node-api', () => {
     let testCid: CommunityIdentifier;
     let testCIndex: CeremonyIndexType;
     let alice: KeyringPair;
+    let bob: KeyringPair;
+    let charlie: KeyringPair;
     const chain = 'ws://127.0.0.1:9944';
     beforeAll(async () => {
         await cryptoWaitReady();
 
         keyring = new Keyring({type: 'sr25519'});
         alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
+        bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+        charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
         const provider = new WsProvider('ws://127.0.0.1:9944');
         try {
@@ -74,6 +78,22 @@ describe('node-api', () => {
             let expected = api.createType('AssignmentCount', [1, 0, 0, 0])
             expect(result.toJSON()).toStrictEqual(expected.toJSON());
         });
+
+        it('should get assignment', async () => {
+                for (const participant of [alice, bob, charlie]) {
+                    const assignment = await getAssignment(api, testCid, testCIndex, participant.address);
+                    expect(assignment.toJSON())
+                        .toStrictEqual({
+                                "bootstrappersReputables": {"m": 2, "s1": 1, "s2": 1},
+                                "endorsees": {"m": 2, "s1": 1, "s2": 1},
+                                "newbies": {"m": 2, "s1": 1, "s2": 1},
+                                "locations": {"m": 1, "s1": 0, "s2": 2}
+                            }
+                        );
+                }
+            }
+        )
+        ;
     });
 
     describe('rpc', () => {
@@ -185,7 +205,9 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const signers = [alice, bob, charlie];
     results.forEach((result, index) => {
         if (result.error !== undefined) {
-            console.log(`failed register ${signers[index]}: ${JSON.stringify(result)}`);
+            console.log(`failed register ${signers[index].address}: ${JSON.stringify(result)}`);
+        } else {
+            console.log(`registered ${signers[index].address}: result: ${JSON.stringify(result)}`);
         }
     })
 
