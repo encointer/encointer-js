@@ -21,7 +21,6 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
     return api.query.encointerCeremonies.meetupCount<MeetupIndexType>([cid, cIndex]);
 }
 
-
 export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
     const mCount = await getMeetupCount(api, cid, cIndex);
 

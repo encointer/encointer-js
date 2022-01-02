@@ -65,11 +65,6 @@ describe('node-api', () => {
     });
 
     describe('assignment', () => {
-        it('should get meetupCount', async () => {
-            const result = await getMeetupCount(api, testCid, testCIndex);
-            expect(result.toNumber()).toBe(1);
-        });
-
         it('should get assignmentCount', async () => {
             const result = await getAssignmentCount(api, testCid, testCIndex);
 
@@ -80,20 +75,22 @@ describe('node-api', () => {
         });
 
         it('should get assignment', async () => {
-                for (const participant of [alice, bob, charlie]) {
-                    const assignment = await getAssignment(api, testCid, testCIndex, participant.address);
-                    expect(assignment.toJSON())
-                        .toStrictEqual({
-                                "bootstrappersReputables": {"m": 2, "s1": 1, "s2": 1},
-                                "endorsees": {"m": 2, "s1": 1, "s2": 1},
-                                "newbies": {"m": 2, "s1": 1, "s2": 1},
-                                "locations": {"m": 1, "s1": 0, "s2": 2}
-                            }
-                        );
-                }
+            for (const participant of [alice, bob, charlie]) {
+                const assignment = await getAssignment(api, testCid, testCIndex, participant.address);
+                expect(assignment.toJSON())
+                    .toStrictEqual({
+                        "bootstrappersReputables": {"m": 2, "s1": 1, "s2": 1},
+                        "endorsees": {"m": 2, "s1": 1, "s2": 1},
+                        "newbies": {"m": 2, "s1": 1, "s2": 1},
+                        "locations": {"m": 1, "s1": 0, "s2": 2}
+                    });
             }
-        )
-        ;
+        });
+
+        it('should get meetupCount', async () => {
+            const result = await getMeetupCount(api, testCid, testCIndex);
+            expect(result.toNumber()).toBe(1);
+        });
     });
 
     describe('rpc', () => {
