@@ -1,1 +1,3 @@
-export { options } from './options';
+export {options} from './options';
+export * from './encointer-api';
+

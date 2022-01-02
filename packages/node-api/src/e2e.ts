@@ -7,10 +7,12 @@ import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
+import { getMeetupCount } from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
-    let api: any;
+    let api: ApiPromise;
+    let testCid: CommunityIdentifier;
     const chain = 'ws://127.0.0.1:9944';
     beforeAll(async () => {
         await cryptoWaitReady();
@@ -36,7 +38,9 @@ describe('node-api', () => {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
 
-        await registerAliceBobCharlieAndGoToAttesting(api, communityIdentifierFromString(api.registry, testCommunityParams.cid))
+        testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
+
+        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
     }, 40000);
 
@@ -53,13 +57,20 @@ describe('node-api', () => {
         });
     });
 
+    describe('assignment', () => {
+        it('should get meetupCount', async () => {
+            const cIndex = api.createType('CeremonyIndexType', 1)
+            const result = await getMeetupCount(api, testCid, cIndex);
+            expect(result.toNumber()).toBe(1);
+        });
+    });
+
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
                 const result = await api.rpc.communities.getAll();
-                // console.log(result);
-                expect(result.length).toBe(0);
+                expect(result[0].cid).toBe(testCid);
             });
 
             it('communities.getLocations should return error on unknown community', async () => {
