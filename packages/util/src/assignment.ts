@@ -84,3 +84,19 @@ export function meetup_time(location: Location, attesting_start: Moment, one_day
 
     return registry.createTypeUnsafe('Moment', [result])
 }
+
+export function mod_inv(a: number, module: number): number {
+    let mn = [module, a];
+    let xy = [0, 1]
+
+    while (mn[1] != 0) {
+        xy = [xy[1], xy[0] - Math.floor((mn[0] / mn[1])) * xy[1]];
+        mn = [mn[1], mn[0] % mn[1]];
+    }
+
+    while (xy[0] < 0) {
+        xy[0] += module;
+    }
+
+    return xy[0]
+}

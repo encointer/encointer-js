@@ -3,7 +3,7 @@
 import {TypeRegistry} from "@polkadot/types";
 import {RegistryTypes} from "@polkadot/types/types";
 import {options as encointerOptions} from "@encointer/node-api";
-import {assignment_fn, meetup_index, meetup_location, meetup_time} from "@encointer/util/assignment";
+import {assignment_fn, meetup_index, meetup_location, meetup_time, mod_inv} from "@encointer/util/assignment";
 import {stringToDegree} from "@encointer/types";
 
 describe('assignment', () => {
@@ -60,5 +60,11 @@ describe('assignment', () => {
         expect(meetup_time(location, attestingStart, oneDay).toNumber()).toEqual(
             200
         )
+    });
+
+    it('mod_inv works', () => {
+        expect(mod_inv(2, 7)).toEqual(4)
+        expect(mod_inv(69, 113)).toEqual(95)
+        expect(mod_inv(111, 113)).toEqual(56)
     });
 });
