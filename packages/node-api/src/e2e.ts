@@ -39,17 +39,17 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        let res = await _registerTestCommunity(api, alice);
-
-        if (res.error !== undefined) {
-            console.log(`failed to register test community: ${JSON.stringify(res)}`);
-        }
+        // let res = await _registerTestCommunity(api, alice);
+        //
+        // if (res.error !== undefined) {
+        //     console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        // }
 
         testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
         testMeetupIndex = api.createType('MeetupIndexType', 1)
 
-        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
+        // await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
     }, 40000);
 

@@ -85,6 +85,42 @@ export function meetup_time(location: Location, attesting_start: Moment, one_day
     return registry.createTypeUnsafe('Moment', [result])
 }
 
+export function assignment_function_inverse(
+    meetupIndex: MeetupIndexType,
+    assignmentParams: AssignmentParams,
+    assignmentCount: MeetupIndexType,
+    participantCount: ParticipantIndexType): Vec<ParticipantIndexType> {
+    const registry = meetupIndex.registry;
+
+    // safe; the numbers will not exceed 2^53
+    const mIndex = meetupIndex.toNumber();
+    const m = assignmentParams.m.toNumber();
+    const aCount = assignmentCount.toNumber();
+    const pCount = participantCount.toNumber();
+
+    const maxIndex = Math.ceil((m - mIndex) / aCount);
+
+    let participants: number[] = [];
+
+    for (let i = 0; i < maxIndex; i++) {
+        const t2 = mod_inv(assignmentParams.s1.toNumber(), m);
+
+        const t3 = t3_fn(aCount, i, mIndex, assignmentParams, t2);
+
+        if (t3 >= pCount) {
+            continue;
+        }
+
+        participants.push(t3)
+
+        if (t3 < pCount - m) {
+            participants.push(t3 + m)
+        }
+    }
+
+    return registry.createTypeUnsafe('Vec<ParticipantIndexType>', participants)
+}
+
 export function mod_inv(a: number, module: number): number {
     let mn = [module, a];
     let xy = [0, 1]
@@ -99,4 +135,11 @@ export function mod_inv(a: number, module: number): number {
     }
 
     return xy[0]
+}
+
+function t3_fn(n: number, currentIndex: number, meetupIndex: number, params: AssignmentParams, t2: number): number {
+    const x = (n* currentIndex) + meetupIndex - params.s2.toNumber();
+    const y =  (x % params.m.toNumber()) * t2;
+
+    return y % params.m.toNumber();
 }

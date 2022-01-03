@@ -1,10 +1,18 @@
 'use strict';
 
-import {TypeRegistry} from "@polkadot/types";
+import {TypeRegistry, u64} from "@polkadot/types";
 import {RegistryTypes} from "@polkadot/types/types";
 import {options as encointerOptions} from "@encointer/node-api";
-import {assignment_fn, meetup_index, meetup_location, meetup_time, mod_inv} from "@encointer/util/assignment";
-import {stringToDegree} from "@encointer/types";
+import {
+    assignment_fn,
+    assignment_function_inverse,
+    meetup_index,
+    meetup_location,
+    meetup_time,
+    mod_inv
+} from "@encointer/util/assignment";
+import {AssignmentParams, MeetupIndexType, ParticipantIndexType, stringToDegree} from "@encointer/types";
+import assert from "assert";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
@@ -62,9 +70,56 @@ describe('assignment', () => {
         )
     });
 
+    it('assignment_fn_inv works', () => {
+        const params = registry.createType('AssignmentParams', [113, 78, 23]);
+        const pCount = registry.createType('ParticipantIndexType', [118])
+        const n = registry.createType('ParticipantIndexType', [118])
+        check_assignment(pCount, params, n)
+    });
+
     it('mod_inv works', () => {
         expect(mod_inv(2, 7)).toEqual(4)
         expect(mod_inv(69, 113)).toEqual(95)
         expect(mod_inv(111, 113)).toEqual(56)
     });
 });
+
+function check_assignment(participantCount: ParticipantIndexType, assignmentParams: AssignmentParams, n: u64) {
+    const registry = assignmentParams.registry;
+    const pCount = participantCount.toNumber();
+
+    let locations = Array.prototype.fill(0, 0, pCount);
+
+    for (let i = 0; i < pCount; i++) {
+        const pIndex = registry.createTypeUnsafe<ParticipantIndexType>('ParticipantIndexType', [i]);
+        locations[i] = assignment_fn(pIndex, assignmentParams, n).toNumber()
+    }
+    console.log(`loc: ${locations}`);
+
+
+    let assignedParticipants = Array.prototype.fill(false, 0, pCount);
+
+    console.log(`assigned before ${assignedParticipants}`);
+
+
+    for (let i = 0; i < n.toNumber(); i++) {
+        const mIndex = registry.createTypeUnsafe<MeetupIndexType>('MeetupIndexType', [i]);
+        const participants = assignment_function_inverse(mIndex, assignmentParams, n, participantCount)
+
+        for (const p of participants) {
+            let pNum = p.toNumber();
+
+            assert(pNum < pCount, `participant index out of bound: ${pNum}, pCount: ${pCount}`);
+            assignedParticipants[pNum] = true
+
+            // const loc: number = locations[pNum]
+            // console.log(`loc: ${loc}`);
+            //
+            // assert.equal(loc, i)
+        }
+    }
+
+    console.log(`assigned ${assignedParticipants}`);
+
+    assert(assignedParticipants.every((val) => val === true))
+}
