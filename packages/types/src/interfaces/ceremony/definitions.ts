@@ -14,23 +14,23 @@ export default {
     AttestationIndexType: 'u64',
     MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     ClaimOfAttendance: {
-      claimant_public: 'AccountId',
-      ceremony_index: 'CeremonyIndexType',
-      community_identifier: 'CommunityIdentifier',
-      meetup_location_index: 'MeetupIndexType',
+      claimantPublic: 'AccountId',
+      ceremonyIndex: 'CeremonyIndexType',
+      communityIdentifier: 'CommunityIdentifier',
+      meetupLocationIndex: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
-      number_of_participants_confirmed: 'u32',
-      claimant_signature: 'Option<MultiSignature>'
+      numberOfParticipantsConfirmed: 'u32',
+      claimantSignature: 'Option<MultiSignature>'
     },
     ClaimOfAttendanceSigningPayload: {
-      claimant_public: 'AccountId',
-      ceremony_index: 'CeremonyIndexType',
-      community_identifier: 'CommunityIdentifier',
-      meetup_location_index: 'MeetupIndexType',
+      claimantPublic: 'AccountId',
+      ceremonyIndex: 'CeremonyIndexType',
+      communityIdentifier: 'CommunityIdentifier',
+      meetupLocationIndex: 'MeetupIndexType',
       location: 'Location',
       timestamp: 'Moment',
-      number_of_participants_confirmed: 'u32',
+      numberOfParticipantsConfirmed: 'u32',
     },
     AssignmentCount: {
       bootstrappers: 'ParticipantIndexType',
@@ -39,7 +39,7 @@ export default {
       newbies: 'ParticipantIndexType',
     },
     Assignment: {
-      bootstrappers_reputables: 'AssignmentParams',
+      bootstrappersReputables: 'AssignmentParams',
       endorsees: 'AssignmentParams',
       newbies: 'AssignmentParams',
       locations: 'AssignmentParams',
@@ -56,11 +56,11 @@ export default {
       public: 'AccountId'
     },
     ProofOfAttendance: {
-      prover_public: 'AccountId',
-      ceremony_index: 'CeremonyIndexType',
-      community_identifier: 'CommunityIdentifier',
-      attendee_public: 'AccountId',
-      attendee_signature: 'MultiSignature'
+      proverPublic: 'AccountId',
+      ceremonyIndex: 'CeremonyIndexType',
+      communityIdentifier: 'CommunityIdentifier',
+      attendeePublic: 'AccountId',
+      attendeeSignature: 'MultiSignature'
     }
   }
 };
