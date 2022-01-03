@@ -7,7 +7,7 @@ import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
-import {getAssignment, getAssignmentCount, getMeetupCount} from './encointer-api';
+import {getAssignment, getAssignmentCount, getMeetupCount, getMeetupIndex} from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -37,17 +37,17 @@ describe('node-api', () => {
             console.log(`connect ${chain} failed`);
             await provider.disconnect();
         }
-
-        let res = await _registerTestCommunity(api, alice);
-
-        if (res.error !== undefined) {
-            console.log(`failed to register test community: ${JSON.stringify(res)}`);
-        }
+        //
+        // let res = await _registerTestCommunity(api, alice);
+        //
+        // if (res.error !== undefined) {
+        //     console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        // }
 
         testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
 
-        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
+        // await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
     }, 40000);
 
@@ -90,6 +90,13 @@ describe('node-api', () => {
         it('should get meetupCount', async () => {
             const result = await getMeetupCount(api, testCid, testCIndex);
             expect(result.toNumber()).toBe(1);
+        });
+
+        it('should get meetupIndex', async () => {
+            // for (const participant of [alice, bob, charlie]) {
+                const assignment = await getMeetupIndex(api, testCid, testCIndex, charlie.address);
+                expect(assignment.toNumber()).toBe(1);
+            // }
         });
     });
 

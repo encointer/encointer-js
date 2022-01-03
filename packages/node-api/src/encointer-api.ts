@@ -29,7 +29,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         return mCount;
     }
 
-    const assignments = await getAssignment(api, cid, cIndex, address);
+    const assignments = await getAssignment(api, cid, cIndex);
 
     // helper query to make below code more readable
     const index_query = (storage_key: IndexRegistry) => {
@@ -48,11 +48,11 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 
     if (!pIndexes[0].eq(0)) {
         let pIndex = api.createType('ParticipantIndexType', pIndexes[0].toNumber() - 1);
-        return meetupIndexFn(pIndex, assignments.bootstrappers_reputables)
+        return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[1].eq(0)) {
-        let b = await getAssignmentCount(api, cid, cIndex, address);
+        let b = await getAssignmentCount(api, cid, cIndex);
         let pIndex = api.createType('ParticipantIndexType', pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
-        return meetupIndexFn(pIndex, assignments.bootstrappers_reputables)
+        return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = api.createType('ParticipantIndexType', pIndexes[2].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.endorsees);
