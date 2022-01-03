@@ -78,13 +78,15 @@ describe('node-api', () => {
         it('should get assignment', async () => {
             for (const participant of [alice, bob, charlie]) {
                 const assignment = await getAssignment(api, testCid, testCIndex, participant.address);
-                expect(assignment.toJSON())
-                    .toStrictEqual({
-                        "bootstrappersReputables": {"m": 2, "s1": 1, "s2": 1},
-                        "endorsees": {"m": 2, "s1": 1, "s2": 1},
-                        "newbies": {"m": 2, "s1": 1, "s2": 1},
-                        "locations": {"m": 1, "s1": 0, "s2": 2}
-                    });
+
+                // hard to test as it is randomized.
+                expect(assignment.bootstrappersReputables.m.toNumber()).toBe(3);
+                expect(assignment.bootstrappersReputables.s1.toNumber()).toBeLessThan(3);
+                expect(assignment.bootstrappersReputables.s2.toNumber()).toBeLessThan(3);
+
+                // no endorsees and newbies assigned
+                expect(assignment.endorsees.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
+                expect(assignment.newbies.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
             }
         });
 
