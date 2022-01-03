@@ -138,8 +138,12 @@ export function mod_inv(a: number, module: number): number {
 }
 
 function t3_fn(n: number, currentIndex: number, meetupIndex: number, params: AssignmentParams, t2: number): number {
-    const x = (n* currentIndex) + meetupIndex - params.s2.toNumber();
-    const y =  (x % params.m.toNumber()) * t2;
+    const x = (n * currentIndex) + meetupIndex - params.s2.toNumber();
+    const y =  remainder(x, params.m.toNumber()) * t2;
 
-    return y % params.m.toNumber();
+    return remainder(y, params.m.toNumber());
+}
+
+function remainder(n: number, m: number) {
+    return ((n % m) + m) % m;
 }
