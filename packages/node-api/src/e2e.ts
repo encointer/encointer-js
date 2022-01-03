@@ -67,11 +67,12 @@ describe('node-api', () => {
     describe('assignment', () => {
         it('should get assignmentCount', async () => {
             const result = await getAssignmentCount(api, testCid, testCIndex);
-
-            // [bootstrappers, reputables, endorsees, newbies]
-            // Todo: Check shouldn't this be [3,0,0,0]?
-            let expected = api.createType('AssignmentCount', [1, 0, 0, 0])
-            expect(result.toJSON()).toStrictEqual(expected.toJSON());
+            expect(result.toJSON()).toStrictEqual({
+                "bootstrappers": 3,
+                "endorsees": 0,
+                "newbies": 0,
+                "reputables": 0,
+            });
         });
 
         it('should get assignment', async () => {
@@ -94,8 +95,8 @@ describe('node-api', () => {
 
         it('should get meetupIndex', async () => {
             // for (const participant of [alice, bob, charlie]) {
-                const assignment = await getMeetupIndex(api, testCid, testCIndex, charlie.address);
-                expect(assignment.toNumber()).toBe(1);
+            const assignment = await getMeetupIndex(api, testCid, testCIndex, charlie.address);
+            expect(assignment.toNumber()).toBe(1);
             // }
         });
     });
@@ -184,12 +185,15 @@ function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<I
 
 async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: CommunityIdentifier): Promise<void> {
 
-    const tx = api.tx.encointerCeremonies.registerParticipant(cid, null)
-
     const keyring = new Keyring({type: 'sr25519'});
     const alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
     const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
+
+    // even though they are identical we need to have three different objects because they are passed by reference in JS.
+    const tx1 = api.tx.encointerCeremonies.registerParticipant(cid, null)
+    const tx2 = api.tx.encointerCeremonies.registerParticipant(cid, null)
+    const tx3 = api.tx.encointerCeremonies.registerParticipant(cid, null)
 
     // Charlie does not have funds
     const transfer_tx = api.tx.balances.transfer(charlie.address, 10000000000000);
@@ -201,9 +205,9 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
         })
 
     let results = await Promise.all([
-        submitAndWatchTx(api, alice, tx),
-        submitAndWatchTx(api, bob, tx),
-        submitAndWatchTx(api, charlie, tx),
+        submitAndWatchTx(api, alice, tx1),
+        submitAndWatchTx(api, bob, tx2),
+        submitAndWatchTx(api, charlie, tx3),
     ])
 
     const signers = [alice, bob, charlie];
