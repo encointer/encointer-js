@@ -88,19 +88,14 @@ function check_assignment(participantCount: ParticipantIndexType, assignmentPara
     const registry = assignmentParams.registry;
     const pCount = participantCount.toNumber();
 
-    let locations = Array.prototype.fill(0, 0, pCount);
+    let locations = new Array(pCount).fill(0, 0, pCount);
 
     for (let i = 0; i < pCount; i++) {
         const pIndex = registry.createTypeUnsafe<ParticipantIndexType>('ParticipantIndexType', [i]);
         locations[i] = assignment_fn(pIndex, assignmentParams, n).toNumber()
     }
-    console.log(`loc: ${locations}`);
 
-
-    let assignedParticipants = Array.prototype.fill(false, 0, pCount);
-
-    console.log(`assigned before ${assignedParticipants}`);
-
+    let assignedParticipants = new Array(pCount).fill(false, 0, pCount);
 
     for (let i = 0; i < n.toNumber(); i++) {
         const mIndex = registry.createTypeUnsafe<MeetupIndexType>('MeetupIndexType', [i]);
@@ -112,10 +107,7 @@ function check_assignment(participantCount: ParticipantIndexType, assignmentPara
             assert(pNum < pCount, `participant index out of bound: ${pNum}, pCount: ${pCount}`);
             assignedParticipants[pNum] = true
 
-            // const loc: number = locations[pNum]
-            // console.log(`loc: ${loc}`);
-            //
-            // assert.equal(loc, i)
+            assert.equal(locations[pNum], i, `locations not equal`)
         }
     }
 
