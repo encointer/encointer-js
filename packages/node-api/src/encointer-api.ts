@@ -3,10 +3,10 @@ import {
     Assignment,
     AssignmentCount, AssignmentParams,
     CeremonyIndexType,
-    CommunityIdentifier,
+    CommunityIdentifier, Location,
     MeetupIndexType, ParticipantIndexType,
 } from "@encointer/types";
-import {meetup_index} from "@encointer/util/assignment";
+import {meetup_index, meetup_location} from "@encointer/util/assignment";
 
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
@@ -63,6 +63,17 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 
     return api.createType('MeetupIndexType', 0);
 }
+
+export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Location> {
+    const [locations, assignmentParams] = await Promise.all([
+        api.rpc.communities.getLocations(cid),
+        getAssignment(api, cid, cIndex)
+    ]);
+
+    return meetup_location(meetupIndex, locations, assignmentParams.locations).unwrap();
+}
+
+
 
 enum IndexRegistry {
     Bootstrapper = "bootstrapperIndex",

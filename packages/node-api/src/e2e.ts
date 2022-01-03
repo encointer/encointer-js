@@ -1,19 +1,20 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
-import {CeremonyIndexType, CommunityIdentifier, stringToDegree} from "../../types/src";
+import {CeremonyIndexType, CommunityIdentifier, MeetupIndexType, stringToDegree} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
-import {getAssignment, getAssignmentCount, getMeetupCount, getMeetupIndex} from './encointer-api';
+import {getAssignment, getAssignmentCount, getMeetupCount, getMeetupIndex, getMeetupLocation} from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
     let api: ApiPromise;
     let testCid: CommunityIdentifier;
     let testCIndex: CeremonyIndexType;
+    let testMeetupIndex: MeetupIndexType;
     let alice: KeyringPair;
     let bob: KeyringPair;
     let charlie: KeyringPair;
@@ -46,6 +47,7 @@ describe('node-api', () => {
 
         testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
+        testMeetupIndex = api.createType('MeetupIndexType', 1)
 
         // await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
@@ -101,6 +103,11 @@ describe('node-api', () => {
                 expect(assignment.toNumber()).toBe(1);
             }
         });
+
+        it('should get meetupLocation', async () => {
+            const location = await getMeetupLocation(api, testCid, testCIndex, testMeetupIndex);
+            expect(location.toJSON()).toStrictEqual(testCommunityParams.locations[0]);
+        });
     });
 
     describe('rpc', () => {
@@ -119,16 +126,6 @@ describe('node-api', () => {
                 } catch (e) {
                     expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
-
-            });
-            // Todo: register a community in the integration tests so we do better tests:
-            // https://github.com/encointer/encointer-js/issues/31
-            it.skip('communities.getLocations should get locations', async () => {
-                let cid = communityIdentifierFromString(api.registry, "sqm1v79dF6b")
-
-                let loc = await api.rpc.communities.getLocations(cid)
-
-                console.log(loc[0].toJSON())
 
             });
         });
@@ -263,7 +260,7 @@ const testCommunityParams = {
     locations: [
         {
             lon: "18.543548583984375",
-            lat: "35.48415637985317"
+            lat: "35.4841563798531700047"
         },
         {
             lon: "18.40484619140625",
