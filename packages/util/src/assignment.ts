@@ -35,7 +35,7 @@ export function assignment_fn(participantIndex: ParticipantIndexType, assignment
 export function meetup_index(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
     const result = assignment_fn(participantIndex, assignmentParams, meetupCount).add(new BN(1));
 
-    return participantIndex.registry.createTypeUnsafe('MeetupIndexType',  [result]);
+    return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [result]);
 }
 
 
@@ -80,7 +80,7 @@ export function meetup_time(location: Location, attesting_start: Moment, one_day
     const per_degree = one_day.toNumber() / 360;
     const lon_time = parseDegree(location.lon) * per_degree;
 
-    let result =  attesting_start.toNumber() + one_day.toNumber() / 2 + lon_time;
+    let result = attesting_start.toNumber() + one_day.toNumber() / 2 + lon_time;
 
     return registry.createTypeUnsafe('Moment', [result])
 }
