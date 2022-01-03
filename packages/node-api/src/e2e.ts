@@ -97,8 +97,8 @@ describe('node-api', () => {
 
         it('should get meetupIndex', async () => {
             for (const participant of [alice, bob, charlie]) {
-            const assignment = await getMeetupIndex(api, testCid, testCIndex, participant.address);
-            expect(assignment.toNumber()).toBe(1);
+                const assignment = await getMeetupIndex(api, testCid, testCIndex, participant.address);
+                expect(assignment.toNumber()).toBe(1);
             }
         });
     });
