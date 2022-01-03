@@ -93,7 +93,7 @@ function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEve
             } else {
                 console.log('txUpdateEvent', {
                     title: `${section}.${method}`,
-                    message: 'ok'
+                    message: data.toJSON()
                 });
                 if (section == 'system' && method == 'ExtrinsicSuccess') {
                     success = true;
