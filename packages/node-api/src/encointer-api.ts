@@ -65,8 +65,8 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 enum IndexRegistry {
-    Bootstrapper = "BootstrapperIndex",
-    Reputable = "ReputableIndex",
-    Endorsee = "EndorseeIndex",
-    Newbie = "NewbieIndex",
+    Bootstrapper = "bootstrapperIndex",
+    Reputable = "reputableIndex",
+    Endorsee = "endorseeIndex",
+    Newbie = "newbieIndex",
 }
