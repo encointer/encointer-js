@@ -22,29 +22,28 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
-    const mCount = await getMeetupCount(api, cid, cIndex);
+    // helper query to make below code more readable
+    const index_query = (storage_key: IndexRegistry) => {
+        return api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
+    }
+
+    // query everything in parallel to speed up process.
+    const [mCount, assignments, ...pIndexes] = await Promise.all([
+        getMeetupCount(api, cid, cIndex),
+        getAssignment(api, cid, cIndex),
+        index_query(IndexRegistry.Bootstrapper),
+        index_query(IndexRegistry.Reputable),
+        index_query(IndexRegistry.Endorsee),
+        index_query(IndexRegistry.Newbie),
+    ]);
 
     if (mCount.eq(0)) {
         // 0 index means not registered
         return mCount;
     }
 
-    const assignments = await getAssignment(api, cid, cIndex);
-
-    // helper query to make below code more readable
-    const index_query = (storage_key: IndexRegistry) => {
-        return api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
-    }
-
     const meetupIndexFn =
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetup_index(pIndex, params, mCount);
-
-    let pIndexes = await Promise.all([
-        index_query(IndexRegistry.Bootstrapper),
-        index_query(IndexRegistry.Reputable),
-        index_query(IndexRegistry.Endorsee),
-        index_query(IndexRegistry.Newbie),
-    ]);
 
     if (!pIndexes[0].eq(0)) {
         let pIndex = api.createType('ParticipantIndexType', pIndexes[0].toNumber() - 1);
