@@ -38,18 +38,18 @@ describe('node-api', () => {
             console.log(`connect ${chain} failed`);
             await provider.disconnect();
         }
-        //
-        // let res = await _registerTestCommunity(api, alice);
-        //
-        // if (res.error !== undefined) {
-        //     console.log(`failed to register test community: ${JSON.stringify(res)}`);
-        // }
+
+        let res = await _registerTestCommunity(api, alice);
+
+        if (res.error !== undefined) {
+            console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        }
 
         testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
         testMeetupIndex = api.createType('MeetupIndexType', 1)
 
-        // await registerAliceBobCharlieAndGoToAttesting(api, testCid)
+        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
     }, 40000);
 
@@ -220,25 +220,20 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
 
 
     // go to assigning phase
-    await nextPhase(api, alice)
-        .then((result) => {
-            if (result.error !== undefined) {
-                console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
-            }
-        });
+    await nextPhase(api, alice);
 
     // go to attesting phase
-    await nextPhase(api, alice)
+    await nextPhase(api, alice);
+}
+
+function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
+    const tx = api.tx.encointerScheduler.nextPhase()
+    return submitAndWatchTx(api, signer, tx)
         .then((result) => {
             if (result.error !== undefined) {
                 console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
             }
         });
-}
-
-function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
-    const tx = api.tx.encointerScheduler.nextPhase()
-    return submitAndWatchTx(api, signer, tx);
 }
 
 // Corresponds the community of in the encointer-node
