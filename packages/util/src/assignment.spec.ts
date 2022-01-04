@@ -71,10 +71,20 @@ describe('assignment', () => {
     });
 
     it('assignment_fn_inv works', () => {
-        const params = registry.createType('AssignmentParams', [113, 78, 23]);
-        const pCount = registry.createType('ParticipantIndexType', [118])
-        const n = registry.createType('ParticipantIndexType', [118])
-        check_assignment(pCount, params, n)
+        let params = registry.createType('AssignmentParams', [113, 78, 23]);
+        let pCount = registry.createType('ParticipantIndexType', 118);
+        let n = registry.createType('ParticipantIndexType', 12);
+        check_assignment(pCount, params, n);
+
+        params = registry.createType('AssignmentParams', [19, 1, 1]);
+        pCount = registry.createType('ParticipantIndexType', 20);
+        n = registry.createType('ParticipantIndexType', 2);
+        check_assignment(pCount, params, n);
+
+        params = registry.createType('AssignmentParams', [7, 1, 1]);
+        pCount = registry.createType('ParticipantIndexType', 10);
+        n = registry.createType('ParticipantIndexType', 1);
+        check_assignment(pCount, params, n);
     });
 
     it('mod_inv works', () => {
@@ -107,11 +117,9 @@ function check_assignment(participantCount: ParticipantIndexType, assignmentPara
             assert(pNum < pCount, `participant index out of bound: ${pNum}, pCount: ${pCount}`);
             assignedParticipants[pNum] = true
 
-            assert.equal(locations[pNum], i, `locations not equal`)
+            assert.equal(i, locations[pNum], `locations not equal`)
         }
     }
-
-    console.log(`assigned ${assignedParticipants}`);
 
     assert(assignedParticipants.every((val) => val === true))
 }

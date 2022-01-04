@@ -5,6 +5,7 @@ import {u64, Vec} from "@polkadot/types";
 import BN from "bn.js";
 import {Option} from "@polkadot/types-codec";
 import {Moment} from "@polkadot/types/interfaces/runtime";
+import assert from "assert";
 
 /**
  * Performs the same meetup assignment as the encointer-ceremonies pallet.
@@ -98,7 +99,7 @@ export function assignment_function_inverse(
     const aCount = assignmentCount.toNumber();
     const pCount = participantCount.toNumber();
 
-    const maxIndex = Math.ceil((m - mIndex) / aCount);
+    const maxIndex = Math.ceil(Math.max(m - mIndex, 0) / aCount);
 
     let participants: number[] = [];
 
@@ -111,6 +112,9 @@ export function assignment_function_inverse(
             continue;
         }
 
+        // never observed in practice
+        assert(t3 >= 0, `t3 smaller 0: ${t3}`);
+
         participants.push(t3)
 
         if (t3 < pCount - m) {
@@ -118,7 +122,7 @@ export function assignment_function_inverse(
         }
     }
 
-    return registry.createTypeUnsafe('Vec<ParticipantIndexType>', participants)
+    return registry.createTypeUnsafe('Vec<ParticipantIndexType>', [participants]);
 }
 
 export function mod_inv(a: number, module: number): number {
@@ -139,7 +143,7 @@ export function mod_inv(a: number, module: number): number {
 
 function t3_fn(n: number, currentIndex: number, meetupIndex: number, params: AssignmentParams, t2: number): number {
     const x = (n * currentIndex) + meetupIndex - params.s2.toNumber();
-    const y =  remainder(x, params.m.toNumber()) * t2;
+    const y = remainder(x, params.m.toNumber()) * t2;
 
     return remainder(y, params.m.toNumber());
 }
