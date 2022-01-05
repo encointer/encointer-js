@@ -116,7 +116,8 @@ describe('node-api', () => {
         });
 
         it('should get meetupParticipants', async () => {
-            // Todo: this test only covers bootstrappers.
+            // Todo: this test only covers bootstrappers. How do we test reputables, endorsees and newbies?
+            // This might be too tedious, we'd need to go to the second meetup and also register more participants.
             const participants = await getMeetupParticipants(api, testCid, testCIndex, testMeetupIndex);
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
@@ -249,7 +250,7 @@ function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
         });
 }
 
-// Corresponds the community of in the encointer-node
+// Corresponds the community of the encointer-node repository
 const testCommunityParams = {
     meta: {
         "name": "Mediterranea",

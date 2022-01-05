@@ -11,7 +11,6 @@ import {Vec} from "@polkadot/types";
 import {AccountId} from "@polkadot/types/interfaces/runtime";
 import {Registry} from "@polkadot/types/types";
 
-
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
     return api.query.encointerCeremonies.assignments<Assignment>([cid, cIndex]);
 }
@@ -25,6 +24,8 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
+    const registry = api.registry;
+
     // helper query to make below code more readable
     const index_query = (storage_key: IndexRegistry) => {
         return api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
@@ -49,17 +50,17 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetup_index(pIndex, params, mCount);
 
     if (!pIndexes[0].eq(0)) {
-        let pIndex = api.createType('ParticipantIndexType', pIndexes[0].toNumber() - 1);
+        let pIndex = participantIndex(registry,pIndexes[0].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[1].eq(0)) {
         let b = await getAssignmentCount(api, cid, cIndex);
-        let pIndex = api.createType('ParticipantIndexType', pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
+        let pIndex = participantIndex(registry,pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[2].eq(0)) {
-        let pIndex = api.createType('ParticipantIndexType', pIndexes[2].toNumber() - 1);
+        let pIndex = participantIndex(registry, pIndexes[2].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.endorsees);
     } else if (!pIndexes[3].eq(0)) {
-        let pIndex = api.createType('ParticipantIndexType', pIndexes[3].toNumber() - 1);
+        let pIndex = participantIndex(registry, pIndexes[3].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.newbies);
     }
 
@@ -154,7 +155,6 @@ function getBootstrapperOrReputable(
         return api.query.encointerCeremonies.reputableRegistry<AccountId>([cid, cIndex], i);
     }
 }
-
 
 enum IndexRegistry {
     Bootstrapper = "bootstrapperIndex",
