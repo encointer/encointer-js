@@ -21,7 +21,7 @@ describe('assignment', () => {
         registry.register(encointerOptions().types as RegistryTypes)
     });
 
-    it('assignment_fn works', () => {
+    it('assignmentFn works', () => {
         const pIndex = registry.createType('ParticipantIndexType', 6);
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const assignmentCount = registry.createType('u64', 5);
@@ -32,12 +32,12 @@ describe('assignment', () => {
     it('meetup_index works', () => {
         const pIndex = registry.createType('ParticipantIndexType', 6);
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
-        const meetupIndex = registry.createType('MeetupIndexType', 5);
+        const mIndex = registry.createType('MeetupIndexType', 5);
 
-        expect(meetupIndex(pIndex, params, meetupIndex).toNumber()).toEqual(2)
+        expect(meetupIndex(pIndex, params, mIndex).toNumber()).toEqual(2)
     });
 
-    it('meetup_location works', () => {
+    it('meetupLocation works', () => {
         const mIndex = registry.createType('MeetupIndexType', 6);
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const l = registry.createType('Location', {});
@@ -54,7 +54,7 @@ describe('assignment', () => {
         expect(meetupLocation(mIndex, locations, params).isNone)
     });
 
-    it('meetup_time works', () => {
+    it('meetupTime works', () => {
         const location = registry.createType('Location', {
             lat: stringToDegree("0"), // irrelevant
             lon: stringToDegree("20")
@@ -68,7 +68,7 @@ describe('assignment', () => {
         ).toEqual(200)
     });
 
-    it('assignment_fn_inv works', () => {
+    it('assignmentFnInverse works', () => {
         let params = registry.createType('AssignmentParams', [113, 78, 23]);
         let pCount = registry.createType('ParticipantIndexType', 118);
         let n = registry.createType('ParticipantIndexType', 12);
@@ -85,7 +85,7 @@ describe('assignment', () => {
         check_assignment(pCount, params, n);
     });
 
-    it('mod_inv works', () => {
+    it('modInv works', () => {
         expect(modInv(2, 7)).toEqual(4)
         expect(modInv(69, 113)).toEqual(95)
         expect(modInv(111, 113)).toEqual(56)
