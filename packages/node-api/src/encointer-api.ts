@@ -97,7 +97,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         participantIndex(api.registry, assignedCount.bootstrappers.add(assignedCount.reputables))
     )
         .filter((pIndex) => isBootstrapperOrReputable(pIndex, assignedCount))
-        .map((pIndex) => getBootstrapperOrReputable(api, cid, cIndex, pIndex, assignedCount))
+        .map((pIndex) => bootstrapperOrReputableQuery(api, cid, cIndex, pIndex, assignedCount))
 
     const endorsees_promises: Promise<AccountId>[] = assignmentFnInverse(
         mIndexZeroBased,
@@ -144,7 +144,7 @@ function isBootstrapperOrReputable(pIndex: ParticipantIndexType, assigned: Assig
     return pIndex.toNumber() < assigned.bootstrappers.toNumber() + assigned.reputables.toNumber();
 }
 
-function getBootstrapperOrReputable(
+function bootstrapperOrReputableQuery(
     api: ApiPromise,
     cid: CommunityIdentifier,
     cIndex: CeremonyIndexType,
