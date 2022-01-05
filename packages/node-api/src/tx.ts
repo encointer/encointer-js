@@ -80,7 +80,7 @@ function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEve
 
                             message = `${error.section}.${error.name}`;
                         } catch (error) {
-                            // swallow error
+                            message = `could not extract dispatch error: ${error}`;
                         }
                     }
                     console.log('txUpdateEvent', {
