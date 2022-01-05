@@ -61,7 +61,7 @@ describe('node-api', () => {
 
     afterAll(async () => {
         // Jest fails to exit after the tests without this.
-        api.disconnect();
+        await api.disconnect();
     });
 
     describe('scheduler', () => {
@@ -84,18 +84,16 @@ describe('node-api', () => {
         });
 
         it('should get assignment', async () => {
-            for (const participant of [alice, bob, charlie]) {
-                const assignment = await getAssignment(api, testCid, testCIndex, participant.address);
+            const assignment = await getAssignment(api, testCid, testCIndex);
 
-                // hard to test as it is randomized.
-                expect(assignment.bootstrappersReputables.m.toNumber()).toBe(3);
-                expect(assignment.bootstrappersReputables.s1.toNumber()).toBeLessThan(3);
-                expect(assignment.bootstrappersReputables.s2.toNumber()).toBeLessThan(3);
+            // hard to test as it is randomized.
+            expect(assignment.bootstrappersReputables.m.toNumber()).toBe(3);
+            expect(assignment.bootstrappersReputables.s1.toNumber()).toBeLessThan(3);
+            expect(assignment.bootstrappersReputables.s2.toNumber()).toBeLessThan(3);
 
-                // no endorsees and newbies assigned
-                expect(assignment.endorsees.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
-                expect(assignment.newbies.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
-            }
+            // no endorsees and newbies assigned
+            expect(assignment.endorsees.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
+            expect(assignment.newbies.toJSON()).toStrictEqual({"m": 2, "s1": 1, "s2": 1})
         });
 
         it('should get meetupCount', async () => {
@@ -128,6 +126,7 @@ describe('node-api', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
+                // @ts-ignore
                 const cidNames = await api.rpc.communities.getAll();
                 expect(cidNames[0].cid).toStrictEqual(testCid);
             });
@@ -136,8 +135,9 @@ describe('node-api', () => {
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
 
                 try {
+                    // @ts-ignore
                     await api.rpc.communities.getLocations(cid)
-                } catch (e) {
+                } catch (e: any) {
                     expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
 
@@ -151,6 +151,7 @@ describe('node-api', () => {
                     digest: [0x00, 0x00, 0x00, 0x00,],
                 });
 
+                // @ts-ignore
                 const result = await api.rpc.bazaar.getBusinesses(cid.toHex());
                 // console.log(result);
                 expect(result.length).toBe(0);
@@ -159,6 +160,7 @@ describe('node-api', () => {
             it('bazaar.GetOfferings should return empty vec', async () => {
                 // random cid
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
+                // @ts-ignore
                 const result = await api.rpc.bazaar.getOfferings(cid);
                 // console.log(result);
                 expect(result.length).toBe(0);
@@ -170,6 +172,7 @@ describe('node-api', () => {
                 const alice = keyring.addFromUri('//Alice', {name: 'Alice default'})
 
                 const bid = api.createType('BusinessIdentifier', [cid, alice.publicKey]);
+                // @ts-ignore
                 const result = await api.rpc.bazaar.getOfferingsForBusiness(bid);
                 // console.log(result);
                 expect(result.length).toBe(0);

@@ -50,11 +50,11 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetup_index(pIndex, params, mCount);
 
     if (!pIndexes[0].eq(0)) {
-        let pIndex = participantIndex(registry,pIndexes[0].toNumber() - 1);
+        let pIndex = participantIndex(registry, pIndexes[0].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[1].eq(0)) {
         let b = await getAssignmentCount(api, cid, cIndex);
-        let pIndex = participantIndex(registry,pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
+        let pIndex = participantIndex(registry, pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[2].toNumber() - 1);
@@ -68,7 +68,11 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Location> {
+    // ts-ignore can be removed once we autogenerate types and interfaces.
+    // The problem is that the rpc methods don't contain a `communities` section by default.
+
     const [locations, assignmentParams] = await Promise.all([
+        // @ts-ignore
         api.rpc.communities.getLocations(cid),
         getAssignment(api, cid, cIndex)
     ]);
