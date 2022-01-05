@@ -27,7 +27,6 @@ describe('assignment', () => {
         const assignmentCount = registry.createType('u64', 5);
 
         expect(assignment_fn(pIndex, params, assignmentCount).toNumber()).toEqual(1)
-
     });
 
     it('meetup_index works', () => {
@@ -36,7 +35,6 @@ describe('assignment', () => {
         const meetupIndex = registry.createType('MeetupIndexType', 5);
 
         expect(meetup_index(pIndex, params, meetupIndex).toNumber()).toEqual(2)
-
     });
 
     it('meetup_location works', () => {
@@ -65,9 +63,9 @@ describe('assignment', () => {
         const attestingStart = registry.createType('Moment', 0);
         const oneDay = registry.createType('Moment', 360);
 
-        expect(meetup_time(location, attestingStart, oneDay).toNumber()).toEqual(
-            200
-        )
+        expect(
+            meetup_time(location, attestingStart, oneDay).toNumber()
+        ).toEqual(200)
     });
 
     it('assignment_fn_inv works', () => {

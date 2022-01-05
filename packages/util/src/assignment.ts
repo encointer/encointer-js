@@ -113,7 +113,7 @@ export function assignment_fn_inverse(
         }
 
         // never observed in practice
-        assert(t3 >= 0, `t3 smaller 0: ${t3}`);
+        assert(t3 >= 0, `[assignment_fn_inverse]: t3 smaller 0: ${t3}`);
 
         participants.push(t3)
 
@@ -148,6 +148,11 @@ function t3_fn(n: number, currentIndex: number, meetupIndex: number, params: Ass
     return remainder(y, params.m.toNumber());
 }
 
+/**
+ * Returns the integer division remainder.
+ * @param n
+ * @param m
+ */
 function remainder(n: number, m: number) {
     return ((n % m) + m) % m;
 }
