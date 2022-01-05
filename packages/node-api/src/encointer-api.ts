@@ -76,14 +76,17 @@ export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifie
 }
 
 export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Vec<AccountId>> {
+    let registry = api.registry;
+    const mIndexZeroBased = registry.createType('MeetupIndexType', meetupIndex.toNumber() - 1);
+
     const [meetupCount, assignmentParams, assignedCount] = await Promise.all([
         getMeetupCount(api, cid, cIndex),
         getAssignment(api, cid, cIndex),
         getAssignmentCount(api, cid, cIndex)
     ])
 
-    const bootstrappers_reputables_promises = assignment_fn_inverse(
-        meetupIndex,
+    const bootstrappers_reputables_promises: Promise<AccountId>[] = assignment_fn_inverse(
+        mIndexZeroBased,
         assignmentParams.bootstrappersReputables,
         meetupCount,
         participantIndex(api.registry, assignedCount.bootstrappers.add(assignedCount.reputables))
@@ -91,8 +94,8 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         .filter((pIndex) => isBootstrapperOrReputable(pIndex, assignedCount))
         .map((pIndex) => getBootstrapperOrReputable(api, cid, cIndex, pIndex, assignedCount))
 
-    const endorsees_promises = assignment_fn_inverse(
-        meetupIndex,
+    const endorsees_promises: Promise<AccountId>[] = assignment_fn_inverse(
+        mIndexZeroBased,
         assignmentParams.endorsees,
         meetupCount,
         assignedCount.endorsees
@@ -105,8 +108,8 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
             )
         );
 
-    const newbie_promises = assignment_fn_inverse(
-        meetupIndex,
+    const newbie_promises: Promise<AccountId>[] = assignment_fn_inverse(
+        mIndexZeroBased,
         assignmentParams.newbies,
         meetupCount,
         assignedCount.newbies
@@ -119,13 +122,13 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
             )
         );
 
-    const [bootstrappers_reputables, endorsees, newbies] = await Promise.all([
-        bootstrappers_reputables_promises,
-        endorsees_promises,
-        newbie_promises
+    const participants = await Promise.all([
+        ...bootstrappers_reputables_promises,
+        ...endorsees_promises,
+        ...newbie_promises
     ]);
 
-    return api.createType('Vec<AccountId>', ...[bootstrappers_reputables, endorsees, newbies])
+    return api.createType('Vec<AccountId>', participants)
 }
 
 function participantIndex(registry: Registry, ...params: unknown[]): ParticipantIndexType {

@@ -7,7 +7,14 @@ import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
-import {getAssignment, getAssignmentCount, getMeetupCount, getMeetupIndex, getMeetupLocation} from './encointer-api';
+import {
+    getAssignment,
+    getAssignmentCount,
+    getMeetupCount,
+    getMeetupIndex,
+    getMeetupLocation,
+    getMeetupParticipants
+} from './encointer-api';
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -107,6 +114,13 @@ describe('node-api', () => {
         it('should get meetupLocation', async () => {
             const location = await getMeetupLocation(api, testCid, testCIndex, testMeetupIndex);
             expect(location.toJSON()).toStrictEqual(testCommunityParams.locations[0]);
+        });
+
+        it('should get meetupParticipants', async () => {
+            // Todo: this test only covers bootstrappers.
+            const participants = await getMeetupParticipants(api, testCid, testCIndex, testMeetupIndex);
+            expect(participants.sort().toJSON())
+                .toStrictEqual([alice.address, bob.address, charlie.address].sort());
         });
     });
 
