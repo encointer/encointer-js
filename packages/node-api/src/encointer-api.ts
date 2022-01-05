@@ -6,7 +6,7 @@ import {
     CommunityIdentifier, Location,
     MeetupIndexType, ParticipantIndexType,
 } from "@encointer/types";
-import {meetup_index, meetup_location, assignment_fn_inverse} from "@encointer/util/assignment";
+import {meetupIndex, meetupLocation, assignmentFnInverse} from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId} from "@polkadot/types/interfaces/runtime";
 import {Registry} from "@polkadot/types/types";
@@ -47,7 +47,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     }
 
     const meetupIndexFn =
-        (pIndex: ParticipantIndexType, params: AssignmentParams) => meetup_index(pIndex, params, mCount);
+        (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, mCount);
 
     if (!pIndexes[0].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[0].toNumber() - 1);
@@ -77,7 +77,7 @@ export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifie
         getAssignment(api, cid, cIndex)
     ]);
 
-    return meetup_location(meetupIndex, locations, assignmentParams.locations).unwrap();
+    return meetupLocation(meetupIndex, locations, assignmentParams.locations).unwrap();
 }
 
 export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Vec<AccountId>> {
@@ -90,7 +90,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         getAssignmentCount(api, cid, cIndex)
     ])
 
-    const bootstrappers_reputables_promises: Promise<AccountId>[] = assignment_fn_inverse(
+    const bootstrappers_reputables_promises: Promise<AccountId>[] = assignmentFnInverse(
         mIndexZeroBased,
         assignmentParams.bootstrappersReputables,
         meetupCount,
@@ -99,7 +99,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         .filter((pIndex) => isBootstrapperOrReputable(pIndex, assignedCount))
         .map((pIndex) => getBootstrapperOrReputable(api, cid, cIndex, pIndex, assignedCount))
 
-    const endorsees_promises: Promise<AccountId>[] = assignment_fn_inverse(
+    const endorsees_promises: Promise<AccountId>[] = assignmentFnInverse(
         mIndexZeroBased,
         assignmentParams.endorsees,
         meetupCount,
@@ -113,7 +113,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
             )
         );
 
-    const newbie_promises: Promise<AccountId>[] = assignment_fn_inverse(
+    const newbie_promises: Promise<AccountId>[] = assignmentFnInverse(
         mIndexZeroBased,
         assignmentParams.newbies,
         meetupCount,

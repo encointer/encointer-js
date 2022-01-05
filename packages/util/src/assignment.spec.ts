@@ -4,12 +4,12 @@ import {TypeRegistry, u64} from "@polkadot/types";
 import {RegistryTypes} from "@polkadot/types/types";
 import {options as encointerOptions} from "@encointer/node-api";
 import {
-    assignment_fn,
-    assignment_fn_inverse,
-    meetup_index,
-    meetup_location,
-    meetup_time,
-    mod_inv
+    assignmentFn,
+    assignmentFnInverse,
+    meetupIndex,
+    meetupLocation,
+    meetupTime,
+    modInv
 } from "@encointer/util/assignment";
 import {AssignmentParams, MeetupIndexType, ParticipantIndexType, stringToDegree} from "@encointer/types";
 import assert from "assert";
@@ -26,7 +26,7 @@ describe('assignment', () => {
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const assignmentCount = registry.createType('u64', 5);
 
-        expect(assignment_fn(pIndex, params, assignmentCount).toNumber()).toEqual(1)
+        expect(assignmentFn(pIndex, params, assignmentCount).toNumber()).toEqual(1)
     });
 
     it('meetup_index works', () => {
@@ -34,7 +34,7 @@ describe('assignment', () => {
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const meetupIndex = registry.createType('MeetupIndexType', 5);
 
-        expect(meetup_index(pIndex, params, meetupIndex).toNumber()).toEqual(2)
+        expect(meetupIndex(pIndex, params, meetupIndex).toNumber()).toEqual(2)
     });
 
     it('meetup_location works', () => {
@@ -43,7 +43,7 @@ describe('assignment', () => {
         const l = registry.createType('Location', {});
         const locations = registry.createType('Vec<Location>', [l, l]);
 
-        expect(meetup_location(mIndex, locations, params).unwrap()).toEqual(l)
+        expect(meetupLocation(mIndex, locations, params).unwrap()).toEqual(l)
     });
 
     it('meetup_location returns none if locations empty', () => {
@@ -51,7 +51,7 @@ describe('assignment', () => {
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const locations = registry.createType('Vec<Location>', []);
 
-        expect(meetup_location(mIndex, locations, params).isNone)
+        expect(meetupLocation(mIndex, locations, params).isNone)
     });
 
     it('meetup_time works', () => {
@@ -64,7 +64,7 @@ describe('assignment', () => {
         const oneDay = registry.createType('Moment', 360);
 
         expect(
-            meetup_time(location, attestingStart, oneDay).toNumber()
+            meetupTime(location, attestingStart, oneDay).toNumber()
         ).toEqual(200)
     });
 
@@ -86,9 +86,9 @@ describe('assignment', () => {
     });
 
     it('mod_inv works', () => {
-        expect(mod_inv(2, 7)).toEqual(4)
-        expect(mod_inv(69, 113)).toEqual(95)
-        expect(mod_inv(111, 113)).toEqual(56)
+        expect(modInv(2, 7)).toEqual(4)
+        expect(modInv(69, 113)).toEqual(95)
+        expect(modInv(111, 113)).toEqual(56)
     });
 });
 
@@ -100,14 +100,14 @@ function check_assignment(participantCount: ParticipantIndexType, assignmentPara
 
     for (let i = 0; i < pCount; i++) {
         const pIndex = registry.createTypeUnsafe<ParticipantIndexType>('ParticipantIndexType', [i]);
-        locations[i] = assignment_fn(pIndex, assignmentParams, n).toNumber()
+        locations[i] = assignmentFn(pIndex, assignmentParams, n).toNumber()
     }
 
     let assignedParticipants = new Array(pCount).fill(false, 0, pCount);
 
     for (let i = 0; i < n.toNumber(); i++) {
         const mIndex = registry.createTypeUnsafe<MeetupIndexType>('MeetupIndexType', [i]);
-        const participants = assignment_fn_inverse(mIndex, assignmentParams, n, participantCount)
+        const participants = assignmentFnInverse(mIndex, assignmentParams, n, participantCount)
 
         for (const p of participants) {
             let pNum = p.toNumber();

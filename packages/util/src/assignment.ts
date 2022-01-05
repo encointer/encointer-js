@@ -14,7 +14,7 @@ import assert from "assert";
  * @param assignmentParams
  * @param assignmentCount
  */
-export function assignment_fn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): ParticipantIndexType {
+export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): ParticipantIndexType {
     const result = participantIndex
         .mul(assignmentParams.s1)
         .add(assignmentParams.s2)
@@ -33,8 +33,8 @@ export function assignment_fn(participantIndex: ParticipantIndexType, assignment
  * @param assignmentParams
  * @param meetupCount
  */
-export function meetup_index(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
-    const result = assignment_fn(participantIndex, assignmentParams, meetupCount).add(new BN(1));
+export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
+    const result = assignmentFn(participantIndex, assignmentParams, meetupCount).add(new BN(1));
 
     return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [result]);
 }
@@ -47,7 +47,7 @@ export function meetup_index(participantIndex: ParticipantIndexType, assignmentP
  * @param locations
  * @param locationAssignmentParams
  */
-export function meetup_location(meetupIndex: MeetupIndexType, locations: Vec<Location>, locationAssignmentParams: AssignmentParams): Option<Location> {
+export function meetupLocation(meetupIndex: MeetupIndexType, locations: Vec<Location>, locationAssignmentParams: AssignmentParams): Option<Location> {
     const registry = meetupIndex.registry;
 
     // not sure why we need to specify the type here explicitly.
@@ -58,7 +58,7 @@ export function meetup_location(meetupIndex: MeetupIndexType, locations: Vec<Loc
         return registry.createTypeUnsafe('Option<Location>', [])
     }
 
-    const location_index = assignment_fn(meetupIndex, locationAssignmentParams, len)
+    const location_index = assignmentFn(meetupIndex, locationAssignmentParams, len)
 
     if (location_index < len) {
         return registry.createTypeUnsafe('Option<Location>', [locations[location_index.toNumber()]])
@@ -75,7 +75,7 @@ export function meetup_location(meetupIndex: MeetupIndexType, locations: Vec<Loc
  * @param attesting_start
  * @param one_day
  */
-export function meetup_time(location: Location, attesting_start: Moment, one_day: Moment): Moment {
+export function meetupTime(location: Location, attesting_start: Moment, one_day: Moment): Moment {
     const registry = location.registry;
 
     const per_degree = one_day.toNumber() / 360;
@@ -86,7 +86,15 @@ export function meetup_time(location: Location, attesting_start: Moment, one_day
     return registry.createTypeUnsafe('Moment', [result])
 }
 
-export function assignment_fn_inverse(
+/**
+ * Returns the participants for a given assignment configuration.
+ *
+ * @param meetupIndex
+ * @param assignmentParams
+ * @param assignmentCount
+ * @param participantCount
+ */
+export function assignmentFnInverse(
     meetupIndex: MeetupIndexType,
     assignmentParams: AssignmentParams,
     assignmentCount: MeetupIndexType,
@@ -104,9 +112,9 @@ export function assignment_fn_inverse(
     let participants: number[] = [];
 
     for (let i = 0; i < maxIndex; i++) {
-        const t2 = mod_inv(assignmentParams.s1.toNumber(), m);
+        const t2 = modInv(assignmentParams.s1.toNumber(), m);
 
-        const t3 = t3_fn(aCount, i, mIndex, assignmentParams, t2);
+        const t3 = t3Fn(aCount, i, mIndex, assignmentParams, t2);
 
         if (t3 >= pCount) {
             continue;
@@ -125,7 +133,7 @@ export function assignment_fn_inverse(
     return registry.createTypeUnsafe('Vec<ParticipantIndexType>', [participants]);
 }
 
-export function mod_inv(a: number, module: number): number {
+export function modInv(a: number, module: number): number {
     let mn = [module, a];
     let xy = [0, 1]
 
@@ -141,7 +149,7 @@ export function mod_inv(a: number, module: number): number {
     return xy[0]
 }
 
-function t3_fn(n: number, currentIndex: number, meetupIndex: number, params: AssignmentParams, t2: number): number {
+function t3Fn(n: number, currentIndex: number, meetupIndex: number, params: AssignmentParams, t2: number): number {
     const x = (n * currentIndex) + meetupIndex - params.s2.toNumber();
     const y = remainder(x, params.m.toNumber()) * t2;
 
