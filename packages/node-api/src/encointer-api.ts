@@ -32,9 +32,10 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     }
 
     // query everything in parallel to speed up process.
-    const [mCount, assignments, ...pIndexes] = await Promise.all([
+    const [mCount, assignments, assignmentCount, ...pIndexes] = await Promise.all([
         getMeetupCount(api, cid, cIndex),
         getAssignment(api, cid, cIndex),
+        getAssignmentCount(api, cid, cIndex),
         indexQuery(IndexRegistry.Bootstrapper),
         indexQuery(IndexRegistry.Reputable),
         indexQuery(IndexRegistry.Endorsee),
@@ -53,8 +54,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         let pIndex = participantIndex(registry, pIndexes[0].toNumber() - 1);
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[1].eq(0)) {
-        let b = await getAssignmentCount(api, cid, cIndex);
-        let pIndex = participantIndex(registry, pIndexes[1].toNumber() - 1 + b.bootstrappers.toNumber());
+        let pIndex = participantIndex(registry, pIndexes[1].toNumber() - 1 + assignmentCount.bootstrappers.toNumber());
         return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[2].toNumber() - 1);

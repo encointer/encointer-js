@@ -115,7 +115,7 @@ describe('node-api', () => {
 
         it('should get meetupParticipants', async () => {
             // Todo: this test only covers bootstrappers. How do we test reputables, endorsees and newbies?
-            // This might be too tedious, we'd need to go to the second meetup and also register more participants.
+            // This might be too tedious, we'd need to go to the second ceremony and also register more participants.
             const participants = await getMeetupParticipants(api, testCid, testCIndex, testMeetupIndex);
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
@@ -206,7 +206,7 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
-    // even though they are identical we need to have three different objects because they are passed by reference in JS.
+    // Even though they are identical, we need to have three different objects because they are passed by reference in JS.
     const tx1 = api.tx.encointerCeremonies.registerParticipant(cid, null)
     const tx2 = api.tx.encointerCeremonies.registerParticipant(cid, null)
     const tx3 = api.tx.encointerCeremonies.registerParticipant(cid, null)
@@ -234,7 +234,6 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
             console.log(`registered ${signers[index].address}: result: ${JSON.stringify(result)}`);
         }
     })
-
 
     // go to assigning phase
     await nextPhase(api, alice);
