@@ -27,7 +27,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     const registry = api.registry;
 
     // helper query to make below code more readable
-    const index_query = (storage_key: IndexRegistry) => {
+    const indexQuery = (storage_key: IndexRegistry) => {
         return api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
     }
 
@@ -35,10 +35,10 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     const [mCount, assignments, ...pIndexes] = await Promise.all([
         getMeetupCount(api, cid, cIndex),
         getAssignment(api, cid, cIndex),
-        index_query(IndexRegistry.Bootstrapper),
-        index_query(IndexRegistry.Reputable),
-        index_query(IndexRegistry.Endorsee),
-        index_query(IndexRegistry.Newbie),
+        indexQuery(IndexRegistry.Bootstrapper),
+        indexQuery(IndexRegistry.Reputable),
+        indexQuery(IndexRegistry.Endorsee),
+        indexQuery(IndexRegistry.Newbie),
     ]);
 
     if (mCount.eq(0)) {
