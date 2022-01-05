@@ -6,7 +6,10 @@ import {
     CommunityIdentifier, Location,
     MeetupIndexType, ParticipantIndexType,
 } from "@encointer/types";
-import {meetup_index, meetup_location} from "@encointer/util/assignment";
+import {meetup_index, meetup_location, assignment_fn_inverse} from "@encointer/util/assignment";
+import {Vec} from "@polkadot/types";
+import {AccountId} from "@polkadot/types/interfaces/runtime";
+import {Registry} from "@polkadot/types/types";
 
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
@@ -72,6 +75,82 @@ export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifie
     return meetup_location(meetupIndex, locations, assignmentParams.locations).unwrap();
 }
 
+export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Vec<AccountId>> {
+    const [meetupCount, assignmentParams, assignedCount] = await Promise.all([
+        getMeetupCount(api, cid, cIndex),
+        getAssignment(api, cid, cIndex),
+        getAssignmentCount(api, cid, cIndex)
+    ])
+
+    const bootstrappers_reputables_promises = assignment_fn_inverse(
+        meetupIndex,
+        assignmentParams.bootstrappersReputables,
+        meetupCount,
+        participantIndex(api.registry, assignedCount.bootstrappers.add(assignedCount.reputables))
+    )
+        .filter((pIndex) => isBootstrapperOrReputable(pIndex, assignedCount))
+        .map((pIndex) => getBootstrapperOrReputable(api, cid, cIndex, pIndex, assignedCount))
+
+    const endorsees_promises = assignment_fn_inverse(
+        meetupIndex,
+        assignmentParams.endorsees,
+        meetupCount,
+        assignedCount.endorsees
+    )
+        .filter((pIndex) => pIndex.toNumber() < assignedCount.endorsees.toNumber())
+        .map((pIndex) =>
+            api.query.encointerCeremonies.endorseeRegistry<AccountId>(
+                [cid, cIndex],
+                participantIndex(api.registry, pIndex.toNumber() + 1)
+            )
+        );
+
+    const newbie_promises = assignment_fn_inverse(
+        meetupIndex,
+        assignmentParams.newbies,
+        meetupCount,
+        assignedCount.newbies
+    )
+        .filter((pIndex) => pIndex.toNumber() < assignedCount.newbies.toNumber())
+        .map((pIndex) =>
+            api.query.encointerCeremonies.newbieRegistry<AccountId>(
+                [cid, cIndex],
+                participantIndex(api.registry, pIndex.toNumber() + 1)
+            )
+        );
+
+    const [bootstrappers_reputables, endorsees, newbies] = await Promise.all([
+        bootstrappers_reputables_promises,
+        endorsees_promises,
+        newbie_promises
+    ]);
+
+    return api.createType('Vec<AccountId>', ...[bootstrappers_reputables, endorsees, newbies])
+}
+
+function participantIndex(registry: Registry, ...params: unknown[]): ParticipantIndexType {
+    return registry.createType('ParticipantIndexType', params)
+}
+
+function isBootstrapperOrReputable(pIndex: ParticipantIndexType, assigned: AssignmentCount): boolean {
+    return pIndex.toNumber() < assigned.bootstrappers.toNumber() + assigned.reputables.toNumber();
+}
+
+function getBootstrapperOrReputable(
+    api: ApiPromise,
+    cid: CommunityIdentifier,
+    cIndex: CeremonyIndexType,
+    pIndex: ParticipantIndexType,
+    assigned: AssignmentCount,
+): Promise<AccountId> {
+    if (pIndex < assigned.bootstrappers) {
+        const i = participantIndex(api.registry, pIndex.toNumber() + 1);
+        return api.query.encointerCeremonies.bootstrapperRegistry<AccountId>([cid, cIndex], i);
+    } else {
+        const i = participantIndex(api.registry, pIndex.toNumber() - assigned.bootstrappers.toNumber() + 1);
+        return api.query.encointerCeremonies.reputableRegistry<AccountId>([cid, cIndex], i);
+    }
+}
 
 
 enum IndexRegistry {

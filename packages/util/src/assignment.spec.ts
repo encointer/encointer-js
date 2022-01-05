@@ -5,7 +5,7 @@ import {RegistryTypes} from "@polkadot/types/types";
 import {options as encointerOptions} from "@encointer/node-api";
 import {
     assignment_fn,
-    assignment_function_inverse,
+    assignment_fn_inverse,
     meetup_index,
     meetup_location,
     meetup_time,
@@ -109,7 +109,7 @@ function check_assignment(participantCount: ParticipantIndexType, assignmentPara
 
     for (let i = 0; i < n.toNumber(); i++) {
         const mIndex = registry.createTypeUnsafe<MeetupIndexType>('MeetupIndexType', [i]);
-        const participants = assignment_function_inverse(mIndex, assignmentParams, n, participantCount)
+        const participants = assignment_fn_inverse(mIndex, assignmentParams, n, participantCount)
 
         for (const p of participants) {
             let pNum = p.toNumber();

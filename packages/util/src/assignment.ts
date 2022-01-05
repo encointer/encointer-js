@@ -86,7 +86,7 @@ export function meetup_time(location: Location, attesting_start: Moment, one_day
     return registry.createTypeUnsafe('Moment', [result])
 }
 
-export function assignment_function_inverse(
+export function assignment_fn_inverse(
     meetupIndex: MeetupIndexType,
     assignmentParams: AssignmentParams,
     assignmentCount: MeetupIndexType,
