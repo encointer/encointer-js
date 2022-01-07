@@ -7,7 +7,7 @@ import type { BlockNumber } from '@polkadot/types/interfaces/runtime';
 /** @name BalanceEntry */
 export interface BalanceEntry extends Struct {
   readonly principal: BalanceType;
-  readonly last_update: BlockNumber;
+  readonly lastUpdate: BlockNumber;
 }
 
 /** @name BalanceType */

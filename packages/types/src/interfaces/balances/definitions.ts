@@ -4,7 +4,7 @@ export default {
     BalanceType: 'i128',
     BalanceEntry: {
       principal: 'BalanceType',
-      last_update: 'BlockNumber'
+      lastUpdate: 'BlockNumber'
     },
     Demurrage: 'BalanceType',
   }

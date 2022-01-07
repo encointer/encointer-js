@@ -7,6 +7,29 @@ import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
 
+/** @name Assignment */
+export interface Assignment extends Struct {
+  readonly bootstrappersReputables: AssignmentParams;
+  readonly endorsees: AssignmentParams;
+  readonly newbies: AssignmentParams;
+  readonly locations: AssignmentParams;
+}
+
+/** @name AssignmentCount */
+export interface AssignmentCount extends Struct {
+  readonly bootstrappers: ParticipantIndexType;
+  readonly reputables: ParticipantIndexType;
+  readonly endorsees: ParticipantIndexType;
+  readonly newbies: ParticipantIndexType;
+}
+
+/** @name AssignmentParams */
+export interface AssignmentParams extends Struct {
+  readonly m: u64;
+  readonly s1: u64;
+  readonly s2: u64;
+}
+
 /** @name Attestation */
 export interface Attestation extends Struct {
   readonly claim: ClaimOfAttendance;
@@ -30,43 +53,43 @@ export interface CeremonyPhaseType extends Enum {
 
 /** @name ClaimOfAttendance */
 export interface ClaimOfAttendance extends Struct {
-  readonly claimant_public: AccountId;
-  readonly ceremony_index: CeremonyIndexType;
-  readonly community_identifier: CommunityIdentifier;
-  readonly meetup_location_index: MeetupLocationIndexType;
+  readonly claimantPublic: AccountId;
+  readonly ceremonyIndex: CeremonyIndexType;
+  readonly communityIdentifier: CommunityIdentifier;
+  readonly meetupLocationIndex: MeetupIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
-  readonly number_of_participants_confirmed: u32;
-  readonly claimant_signature: Option<MultiSignature>;
+  readonly numberOfParticipantsConfirmed: u32;
+  readonly claimantSignature: Option<MultiSignature>;
 }
 
 /** @name ClaimOfAttendanceSigningPayload */
 export interface ClaimOfAttendanceSigningPayload extends Struct {
-  readonly claimant_public: AccountId;
-  readonly ceremony_index: CeremonyIndexType;
-  readonly community_identifier: CommunityIdentifier;
-  readonly meetup_location_index: MeetupLocationIndexType;
+  readonly claimantPublic: AccountId;
+  readonly ceremonyIndex: CeremonyIndexType;
+  readonly communityIdentifier: CommunityIdentifier;
+  readonly meetupLocationIndex: MeetupIndexType;
   readonly location: Location;
   readonly timestamp: Moment;
-  readonly number_of_participants_confirmed: u32;
+  readonly numberOfParticipantsConfirmed: u32;
 }
 
 /** @name MeetupAssignment */
-export interface MeetupAssignment extends ITuple<[MeetupLocationIndexType, Option<Location>]> {}
+export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
 
-/** @name MeetupLocationIndexType */
-export interface MeetupLocationIndexType extends u64 {}
+/** @name MeetupIndexType */
+export interface MeetupIndexType extends u64 {}
 
 /** @name ParticipantIndexType */
 export interface ParticipantIndexType extends u64 {}
 
 /** @name ProofOfAttendance */
 export interface ProofOfAttendance extends Struct {
-  readonly prover_public: AccountId;
-  readonly ceremony_index: CeremonyIndexType;
-  readonly community_identifier: CommunityIdentifier;
-  readonly attendee_public: AccountId;
-  readonly attendee_signature: MultiSignature;
+  readonly proverPublic: AccountId;
+  readonly ceremonyIndex: CeremonyIndexType;
+  readonly communityIdentifier: CommunityIdentifier;
+  readonly attendeePublic: AccountId;
+  readonly attendeeSignature: MultiSignature;
 }
 
 export type PHANTOM_CEREMONY = 'ceremony';
