@@ -68,6 +68,20 @@ describe('assignment', () => {
         ).toEqual(160)
     });
 
+    it('meetupTime works for non-integer results', () => {
+        const location = registry.createType('Location', {
+            lat: stringToDegree("0"), // irrelevant
+            lon: stringToDegree("20")
+        });
+
+        const attestingStart = registry.createType('Moment', 0);
+        const oneDay = registry.createType('Moment', 178);
+
+        expect(
+            meetupTime(location, attestingStart, oneDay).toNumber()
+        ).toEqual(79)
+    });
+
     it('assignmentFnInverse works', () => {
         let params = registry.createType('AssignmentParams', [113, 78, 23]);
         let pCount = registry.createType('ParticipantIndexType', 118);
