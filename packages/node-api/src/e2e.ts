@@ -1,7 +1,13 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
-import {CeremonyIndexType, CommunityIdentifier, MeetupIndexType, stringToDegree} from "../../types/src";
+import {
+    CeremonyIndexType,
+    CeremonyPhaseType,
+    CommunityIdentifier,
+    MeetupIndexType,
+    stringToDegree
+} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
@@ -13,8 +19,10 @@ import {
     getMeetupIndex,
     getMeetupLocation,
     getMeetupParticipants,
-    getParticipantIndex
+    getParticipantIndex,
+    getStartOfAttestingPhase
 } from './encointer-api';
+import {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -67,9 +75,18 @@ describe('node-api', () => {
 
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
-            const result = await api.query.encointerScheduler.currentPhase();
-            // console.log(result);
-            expect(result).toBeDefined();
+            const result = await api.query.encointerScheduler.currentPhase<CeremonyPhaseType>();
+            expect(result.isAttesting);
+        });
+
+        it('should getAttestingStart', async () => {
+            const [attestingStart, nextPhase, attestingDuration] = await Promise.all([
+                getStartOfAttestingPhase(api),
+                api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
+                api.query.encointerScheduler.phaseDurations<Moment>('Attesting')
+            ]);
+
+            expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() - attestingDuration.toNumber());
         });
     });
 
