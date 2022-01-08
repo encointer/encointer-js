@@ -12,7 +12,8 @@ import {
     getMeetupCount,
     getMeetupIndex,
     getMeetupLocation,
-    getMeetupParticipants
+    getMeetupParticipants,
+    getParticipantIndex
 } from './encointer-api';
 
 describe('node-api', () => {
@@ -120,6 +121,14 @@ describe('node-api', () => {
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
         });
+
+        it('should get participantIndex', async () => {
+            for (const [i, participant] of [alice, bob, charlie].entries()) {
+                const pIndex = await getParticipantIndex(api, testCid, testCIndex, participant.address);
+                expect(pIndex.toNumber()).toBe(i + 1);
+            }
+        });
+
     });
 
     describe('rpc', () => {

@@ -10,6 +10,7 @@ import {meetupIndex, meetupLocation, assignmentFnInverse} from "@encointer/util/
 import {Vec} from "@polkadot/types";
 import {AccountId} from "@polkadot/types/interfaces/runtime";
 import {Registry} from "@polkadot/types/types";
+import {IndexRegistry, IParticipantIndexQuery} from "@encointer/node-api/interface";
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
     return api.query.encointerCeremonies.assignments<Assignment>([cid, cIndex]);
@@ -27,9 +28,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     const registry = api.registry;
 
     // helper query to make below code more readable
-    const indexQuery = (storage_key: IndexRegistry) => {
-        return api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
-    }
+    const indexQuery = participantIndexQuery(api, cid, cIndex, address);
 
     // query everything in parallel to speed up process.
     const [mCount, assignments, assignmentCount, ...pIndexes] = await Promise.all([
@@ -136,6 +135,32 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
     return api.createType('Vec<AccountId>', participants)
 }
 
+export async function getParticipantIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<ParticipantIndexType> {
+
+    const indexQuery = participantIndexQuery(api, cid, cIndex, address);
+
+    // query everything in parallel to speed up process.
+    const pIndexes = await Promise.all([
+        indexQuery(IndexRegistry.Bootstrapper),
+        indexQuery(IndexRegistry.Reputable),
+        indexQuery(IndexRegistry.Endorsee),
+        indexQuery(IndexRegistry.Newbie),
+    ]);
+
+    const index = pIndexes.find(i => i.toNumber() > 0);
+
+    if (index !== undefined) {
+        return index;
+    } else {
+        return participantIndex(api.registry, 0)
+    }
+}
+
+function participantIndexQuery(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): IParticipantIndexQuery {
+    return (storage_key: IndexRegistry) =>
+        api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
+}
+
 function participantIndex(registry: Registry, ...params: unknown[]): ParticipantIndexType {
     return registry.createType('ParticipantIndexType', params)
 }
@@ -158,11 +183,4 @@ function bootstrapperOrReputableQuery(
         const i = participantIndex(api.registry, pIndex.toNumber() - assigned.bootstrappers.toNumber() + 1);
         return api.query.encointerCeremonies.reputableRegistry<AccountId>([cid, cIndex], i);
     }
-}
-
-enum IndexRegistry {
-    Bootstrapper = "bootstrapperIndex",
-    Reputable = "reputableIndex",
-    Endorsee = "endorseeIndex",
-    Newbie = "newbieIndex",
 }
