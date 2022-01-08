@@ -65,7 +65,7 @@ describe('assignment', () => {
 
         expect(
             meetupTime(location, attestingStart, oneDay).toNumber()
-        ).toEqual(200)
+        ).toEqual(160)
     });
 
     it('assignmentFnInverse works', () => {

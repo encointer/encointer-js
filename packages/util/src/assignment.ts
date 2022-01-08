@@ -81,7 +81,7 @@ export function meetupTime(location: Location, attesting_start: Moment, one_day:
     const per_degree = one_day.toNumber() / 360;
     const lon_time = parseDegree(location.lon) * per_degree;
 
-    let result = attesting_start.toNumber() + one_day.toNumber() / 2 + lon_time;
+    let result = attesting_start.toNumber() + one_day.toNumber() / 2 - lon_time;
 
     return registry.createTypeUnsafe('Moment', [result])
 }
