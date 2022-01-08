@@ -46,7 +46,7 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        let res = await _registerTestCommunity(api, alice);
+        let res = await registerTestCommunity(api, alice);
 
         if (res.error !== undefined) {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
@@ -190,7 +190,7 @@ describe('node-api', () => {
     });
 });
 
-function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
+function registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
     const loc_json = testCommunityParams.locations[0]
     const location = api.createType('Location', {
         lat: stringToDegree(loc_json.lat),
