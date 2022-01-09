@@ -83,18 +83,18 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
                             message = `could not extract dispatch error: ${JSON.stringify(error)}`;
                         }
                     }
-                    console.log('txUpdateEvent', {
+                    console.log('txUpdateEvent', `${JSON.stringify({
                         title: `${section}.${method}`,
                         message
-                    });
+                    })}`);
                     error = message;
                 }
 
             } else {
-                console.log('txUpdateEvent', {
+                console.log('txUpdateEvent', `${JSON.stringify({
                     title: `${section}.${method}`,
-                    message: JSON.stringify(data)
-                });
+                    message: data
+                })}`);
                 if (section == 'system' && method == 'ExtrinsicSuccess') {
                     success = true;
                 }
