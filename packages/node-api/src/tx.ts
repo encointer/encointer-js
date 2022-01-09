@@ -80,7 +80,7 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
 
                             message = `${error.section}.${error.name}`;
                         } catch (error) {
-                            message = `could not extract dispatch error: ${error}`;
+                            message = `could not extract dispatch error: ${JSON.stringify(error)}`;
                         }
                     }
                     console.log('txUpdateEvent', {
@@ -93,7 +93,7 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
             } else {
                 console.log('txUpdateEvent', {
                     title: `${section}.${method}`,
-                    message: data.toJSON()
+                    message: JSON.stringify(data)
                 });
                 if (section == 'system' && method == 'ExtrinsicSuccess') {
                     success = true;
