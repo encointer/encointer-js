@@ -60,7 +60,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
  * @param api
  * @param result
  */
-function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEventResult {
+export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEventResult {
     let success = false;
     let error;
     result.events
