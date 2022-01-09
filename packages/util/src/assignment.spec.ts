@@ -29,7 +29,7 @@ describe('assignment', () => {
         expect(assignmentFn(pIndex, params, assignmentCount).toNumber()).toEqual(1)
     });
 
-    it('meetup_index works', () => {
+    it('meetupIndex works', () => {
         const pIndex = registry.createType('ParticipantIndexType', 6);
         const params = registry.createType('AssignmentParams', [4, 5, 3]);
         const mIndex = registry.createType('MeetupIndexType', 5);
@@ -65,24 +65,38 @@ describe('assignment', () => {
 
         expect(
             meetupTime(location, attestingStart, oneDay).toNumber()
-        ).toEqual(200)
+        ).toEqual(160)
+    });
+
+    it('meetupTime works for non-integer results', () => {
+        const location = registry.createType('Location', {
+            lat: stringToDegree("0"), // irrelevant
+            lon: stringToDegree("20")
+        });
+
+        const attestingStart = registry.createType('Moment', 0);
+        const oneDay = registry.createType('Moment', 178);
+
+        expect(
+            meetupTime(location, attestingStart, oneDay).toNumber()
+        ).toEqual(79)
     });
 
     it('assignmentFnInverse works', () => {
         let params = registry.createType('AssignmentParams', [113, 78, 23]);
         let pCount = registry.createType('ParticipantIndexType', 118);
         let n = registry.createType('ParticipantIndexType', 12);
-        check_assignment(pCount, params, n);
+        checkAssignment(pCount, params, n);
 
         params = registry.createType('AssignmentParams', [19, 1, 1]);
         pCount = registry.createType('ParticipantIndexType', 20);
         n = registry.createType('ParticipantIndexType', 2);
-        check_assignment(pCount, params, n);
+        checkAssignment(pCount, params, n);
 
         params = registry.createType('AssignmentParams', [7, 1, 1]);
         pCount = registry.createType('ParticipantIndexType', 10);
         n = registry.createType('ParticipantIndexType', 1);
-        check_assignment(pCount, params, n);
+        checkAssignment(pCount, params, n);
     });
 
     it('modInv works', () => {
@@ -92,7 +106,7 @@ describe('assignment', () => {
     });
 });
 
-function check_assignment(participantCount: ParticipantIndexType, assignmentParams: AssignmentParams, n: u64) {
+function checkAssignment(participantCount: ParticipantIndexType, assignmentParams: AssignmentParams, n: u64) {
     const registry = assignmentParams.registry;
     const pCount = participantCount.toNumber();
 

@@ -1,7 +1,13 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
-import {CeremonyIndexType, CommunityIdentifier, MeetupIndexType, stringToDegree} from "../../types/src";
+import {
+    CeremonyIndexType,
+    CeremonyPhaseType,
+    CommunityIdentifier,
+    MeetupIndexType,
+    stringToDegree
+} from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
 import {ISubmitAndWatchResult} from "./interface";
@@ -12,8 +18,11 @@ import {
     getMeetupCount,
     getMeetupIndex,
     getMeetupLocation,
-    getMeetupParticipants
+    getMeetupParticipants,
+    getParticipantIndex,
+    getStartOfAttestingPhase
 } from './encointer-api';
+import {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('node-api', () => {
     let keyring: Keyring;
@@ -45,7 +54,7 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        let res = await _registerTestCommunity(api, alice);
+        let res = await registerTestCommunity(api, alice);
 
         if (res.error !== undefined) {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
@@ -66,9 +75,18 @@ describe('node-api', () => {
 
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
-            const result = await api.query.encointerScheduler.currentPhase();
-            // console.log(result);
-            expect(result).toBeDefined();
+            const result = await api.query.encointerScheduler.currentPhase<CeremonyPhaseType>();
+            expect(result.isAttesting);
+        });
+
+        it('should getAttestingStart', async () => {
+            const [attestingStart, nextPhase, attestingDuration] = await Promise.all([
+                getStartOfAttestingPhase(api),
+                api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
+                api.query.encointerScheduler.phaseDurations<Moment>('Attesting')
+            ]);
+
+            expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() - attestingDuration.toNumber());
         });
     });
 
@@ -120,6 +138,14 @@ describe('node-api', () => {
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
         });
+
+        it('should get participantIndex', async () => {
+            for (const [i, participant] of [alice, bob, charlie].entries()) {
+                const pIndex = await getParticipantIndex(api, testCid, testCIndex, participant.address);
+                expect(pIndex.toNumber()).toBe(i + 1);
+            }
+        });
+
     });
 
     describe('rpc', () => {
@@ -181,7 +207,7 @@ describe('node-api', () => {
     });
 });
 
-function _registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
+function registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<ISubmitAndWatchResult> {
     const loc_json = testCommunityParams.locations[0]
     const location = api.createType('Location', {
         lat: stringToDegree(loc_json.lat),

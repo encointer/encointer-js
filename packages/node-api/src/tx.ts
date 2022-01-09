@@ -60,7 +60,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
  * @param api
  * @param result
  */
-function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEventResult {
+export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEventResult {
     let success = false;
     let error;
     result.events
@@ -80,21 +80,21 @@ function extractEvents(api: ApiPromise, result: ISubmittableResult): IExtractEve
 
                             message = `${error.section}.${error.name}`;
                         } catch (error) {
-                            message = `could not extract dispatch error: ${error}`;
+                            message = `could not extract dispatch error: ${JSON.stringify(error)}`;
                         }
                     }
-                    console.log('txUpdateEvent', {
+                    console.log('txUpdateEvent', `${JSON.stringify({
                         title: `${section}.${method}`,
                         message
-                    });
+                    })}`);
                     error = message;
                 }
 
             } else {
-                console.log('txUpdateEvent', {
+                console.log('txUpdateEvent', `${JSON.stringify({
                     title: `${section}.${method}`,
-                    message: data.toJSON()
-                });
+                    message: data
+                })}`);
                 if (section == 'system' && method == 'ExtrinsicSuccess') {
                     success = true;
                 }
