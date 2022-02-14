@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "@encointer/types": "^0.6.0",
-    "@polkadot/api": "^7.1.1"
+    "@polkadot/api": "^7.8.1"
   },
   "devDependencies": {
-    "@polkadot/util-crypto": "^8.2.2"
+    "@polkadot/util-crypto": "^8.4.1"
   }
 }

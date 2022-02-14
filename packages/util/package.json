@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
-    "@polkadot/util": "^8.0.5",
+    "@polkadot/util": "^8.4.1",
     "@types/bn.js": "^4.11.6",
     "assert": "^2.0.0",
     "bn.js": "^4.12.0"
