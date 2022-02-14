@@ -132,7 +132,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         ...newbie_promises
     ]);
 
-    return api.createType('Vec<AccountId>', participants)
+    return api.createType('Vec<AccountId>', participants.map((a) => a.toHex()))
 }
 
 export async function getParticipantIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<ParticipantIndexType> {
