@@ -220,7 +220,9 @@ function registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<IS
     // (location, bootstrappers, metadata, demurrage, nominal_income)
     const params = [location, bootstrappers, meta, null, null];
 
-    const tx = api.tx.encointerCommunities.newCommunity(...params);
+    const tx = api.tx.sudo.sudo(
+        api.tx.encointerCommunities.newCommunity(...params)
+    );
 
     return submitAndWatchTx(api, signer, tx);
 }
@@ -269,7 +271,9 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
 }
 
 function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
-    const tx = api.tx.encointerScheduler.nextPhase()
+    const tx = api.tx.sudo.sudo(
+        api.tx.encointerScheduler.nextPhase()
+    );
     return submitAndWatchTx(api, signer, tx)
         .then((result) => {
             if (result.error !== undefined) {
