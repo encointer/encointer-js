@@ -25,7 +25,7 @@ jobs:
           name: executables
           # in fact this action should download the latest artifact, but sometimes fails. Then we need to
           # set the `run_id` to force a download of an updated binary.
-          run_id: 1636657826
+          run_id: 1839662966
           path: node
           repo: encointer/encointer-node
 
