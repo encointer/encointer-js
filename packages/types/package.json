@@ -1,6 +1,6 @@
 {
   "name": "@encointer/types",
-  "version": "0.7.2",
+  "version": "0.6.5",
   "description": "Encointer type definitions for Polkadot.js",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
@@ -14,14 +14,14 @@
     "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces --input ./src/interfaces"
   },
   "dependencies": {
-    "@polkadot/api": "^7.8.1",
-    "@polkadot/types": "^7.8.1",
-    "@polkadot/util": "^8.4.1"
+    "@polkadot/api": "^7.1.1",
+    "@polkadot/types": "^7.1.1",
+    "@polkadot/util": "^8.0.5"
   },
   "devDependencies": {
-    "@polkadot/typegen": "7.8.1",
+    "@polkadot/typegen": "7.1.1",
     "ts-node": "^9.1.1",
-    "typescript": "^4.5.5"
+    "typescript": "^4.2.4"
   },
   "repository": {
     "type": "git",

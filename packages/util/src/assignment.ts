@@ -120,9 +120,15 @@ export function computeMeetupIndex(
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
 
+    console.log(`[meetupIndex] executing assignmentFn`);
+
     const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
 
-    return result.addn(1) as MeetupIndexType;
+    const mIndex = result.addn(1) as MeetupIndexType
+
+    console.log(`[meetupIndex] mIndex (=assignmentFn result + 1): ${JSON.stringify(mIndex)}`);
+
+    return mIndex;
 }
 
 

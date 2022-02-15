@@ -55,6 +55,12 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         getParticipantRegistration(api, cid, cIndex,address),
     ]);
 
+    console.log(`[getMeetupIndex] mCount: ${mCount}`)
+    console.log(`[getMeetupIndex] assignment: ${JSON.stringify(assignments)}`)
+    console.log(`[getMeetupIndex] assignmentCount: ${JSON.stringify(assignmentCount)}`)
+    console.log(`[getMeetupIndex] pIndexes: ${JSON.stringify(registration)}`)
+
+
     if (mCount.eq(0)) {
         // 0 index means not registered
         return mCount;
