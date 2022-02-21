@@ -29,7 +29,7 @@ export interface CommunityMetadataType extends Struct {
   readonly name: Text;
   readonly symbol: Text;
   readonly icons: Text;
-  readonly theme: Option<Theme>;
+  readonly theme: Option<Text>;
   readonly url: Option<Text>;
 }
 
