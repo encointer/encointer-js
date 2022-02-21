@@ -69,7 +69,7 @@ export default {
       name: 'Text',
       symbol: 'Text',
       icons: 'Text',
-      theme: 'Option<Theme>',
+      theme: 'Option<Text>',
       url: 'Option<Text>'
     },
     Theme: {
