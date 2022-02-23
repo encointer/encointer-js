@@ -194,7 +194,7 @@ export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): P
     const demurrageCommunity = await api.query.encointerCommunities.demurragePerBlock<FixedI64F64>(cid)
         .then((dc) => api.createType('Demurrage', dc.bits))
 
-    if (demurrageCommunity.toNumber() == 0) {
+    if (demurrageCommunity.eq(0)) {
         const demurrageDefault = (api.consts.encointerBalances.defaultDemurrage as FixedI64F64).bits;
         return api.createType('Demurrage', demurrageDefault);
     } else {
