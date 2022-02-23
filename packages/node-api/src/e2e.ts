@@ -322,7 +322,33 @@ const edisonPaulaCommunity = {
     },
     cid: "u0qj94fxxJ6",
     demurrage: 126848301745007,
-    ceremony_income: stringToEncointerBalance("22")
+    ceremony_income: stringToEncointerBalance("22"),
+    "bootstrappers": [
+        "5ECkrFJwePB7W9jJUJfQhC8dDqGv1LzxG6Uq5jnXSa72RvF7",
+        "5FsHqdzwHD1aXE3TFaw3HCjg4qisPjSBwCu8orNHTrz2ezAk",
+        "5Hh293GGCyG48Z4UEXbftSfbTnWXepezbfNcdbV2SmBKwCZv",
+        "5CCrnj8AXNuqgwUqWRtaepkvLjdZKWQ4MoRKc2GDsrA7SC4A",
+        "5FvNKkMDRb8pBsXfxRBphY9ZmkkCNUHWnq5Dpw7hKpvBU1L4",
+        "5HEbRQGjxxjbGqN1JYwfxzYfSmNHiuRnwHZp2QdjjrPmGTx6",
+        "5Cg5fyjiAcH6x8PYWU5Z9aBTPe8mV7D9nxEFDqu8iT5SZ7dx",
+        "5E9yNH27WWgYv8amcSnXhEvB6qQof6sMq2h8rVxgS2QtSok2",
+        "5G3y5Cxha4D5X4iGzJQ8j62CzeTtpTo379PqBkFSzVFvnXjB",
+        "5EFbay2uvdfCCnQLFYRp9ozaP3X4868enZDRE27HyGKcJ9qD"
+    ],
+    locations: [
+        {
+            lon: "8.515608608722687",
+            lat: "47.38984797042854"
+        },
+        {
+            lon: "8.515962660312653",
+            lat: "47.390349148891545"
+        },
+        {
+            lon: "8.515377938747404",
+            lat: "47.389401263868514"
+        }
+    ]
 }
 
 // Corresponds the community of the encointer-node repository
