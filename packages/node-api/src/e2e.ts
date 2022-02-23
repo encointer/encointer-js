@@ -1,6 +1,6 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
-import {communityIdentifierFromString, communityIdentifierToString} from "../../util/src";
+import {communityIdentifierFromString} from "../../util/src";
 import {
     CeremonyIndexType,
     CeremonyPhaseType,
@@ -15,7 +15,8 @@ import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
 import {
     getAssignment,
-    getAssignmentCount, getDemurrage,
+    getAssignmentCount,
+    getDemurrage,
     getMeetupCount,
     getMeetupIndex,
     getMeetupLocation,
