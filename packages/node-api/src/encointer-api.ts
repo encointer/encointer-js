@@ -4,7 +4,7 @@ import {
     AssignmentCount, AssignmentParams,
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
-    MeetupIndexType, ParticipantIndexType,
+    MeetupIndexType, NominalIncomeType, ParticipantIndexType,
 } from "@encointer/types";
 import {meetupIndex, meetupLocation, assignmentFnInverse, meetupTime} from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
@@ -195,6 +195,19 @@ export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): P
         return api.createType('Demurrage', demurrageDefault);
     } else {
         return demurrageCommunity;
+    }
+}
+
+export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifier): Promise<NominalIncomeType> {
+    const [incomeCommunity, incomeDefault] = await Promise.all([
+        api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType('NominalIncomeType', cr.bits)),
+        api.query.encointerCeremonies.ceremonyReward<FixedI64F64>().then((cr) => api.createType('NominalIncomeType', cr.bits))
+    ])
+
+    if (incomeCommunity.eq(0)) {
+        return incomeDefault
+    } else {
+        return incomeCommunity;
     }
 }
 

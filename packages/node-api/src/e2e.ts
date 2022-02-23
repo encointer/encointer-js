@@ -6,7 +6,8 @@ import {
     CeremonyPhaseType,
     CommunityIdentifier,
     MeetupIndexType,
-    stringToDegree
+    stringToDegree,
+    stringToEncointerBalance
 } from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
@@ -19,6 +20,7 @@ import {
     getMeetupIndex,
     getMeetupLocation,
     getMeetupParticipants,
+    getCeremonyIncome,
     getParticipantIndex,
     getStartOfAttestingPhase
 } from './encointer-api';
@@ -55,11 +57,11 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        let res = await registerTestCommunity(api, alice);
-
-        if (res.error !== undefined) {
-            console.log(`failed to register test community: ${JSON.stringify(res)}`);
-        }
+        // let res = await registerTestCommunity(api, alice);
+        //
+        // if (res.error !== undefined) {
+        //     console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        // }
 
         cidMTA = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
@@ -67,7 +69,7 @@ describe('node-api', () => {
 
         cidEDI = communityIdentifierFromString(api.registry, edisonPaulaCommunity.cid)
 
-        await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
+        // await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
 
     }, 80000);
 
@@ -157,6 +159,16 @@ describe('node-api', () => {
             // this community has custom demurrage
             const demurrage = await getDemurrage(api, cidEDI)
             expect(demurrage.toJSON()).toStrictEqual(edisonPaulaCommunity.demurrage);
+        });
+
+        it('should get ceremony income', async () => {
+            // test community has default income
+            const incomeDefault = await getCeremonyIncome(api, cidMTA);
+            expect(incomeDefault.toBn().toString()).toEqual(defaultNominalIncome.toString());
+
+            // this community has custom income
+            const demurrage = await getCeremonyIncome(api, cidEDI)
+            expect(demurrage.toBn().toString()).toEqual(edisonPaulaCommunity.ceremony_income.toString());
         });
 
     });
@@ -296,6 +308,7 @@ function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
 }
 
 const defaultDemurrage = 2078506789235;
+const defaultNominalIncome = stringToEncointerBalance("1");
 
 // Corresponds the community of the encointer-node repository
 //
@@ -309,7 +322,7 @@ const edisonPaulaCommunity = {
     },
     cid: "u0qj94fxxJ6",
     demurrage: 126848301745007,
-    ceremony_income: 22
+    ceremony_income: stringToEncointerBalance("22")
 }
 
 // Corresponds the community of the encointer-node repository
