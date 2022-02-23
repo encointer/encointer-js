@@ -186,6 +186,9 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
     }
 }
 
+/**
+ * Returns either the community-specific demurrage or the default demurrage.
+ */
 export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
     const demurrageCommunity = await api.query.encointerCommunities.demurragePerBlock<FixedI64F64>(cid)
         .then((dc) => api.createType('Demurrage', dc.bits))
@@ -198,6 +201,9 @@ export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): P
     }
 }
 
+/**
+ * Returns either the community-specific ceremony income or the default ceremony income.
+ */
 export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifier): Promise<NominalIncomeType> {
     const [incomeCommunity, incomeDefault] = await Promise.all([
         api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType('NominalIncomeType', cr.bits)),
