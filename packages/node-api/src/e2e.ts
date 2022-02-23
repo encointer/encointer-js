@@ -14,7 +14,7 @@ import {ISubmitAndWatchResult} from "./interface";
 import {KeyringPair} from "@polkadot/keyring/types";
 import {
     getAssignment,
-    getAssignmentCount,
+    getAssignmentCount, getDemurrage,
     getMeetupCount,
     getMeetupIndex,
     getMeetupLocation,
@@ -27,7 +27,7 @@ import {Moment} from "@polkadot/types/interfaces/runtime";
 describe('node-api', () => {
     let keyring: Keyring;
     let api: ApiPromise;
-    let testCid: CommunityIdentifier;
+    let cidMTA: CommunityIdentifier;
     let testCIndex: CeremonyIndexType;
     let testMeetupIndex: MeetupIndexType;
     let alice: KeyringPair;
@@ -60,11 +60,11 @@ describe('node-api', () => {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
 
-        testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
+        cidMTA = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
         testMeetupIndex = api.createType('MeetupIndexType', 1)
 
-        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
+        await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
 
     }, 80000);
 
@@ -92,7 +92,7 @@ describe('node-api', () => {
 
     describe('assignment', () => {
         it('should get assignmentCount', async () => {
-            const result = await getAssignmentCount(api, testCid, testCIndex);
+            const result = await getAssignmentCount(api, cidMTA, testCIndex);
             expect(result.toJSON()).toStrictEqual({
                 "bootstrappers": 3,
                 "endorsees": 0,
@@ -102,7 +102,7 @@ describe('node-api', () => {
         });
 
         it('should get assignment', async () => {
-            const assignment = await getAssignment(api, testCid, testCIndex);
+            const assignment = await getAssignment(api, cidMTA, testCIndex);
 
             // hard to test as it is randomized.
             expect(assignment.bootstrappersReputables.m.toNumber()).toBe(3);
@@ -115,35 +115,41 @@ describe('node-api', () => {
         });
 
         it('should get meetupCount', async () => {
-            const result = await getMeetupCount(api, testCid, testCIndex);
+            const result = await getMeetupCount(api, cidMTA, testCIndex);
             expect(result.toNumber()).toBe(1);
         });
 
         it('should get meetupIndex', async () => {
             for (const participant of [alice, bob, charlie]) {
-                const assignment = await getMeetupIndex(api, testCid, testCIndex, participant.address);
+                const assignment = await getMeetupIndex(api, cidMTA, testCIndex, participant.address);
                 expect(assignment.toNumber()).toBe(1);
             }
         });
 
         it('should get meetupLocation', async () => {
-            const location = await getMeetupLocation(api, testCid, testCIndex, testMeetupIndex);
+            const location = await getMeetupLocation(api, cidMTA, testCIndex, testMeetupIndex);
             expect(location.toJSON()).toStrictEqual(testCommunityParams.locations[0]);
         });
 
         it('should get meetupParticipants', async () => {
             // Todo: this test only covers bootstrappers. How do we test reputables, endorsees and newbies?
             // This might be too tedious, we'd need to go to the second ceremony and also register more participants.
-            const participants = await getMeetupParticipants(api, testCid, testCIndex, testMeetupIndex);
+            const participants = await getMeetupParticipants(api, cidMTA, testCIndex, testMeetupIndex);
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
         });
 
         it('should get participantIndex', async () => {
             for (const [i, participant] of [alice, bob, charlie].entries()) {
-                const pIndex = await getParticipantIndex(api, testCid, testCIndex, participant.address);
+                const pIndex = await getParticipantIndex(api, cidMTA, testCIndex, participant.address);
                 expect(pIndex.toNumber()).toBe(i + 1);
             }
+        });
+
+        it('should get demurrage', async () => {
+            const demurrage = await getDemurrage(api, cidMTA)
+
+            console.log(`Demurrage; ${demurrage}`);
         });
 
     });
@@ -154,7 +160,7 @@ describe('node-api', () => {
             it('communities.GetAll should return empty vec', async () => {
                 // @ts-ignore
                 const cidNames = await api.rpc.communities.getAll();
-                expect(cidNames[0].cid).toStrictEqual(testCid);
+                expect(cidNames[0].cid).toStrictEqual(cidMTA);
             });
 
             it('communities.getLocations should return error on unknown community', async () => {
