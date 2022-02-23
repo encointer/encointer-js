@@ -30,6 +30,7 @@ describe('node-api', () => {
     let cidMTA: CommunityIdentifier;
     let testCIndex: CeremonyIndexType;
     let testMeetupIndex: MeetupIndexType;
+    let cidEDI: CommunityIdentifier;
     let alice: KeyringPair;
     let bob: KeyringPair;
     let charlie: KeyringPair;
@@ -63,6 +64,8 @@ describe('node-api', () => {
         cidMTA = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
         testMeetupIndex = api.createType('MeetupIndexType', 1)
+
+        cidEDI = communityIdentifierFromString(api.registry, edisonPaulaCommunity.cid)
 
         await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
 
@@ -147,9 +150,13 @@ describe('node-api', () => {
         });
 
         it('should get demurrage', async () => {
-            const demurrage = await getDemurrage(api, cidMTA)
+            // test community has default demurrage
+            const demurrageDefault = await getDemurrage(api, cidMTA);
+            expect(demurrageDefault.toJSON()).toStrictEqual(defaultDemurrage);
 
-            console.log(`Demurrage; ${demurrage}`);
+            // this community has custom demurrage
+            const demurrage = await getDemurrage(api, cidEDI)
+            expect(demurrage.toJSON()).toStrictEqual(edisonPaulaCommunity.demurrage);
         });
 
     });
@@ -288,6 +295,23 @@ function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
         });
 }
 
+const defaultDemurrage = 2078506789235;
+
+// Corresponds the community of the encointer-node repository
+//
+// We only want this to query custom community income and demurrage, but we align it, with the encointer-node's
+// test community to be able to test against gesell.
+const edisonPaulaCommunity = {
+    meta: {
+        name: "EdisonPaula",
+        symbol: "EDI",
+        icons: "QmcqHLThzvpKt67NpKRy1NHtx7KduKx3EzyFB3Yk95ra8t"
+    },
+    cid: "u0qj94fxxJ6",
+    demurrage: 126848301745007,
+    ceremony_income: 22
+}
+
 // Corresponds the community of the encointer-node repository
 const testCommunityParams = {
     meta: {
@@ -306,8 +330,8 @@ const testCommunityParams = {
     ],
     locations: [
         {
-            lon: "18.543548583984375",
-            lat: "35.4841563798531680618"
+            lon: "18.4075927734375",
+            lat: "35.23215941201715395437"
         },
         {
             lon: "18.40484619140625",

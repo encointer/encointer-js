@@ -3,7 +3,7 @@ import {
     Assignment,
     AssignmentCount, AssignmentParams,
     CeremonyIndexType, CeremonyPhaseType,
-    CommunityIdentifier, Location,
+    CommunityIdentifier, Demurrage, FixedI64F64, Location,
     MeetupIndexType, ParticipantIndexType,
 } from "@encointer/types";
 import {meetupIndex, meetupLocation, assignmentFnInverse, meetupTime} from "@encointer/util/assignment";
@@ -183,6 +183,18 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
     } else {
         // registering phase
         return registry.createType('Moment', nextPhaseStart.add(assigningDuration))
+    }
+}
+
+export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
+    const demurrageCommunity = await api.query.encointerCommunities.demurragePerBlock<FixedI64F64>(cid)
+        .then((dc) => api.createType('Demurrage', dc.bits))
+
+    if (demurrageCommunity.toNumber() == 0) {
+        const demurrageDefault = (api.consts.encointerBalances.defaultDemurrage as FixedI64F64).bits;
+        return api.createType('Demurrage', demurrageDefault);
+    } else {
+        return demurrageCommunity;
     }
 }
 
