@@ -1,6 +1,6 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/options";
-import {communityIdentifierFromString} from "../../util/src";
+import {communityIdentifierFromString, communityIdentifierToString} from "../../util/src";
 import {
     CeremonyIndexType,
     CeremonyPhaseType,
@@ -362,7 +362,7 @@ const testCommunityParams = {
         "symbol": "MTA",
         "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
-    cid: "sqm1v79dF6b",
+    cid: "sqm0679dF6b",
     bootstrappers: [
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
