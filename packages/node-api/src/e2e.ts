@@ -6,7 +6,8 @@ import {
     CeremonyPhaseType,
     CommunityIdentifier,
     MeetupIndexType,
-    stringToDegree
+    stringToDegree,
+    stringToEncointerBalance
 } from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {submitAndWatchTx} from "./tx";
@@ -15,10 +16,12 @@ import {KeyringPair} from "@polkadot/keyring/types";
 import {
     getAssignment,
     getAssignmentCount,
+    getDemurrage,
     getMeetupCount,
     getMeetupIndex,
     getMeetupLocation,
     getMeetupParticipants,
+    getCeremonyIncome,
     getParticipantIndex,
     getStartOfAttestingPhase
 } from './encointer-api';
@@ -27,9 +30,10 @@ import {Moment} from "@polkadot/types/interfaces/runtime";
 describe('node-api', () => {
     let keyring: Keyring;
     let api: ApiPromise;
-    let testCid: CommunityIdentifier;
+    let cidMTA: CommunityIdentifier;
     let testCIndex: CeremonyIndexType;
     let testMeetupIndex: MeetupIndexType;
+    // let cidEDI: CommunityIdentifier;
     let alice: KeyringPair;
     let bob: KeyringPair;
     let charlie: KeyringPair;
@@ -60,13 +64,15 @@ describe('node-api', () => {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
 
-        testCid = communityIdentifierFromString(api.registry, testCommunityParams.cid)
+        cidMTA = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
         testMeetupIndex = api.createType('MeetupIndexType', 1)
 
-        await registerAliceBobCharlieAndGoToAttesting(api, testCid)
+        // cidEDI = communityIdentifierFromString(api.registry, edisonPaulaCommunity.cid)
 
-    }, 40000);
+        await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
+
+    }, 80000);
 
     afterAll(async () => {
         // Jest fails to exit after the tests without this.
@@ -92,7 +98,7 @@ describe('node-api', () => {
 
     describe('assignment', () => {
         it('should get assignmentCount', async () => {
-            const result = await getAssignmentCount(api, testCid, testCIndex);
+            const result = await getAssignmentCount(api, cidMTA, testCIndex);
             expect(result.toJSON()).toStrictEqual({
                 "bootstrappers": 3,
                 "endorsees": 0,
@@ -102,7 +108,7 @@ describe('node-api', () => {
         });
 
         it('should get assignment', async () => {
-            const assignment = await getAssignment(api, testCid, testCIndex);
+            const assignment = await getAssignment(api, cidMTA, testCIndex);
 
             // hard to test as it is randomized.
             expect(assignment.bootstrappersReputables.m.toNumber()).toBe(3);
@@ -115,35 +121,59 @@ describe('node-api', () => {
         });
 
         it('should get meetupCount', async () => {
-            const result = await getMeetupCount(api, testCid, testCIndex);
+            const result = await getMeetupCount(api, cidMTA, testCIndex);
             expect(result.toNumber()).toBe(1);
         });
 
         it('should get meetupIndex', async () => {
             for (const participant of [alice, bob, charlie]) {
-                const assignment = await getMeetupIndex(api, testCid, testCIndex, participant.address);
+                const assignment = await getMeetupIndex(api, cidMTA, testCIndex, participant.address);
                 expect(assignment.toNumber()).toBe(1);
             }
         });
 
         it('should get meetupLocation', async () => {
-            const location = await getMeetupLocation(api, testCid, testCIndex, testMeetupIndex);
+            const location = await getMeetupLocation(api, cidMTA, testCIndex, testMeetupIndex);
             expect(location.toJSON()).toStrictEqual(testCommunityParams.locations[0]);
         });
 
         it('should get meetupParticipants', async () => {
             // Todo: this test only covers bootstrappers. How do we test reputables, endorsees and newbies?
             // This might be too tedious, we'd need to go to the second ceremony and also register more participants.
-            const participants = await getMeetupParticipants(api, testCid, testCIndex, testMeetupIndex);
+            const participants = await getMeetupParticipants(api, cidMTA, testCIndex, testMeetupIndex);
             expect(participants.sort().toJSON())
                 .toStrictEqual([alice.address, bob.address, charlie.address].sort());
         });
 
         it('should get participantIndex', async () => {
             for (const [i, participant] of [alice, bob, charlie].entries()) {
-                const pIndex = await getParticipantIndex(api, testCid, testCIndex, participant.address);
+                const pIndex = await getParticipantIndex(api, cidMTA, testCIndex, participant.address);
                 expect(pIndex.toNumber()).toBe(i + 1);
             }
+        });
+
+        it('should get demurrage', async () => {
+            // test community has default demurrage
+            const demurrageDefault = await getDemurrage(api, cidMTA);
+            expect(demurrageDefault.toJSON()).toStrictEqual(defaultDemurrage);
+
+            // Todo setup integration tests against gesell.
+            //
+            // this community has custom demurrage
+            // const demurrage = await getDemurrage(api, cidEDI)
+            // expect(demurrage.toJSON()).toStrictEqual(edisonPaulaCommunity.demurrage);
+        });
+
+        it('should get ceremony income', async () => {
+            // test community has default income
+            const incomeDefault = await getCeremonyIncome(api, cidMTA);
+            expect(incomeDefault.toBn().toString()).toEqual(defaultNominalIncome.toString());
+
+            // Todo setup integration tests against gesell.
+            //
+            // this community has custom income
+            // const demurrage = await getCeremonyIncome(api, cidEDI)
+            // expect(demurrage.toBn().toString()).toEqual(edisonPaulaCommunity.ceremony_income.toString());
         });
 
     });
@@ -154,7 +184,7 @@ describe('node-api', () => {
             it('communities.GetAll should return empty vec', async () => {
                 // @ts-ignore
                 const cidNames = await api.rpc.communities.getAll();
-                expect(cidNames[0].cid).toStrictEqual(testCid);
+                expect(cidNames[0].cid).toStrictEqual(cidMTA);
             });
 
             it('communities.getLocations should return error on unknown community', async () => {
@@ -282,6 +312,50 @@ function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
         });
 }
 
+const defaultDemurrage = 2078506789235;
+const defaultNominalIncome = stringToEncointerBalance("1");
+
+// Corresponds the community of the encointer-node repository
+//
+// We only want this to query custom community income and demurrage, but we align it, with the encointer-node's
+// test community to be able to test against gesell.
+// const edisonPaulaCommunity = {
+//     meta: {
+//         name: "EdisonPaula",
+//         symbol: "EDI",
+//         icons: "QmcqHLThzvpKt67NpKRy1NHtx7KduKx3EzyFB3Yk95ra8t"
+//     },
+//     cid: "u0qj94fxxJ6",
+//     demurrage: 126848301745007,
+//     ceremony_income: stringToEncointerBalance("22"),
+//     "bootstrappers": [
+//         "5ECkrFJwePB7W9jJUJfQhC8dDqGv1LzxG6Uq5jnXSa72RvF7",
+//         "5FsHqdzwHD1aXE3TFaw3HCjg4qisPjSBwCu8orNHTrz2ezAk",
+//         "5Hh293GGCyG48Z4UEXbftSfbTnWXepezbfNcdbV2SmBKwCZv",
+//         "5CCrnj8AXNuqgwUqWRtaepkvLjdZKWQ4MoRKc2GDsrA7SC4A",
+//         "5FvNKkMDRb8pBsXfxRBphY9ZmkkCNUHWnq5Dpw7hKpvBU1L4",
+//         "5HEbRQGjxxjbGqN1JYwfxzYfSmNHiuRnwHZp2QdjjrPmGTx6",
+//         "5Cg5fyjiAcH6x8PYWU5Z9aBTPe8mV7D9nxEFDqu8iT5SZ7dx",
+//         "5E9yNH27WWgYv8amcSnXhEvB6qQof6sMq2h8rVxgS2QtSok2",
+//         "5G3y5Cxha4D5X4iGzJQ8j62CzeTtpTo379PqBkFSzVFvnXjB",
+//         "5EFbay2uvdfCCnQLFYRp9ozaP3X4868enZDRE27HyGKcJ9qD"
+//     ],
+//     locations: [
+//         {
+//             lon: "8.515608608722687",
+//             lat: "47.38984797042854"
+//         },
+//         {
+//             lon: "8.515962660312653",
+//             lat: "47.390349148891545"
+//         },
+//         {
+//             lon: "8.515377938747404",
+//             lat: "47.389401263868514"
+//         }
+//     ]
+// }
+
 // Corresponds the community of the encointer-node repository
 const testCommunityParams = {
     meta: {
@@ -289,7 +363,7 @@ const testCommunityParams = {
         "symbol": "MTA",
         "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
-    cid: "sqm1v79dF6b",
+    cid: "sqm0679dF6b",
     bootstrappers: [
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
@@ -300,8 +374,8 @@ const testCommunityParams = {
     ],
     locations: [
         {
-            lon: "18.543548583984375",
-            lat: "35.4841563798531700047"
+            lon: "18.4075927734375",
+            lat: "35.23215941201715395437"
         },
         {
             lon: "18.40484619140625",

@@ -72,8 +72,5 @@ export default {
       theme: 'Option<Text>',
       url: 'Option<Text>'
     },
-    Theme: {
-      primary_swatch: 'u32'
-    }
   }
 };

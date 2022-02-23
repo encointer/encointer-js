@@ -3,8 +3,8 @@ import {
     Assignment,
     AssignmentCount, AssignmentParams,
     CeremonyIndexType, CeremonyPhaseType,
-    CommunityIdentifier, Location,
-    MeetupIndexType, ParticipantIndexType,
+    CommunityIdentifier, Demurrage, FixedI64F64, Location,
+    MeetupIndexType, NominalIncomeType, ParticipantIndexType,
 } from "@encointer/types";
 import {meetupIndex, meetupLocation, assignmentFnInverse, meetupTime} from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
@@ -183,6 +183,39 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
     } else {
         // registering phase
         return registry.createType('Moment', nextPhaseStart.add(assigningDuration))
+    }
+}
+
+/**
+ * Returns either the community-specific demurrage or the default demurrage.
+ */
+export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
+    // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
+    const demurrageCommunity = await api.query.encointerCommunities.demurragePerBlock<FixedI64F64>(cid)
+        .then((dc) => api.createType('Demurrage', dc.bits))
+
+    if (demurrageCommunity.eq(0)) {
+        const demurrageDefault = (api.consts.encointerBalances.defaultDemurrage as FixedI64F64).bits;
+        return api.createType('Demurrage', demurrageDefault);
+    } else {
+        return demurrageCommunity;
+    }
+}
+
+/**
+ * Returns either the community-specific ceremony income or the default ceremony income.
+ */
+export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifier): Promise<NominalIncomeType> {
+    // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
+    const [incomeCommunity, incomeDefault] = await Promise.all([
+        api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType('NominalIncomeType', cr.bits)),
+        api.query.encointerCeremonies.ceremonyReward<FixedI64F64>().then((cr) => api.createType('NominalIncomeType', cr.bits))
+    ])
+
+    if (incomeCommunity.eq(0)) {
+        return incomeDefault
+    } else {
+        return incomeCommunity;
     }
 }
 

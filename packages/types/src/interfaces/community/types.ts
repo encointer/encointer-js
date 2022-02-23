@@ -3,7 +3,7 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
-import type { Enum, Option, Struct, Text, U8aFixed, i128, u32 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Text, U8aFixed, i128 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name CidDigest */
@@ -64,11 +64,6 @@ export interface Reputation extends Enum {
   readonly isVerifiedUnlinked: boolean;
   readonly isVerifiedLinked: boolean;
   readonly type: 'Unverified' | 'UnverifiedReputable' | 'VerifiedUnlinked' | 'VerifiedLinked';
-}
-
-/** @name Theme */
-export interface Theme extends Struct {
-  readonly primary_swatch: u32;
 }
 
 export type PHANTOM_COMMUNITY = 'community';
