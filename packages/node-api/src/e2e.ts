@@ -66,7 +66,7 @@ describe('node-api', () => {
 
         await registerAliceBobCharlieAndGoToAttesting(api, testCid)
 
-    }, 40000);
+    }, 80000);
 
     afterAll(async () => {
         // Jest fails to exit after the tests without this.
