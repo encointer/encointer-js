@@ -51,16 +51,24 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 
     if (!pIndexes[0].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[0].toNumber() - 1);
-        return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+        if (pIndex < assignmentCount.bootstrappers) {
+            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+        }
     } else if (!pIndexes[1].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[1].toNumber() - 1 + assignmentCount.bootstrappers.toNumber());
-        return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+        if (pIndex < assignmentCount.reputables) {
+            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+        }
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[2].toNumber() - 1);
-        return meetupIndexFn(pIndex, assignments.endorsees);
+        if (pIndex < assignmentCount.endorsees) {
+            return meetupIndexFn(pIndex, assignments.endorsees);
+        }
     } else if (!pIndexes[3].eq(0)) {
         let pIndex = participantIndex(registry, pIndexes[3].toNumber() - 1);
-        return meetupIndexFn(pIndex, assignments.newbies);
+        if (pIndex < assignmentCount.newbies){
+            return meetupIndexFn(pIndex, assignments.newbies);
+        }
     }
 
     return api.createType('MeetupIndexType', 0);
