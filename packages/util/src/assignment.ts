@@ -1,8 +1,14 @@
 /// Helper stuff for the meetup assignment calculation
 
-import {AssignmentParams, MeetupIndexType, ParticipantIndexType, Location, parseDegree} from "@encointer/types";
+import {
+    AssignmentParams,
+    MeetupIndexType,
+    ParticipantIndexType,
+    Location,
+    parseDegree,
+    Assignment, AssignmentCount
+} from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
-import BN from "bn.js";
 import {Option} from "@polkadot/types-codec";
 import {Moment} from "@polkadot/types/interfaces/runtime";
 import assert from "assert";
@@ -14,16 +20,66 @@ import assert from "assert";
  * @param assignmentParams
  * @param assignmentCount
  */
-export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): ParticipantIndexType {
-    const result = participantIndex
+export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
+
+    if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
+        return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [0]);
+    }
+
+    return participantIndex
         .mul(assignmentParams.s1)
         .add(assignmentParams.s2)
         .mod(assignmentParams.m)
-        .mod(assignmentCount);
+        .mod(assignmentCount) as MeetupIndexType
+}
 
-    // We exploit the fact that all `Codec` types in polkadot-js have a registry attached, which points to the same
-    // `api.registry` created at `Api` construction.
-    return participantIndex.registry.createTypeUnsafe('ParticipantIndexType', [result]);
+/**
+ * Computes the meetup index given the all the meetup params.
+ *
+ * Returns 0 if the participant has not been assigned.
+ */
+export function computeMeetupIndex(
+    pIndexes: [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType],
+    assignments: Assignment,
+    assignmentCount: AssignmentCount,
+    meetupCount: MeetupIndexType
+): MeetupIndexType {
+    const registry = assignmentCount.registry;
+
+    if (meetupCount.eq(0)) {
+        // 0 index means not registered
+        return meetupCount;
+    }
+
+    const meetupIndexFn =
+        (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, meetupCount);
+
+    if (!pIndexes[0].eq(0)) {
+        let pIndex = pIndexes[0].subn(1) as ParticipantIndexType;
+        if (pIndex < assignmentCount.bootstrappers) {
+            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+        }
+    } else if (!pIndexes[1].eq(0)) {
+        let pIndex = pIndexes[1].subn(1) as ParticipantIndexType;
+        if (pIndex < assignmentCount.reputables) {
+            return meetupIndexFn(
+                pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
+                assignments.bootstrappersReputables
+            )
+        }
+    } else if (!pIndexes[2].eq(0)) {
+        let pIndex = pIndexes[2].subn(1) as ParticipantIndexType;
+        if (pIndex < assignmentCount.endorsees) {
+            return meetupIndexFn(pIndex, assignments.endorsees);
+        }
+    } else if (!pIndexes[3].eq(0)) {
+        let pIndex = pIndexes[3].subn(1) as ParticipantIndexType;
+        if (pIndex < assignmentCount.newbies){
+            return meetupIndexFn(pIndex, assignments.newbies);
+        }
+    }
+
+    return registry.createType('MeetupIndexType', 0);
 }
 
 /**
@@ -34,9 +90,10 @@ export function assignmentFn(participantIndex: ParticipantIndexType, assignmentP
  * @param meetupCount
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
-    const result = assignmentFn(participantIndex, assignmentParams, meetupCount).add(new BN(1));
 
-    return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [result]);
+    const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
+
+    return result.addn(1) as MeetupIndexType;
 }
 
 
