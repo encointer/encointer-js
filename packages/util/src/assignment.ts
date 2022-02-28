@@ -60,9 +60,12 @@ export function computeMeetupIndex(
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
     } else if (!pIndexes[1].eq(0)) {
-        let pIndex = pIndexes[1].subn(1).add(assignmentCount.bootstrappers) as ParticipantIndexType;
+        let pIndex = pIndexes[1].subn(1) as ParticipantIndexType;
         if (pIndex < assignmentCount.reputables) {
-            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
+            return meetupIndexFn(
+                pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
+                assignments.bootstrappersReputables
+            )
         }
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = pIndexes[2].subn(1) as ParticipantIndexType;
