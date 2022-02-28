@@ -1,13 +1,12 @@
 import {ApiPromise} from "@polkadot/api";
 import {
     Assignment,
-    AssignmentCount, AssignmentParams,
+    AssignmentCount,
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
     MeetupIndexType, NominalIncomeType, ParticipantIndexType,
 } from "@encointer/types";
 import {
-    meetupIndex,
     meetupLocation,
     assignmentFnInverse,
     meetupTime,
