@@ -6,6 +6,7 @@ import {options as encointerOptions} from "@encointer/node-api";
 import {
     assignmentFn,
     assignmentFnInverse,
+    computeMeetupIndex,
     meetupIndex,
     meetupLocation,
     meetupTime,
@@ -103,6 +104,33 @@ describe('assignment', () => {
         expect(modInv(2, 7)).toEqual(4)
         expect(modInv(69, 113)).toEqual(95)
         expect(modInv(111, 113)).toEqual(56)
+    });
+
+    it('computeMeetupIndex returns 0 for unassigned participant', () => {
+        const pIndex0 = registry.createType('ParticipantIndexType', 0);
+        const pIndex6 = registry.createType('ParticipantIndexType', 6);
+        let meetupCount = registry.createType('MeetupIndexType', 1);
+        let assignment = registry.createType('Assignment');
+        let assignmentCount = registry.createType('AssignmentCount', [3, 3, 3, 3]);
+
+        const compute =
+            (pindexes: [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType]) => computeMeetupIndex(pindexes, assignment, assignmentCount, meetupCount)
+
+        expect(
+            compute([pIndex6, pIndex0, pIndex0, pIndex0]).toNumber()
+        ).toEqual(0)
+
+        expect(
+            compute([pIndex0, pIndex6, pIndex0, pIndex0]).toNumber()
+        ).toEqual(0)
+
+        expect(
+            compute([pIndex0, pIndex0, pIndex6, pIndex0]).toNumber()
+        ).toEqual(0)
+
+        expect(
+            compute([pIndex0, pIndex0, pIndex0, pIndex6]).toNumber()
+        ).toEqual(0)
     });
 });
 
