@@ -14,16 +14,22 @@ import assert from "assert";
  * @param assignmentParams
  * @param assignmentCount
  */
-export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): ParticipantIndexType {
+export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
+    // We exploit the fact that all `Codec` types in polkadot-js have a registry attached, which points to the same
+    // `api.registry` created at `Api` construction.
+    const registry = participantIndex.registry;
+
+    if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
+        return registry.createType('MeetupIndexType', [0]);
+    }
+
     const result = participantIndex
         .mul(assignmentParams.s1)
         .add(assignmentParams.s2)
         .mod(assignmentParams.m)
         .mod(assignmentCount);
 
-    // We exploit the fact that all `Codec` types in polkadot-js have a registry attached, which points to the same
-    // `api.registry` created at `Api` construction.
-    return participantIndex.registry.createTypeUnsafe('ParticipantIndexType', [result]);
+    return registry.createType('MeetupIndexType', [result]);
 }
 
 /**
@@ -34,9 +40,10 @@ export function assignmentFn(participantIndex: ParticipantIndexType, assignmentP
  * @param meetupCount
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
-    const result = assignmentFn(participantIndex, assignmentParams, meetupCount).add(new BN(1));
 
-    return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [result]);
+    const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
+
+    return result.addn(1) as MeetupIndexType;
 }
 
 
