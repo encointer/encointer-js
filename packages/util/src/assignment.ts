@@ -79,7 +79,7 @@ export function computeMeetupIndex(
         }
     }
 
-    return registry.createTypeUnsafe('MeetupIndexType', 0);
+    return registry.createTypeUnsafe('MeetupIndexType', [0]);
 }
 
 /**
