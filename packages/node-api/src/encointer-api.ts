@@ -6,7 +6,13 @@ import {
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
     MeetupIndexType, NominalIncomeType, ParticipantIndexType,
 } from "@encointer/types";
-import {meetupIndex, meetupLocation, assignmentFnInverse, meetupTime} from "@encointer/util/assignment";
+import {
+    meetupIndex,
+    meetupLocation,
+    assignmentFnInverse,
+    meetupTime,
+    computeMeetupIndex
+} from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
 import {Registry} from "@polkadot/types/types";
@@ -25,8 +31,6 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
-    const registry = api.registry;
-
     // helper query to make below code more readable
     const indexQuery = participantIndexQuery(api, cid, cIndex, address);
 
@@ -46,32 +50,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         return mCount;
     }
 
-    const meetupIndexFn =
-        (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, mCount);
-
-    if (!pIndexes[0].eq(0)) {
-        let pIndex = participantIndex(registry, pIndexes[0].toNumber() - 1);
-        if (pIndex < assignmentCount.bootstrappers) {
-            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
-        }
-    } else if (!pIndexes[1].eq(0)) {
-        let pIndex = participantIndex(registry, pIndexes[1].toNumber() - 1 + assignmentCount.bootstrappers.toNumber());
-        if (pIndex < assignmentCount.reputables) {
-            return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
-        }
-    } else if (!pIndexes[2].eq(0)) {
-        let pIndex = participantIndex(registry, pIndexes[2].toNumber() - 1);
-        if (pIndex < assignmentCount.endorsees) {
-            return meetupIndexFn(pIndex, assignments.endorsees);
-        }
-    } else if (!pIndexes[3].eq(0)) {
-        let pIndex = participantIndex(registry, pIndexes[3].toNumber() - 1);
-        if (pIndex < assignmentCount.newbies){
-            return meetupIndexFn(pIndex, assignments.newbies);
-        }
-    }
-
-    return api.createType('MeetupIndexType', 0);
+    return computeMeetupIndex(pIndexes, assignments, assignmentCount, mCount);
 }
 
 export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Location> {
