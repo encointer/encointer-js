@@ -64,6 +64,7 @@ export function computeMeetupIndex(
         }
     } else if (!pIndexes[1].eq(0)) {
         let pIndex = pIndexes[1].subn(1) as ParticipantIndexType;
+        console.log(`[computeMeetupIndex] is reputable`);
         if (pIndex.lt(assignmentCount.reputables)) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
@@ -72,11 +73,13 @@ export function computeMeetupIndex(
         }
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = pIndexes[2].subn(1) as ParticipantIndexType;
+        console.log(`[computeMeetupIndex] is endorsee`);
         if (pIndex.lt(assignmentCount.endorsees)) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
     } else if (!pIndexes[3].eq(0)) {
         let pIndex = pIndexes[3].subn(1) as ParticipantIndexType;
+        console.log(`[computeMeetupIndex] is endorsee`);
         if (pIndex.lt(assignmentCount.newbies)){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
@@ -98,7 +101,9 @@ export function meetupIndex(participantIndex: ParticipantIndexType, assignmentPa
 
     const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
 
-    console.log(`[meetupIndex] assignmentFn result: ${JSON.stringify(result)}`);
+    const mIndex = result.addn(1) as MeetupIndexType
+
+    console.log(`[meetupIndex] mIndex (=assignmentFn result + 1): ${JSON.stringify(mIndex)}`);
 
     return result.addn(1) as MeetupIndexType;
 }
