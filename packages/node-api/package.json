@@ -1,6 +1,6 @@
 {
   "name": "@encointer/node-api",
-  "version": "0.6.5-alpha.0",
+  "version": "0.6.5-alpha.1",
   "description": "Encointer Node API",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js#readme",
@@ -18,7 +18,7 @@
     "url": "https://github.com/encointer/encointer-js/issues"
   },
   "dependencies": {
-    "@encointer/types": "^0.6.5-alpha.0",
+    "@encointer/types": "^0.6.5-alpha.1",
     "@polkadot/api": "^7.1.1"
   },
   "devDependencies": {
