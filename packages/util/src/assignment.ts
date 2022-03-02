@@ -58,13 +58,13 @@ export function computeMeetupIndex(
     if (!pIndexes[0].eq(0)) {
         let pIndex = pIndexes[0].subn(1) as ParticipantIndexType;
         console.log(`[computeMeetupIndex] is bootstrapper`);
-        if (pIndex < assignmentCount.bootstrappers) {
+        if (pIndex.lt(assignmentCount.bootstrappers)) {
             console.log(`[computeMeetupIndex] pIndex is < bootstrapperCount. Computing meetup_index`);
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
     } else if (!pIndexes[1].eq(0)) {
         let pIndex = pIndexes[1].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.reputables) {
+        if (pIndex.lt(assignmentCount.reputables)) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
                 assignments.bootstrappersReputables
@@ -72,12 +72,12 @@ export function computeMeetupIndex(
         }
     } else if (!pIndexes[2].eq(0)) {
         let pIndex = pIndexes[2].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.endorsees) {
+        if (pIndex.lt(assignmentCount.endorsees)) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
     } else if (!pIndexes[3].eq(0)) {
         let pIndex = pIndexes[3].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.newbies){
+        if (pIndex.lt(assignmentCount.newbies)){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
     }
