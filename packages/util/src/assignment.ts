@@ -23,6 +23,7 @@ import assert from "assert";
 export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
 
     if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
+        console.log(`[assignmentFn] invalid params or assignmentCount. Returning 0`);
         return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [0]);
     }
 
@@ -56,7 +57,9 @@ export function computeMeetupIndex(
 
     if (!pIndexes[0].eq(0)) {
         let pIndex = pIndexes[0].subn(1) as ParticipantIndexType;
+        console.log(`[computeMeetupIndex] is bootstrapper`);
         if (pIndex < assignmentCount.bootstrappers) {
+            console.log(`[computeMeetupIndex] pIndex is < bootstrapperCount. Computing meetup_index`);
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
     } else if (!pIndexes[1].eq(0)) {
@@ -91,7 +94,11 @@ export function computeMeetupIndex(
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
 
+    console.log(`[meetupIndex] executing assignmentFn`);
+
     const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
+
+    console.log(`[meetupIndex] assignmentFn result: ${JSON.stringify(result)}`);
 
     return result.addn(1) as MeetupIndexType;
 }
