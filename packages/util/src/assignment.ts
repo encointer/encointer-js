@@ -34,12 +34,18 @@ export function assignmentFn(participantIndex: ParticipantIndexType, assignmentP
 }
 
 /**
+ * Registries in the order: [bootstrapperIndex, reputableIndex, endorseeIndex, newbieIndex]
+ */
+export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType];
+
+
+/**
  * Computes the meetup index given the all the meetup params.
  *
  * Returns 0 if the participant has not been assigned.
  */
 export function computeMeetupIndex(
-    pIndexes: [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType],
+    pIndexes: ParticipantIndexes,
     assignments: Assignment,
     assignmentCount: AssignmentCount,
     meetupCount: MeetupIndexType

@@ -10,9 +10,14 @@ import {
     meetupIndex,
     meetupLocation,
     meetupTime,
-    modInv
+    modInv, ParticipantIndexes
 } from "@encointer/util/assignment";
-import {AssignmentParams, MeetupIndexType, ParticipantIndexType, stringToDegree} from "@encointer/types";
+import {
+    AssignmentParams,
+    MeetupIndexType,
+    ParticipantIndexType,
+    stringToDegree
+} from "@encointer/types";
 import assert from "assert";
 
 describe('assignment', () => {
@@ -114,7 +119,7 @@ describe('assignment', () => {
         let assignmentCount = registry.createType('AssignmentCount', [3, 3, 3, 3]);
 
         const compute =
-            (pindexes: [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType]) => computeMeetupIndex(pindexes, assignment, assignmentCount, meetupCount)
+            (pindexes: ParticipantIndexes) => computeMeetupIndex(pindexes, assignment, assignmentCount, meetupCount)
 
         expect(
             compute([pIndex6, pIndex0, pIndex0, pIndex0]).toNumber()
@@ -132,6 +137,7 @@ describe('assignment', () => {
             compute([pIndex0, pIndex0, pIndex0, pIndex6]).toNumber()
         ).toEqual(0)
     });
+
 });
 
 function checkAssignment(participantCount: ParticipantIndexType, assignmentParams: AssignmentParams, n: u64) {
@@ -162,4 +168,82 @@ function checkAssignment(participantCount: ParticipantIndexType, assignmentParam
     }
 
     assert(assignedParticipants.every((val) => val === true))
+}
+
+export const communityCeremony = {
+    assignment: {
+        bootstrappers_reputables: {
+            m: 7,
+            s1: 6,
+            s2: 4
+        },
+        endorsees: {
+            m: 7,
+            s1: 6,
+            s2: 5
+        },
+        newbies: {
+            m: 2,
+            s1: 1,
+            s2: 1
+        },
+        locations: {
+            m: 9,
+            s1: 1,
+            s2: 7
+        }
+    },
+    assignment_count: {
+        bootstrappers: 10,
+        reputables: 0,
+        endorsees: 10,
+        newbies: 2
+    },
+    meetup_count: 3,
+    meetups: [{
+        index: 1,
+        location: {
+            lat: 13.5947899999999997078,
+            lon: -54.14987899999999854117
+        },
+        time: 1646753760000,
+        registrations: [{
+            index: 5,
+            registration_type: 'ParticipantRegistration.Bootstrapper',
+            participant: '0xbc92e2f48a3af6f54d5dbb3cd9a6ded4d59218020502464997ced2d71a507b4e',
+        }, {
+            index: 2,
+            registration_type: 'ParticipantRegistration.Bootstrapper',
+            participant: '0x2ebc2d24537019a2fe6ff2c5b8069526845e3f543aea720391ce57a96b82ad09',
+        }, {
+            index: 9,
+            registration_type: 'ParticipantRegistration.Bootstrapper',
+            participant: '0x2a7c54cba3ac5e1cdc4ce983c360b69c3059b6faaaa5bcfb3d3d99b560d8963c',
+        }, {
+            index: 6,
+            registration_type: 'ParticipantRegistration.Bootstrapper',
+            participant: '0xca9b21c0a81622d85afb45aacc033efb40fc310ecb0bca855014a1c1a54bcd67',
+        }, {
+            index: 6,
+            registration_type: 'ParticipantRegistration.Endorsee',
+            participant: '0x6a0eb8650fb4a32a90e7407478b22b2569eaad2605ec0ab9af13777b482e2d1a'
+        }, {
+            index: 3,
+            registration_type: 'ParticipantRegistration.Endorsee',
+            participant: '0x18bd9e2b98fc15c3bbc0093c6b009e2dde35a74819ab42a483ed3096b983b816'
+        }, {
+            index: 10,
+            registration_type: 'ParticipantRegistration.Endorsee',
+            participant: '0x1a09277c4f77ecc42dea0d20d7629fcfbb43fc9e4233831122e13cc514645420',
+        }, {
+            index: 7,
+            registration_type: 'ParticipantRegistration.Endorsee',
+            participant: '0x3a00401092b6bd75565889e85503ad4fbf2bf9d17710412e1e0f0c590e7a9c07',
+        }, {
+            index: 2,
+            registration_type: 'ParticipantRegistration.Newbie',
+            participant: '0x30b3e1899a7483fd61f41069601e3671f6f35e3b96f4de902f6e15230f0d8171',
+        }
+        ]
+    }]
 }
