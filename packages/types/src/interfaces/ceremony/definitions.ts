@@ -49,6 +49,31 @@ export default {
       s1: 'u64',
       s2: 'u64',
     },
+    CommunityCeremonyStats: {
+      assignment: 'Assignment',
+      assignmentCount: 'AssignmentCount',
+      meetupCount: 'MeetupCount',
+      meetups: 'Vec<Meetup>',
+    },
+    Meetup: {
+      index: 'MeetupIndexType',
+      location: 'Location',
+      time: 'Moment',
+      registration: 'Vec<ParticipantRegistration>',
+    },
+    ParticipantRegistration: {
+      index: 'ParticipantIndexType',
+      registrationType: 'RegistrationType',
+      participant: 'AccountId',
+    },
+    RegistrationType: {
+      _enum: [
+        'Bootstrapper',
+        'Reputable',
+        'Endorsee',
+        'Newbie',
+      ]
+    },
     // Todo: remove this type does no longer exist in ceremonies, but it still exists in the trusted stuff.
     Attestation: {
       claim: 'ClaimOfAttendance',
