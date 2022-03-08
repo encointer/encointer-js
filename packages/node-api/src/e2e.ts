@@ -23,7 +23,8 @@ import {
     getMeetupParticipants,
     getCeremonyIncome,
     getParticipantIndex,
-    getStartOfAttestingPhase
+    getStartOfAttestingPhase,
+    getParticipantRegistration
 } from './encointer-api';
 import {Moment} from "@polkadot/types/interfaces/runtime";
 
