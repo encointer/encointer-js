@@ -286,7 +286,7 @@ describe('assignment', () => {
 
     communityCeremony.meetups.forEach((meetup) => {
         meetup.registrations.forEach((registration, index) => {
-            it(`registration [mIndex, pIndex]: [${meetup.index}, ${registration[1].index}]`, () => {
+            it(`test computeMeetupIndex works for [mIndex, pIndex]: [${meetup.index}, ${registration[1].index}]`, () => {
 
                 // console.log(`testCommunity: ${JSON.stringify(testCommunityCeremony)}`);
 
