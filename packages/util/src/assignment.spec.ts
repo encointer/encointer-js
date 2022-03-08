@@ -151,9 +151,9 @@ describe('assignment', () => {
     });
 
     const communityCeremony = {
-        community_ceremony: ['srcq45PYNyD', 1045],
+        communityCeremony: ['srcq45PYNyD', 1045],
         assignment: {
-            bootstrappers_reputables: {
+            bootstrappersReputables: {
                 m: 7,
                 s1: 6,
                 s2: 4
@@ -174,13 +174,13 @@ describe('assignment', () => {
                 s2: 7
             }
         },
-        assignment_count: {
+        assignmentCount: {
             bootstrappers: 10,
             reputables: 0,
             endorsees: 10,
             newbies: 2
         },
-        meetup_count: 3,
+        meetupCount: 3,
         meetups: [{
             index: 1,
             location: {
@@ -190,31 +190,31 @@ describe('assignment', () => {
             time: 1646753760000,
             registrations: [['0xbc92e2f48a3af6f54d5dbb3cd9a6ded4d59218020502464997ced2d71a507b4e', {
                 index: 5,
-                registration_type: 'Bootstrapper',
+                registrationType: 'Bootstrapper',
             }], ['0x2ebc2d24537019a2fe6ff2c5b8069526845e3f543aea720391ce57a96b82ad09', {
                 index: 2,
-                registration_type: 'Bootstrapper',
+                registrationType: 'Bootstrapper',
             }], ['0x2a7c54cba3ac5e1cdc4ce983c360b69c3059b6faaaa5bcfb3d3d99b560d8963c', {
                 index: 9,
-                registration_type: 'Bootstrapper',
+                registrationType: 'Bootstrapper',
             }], ['0xca9b21c0a81622d85afb45aacc033efb40fc310ecb0bca855014a1c1a54bcd67', {
                 index: 6,
-                registration_type: 'Bootstrapper',
+                registrationType: 'Bootstrapper',
             }], ['0x6a0eb8650fb4a32a90e7407478b22b2569eaad2605ec0ab9af13777b482e2d1a', {
                 index: 6,
-                registration_type: 'Endorsee',
+                registrationType: 'Endorsee',
             }], ['0x18bd9e2b98fc15c3bbc0093c6b009e2dde35a74819ab42a483ed3096b983b816', {
                 index: 3,
-                registration_type: 'Endorsee',
+                registrationType: 'Endorsee',
             }], ['0x1a09277c4f77ecc42dea0d20d7629fcfbb43fc9e4233831122e13cc514645420', {
                 index: 10,
-                registration_type: 'Endorsee',
+                registrationType: 'Endorsee',
             }], ['0x3a00401092b6bd75565889e85503ad4fbf2bf9d17710412e1e0f0c590e7a9c07', {
                 index: 7,
-                registration_type: 'Endorsee',
+                registrationType: 'Endorsee',
             }], ['0x30b3e1899a7483fd61f41069601e3671f6f35e3b96f4de902f6e15230f0d8171', {
                 index: 2,
-                registration_type: 'Newbie',
+                registrationType: 'Newbie',
             }]
             ]
         }]
@@ -224,7 +224,15 @@ describe('assignment', () => {
     communityCeremony.meetups.forEach((meetup) => {
         meetup.registrations.forEach((registration, index) => {
             it(`registration with pIndex: ${registration[1].index}`, () => {
+
+                console.log(`testcommunity: ${JSON.stringify(testCommunityCeremony)}`);
+                console.log(`registration: ${JSON.stringify(registration[1])}`);
+
                 const reg = registry.createType('ParticipantRegistration', registration[1]);
+
+                console.log(`Meetup: ${JSON.stringify(meetup)}`);
+                console.log(`MeetupCount: ${testCommunityCeremony.meetupCount}`);
+                console.log(`Registration: ${reg}`);
 
                 expect(computeMeetupIndex(reg,
                     testCommunityCeremony.assignment,

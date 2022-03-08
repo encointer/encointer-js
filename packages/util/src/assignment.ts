@@ -82,22 +82,25 @@ export function computeMeetupIndex(
     const meetupIndexFn =
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, meetupCount);
 
-    if (!registration.registrationType.isBootstrapper) {
+    if (registration.registrationType.isBootstrapper) {
+        console.log("[computeMeetupIndex] is bootstrapper.")
         if (pIndex < assignmentCount.bootstrappers) {
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
-    } else if (!registration.registrationType.isReputable) {
+    } else if (registration.registrationType.isReputable) {
         if (pIndex < assignmentCount.reputables) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
                 assignments.bootstrappersReputables
             )
         }
-    } else if (!registration.registrationType.isEndorsee) {
+    } else if (registration.registrationType.isEndorsee) {
+        console.log("[computeMeetupIndex] is endorsee.")
         if (pIndex < assignmentCount.endorsees) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
-    } else if (!registration.registrationType.isNewbie) {
+    } else if (registration.registrationType.isNewbie) {
+        console.log("[computeMeetupIndex] is endorsee.")
         if (pIndex < assignmentCount.newbies){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
