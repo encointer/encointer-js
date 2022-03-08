@@ -152,6 +152,13 @@ describe('node-api', () => {
             }
         });
 
+        it('should get participantRegistration', async () => {
+            for (const [i, participant] of [alice, bob, charlie].entries()) {
+                const pIndex = await getParticipantRegistration(api, cidMTA, testCIndex, participant.address);
+                expect(pIndex.unwrap().toJSON()).toStrictEqual({index: i + 1, registrationType: "Bootstrapper"});
+            }
+        });
+
         it('should get demurrage', async () => {
             // test community has default demurrage
             const demurrageDefault = await getDemurrage(api, cidMTA);
