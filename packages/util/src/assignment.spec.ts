@@ -7,7 +7,7 @@ import {
     assignmentFn,
     assignmentFnInverse,
     computeMeetupIndex,
-    getRegistrationType,
+    getRegistration,
     meetupIndex,
     meetupLocation,
     meetupTime,
@@ -256,7 +256,7 @@ describe('assignment', () => {
         let assignmentCount = registry.createType('AssignmentCount', [3, 3, 3, 3]);
 
         const compute =
-            (pindexes: ParticipantIndexes) => computeMeetupIndex(getRegistrationType(pindexes).unwrap(), assignment, assignmentCount, meetupCount)
+            (pindexes: ParticipantIndexes) => computeMeetupIndex(getRegistration(pindexes).unwrap(), assignment, assignmentCount, meetupCount)
 
         expect(
             compute([pIndex6, pIndex0, pIndex0, pIndex0]).toNumber()

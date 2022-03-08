@@ -39,7 +39,7 @@ export function assignmentFn(participantIndex: ParticipantIndexType, assignmentP
  */
 export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType];
 
-export function getRegistrationType(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
+export function getRegistration(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
     const registry = pIndexes[0].registry;
     if (!pIndexes[0].eq(0)) {
         return registry.createType('Option<ParticipantRegistration>', [pIndexes[0], 'Bootstrapper'])

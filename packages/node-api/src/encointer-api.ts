@@ -11,7 +11,7 @@ import {
     assignmentFnInverse,
     meetupTime,
     computeMeetupIndex,
-    getRegistrationType
+    getRegistration
 } from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
@@ -50,7 +50,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         return mCount;
     }
 
-    const registration = getRegistrationType(pIndexes);
+    const registration = getRegistration(pIndexes);
 
     if (registration.isNone) {
         console.log("[getMeetupIndex] participantIndex was 0");
