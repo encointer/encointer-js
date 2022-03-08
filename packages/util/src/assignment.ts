@@ -84,11 +84,12 @@ export function computeMeetupIndex(
 
     if (registration.registrationType.isBootstrapper) {
         console.log("[computeMeetupIndex] is bootstrapper.")
-        if (pIndex < assignmentCount.bootstrappers) {
+        if (pIndex.lt(assignmentCount.bootstrappers)) {
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
     } else if (registration.registrationType.isReputable) {
-        if (pIndex < assignmentCount.reputables) {
+        console.log("[computeMeetupIndex] is reputable")
+        if (pIndex.lt(assignmentCount.reputables)) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
                 assignments.bootstrappersReputables
@@ -96,12 +97,12 @@ export function computeMeetupIndex(
         }
     } else if (registration.registrationType.isEndorsee) {
         console.log("[computeMeetupIndex] is endorsee.")
-        if (pIndex < assignmentCount.endorsees) {
+        if (pIndex.lt(assignmentCount.endorsees)) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
     } else if (registration.registrationType.isNewbie) {
         console.log("[computeMeetupIndex] is endorsee.")
-        if (pIndex < assignmentCount.newbies){
+        if (pIndex.lt(assignmentCount.newbies)){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
     }
