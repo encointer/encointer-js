@@ -10,7 +10,8 @@ import {
     meetupLocation,
     assignmentFnInverse,
     meetupTime,
-    computeMeetupIndex
+    computeMeetupIndex,
+    getRegistrationType
 } from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
@@ -49,7 +50,14 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         return mCount;
     }
 
-    return computeMeetupIndex(pIndexes, assignments, assignmentCount, mCount);
+    const registration = getRegistrationType(pIndexes);
+
+    if (registration.isNone) {
+        console.log("[getMeetupIndex] participantIndex was 0");
+        return mCount
+    }
+
+    return computeMeetupIndex(registration.unwrap(), assignments, assignmentCount, mCount);
 }
 
 export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Location> {
