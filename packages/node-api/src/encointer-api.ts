@@ -54,7 +54,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 
     if (registration.isNone) {
         console.log("[getMeetupIndex] participantIndex was 0");
-        return mCount
+        return mCount.registry.createType('MeetupIndexType', [0]);
     }
 
     return computeMeetupIndex(registration.unwrap(), assignments, assignmentCount, mCount);
