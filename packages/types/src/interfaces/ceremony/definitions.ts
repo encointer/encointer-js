@@ -50,16 +50,17 @@ export default {
       s2: 'u64',
     },
     CommunityCeremonyStats: {
+      community_ceremony: '(Text, CeremonyIndexType)',
       assignment: 'Assignment',
       assignmentCount: 'AssignmentCount',
-      meetupCount: 'MeetupCount',
+      meetupCount: 'MeetupIndexType',
       meetups: 'Vec<Meetup>',
     },
     Meetup: {
       index: 'MeetupIndexType',
-      location: 'Location',
+      location: 'LocationRpc',
       time: 'Moment',
-      registration: 'Vec<ParticipantRegistration>',
+      registrations: 'Vec<ParticipantRegistration>',
     },
     ParticipantRegistration: {
       index: 'ParticipantIndexType',
