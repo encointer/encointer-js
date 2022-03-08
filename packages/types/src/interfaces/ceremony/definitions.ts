@@ -60,12 +60,11 @@ export default {
       index: 'MeetupIndexType',
       location: 'LocationRpc',
       time: 'Moment',
-      registrations: 'Vec<ParticipantRegistration>',
+      registrations: 'Vec<(AccountId, ParticipantRegistration)>',
     },
     ParticipantRegistration: {
       index: 'ParticipantIndexType',
       registrationType: 'RegistrationType',
-      participant: 'AccountId',
     },
     RegistrationType: {
       _enum: [

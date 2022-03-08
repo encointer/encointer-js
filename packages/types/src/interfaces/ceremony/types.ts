@@ -88,7 +88,7 @@ export interface Meetup extends Struct {
   readonly index: MeetupIndexType;
   readonly location: LocationRpc;
   readonly time: Moment;
-  readonly registrations: Vec<ParticipantRegistration>;
+  readonly registrations: Vec<ITuple<[AccountId, ParticipantRegistration]>>;
 }
 
 /** @name MeetupAssignment */
@@ -104,7 +104,6 @@ export interface ParticipantIndexType extends u64 {}
 export interface ParticipantRegistration extends Struct {
   readonly index: ParticipantIndexType;
   readonly registrationType: RegistrationType;
-  readonly participant: AccountId;
 }
 
 /** @name ProofOfAttendance */
