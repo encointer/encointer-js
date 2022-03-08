@@ -252,6 +252,34 @@ describe('assignment', () => {
                     }]
                 ]
             },
+            {
+                index: 3,
+                location: {
+                    lat: 13.5767120000000005575,
+                    lon: -54.1591189999999969018
+                },
+                time: 1646753760000,
+                registrations: [['0x145384a90922d821e44baaf94e668a180052769bfc25233231be4d48b0d65a5b', {
+                    index: 3,
+                    registration_type: 'Bootstrapper',
+                }], ['0xe04081bec8e985bdc79ea9352992bb198ad2370cfc45cdd438a19b28bfc34778', {
+                    index: 10,
+                    registration_type: 'Bootstrapper',
+                }], ['0x1c6f2cdb4358a90e70b7cfda54342bb666142e6324be43ed203b1e2576c9c938', {
+                    index: 7,
+                    registration_type: 'Bootstrapper',
+                }], ['0xd676d75426aae4d550e5eb62d297117873c718e135348f49823644ca73959147', {
+                    index: 4,
+                    registration_type: 'Endorsee',
+                }], ['0xf6f01a3529554b355430d9d1a78436c729d0ec1460b2049f701f0a711c98e935', {
+                    index: 1,
+                    registration_type: 'Endorsee',
+                }], ['0x04e70223a2bb5fd736828bde9b8e259ac00b3e3b63b252942a25916b2f2b7b61', {
+                    index: 8,
+                    registration_type: 'Endorsee',
+                }]
+                ]
+            }
         ]
     }
 
