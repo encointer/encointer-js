@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
-import type { Enum, Option, Struct, u32, u64 } from '@polkadot/types-codec';
+import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community';
+import type { Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
@@ -74,6 +74,23 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
   readonly numberOfParticipantsConfirmed: u32;
 }
 
+/** @name CommunityCeremonyStats */
+export interface CommunityCeremonyStats extends Struct {
+  readonly communityCeremony: ITuple<[Text, CeremonyIndexType]>;
+  readonly assignment: Assignment;
+  readonly assignmentCount: AssignmentCount;
+  readonly meetupCount: MeetupIndexType;
+  readonly meetups: Vec<Meetup>;
+}
+
+/** @name Meetup */
+export interface Meetup extends Struct {
+  readonly index: MeetupIndexType;
+  readonly location: LocationRpc;
+  readonly time: Moment;
+  readonly registrations: Vec<ITuple<[AccountId, ParticipantRegistration]>>;
+}
+
 /** @name MeetupAssignment */
 export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Location>]> {}
 
@@ -83,6 +100,12 @@ export interface MeetupIndexType extends u64 {}
 /** @name ParticipantIndexType */
 export interface ParticipantIndexType extends u64 {}
 
+/** @name ParticipantRegistration */
+export interface ParticipantRegistration extends Struct {
+  readonly index: ParticipantIndexType;
+  readonly registrationType: RegistrationType;
+}
+
 /** @name ProofOfAttendance */
 export interface ProofOfAttendance extends Struct {
   readonly proverPublic: AccountId;
@@ -90,6 +113,15 @@ export interface ProofOfAttendance extends Struct {
   readonly communityIdentifier: CommunityIdentifier;
   readonly attendeePublic: AccountId;
   readonly attendeeSignature: MultiSignature;
+}
+
+/** @name RegistrationType */
+export interface RegistrationType extends Enum {
+  readonly isBootstrapper: boolean;
+  readonly isReputable: boolean;
+  readonly isEndorsee: boolean;
+  readonly isNewbie: boolean;
+  readonly type: 'Bootstrapper' | 'Reputable' | 'Endorsee' | 'Newbie';
 }
 
 export type PHANTOM_CEREMONY = 'ceremony';

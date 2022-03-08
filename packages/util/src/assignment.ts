@@ -6,7 +6,7 @@ import {
     ParticipantIndexType,
     Location,
     parseDegree,
-    Assignment, AssignmentCount
+    Assignment, AssignmentCount, ParticipantRegistration
 } from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
 import {Option} from "@polkadot/types-codec";
@@ -23,6 +23,7 @@ import assert from "assert";
 export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
 
     if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
+        console.log(`[assignmentFn] invalid params or assignmentCount. Returning 0`);
         return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [0]);
     }
 
@@ -34,47 +35,75 @@ export function assignmentFn(participantIndex: ParticipantIndexType, assignmentP
 }
 
 /**
+ * Registries in the order: [bootstrapperIndex, reputableIndex, endorseeIndex, newbieIndex]
+ */
+export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType];
+
+export function getRegistration(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
+    const registry = pIndexes[0].registry;
+    if (!pIndexes[0].eq(0)) {
+        return registry.createType('Option<ParticipantRegistration>', [pIndexes[0], 'Bootstrapper'])
+    } else if (!pIndexes[1].eq(0)) {
+        return registry.createType('Option<ParticipantRegistration>', [pIndexes[1], 'Reputable'])
+    } else if (!pIndexes[2].eq(0)) {
+        return registry.createType('Option<ParticipantRegistration>', [pIndexes[2], 'Endorsee'])
+    } else if (!pIndexes[3].eq(0)) {
+        return registry.createType('Option<ParticipantRegistration>', [pIndexes[3], 'Newbie'])
+    }
+
+    return registry.createType('Option<ParticipantRegistration>', []);
+}
+
+/**
  * Computes the meetup index given the all the meetup params.
  *
  * Returns 0 if the participant has not been assigned.
  */
 export function computeMeetupIndex(
-    pIndexes: [ParticipantIndexType, ParticipantIndexType, ParticipantIndexType, ParticipantIndexType],
+    registration: ParticipantRegistration,
     assignments: Assignment,
     assignmentCount: AssignmentCount,
     meetupCount: MeetupIndexType
 ): MeetupIndexType {
     const registry = assignmentCount.registry;
+    let pIndex: ParticipantIndexType;
 
     if (meetupCount.eq(0)) {
         // 0 index means not registered
         return meetupCount;
     }
 
+    if (registration.index.eq(0)) {
+        console.log("[computeMeetupIndex] supplied registration with participantIndex = 0. returning...")
+        return registration.index;
+    } else {
+        pIndex = registration.index.subn(1) as ParticipantIndexType;
+    }
+
     const meetupIndexFn =
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, meetupCount);
 
-    if (!pIndexes[0].eq(0)) {
-        let pIndex = pIndexes[0].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.bootstrappers) {
+    if (registration.registrationType.isBootstrapper) {
+        console.log("[computeMeetupIndex] is bootstrapper.")
+        if (pIndex.lt(assignmentCount.bootstrappers)) {
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
-    } else if (!pIndexes[1].eq(0)) {
-        let pIndex = pIndexes[1].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.reputables) {
+    } else if (registration.registrationType.isReputable) {
+        console.log("[computeMeetupIndex] is reputable")
+        if (pIndex.lt(assignmentCount.reputables)) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
                 assignments.bootstrappersReputables
             )
         }
-    } else if (!pIndexes[2].eq(0)) {
-        let pIndex = pIndexes[2].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.endorsees) {
+    } else if (registration.registrationType.isEndorsee) {
+        console.log("[computeMeetupIndex] is endorsee.")
+        if (pIndex.lt(assignmentCount.endorsees)) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
-    } else if (!pIndexes[3].eq(0)) {
-        let pIndex = pIndexes[3].subn(1) as ParticipantIndexType;
-        if (pIndex < assignmentCount.newbies){
+    } else if (registration.registrationType.isNewbie) {
+        console.log("[computeMeetupIndex] is endorsee.")
+        if (pIndex.lt(assignmentCount.newbies)){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
     }

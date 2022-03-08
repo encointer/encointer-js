@@ -23,7 +23,8 @@ import {
     getMeetupParticipants,
     getCeremonyIncome,
     getParticipantIndex,
-    getStartOfAttestingPhase
+    getStartOfAttestingPhase,
+    getParticipantRegistration
 } from './encointer-api';
 import {Moment} from "@polkadot/types/interfaces/runtime";
 
@@ -149,6 +150,13 @@ describe('node-api', () => {
             for (const [i, participant] of [alice, bob, charlie].entries()) {
                 const pIndex = await getParticipantIndex(api, cidMTA, testCIndex, participant.address);
                 expect(pIndex.toNumber()).toBe(i + 1);
+            }
+        });
+
+        it('should get participantRegistration', async () => {
+            for (const [i, participant] of [alice, bob, charlie].entries()) {
+                const pIndex = await getParticipantRegistration(api, cidMTA, testCIndex, participant.address);
+                expect(pIndex.unwrap().toJSON()).toStrictEqual({index: i + 1, registrationType: "Bootstrapper"});
             }
         });
 

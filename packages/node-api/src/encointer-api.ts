@@ -4,18 +4,20 @@ import {
     AssignmentCount,
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
-    MeetupIndexType, NominalIncomeType, ParticipantIndexType,
+    MeetupIndexType, NominalIncomeType, ParticipantIndexType, ParticipantRegistration,
 } from "@encointer/types";
 import {
     meetupLocation,
     assignmentFnInverse,
     meetupTime,
-    computeMeetupIndex
+    computeMeetupIndex,
+    getRegistration
 } from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
 import {Registry} from "@polkadot/types/types";
 import {IndexRegistry, IParticipantIndexQuery} from "@encointer/node-api/interface";
+import {Option} from "@polkadot/types-codec";
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
     return api.query.encointerCeremonies.assignments<Assignment>([cid, cIndex]);
@@ -29,19 +31,28 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
     return api.query.encointerCeremonies.meetupCount<MeetupIndexType>([cid, cIndex]);
 }
 
-export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
+export async function getParticipantRegistration(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<Option<ParticipantRegistration>> {
     // helper query to make below code more readable
     const indexQuery = participantIndexQuery(api, cid, cIndex, address);
 
-    // query everything in parallel to speed up process.
-    const [mCount, assignments, assignmentCount, ...pIndexes] = await Promise.all([
-        getMeetupCount(api, cid, cIndex),
-        getAssignment(api, cid, cIndex),
-        getAssignmentCount(api, cid, cIndex),
+    const pIndexes = await Promise.all([
         indexQuery(IndexRegistry.Bootstrapper),
         indexQuery(IndexRegistry.Reputable),
         indexQuery(IndexRegistry.Endorsee),
         indexQuery(IndexRegistry.Newbie),
+    ]);
+
+    return getRegistration(pIndexes);
+}
+
+export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<MeetupIndexType> {
+
+    // query everything in parallel to speed up process.
+    const [mCount, assignments, assignmentCount, registration] = await Promise.all([
+        getMeetupCount(api, cid, cIndex),
+        getAssignment(api, cid, cIndex),
+        getAssignmentCount(api, cid, cIndex),
+        getParticipantRegistration(api, cid, cIndex,address),
     ]);
 
     if (mCount.eq(0)) {
@@ -49,7 +60,12 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         return mCount;
     }
 
-    return computeMeetupIndex(pIndexes, assignments, assignmentCount, mCount);
+    if (registration.isNone) {
+        console.log("[getMeetupIndex] participantIndex was 0");
+        return mCount.registry.createType('MeetupIndexType', [0]);
+    }
+
+    return computeMeetupIndex(registration.unwrap(), assignments, assignmentCount, mCount);
 }
 
 export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Location> {
