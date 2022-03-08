@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { CommunityIdentifier, Location } from '@encointer/types/interfaces/community';
-import type { Enum, Option, Struct, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community';
+import type { Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
@@ -76,18 +76,19 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
 
 /** @name CommunityCeremonyStats */
 export interface CommunityCeremonyStats extends Struct {
+  readonly community_ceremony: ITuple<[Text, CeremonyIndexType]>;
   readonly assignment: Assignment;
   readonly assignmentCount: AssignmentCount;
-  readonly meetupCount: MeetupCount;
+  readonly meetupCount: MeetupIndexType;
   readonly meetups: Vec<Meetup>;
 }
 
 /** @name Meetup */
 export interface Meetup extends Struct {
   readonly index: MeetupIndexType;
-  readonly location: Location;
+  readonly location: LocationRpc;
   readonly time: Moment;
-  readonly registration: Vec<ParticipantRegistration>;
+  readonly registrations: Vec<ParticipantRegistration>;
 }
 
 /** @name MeetupAssignment */
