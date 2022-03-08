@@ -188,36 +188,71 @@ describe('assignment', () => {
                 lon: '-54.14987899999999854117'
             },
             time: 1646753760000,
-            registrations: [['0xbc92e2f48a3af6f54d5dbb3cd9a6ded4d59218020502464997ced2d71a507b4e', {
-                index: 5,
-                registrationType: 'Bootstrapper',
-            }], ['0x2ebc2d24537019a2fe6ff2c5b8069526845e3f543aea720391ce57a96b82ad09', {
-                index: 2,
-                registrationType: 'Bootstrapper',
-            }], ['0x2a7c54cba3ac5e1cdc4ce983c360b69c3059b6faaaa5bcfb3d3d99b560d8963c', {
-                index: 9,
-                registrationType: 'Bootstrapper',
-            }], ['0xca9b21c0a81622d85afb45aacc033efb40fc310ecb0bca855014a1c1a54bcd67', {
-                index: 6,
-                registrationType: 'Bootstrapper',
-            }], ['0x6a0eb8650fb4a32a90e7407478b22b2569eaad2605ec0ab9af13777b482e2d1a', {
-                index: 6,
-                registrationType: 'Endorsee',
-            }], ['0x18bd9e2b98fc15c3bbc0093c6b009e2dde35a74819ab42a483ed3096b983b816', {
-                index: 3,
-                registrationType: 'Endorsee',
-            }], ['0x1a09277c4f77ecc42dea0d20d7629fcfbb43fc9e4233831122e13cc514645420', {
-                index: 10,
-                registrationType: 'Endorsee',
-            }], ['0x3a00401092b6bd75565889e85503ad4fbf2bf9d17710412e1e0f0c590e7a9c07', {
-                index: 7,
-                registrationType: 'Endorsee',
-            }], ['0x30b3e1899a7483fd61f41069601e3671f6f35e3b96f4de902f6e15230f0d8171', {
-                index: 2,
-                registrationType: 'Newbie',
-            }]
+            registrations: [
+                ['0xbc92e2f48a3af6f54d5dbb3cd9a6ded4d59218020502464997ced2d71a507b4e', {
+                    index: 5,
+                    registrationType: 'Bootstrapper',
+                }], ['0x2ebc2d24537019a2fe6ff2c5b8069526845e3f543aea720391ce57a96b82ad09', {
+                    index: 2,
+                    registrationType: 'Bootstrapper',
+                }], ['0x2a7c54cba3ac5e1cdc4ce983c360b69c3059b6faaaa5bcfb3d3d99b560d8963c', {
+                    index: 9,
+                    registrationType: 'Bootstrapper',
+                }], ['0xca9b21c0a81622d85afb45aacc033efb40fc310ecb0bca855014a1c1a54bcd67', {
+                    index: 6,
+                    registrationType: 'Bootstrapper',
+                }], ['0x6a0eb8650fb4a32a90e7407478b22b2569eaad2605ec0ab9af13777b482e2d1a', {
+                    index: 6,
+                    registrationType: 'Endorsee',
+                }], ['0x18bd9e2b98fc15c3bbc0093c6b009e2dde35a74819ab42a483ed3096b983b816', {
+                    index: 3,
+                    registrationType: 'Endorsee',
+                }], ['0x1a09277c4f77ecc42dea0d20d7629fcfbb43fc9e4233831122e13cc514645420', {
+                    index: 10,
+                    registrationType: 'Endorsee',
+                }], ['0x3a00401092b6bd75565889e85503ad4fbf2bf9d17710412e1e0f0c590e7a9c07', {
+                    index: 7,
+                    registrationType: 'Endorsee',
+                }], ['0x30b3e1899a7483fd61f41069601e3671f6f35e3b96f4de902f6e15230f0d8171', {
+                    index: 2,
+                    registrationType: 'Newbie',
+                }]
             ]
-        }]
+        },
+            {
+                index: 2,
+                location: {
+                    lat: '13.5767120000000005575',
+                    lon: '-54.16835900000000236787'
+                },
+                time: 1646753760000,
+                registrations: [
+                    ['0x2ecf61828dfd1c54e8d9055a909863269adb1aa413a8f84977dc090a6f5afa28', {
+                        index: 4,
+                        registration_type: 'Bootstrapper',
+                    }], ['0xecf5b26b04fafaf2eb1d7b85461930796dd9624ec08f4d15fd4dfb73c90fc07a', {
+                        index: 1,
+                        registration_type: 'Bootstrapper',
+                    }], ['0xb02a7a35b463f6da873e011cd6723b5f0137f3a1b10d55cb6d0a612ff7411a17', {
+                        index: 8,
+                        registration_type: 'Bootstrapper',
+
+                    }], ['0xba0f1b7b114ab35a37c157e4e5634e8b712ffad58f1a6ea7f191fe71a76bb57e', {
+                        index: 5,
+                        registration_type: 'Endorsee',
+                    }], ['0xb8d6033be29593ea4ea3b86bb927ec2f2e27681d3276f0e57bce369a791c1371', {
+                        index: 2,
+                        registration_type: 'Endorsee',
+                    }], ['0x5c5e545ec13de3b7d980ae07f232716acf186c0a9b3d6e24cee07e106bc18b4f', {
+                        index: 9,
+                        registration_type: 'Endorsee',
+                    }], ['0xee3416f9311bae7529d8117a93b6544f883e0c0516e69b77aead6456173af623', {
+                        index: 1,
+                        registration_type: 'Newbie',
+                    }]
+                ]
+            },
+        ]
     }
 
 
@@ -230,9 +265,9 @@ describe('assignment', () => {
                 const reg = registry.createType('ParticipantRegistration', registration[1]);
 
                 expect(computeMeetupIndex(reg,
-                    testCommunityCeremony.assignment,
-                    testCommunityCeremony.assignmentCount,
-                    testCommunityCeremony.meetupCount
+                        testCommunityCeremony.assignment,
+                        testCommunityCeremony.assignmentCount,
+                        testCommunityCeremony.meetupCount
                     ).toNumber()
                 ).toEqual(meetup.index);
             })

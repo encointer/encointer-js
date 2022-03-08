@@ -23,6 +23,7 @@ import assert from "assert";
 export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
 
     if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
+        console.log(`[assignmentFn] invalid params or assignmentCount. Returning 0`);
         return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [0]);
     }
 
