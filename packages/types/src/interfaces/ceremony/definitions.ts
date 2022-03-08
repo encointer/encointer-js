@@ -50,7 +50,7 @@ export default {
       s2: 'u64',
     },
     CommunityCeremonyStats: {
-      community_ceremony: '(Text, CeremonyIndexType)',
+      communityCeremony: '(Text, CeremonyIndexType)',
       assignment: 'Assignment',
       assignmentCount: 'AssignmentCount',
       meetupCount: 'MeetupIndexType',

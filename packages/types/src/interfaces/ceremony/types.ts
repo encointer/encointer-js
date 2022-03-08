@@ -76,7 +76,7 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
 
 /** @name CommunityCeremonyStats */
 export interface CommunityCeremonyStats extends Struct {
-  readonly community_ceremony: ITuple<[Text, CeremonyIndexType]>;
+  readonly communityCeremony: ITuple<[Text, CeremonyIndexType]>;
   readonly assignment: Assignment;
   readonly assignmentCount: AssignmentCount;
   readonly meetupCount: MeetupIndexType;
