@@ -225,19 +225,15 @@ describe('assignment', () => {
         meetup.registrations.forEach((registration, index) => {
             it(`registration with pIndex: ${registration[1].index}`, () => {
 
-                console.log(`testcommunity: ${JSON.stringify(testCommunityCeremony)}`);
-                console.log(`registration: ${JSON.stringify(registration[1])}`);
+                console.log(`testCommunity: ${JSON.stringify(testCommunityCeremony)}`);
 
                 const reg = registry.createType('ParticipantRegistration', registration[1]);
-
-                console.log(`Meetup: ${JSON.stringify(meetup)}`);
-                console.log(`MeetupCount: ${testCommunityCeremony.meetupCount}`);
-                console.log(`Registration: ${reg}`);
 
                 expect(computeMeetupIndex(reg,
                     testCommunityCeremony.assignment,
                     testCommunityCeremony.assignmentCount,
-                    testCommunityCeremony.meetupCount)
+                    testCommunityCeremony.meetupCount
+                    ).toNumber()
                 ).toEqual(meetup.index);
             })
 
