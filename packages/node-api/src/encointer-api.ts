@@ -58,7 +58,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     console.log(`[getMeetupIndex] mCount: ${mCount}`)
     console.log(`[getMeetupIndex] assignment: ${JSON.stringify(assignments)}`)
     console.log(`[getMeetupIndex] assignmentCount: ${JSON.stringify(assignmentCount)}`)
-    console.log(`[getMeetupIndex] pIndexes: ${JSON.stringify(registration)}`)
+    console.log(`[getMeetupIndex] registration: ${JSON.stringify(registration)}`)
 
 
     if (mCount.eq(0)) {

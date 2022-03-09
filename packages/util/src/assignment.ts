@@ -41,14 +41,17 @@ export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, Pa
 
 export function getRegistration(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
     const registry = pIndexes[0].registry;
+
+    console.log(`[getRegistration] pIndexes: ${JSON.stringify(pIndexes)}`);
+
     if (!pIndexes[0].eq(0)) {
-        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [pIndexes[0], 'Bootstrapper'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[0], 'Bootstrapper']]);
     } else if (!pIndexes[1].eq(0)) {
-        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [pIndexes[1], 'Reputable'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[1], 'Reputable']]);
     } else if (!pIndexes[2].eq(0)) {
-        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [pIndexes[2], 'Endorsee'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[2], 'Endorsee']]);
     } else if (!pIndexes[3].eq(0)) {
-        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [pIndexes[3], 'Newbie'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[3], 'Newbie']]);
     }
 
     return registry.createTypeUnsafe('Option<ParticipantRegistration>', []);
