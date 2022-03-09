@@ -1,5 +1,24 @@
 export default {
-  rpc: {},
+  rpc: {
+      ceremonies: {
+          getReputations: {
+              description: 'Get all reputations of an account in any community',
+              params: [
+                  {
+                      name: 'account',
+                      type: 'AccountId',
+                      isOptional: false
+                  },
+                  {
+                      name: 'at',
+                      type: 'Hash',
+                      isOptional: true
+                  }
+              ],
+              type: 'Vec<(CommunityIdentifier, Reputation)>'
+          },
+      },
+  },
   types: {
     CeremonyIndexType: 'u32',
     CeremonyPhaseType: {
