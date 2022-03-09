@@ -53,14 +53,6 @@ export default {
       lat: 'DegreeRpc',
       lon: 'DegreeRpc'
     },
-    Reputation: {
-      _enum: [
-        'Unverified',
-        'UnverifiedReputable',
-        'VerifiedUnlinked',
-        'VerifiedLinked'
-      ]
-    },
     CidName: {
       cid: 'CommunityIdentifier',
       name: 'Text',

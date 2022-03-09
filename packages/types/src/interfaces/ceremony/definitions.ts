@@ -32,6 +32,13 @@ export default {
     MeetupIndexType: 'u64',
     AttestationIndexType: 'u64',
     MeetupAssignment: '(MeetupIndexType, Option<Location>)',
+    Reputation: {
+      _enum: ['Unverified', 'UnverifiedReputable', 'VerifiedUnlinked', 'VerifiedLinked']
+    },
+    CommunityReputation: {
+      communityIdentifier: 'CommunityIdentifier',
+      reputation: 'Reputation'
+    },
     ClaimOfAttendance: {
       claimantPublic: 'AccountId',
       ceremonyIndex: 'CeremonyIndexType',
