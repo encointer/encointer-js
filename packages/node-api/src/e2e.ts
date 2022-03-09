@@ -188,6 +188,17 @@ describe('node-api', () => {
 
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
+        describe('ceremonies', () => {
+            it('ceremonies.getReputations should return empty vec', async () => {
+                // @ts-ignore
+                const reputations = await api.rpc.ceremonies.getReputations(alice.address);
+
+                // console.log(`Reputations: ${JSON.stringify(reputations)}`);
+
+                expect(reputations.length).toBe(0)
+            });
+        });
+
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
                 // @ts-ignore
