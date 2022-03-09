@@ -41,17 +41,20 @@ export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, Pa
 
 export function getRegistration(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
     const registry = pIndexes[0].registry;
+
+    console.log(`[getRegistration] pIndexes: ${JSON.stringify(pIndexes)}`);
+
     if (!pIndexes[0].eq(0)) {
-        return registry.createType('Option<ParticipantRegistration>', [pIndexes[0], 'Bootstrapper'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[0], 'Bootstrapper']]);
     } else if (!pIndexes[1].eq(0)) {
-        return registry.createType('Option<ParticipantRegistration>', [pIndexes[1], 'Reputable'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[1], 'Reputable']]);
     } else if (!pIndexes[2].eq(0)) {
-        return registry.createType('Option<ParticipantRegistration>', [pIndexes[2], 'Endorsee'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[2], 'Endorsee']]);
     } else if (!pIndexes[3].eq(0)) {
-        return registry.createType('Option<ParticipantRegistration>', [pIndexes[3], 'Newbie'])
+        return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[3], 'Newbie']]);
     }
 
-    return registry.createType('Option<ParticipantRegistration>', []);
+    return registry.createTypeUnsafe('Option<ParticipantRegistration>', []);
 }
 
 /**
@@ -108,7 +111,7 @@ export function computeMeetupIndex(
         }
     }
 
-    return registry.createType('MeetupIndexType', 0);
+    return registry.createTypeUnsafe('MeetupIndexType', [0]);
 }
 
 /**
@@ -120,9 +123,15 @@ export function computeMeetupIndex(
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
 
+    console.log(`[meetupIndex] executing assignmentFn`);
+
     const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
 
-    return result.addn(1) as MeetupIndexType;
+    const mIndex = result.addn(1) as MeetupIndexType
+
+    console.log(`[meetupIndex] mIndex (=assignmentFn result + 1): ${JSON.stringify(mIndex)}`);
+
+    return mIndex;
 }
 
 

@@ -371,7 +371,7 @@ const testCommunityParams = {
         "symbol": "MTA",
         "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
-    cid: "sqm0679dF6b",
+    cid: "sqm1v79dF6b",
     bootstrappers: [
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
@@ -382,8 +382,8 @@ const testCommunityParams = {
     ],
     locations: [
         {
-            lon: "18.4075927734375",
-            lat: "35.23215941201715395437"
+            lon: "18.543548583984375",
+            lat: "35.4841563798531700047"
         },
         {
             lon: "18.40484619140625",

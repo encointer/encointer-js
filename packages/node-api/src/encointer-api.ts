@@ -55,6 +55,12 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         getParticipantRegistration(api, cid, cIndex,address),
     ]);
 
+    console.log(`[getMeetupIndex] mCount: ${mCount}`)
+    console.log(`[getMeetupIndex] assignment: ${JSON.stringify(assignments)}`)
+    console.log(`[getMeetupIndex] assignmentCount: ${JSON.stringify(assignmentCount)}`)
+    console.log(`[getMeetupIndex] registration: ${JSON.stringify(registration)}`)
+
+
     if (mCount.eq(0)) {
         // 0 index means not registered
         return mCount;
@@ -62,7 +68,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
 
     if (registration.isNone) {
         console.log("[getMeetupIndex] participantIndex was 0");
-        return mCount.registry.createType('MeetupIndexType', [0]);
+        return mCount.registry.createTypeUnsafe("MeetupIndexType", [0]) as MeetupIndexType; // don't know why the cast is necessary
     }
 
     return computeMeetupIndex(registration.unwrap(), assignments, assignmentCount, mCount);
