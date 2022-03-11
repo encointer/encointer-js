@@ -1,6 +1,6 @@
 {
   "name": "@encointer/types",
-  "version": "0.6.6-alpha.2",
+  "version": "0.6.6-alpha.3",
   "description": "Encointer type definitions for Polkadot.js",
   "author": "Encointer authors & contributors",
   "homepage": "https://github.com/encointer/encointer-js",
