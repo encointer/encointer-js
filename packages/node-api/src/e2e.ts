@@ -217,6 +217,16 @@ describe('node-api', () => {
                 }
 
             });
+
+            it('communities.getAllBalances should return empty vec', async () => {
+                // @ts-ignore
+                const balances = await api.rpc.communities.getAllBalances(alice.address);
+
+                // console.log(`balances: ${JSON.stringify(balances)}`);
+
+                expect(balances.length).toBe(0)
+
+            });
         });
 
         describe('bazaar', () => {
