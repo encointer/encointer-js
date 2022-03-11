@@ -199,7 +199,7 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
  */
 export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
     // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
-    const demurrageCommunity = await api.query.encointerCommunities.demurragePerBlock<FixedI64F64>(cid)
+    const demurrageCommunity = await api.query.encointerBalances.demurragePerBlock<FixedI64F64>(cid)
         .then((dc) => api.createType('Demurrage', dc.bits))
 
     if (demurrageCommunity.eq(0)) {
