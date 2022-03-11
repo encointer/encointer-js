@@ -15,7 +15,7 @@ export default {
                       isOptional: true
                   }
               ],
-              type: 'Vec<(CommunityIdentifier, Reputation)>'
+              type: 'Vec<(CeremonyIndexType, CommunityReputation)>'
           },
       },
   },
