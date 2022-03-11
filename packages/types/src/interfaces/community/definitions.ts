@@ -27,6 +27,22 @@ export default {
           }
         ],
         type: 'Vec<LocationRpc>'
+      },
+      getAllBalances: {
+        description: 'Get all non-zero balances for account in all communities',
+        params: [
+          {
+            name: 'account',
+            type: 'AccountId',
+            isOptional: false
+          },
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<(CommunityIdentifier, BalanceEntry)>'
       }
     }
   },
@@ -52,14 +68,6 @@ export default {
     LocationRpc: {
       lat: 'DegreeRpc',
       lon: 'DegreeRpc'
-    },
-    Reputation: {
-      _enum: [
-        'Unverified',
-        'UnverifiedReputable',
-        'VerifiedUnlinked',
-        'VerifiedLinked'
-      ]
     },
     CidName: {
       cid: 'CommunityIdentifier',

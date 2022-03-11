@@ -188,6 +188,17 @@ describe('node-api', () => {
 
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
+        describe('ceremonies', () => {
+            it('ceremonies.getReputations should return empty vec', async () => {
+                // @ts-ignore
+                const reputations = await api.rpc.ceremonies.getReputations(alice.address);
+
+                // console.log(`Reputations: ${JSON.stringify(reputations)}`);
+
+                expect(reputations.length).toBe(0)
+            });
+        });
+
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
                 // @ts-ignore
@@ -204,6 +215,16 @@ describe('node-api', () => {
                 } catch (e: any) {
                     expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
+
+            });
+
+            it('communities.getAllBalances should return empty vec', async () => {
+                // @ts-ignore
+                const balances = await api.rpc.communities.getAllBalances(alice.address);
+
+                // console.log(`balances: ${JSON.stringify(balances)}`);
+
+                expect(balances.length).toBe(0)
 
             });
         });
@@ -382,6 +403,8 @@ const testCommunityParams = {
     ],
     locations: [
         {
+            // this is not the exact same value as in the encointer-node,
+            // but the same value leads to different cid, due to ##35
             lon: "18.543548583984375",
             lat: "35.4841563798531700047"
         },

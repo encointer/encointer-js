@@ -83,6 +83,12 @@ export interface CommunityCeremonyStats extends Struct {
   readonly meetups: Vec<Meetup>;
 }
 
+/** @name CommunityReputation */
+export interface CommunityReputation extends Struct {
+  readonly communityIdentifier: CommunityIdentifier;
+  readonly reputation: Reputation;
+}
+
 /** @name Meetup */
 export interface Meetup extends Struct {
   readonly index: MeetupIndexType;
@@ -122,6 +128,15 @@ export interface RegistrationType extends Enum {
   readonly isEndorsee: boolean;
   readonly isNewbie: boolean;
   readonly type: 'Bootstrapper' | 'Reputable' | 'Endorsee' | 'Newbie';
+}
+
+/** @name Reputation */
+export interface Reputation extends Enum {
+  readonly isUnverified: boolean;
+  readonly isUnverifiedReputable: boolean;
+  readonly isVerifiedUnlinked: boolean;
+  readonly isVerifiedLinked: boolean;
+  readonly type: 'Unverified' | 'UnverifiedReputable' | 'VerifiedUnlinked' | 'VerifiedLinked';
 }
 
 export type PHANTOM_CEREMONY = 'ceremony';

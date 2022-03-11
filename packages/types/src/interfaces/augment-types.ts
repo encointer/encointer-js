@@ -3,9 +3,9 @@
 
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
-import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, Meetup, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType } from '@encointer/types/interfaces/ceremony';
+import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, CommunityReputation, Meetup, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType, Reputation } from '@encointer/types/interfaces/ceremony';
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
-import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType, Reputation } from '@encointer/types/interfaces/community';
+import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
@@ -223,6 +223,7 @@ declare module '@polkadot/types/types/registry' {
     CommunityCeremonyStats: CommunityCeremonyStats;
     CommunityIdentifier: CommunityIdentifier;
     CommunityMetadataType: CommunityMetadataType;
+    CommunityReputation: CommunityReputation;
     CompactAssignments: CompactAssignments;
     CompactAssignmentsTo257: CompactAssignmentsTo257;
     CompactAssignmentsTo265: CompactAssignmentsTo265;
