@@ -393,6 +393,8 @@ const testCommunityParams = {
     ],
     locations: [
         {
+            // this is not the exact same value as in the encointer-node,
+            // but the same value leads to different cid, due to ##35
             lon: "18.543548583984375",
             lat: "35.4841563798531700047"
         },
