@@ -352,7 +352,7 @@ const defaultNominalIncome = stringToEncointerBalance("1");
 //     meta: {
 //         name: "EdisonPaula",
 //         symbol: "EDI",
-//         icons: "QmcqHLThzvpKt67NpKRy1NHtx7KduKx3EzyFB3Yk95ra8t"
+//         assets: "QmcqHLThzvpKt67NpKRy1NHtx7KduKx3EzyFB3Yk95ra8t"
 //     },
 //     cid: "u0qj94fxxJ6",
 //     demurrage: 126848301745007,
@@ -390,7 +390,7 @@ const testCommunityParams = {
     meta: {
         "name": "Mediterranea",
         "symbol": "MTA",
-        "icons": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
+        "assets": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
     cid: "sqm1v79dF6b",
     bootstrappers: [
