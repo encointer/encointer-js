@@ -28,7 +28,7 @@ export interface CommunityIdentifier extends Struct {
 export interface CommunityMetadataType extends Struct {
   readonly name: Text;
   readonly symbol: Text;
-  readonly icons: Text;
+  readonly assets: Text;
   readonly theme: Option<Text>;
   readonly url: Option<Text>;
 }

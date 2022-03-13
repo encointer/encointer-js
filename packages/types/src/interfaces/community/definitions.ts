@@ -76,7 +76,7 @@ export default {
     CommunityMetadataType: {
       name: 'Text',
       symbol: 'Text',
-      icons: 'Text',
+      assets: 'Text',
       theme: 'Option<Text>',
       url: 'Option<Text>'
     },
