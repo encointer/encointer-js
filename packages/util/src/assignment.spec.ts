@@ -24,11 +24,10 @@ import * as testCeremonies from "./test-ceremony-data";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
-    const tests = Object.values(testCeremonies);
+    const ceremonyTestCases = Object.values(testCeremonies);
 
     beforeAll(() => {
         registry.register(encointerOptions().types as RegistryTypes)
-
     });
 
     it('assignmentFn works', () => {
@@ -142,7 +141,7 @@ describe('assignment', () => {
         ).toEqual(0)
     });
 
-    tests.forEach((ceremonyTestCase) => {
+    ceremonyTestCases.forEach((ceremonyTestCase) => {
         it(`creates correct CommunityCeremonyStats for ${ceremonyTestCase.communityCeremony} `, () => {
             const testCeremony = registry.createType('CommunityCeremonyStats', ceremonyTestCase)
 
@@ -151,7 +150,7 @@ describe('assignment', () => {
     });
 
 
-    tests.forEach((ceremonyTestCase) => {
+    ceremonyTestCases.forEach((ceremonyTestCase) => {
         ceremonyTestCase.meetups.forEach((meetup) => {
             meetup.registrations.forEach((registration, index) => {
 
