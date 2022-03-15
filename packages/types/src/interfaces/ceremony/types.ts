@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community';
-import type { Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Vec, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
@@ -76,7 +76,7 @@ export interface ClaimOfAttendanceSigningPayload extends Struct {
 
 /** @name CommunityCeremonyStats */
 export interface CommunityCeremonyStats extends Struct {
-  readonly communityCeremony: ITuple<[Text, CeremonyIndexType]>;
+  readonly communityCeremony: ITuple<[CommunityIdentifier, CeremonyIndexType]>;
   readonly assignment: Assignment;
   readonly assignmentCount: AssignmentCount;
   readonly meetupCount: MeetupIndexType;
