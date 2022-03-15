@@ -20,7 +20,7 @@ import {
     stringToDegree
 } from "@encointer/types";
 import assert from "assert";
-import * as testCeremonies from "./test-ceremonies";
+import * as testCeremonies from "./test-ceremony-data";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
