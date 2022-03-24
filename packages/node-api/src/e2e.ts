@@ -96,33 +96,6 @@ describe('node-api', () => {
 
             expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() - attestingDuration.toNumber());
         });
-
-        const computeStartOfAttestingTestCases = [
-            { currentPhase: 'Registering', expected: 105},
-            { currentPhase: 'Assigning', expected: 100 },
-            { currentPhase: 'Attesting', expected: 90 },
-        ];
-
-        computeStartOfAttestingTestCases.forEach((test) => {
-            it(`computeStartOfAttesting works in ${test.currentPhase}`, () => {
-                const currentPhase = api.createType<CeremonyPhaseType>('CeremonyPhaseType', test.currentPhase);
-
-                const nextPhaseStart = api.createType<Moment>('Moment', 100);
-                const assigningDuration = api.createType<Moment>('Moment', 5);
-                const attestingDuration = api.createType<Moment>('Moment', 10);
-
-                expect(
-                    computeStartOfAttestingPhase(
-                        currentPhase,
-                        nextPhaseStart,
-                        assigningDuration,
-                        attestingDuration
-                    ).toNumber()
-                ).toEqual(test.expected);
-            });
-
-        })
-
     });
 
     describe('assignment', () => {

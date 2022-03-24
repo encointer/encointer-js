@@ -11,7 +11,8 @@ import {
     assignmentFnInverse,
     meetupTime,
     computeMeetupIndex,
-    getRegistration
+    getRegistration,
+    computeStartOfAttestingPhase
 } from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
@@ -190,23 +191,6 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
     ])
 
     return computeStartOfAttestingPhase(currentPhase, nextPhaseStart, assigningDuration, attestingDuration)
-}
-
-export function computeStartOfAttestingPhase(
-    currentPhase: CeremonyPhaseType,
-    nextPhaseStart: Moment,
-    assigningDuration: Moment,
-    attestingDuration: Moment
-): Moment {
-    if (currentPhase.isRegistering) {
-        return nextPhaseStart.add(assigningDuration) as Moment
-    } else if (currentPhase.isAssigning) {
-        return nextPhaseStart;
-    } else if (currentPhase.isAttesting) {
-        return nextPhaseStart.sub(attestingDuration) as Moment
-    } else {
-        throw `[computeStartOfAttestingPhase] Unknown phase supplied: ${currentPhase}`;
-    }
 }
 
 /**

@@ -6,7 +6,7 @@ import {options as encointerOptions} from "@encointer/node-api";
 import {
     assignmentFn,
     assignmentFnInverse,
-    computeMeetupIndex,
+    computeMeetupIndex, computeStartOfAttestingPhase,
     getRegistration,
     meetupIndex,
     meetupLocation,
@@ -14,13 +14,14 @@ import {
     modInv, ParticipantIndexes
 } from "@encointer/util/assignment";
 import {
-    AssignmentParams,
+    AssignmentParams, CeremonyPhaseType,
     MeetupIndexType,
     ParticipantIndexType,
     stringToDegree
 } from "@encointer/types";
 import assert from "assert";
 import * as testCeremonies from "./test-ceremony-data";
+import {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
@@ -105,6 +106,32 @@ describe('assignment', () => {
                 meetupTime(location, attestingStart, oneDay, meetupOffset).toNumber()
             ).toEqual(test.expected)
         })
+    })
+
+    const computeStartOfAttestingTestCases = [
+        { currentPhase: 'Registering', expected: 105},
+        { currentPhase: 'Assigning', expected: 100 },
+        { currentPhase: 'Attesting', expected: 90 },
+    ];
+
+    computeStartOfAttestingTestCases.forEach((test) => {
+        const nextPhaseStart = registry.createType<Moment>('Moment', 100);
+        const assigningDuration = registry.createType<Moment>('Moment', 5);
+        const attestingDuration = registry.createType<Moment>('Moment', 10);
+
+
+        it(`computeStartOfAttesting works in ${test.currentPhase}`, () => {
+            const currentPhase = registry.createType<CeremonyPhaseType>('CeremonyPhaseType', test.currentPhase);
+            expect(
+                computeStartOfAttestingPhase(
+                    currentPhase,
+                    nextPhaseStart,
+                    assigningDuration,
+                    attestingDuration
+                ).toNumber()
+            ).toEqual(test.expected);
+        });
+
     })
 
     it('assignmentFnInverse works', () => {
