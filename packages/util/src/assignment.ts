@@ -6,7 +6,7 @@ import {
     ParticipantIndexType,
     Location,
     parseDegree,
-    Assignment, AssignmentCount, ParticipantRegistration
+    Assignment, AssignmentCount, ParticipantRegistration, MeetupTimeOffsetType
 } from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
 import {Option} from "@polkadot/types-codec";
@@ -165,18 +165,19 @@ export function meetupLocation(meetupIndex: MeetupIndexType, locations: Vec<Loca
 
 /**
  * Get the meetup time for a given location.
- *
- * @param location
- * @param attesting_start
- * @param one_day
  */
-export function meetupTime(location: Location, attesting_start: Moment, one_day: Moment): Moment {
+export function meetupTime(location: Location, attesting_start: Moment, one_day: Moment, offset: MeetupTimeOffsetType): Moment {
     const registry = location.registry;
 
     const per_degree = one_day.toNumber() / 360;
-    const lon_time = parseDegree(location.lon) * per_degree;
 
-    let result = Math.round(attesting_start.toNumber() + one_day.toNumber() / 2 - lon_time);
+    // The meetups start at high sun at 180 degrees and during one day the meetup locations travel
+    // along the globe until the very last meetup happens at high sun at -180 degrees.
+    // So we scale the range 180...-180 to 0...360
+    const lon = Math.abs(parseDegree(location.lon) - 180);
+    const lon_time = lon * per_degree;
+
+    let result = Math.round(attesting_start.toNumber() + lon_time + offset.toNumber());
 
     return registry.createTypeUnsafe('Moment', [result])
 }

@@ -71,9 +71,10 @@ describe('assignment', () => {
 
         const attestingStart = registry.createType('Moment', 0);
         const oneDay = registry.createType('Moment', 360);
+        const meetupOffset = registry.createType('MeetupTimeOffsetType', 0);
 
         expect(
-            meetupTime(location, attestingStart, oneDay).toNumber()
+            meetupTime(location, attestingStart, oneDay, meetupOffset).toNumber()
         ).toEqual(160)
     });
 
@@ -85,9 +86,10 @@ describe('assignment', () => {
 
         const attestingStart = registry.createType('Moment', 0);
         const oneDay = registry.createType('Moment', 178);
+        const meetupOffset = registry.createType('MeetupTimeOffsetType', 0);
 
         expect(
-            meetupTime(location, attestingStart, oneDay).toNumber()
+            meetupTime(location, attestingStart, oneDay,meetupOffset).toNumber()
         ).toEqual(79)
     });
 
