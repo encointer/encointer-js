@@ -63,35 +63,49 @@ describe('assignment', () => {
         expect(meetupLocation(mIndex, locations, params).isNone)
     });
 
-    it('meetupTime works', () => {
-        const location = registry.createType('Location', {
-            lat: stringToDegree("0"), // irrelevant
-            lon: stringToDegree("20")
-        });
+    const meetupTimeTestCases = [
+        {
+            description: "is correct without offset",
+            longitude: "20",
+            offset: 0,
+            expected: 160
+        },
+        {
+            description: "is correct for non-integer results",
+            longitude: "19.5",
+            offset: 0,
+            expected: 161
+        },
+        {
+            description: "is correct for positive offset",
+            longitude: "20",
+            offset: 1,
+            expected: 161
+        },
+        {
+            description: "is correct result for negative offset",
+            longitude: "20",
+            offset: -1,
+            expected: 159
+        }
+    ];
 
+    meetupTimeTestCases.forEach((test) => {
         const attestingStart = registry.createType('Moment', 0);
         const oneDay = registry.createType('Moment', 360);
-        const meetupOffset = registry.createType('MeetupTimeOffsetType', 0);
 
-        expect(
-            meetupTime(location, attestingStart, oneDay, meetupOffset).toNumber()
-        ).toEqual(160)
-    });
+        it(`meetupTime ${test.description}`, () => {
+            const meetupOffset = registry.createType('MeetupTimeOffsetType', test.offset);
+            const location = registry.createType('Location', {
+                lat: stringToDegree("0"), // irrelevant
+                lon: stringToDegree(test.longitude)
+            });
 
-    it('meetupTime works for non-integer results', () => {
-        const location = registry.createType('Location', {
-            lat: stringToDegree("0"), // irrelevant
-            lon: stringToDegree("20")
-        });
-
-        const attestingStart = registry.createType('Moment', 0);
-        const oneDay = registry.createType('Moment', 178);
-        const meetupOffset = registry.createType('MeetupTimeOffsetType', 0);
-
-        expect(
-            meetupTime(location, attestingStart, oneDay,meetupOffset).toNumber()
-        ).toEqual(79)
-    });
+            expect(
+                meetupTime(location, attestingStart, oneDay, meetupOffset).toNumber()
+            ).toEqual(test.expected)
+        })
+    })
 
     it('assignmentFnInverse works', () => {
         let params = registry.createType('AssignmentParams', [113, 78, 23]);
