@@ -53,7 +53,7 @@ export default {
     },
     types: {
         BusinessIdentifier: {
-            community_identifier: 'CommunityIdentifier',
+            communityIdentifier: 'CommunityIdentifier',
             controller: 'AccountId'
         },
         OfferingIdentifier: 'u32',
