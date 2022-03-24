@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community';
-import type { Enum, Option, Struct, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Vec, i32, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Moment } from '@polkadot/types/interfaces/runtime';
@@ -102,6 +102,9 @@ export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Locati
 
 /** @name MeetupIndexType */
 export interface MeetupIndexType extends u64 {}
+
+/** @name MeetupTimeOffsetType */
+export interface MeetupTimeOffsetType extends i32 {}
 
 /** @name ParticipantIndexType */
 export interface ParticipantIndexType extends u64 {}

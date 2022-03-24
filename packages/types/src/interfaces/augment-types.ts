@@ -3,7 +3,7 @@
 
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
 import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
-import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, CommunityReputation, Meetup, MeetupAssignment, MeetupIndexType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType, Reputation } from '@encointer/types/interfaces/ceremony';
+import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, CommunityReputation, Meetup, MeetupAssignment, MeetupIndexType, MeetupTimeOffsetType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType, Reputation } from '@encointer/types/interfaces/ceremony';
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
@@ -592,6 +592,7 @@ declare module '@polkadot/types/types/registry' {
     Meetup: Meetup;
     MeetupAssignment: MeetupAssignment;
     MeetupIndexType: MeetupIndexType;
+    MeetupTimeOffsetType: MeetupTimeOffsetType;
     MemberCount: MemberCount;
     MembershipProof: MembershipProof;
     MessageData: MessageData;
