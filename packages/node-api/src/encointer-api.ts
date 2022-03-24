@@ -182,22 +182,30 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
 }
 
 export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment> {
-    const registry = api.registry;
-
-    const [currentPhase, nextPhaseStart, attestingDuration, assigningDuration] = await Promise.all([
+    const [currentPhase, nextPhaseStart, assigningDuration, attestingDuration] = await Promise.all([
         api.query.encointerScheduler.currentPhase<CeremonyPhaseType>(),
         api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
-        api.query.encointerScheduler.phaseDurations<Moment>('Attesting'),
         api.query.encointerScheduler.phaseDurations<Moment>('Assigning'),
+        api.query.encointerScheduler.phaseDurations<Moment>('Attesting'),
     ])
 
-    if (currentPhase.isAssigning) {
+    return computeStartOfAttestingPhase(currentPhase, nextPhaseStart, assigningDuration, attestingDuration)
+}
+
+export function computeStartOfAttestingPhase(
+    currentPhase: CeremonyPhaseType,
+    nextPhaseStart: Moment,
+    assigningDuration: Moment,
+    attestingDuration: Moment
+): Moment {
+    if (currentPhase.isRegistering) {
+        return nextPhaseStart.add(assigningDuration) as Moment
+    } else if (currentPhase.isAssigning) {
         return nextPhaseStart;
     } else if (currentPhase.isAttesting) {
-        return registry.createType('Moment', nextPhaseStart.sub(attestingDuration))
+        return nextPhaseStart.sub(attestingDuration) as Moment
     } else {
-        // registering phase
-        return registry.createType('Moment', nextPhaseStart.add(assigningDuration))
+        throw `[computeStartOfAttestingPhase] Unknown phase supplied: ${currentPhase}`;
     }
 }
 
