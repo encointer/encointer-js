@@ -25,7 +25,6 @@ import {
     getParticipantIndex,
     getStartOfAttestingPhase,
     getParticipantRegistration,
-    computeStartOfAttestingPhase
 } from './encointer-api';
 import {Moment} from "@polkadot/types/interfaces/runtime";
 
