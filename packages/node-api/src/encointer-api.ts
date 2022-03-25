@@ -4,7 +4,7 @@ import {
     AssignmentCount,
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
-    MeetupIndexType, NominalIncomeType, ParticipantIndexType, ParticipantRegistration,
+    MeetupIndexType, MeetupTimeOffsetType, NominalIncomeType, ParticipantIndexType, ParticipantRegistration,
 } from "@encointer/types";
 import {
     meetupLocation,
@@ -29,6 +29,10 @@ export async function getAssignmentCount(api: ApiPromise, cid: CommunityIdentifi
 
 export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<MeetupIndexType> {
     return api.query.encointerCeremonies.meetupCount<MeetupIndexType>([cid, cIndex]);
+}
+
+export async function getMeetupTimeOffset(api: ApiPromise): Promise<MeetupTimeOffsetType> {
+    return api.query.encointerCeremonies.MeetupTimeOffset<MeetupTimeOffsetType>();
 }
 
 export async function getParticipantRegistration(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<Option<ParticipantRegistration>> {
@@ -165,13 +169,16 @@ export async function getParticipantIndex(api: ApiPromise, cid: CommunityIdentif
 }
 
 export async function getNextMeetupTime(api: ApiPromise, location: Location): Promise<Moment> {
-    const attestingStart = await getStartOfAttestingPhase(api);
+    const [attestingStart, offset] = await Promise.all([
+        getStartOfAttestingPhase(api),
+        getMeetupTimeOffset(api),
+    ]);
     const oneDayT = api.createType<Moment>(
         'Moment',
         api.consts.encointerScheduler.momentsPerDay
     );
 
-    return meetupTime(location, attestingStart, oneDayT)
+    return meetupTime(location, attestingStart, oneDayT, offset)
 }
 
 export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment> {
