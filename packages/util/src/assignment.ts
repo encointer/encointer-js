@@ -6,7 +6,7 @@ import {
     ParticipantIndexType,
     Location,
     parseDegree,
-    Assignment, AssignmentCount, ParticipantRegistration, MeetupTimeOffsetType
+    Assignment, AssignmentCount, ParticipantRegistration, MeetupTimeOffsetType, CeremonyPhaseType
 } from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
 import {Option} from "@polkadot/types-codec";
@@ -180,6 +180,23 @@ export function meetupTime(location: Location, attesting_start: Moment, one_day:
     let result = Math.round(attesting_start.toNumber() + lon_time + offset.toNumber());
 
     return registry.createTypeUnsafe('Moment', [result])
+}
+
+export function computeStartOfAttestingPhase(
+    currentPhase: CeremonyPhaseType,
+    nextPhaseStart: Moment,
+    assigningDuration: Moment,
+    attestingDuration: Moment
+): Moment {
+    if (currentPhase.isRegistering) {
+        return nextPhaseStart.add(assigningDuration) as Moment
+    } else if (currentPhase.isAssigning) {
+        return nextPhaseStart;
+    } else if (currentPhase.isAttesting) {
+        return nextPhaseStart.sub(attestingDuration) as Moment
+    } else {
+        throw `[computeStartOfAttestingPhase] Unknown phase supplied: ${currentPhase}`;
+    }
 }
 
 /**

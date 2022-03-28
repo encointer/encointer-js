@@ -11,7 +11,8 @@ import {
     assignmentFnInverse,
     meetupTime,
     computeMeetupIndex,
-    getRegistration
+    getRegistration,
+    computeStartOfAttestingPhase
 } from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
@@ -182,23 +183,14 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
 }
 
 export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment> {
-    const registry = api.registry;
-
-    const [currentPhase, nextPhaseStart, attestingDuration, assigningDuration] = await Promise.all([
+    const [currentPhase, nextPhaseStart, assigningDuration, attestingDuration] = await Promise.all([
         api.query.encointerScheduler.currentPhase<CeremonyPhaseType>(),
         api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
-        api.query.encointerScheduler.phaseDurations<Moment>('Attesting'),
         api.query.encointerScheduler.phaseDurations<Moment>('Assigning'),
+        api.query.encointerScheduler.phaseDurations<Moment>('Attesting'),
     ])
 
-    if (currentPhase.isAssigning) {
-        return nextPhaseStart;
-    } else if (currentPhase.isAttesting) {
-        return registry.createType('Moment', nextPhaseStart.sub(attestingDuration))
-    } else {
-        // registering phase
-        return registry.createType('Moment', nextPhaseStart.add(assigningDuration))
-    }
+    return computeStartOfAttestingPhase(currentPhase, nextPhaseStart, assigningDuration, attestingDuration)
 }
 
 /**
