@@ -1,51 +1,5 @@
 export default {
-  rpc: {
-    encointer: {
-      getAllCommunities: {
-        description: 'Get the cid and name of all communities as Vec<CidNames>',
-        params: [
-          {
-            name: 'at',
-            type: 'Hash',
-            isOptional: true
-          }
-        ],
-        type: 'Vec<CidName>'
-      },
-      getLocations: {
-        description: 'Get all registered locations of a community',
-        params: [
-          {
-            name: 'cid',
-            type: 'CommunityIdentifier',
-            isOptional: false
-          },
-          {
-            name: 'at',
-            type: 'Hash',
-            isOptional: true
-          }
-        ],
-        type: 'Vec<LocationRpc>'
-      },
-      getAllBalances: {
-        description: 'Get all non-zero balances for account in all communities',
-        params: [
-          {
-            name: 'account',
-            type: 'AccountId',
-            isOptional: false
-          },
-          {
-            name: 'at',
-            type: 'Hash',
-            isOptional: true
-          }
-        ],
-        type: 'Vec<(CommunityIdentifier, BalanceEntry)>'
-      }
-    }
-  },
+  rpc: {},
   types: {
     CommunityIdentifier: {
       geohash: 'GeoHash',

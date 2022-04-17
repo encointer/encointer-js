@@ -14,7 +14,7 @@ export interface BusinessData extends Struct {
 
 /** @name BusinessIdentifier */
 export interface BusinessIdentifier extends Struct {
-  readonly community_identifier: CommunityIdentifier;
+  readonly communityIdentifier: CommunityIdentifier;
   readonly controller: AccountId;
 }
 

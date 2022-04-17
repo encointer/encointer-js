@@ -1,24 +1,5 @@
 export default {
-  rpc: {
-      encointer: {
-          getReputations: {
-              description: 'Get all reputations of an account in any community',
-              params: [
-                  {
-                      name: 'account',
-                      type: 'AccountId',
-                      isOptional: false
-                  },
-                  {
-                      name: 'at',
-                      type: 'Hash',
-                      isOptional: true
-                  }
-              ],
-              type: 'Vec<(CeremonyIndexType, CommunityReputation)>'
-          },
-      },
-  },
+  rpc: {},
   types: {
     CeremonyIndexType: 'u32',
     CeremonyPhaseType: {
