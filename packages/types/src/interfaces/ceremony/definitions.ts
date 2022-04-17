@@ -1,6 +1,6 @@
 export default {
   rpc: {
-      ceremonies: {
+      encointer: {
           getReputations: {
               description: 'Get all reputations of an account in any community',
               params: [

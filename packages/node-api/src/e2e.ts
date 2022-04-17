@@ -191,7 +191,7 @@ describe('node-api', () => {
         describe('ceremonies', () => {
             it('ceremonies.getReputations should return empty vec', async () => {
                 // @ts-ignore
-                const reputations = await api.rpc.ceremonies.getReputations(alice.address);
+                const reputations = await api.rpc.encointer.getReputations(alice.address);
 
                 // console.log(`Reputations: ${JSON.stringify(reputations)}`);
 
@@ -202,7 +202,7 @@ describe('node-api', () => {
         describe('communities', () => {
             it('communities.GetAll should return empty vec', async () => {
                 // @ts-ignore
-                const cidNames = await api.rpc.communities.getAll();
+                const cidNames = await api.rpc.encointer.getAllCommunities();
                 expect(cidNames[0].cid).toStrictEqual(cidMTA);
             });
 
@@ -211,7 +211,7 @@ describe('node-api', () => {
 
                 try {
                     // @ts-ignore
-                    await api.rpc.communities.getLocations(cid)
+                    await api.rpc.encointer.getLocations(cid)
                 } catch (e: any) {
                     expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
@@ -220,7 +220,7 @@ describe('node-api', () => {
 
             it('communities.getAllBalances should return empty vec', async () => {
                 // @ts-ignore
-                const balances = await api.rpc.communities.getAllBalances(alice.address);
+                const balances = await api.rpc.encointer.getAllBalances(alice.address);
 
                 // console.log(`balances: ${JSON.stringify(balances)}`);
 
@@ -237,7 +237,7 @@ describe('node-api', () => {
                 });
 
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getBusinesses(cid.toHex());
+                const result = await api.rpc.encointer.bazaarGetBusinesses(cid.toHex());
                 // console.log(result);
                 expect(result.length).toBe(0);
             });
@@ -246,7 +246,7 @@ describe('node-api', () => {
                 // random cid
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getOfferings(cid);
+                const result = await api.rpc.encointer.bazaarGetOfferings(cid);
                 // console.log(result);
                 expect(result.length).toBe(0);
             });
@@ -258,7 +258,7 @@ describe('node-api', () => {
 
                 const bid = api.createType('BusinessIdentifier', [cid, alice.publicKey]);
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getOfferingsForBusiness(bid);
+                const result = await api.rpc.encoiner.bazaarGetOfferingsForBusiness(bid);
                 // console.log(result);
                 expect(result.length).toBe(0);
             });

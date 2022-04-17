@@ -1,7 +1,7 @@
 export default {
   rpc: {
-    communities: {
-      getAll: {
+    encointer: {
+      getAllCommunities: {
         description: 'Get the cid and name of all communities as Vec<CidNames>',
         params: [
           {

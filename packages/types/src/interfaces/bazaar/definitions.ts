@@ -1,7 +1,7 @@
 export default {
     rpc: {
-        bazaar: {
-            getBusinesses: {
+        encointer: {
+            bazaarGetBusinesses: {
                 description: 'Get all businesses in a Community',
                 params: [
                     {
@@ -17,7 +17,7 @@ export default {
                 ],
                 type: 'Vec<BusinessData>'
             },
-            getOfferings: {
+            bazaarGetOfferings: {
                 description: 'Get all offerings in a Community',
                 params: [
                     {
@@ -33,7 +33,7 @@ export default {
                 ],
                 type: 'Vec<OfferingData>'
             },
-            getOfferingsForBusiness: {
+            bazaarGetOfferingsForBusiness: {
                 description: 'Get all offerings of a business',
                 params: [
                     {
