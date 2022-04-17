@@ -54,6 +54,9 @@ describe('node-api', () => {
                 provider: provider
             });
             console.log(`${chain} wss connected success`);
+            console.log(
+                `rpc-methods ${await  api.rpc.rpc.methods()}`
+            );
         } catch (err) {
             console.log(`connect ${chain} failed`);
             await provider.disconnect();
@@ -188,39 +191,37 @@ describe('node-api', () => {
 
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
-        describe('ceremonies', () => {
-            it('ceremonies.getReputations should return empty vec', async () => {
+        describe('encointer', () => {
+            it('encointer.getReputations should return empty vec', async () => {
                 // @ts-ignore
-                const reputations = await api.rpc.ceremonies.getReputations(alice.address);
+                const reputations = await api.rpc.encointer.getReputations(alice.address);
 
                 // console.log(`Reputations: ${JSON.stringify(reputations)}`);
 
                 expect(reputations.length).toBe(0)
             });
-        });
 
-        describe('communities', () => {
-            it('communities.GetAll should return empty vec', async () => {
+            it('encointer.GetAllCommunities should return empty vec', async () => {
                 // @ts-ignore
-                const cidNames = await api.rpc.communities.getAll();
+                const cidNames = await api.rpc.encointer.getAllCommunities();
                 expect(cidNames[0].cid).toStrictEqual(cidMTA);
             });
 
-            it('communities.getLocations should return error on unknown community', async () => {
+            it('encointer.getLocations should return error on unknown community', async () => {
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
 
                 try {
                     // @ts-ignore
-                    await api.rpc.communities.getLocations(cid)
+                    await api.rpc.encointer.getLocations(cid)
                 } catch (e: any) {
                     expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
 
             });
 
-            it('communities.getAllBalances should return empty vec', async () => {
+            it('encointer.getAllBalances should return empty vec', async () => {
                 // @ts-ignore
-                const balances = await api.rpc.communities.getAllBalances(alice.address);
+                const balances = await api.rpc.encointer.getAllBalances(alice.address);
 
                 // console.log(`balances: ${JSON.stringify(balances)}`);
 
@@ -230,35 +231,35 @@ describe('node-api', () => {
         });
 
         describe('bazaar', () => {
-            it('bazaar.GetBusinesses should return empty vec', async () => {
+            it('encointer.bazaarGetBusinesses should return empty vec', async () => {
                 const cid = api.createType('CommunityIdentifier', {
                     geohash: [0x00, 0x00, 0x00, 0x00, 0x00],
                     digest: [0x00, 0x00, 0x00, 0x00,],
                 });
 
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getBusinesses(cid.toHex());
+                const result = await api.rpc.encointer.bazaarGetBusinesses(cid.toHex());
                 // console.log(result);
                 expect(result.length).toBe(0);
             });
 
-            it('bazaar.GetOfferings should return empty vec', async () => {
+            it('encointer.bazaarGetOfferings should return empty vec', async () => {
                 // random cid
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getOfferings(cid);
+                const result = await api.rpc.encointer.bazaarGetOfferings(cid);
                 // console.log(result);
                 expect(result.length).toBe(0);
             });
 
-            it('bazaar.GetOfferingsForBusiness should return empty vec', async () => {
+            it('encointer.bazaarGetOfferingsForBusiness should return empty vec', async () => {
                 // random cid
                 let cid = communityIdentifierFromString(api.registry, "gbsuv7YXq9G")
                 const alice = keyring.addFromUri('//Alice', {name: 'Alice default'})
 
                 const bid = api.createType('BusinessIdentifier', [cid, alice.publicKey]);
                 // @ts-ignore
-                const result = await api.rpc.bazaar.getOfferingsForBusiness(bid);
+                const result = await api.rpc.encointer.bazaarGetOfferingsForBusiness(bid);
                 // console.log(result);
                 expect(result.length).toBe(0);
             });

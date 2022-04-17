@@ -85,7 +85,7 @@ export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifie
 
     const [locations, assignmentParams] = await Promise.all([
         // @ts-ignore
-        api.rpc.communities.getLocations(cid),
+        api.rpc.encointer.getLocations(cid),
         getAssignment(api, cid, cIndex)
     ]);
 
