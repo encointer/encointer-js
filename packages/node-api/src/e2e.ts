@@ -25,6 +25,7 @@ import {
     getParticipantIndex,
     getStartOfAttestingPhase,
     getParticipantRegistration,
+    getMeetupTimeOffset,
 } from './encointer-api';
 import {Moment} from "@polkadot/types/interfaces/runtime";
 
@@ -134,6 +135,11 @@ describe('node-api', () => {
                 const assignment = await getMeetupIndex(api, cidMTA, testCIndex, participant.address);
                 expect(assignment.toNumber()).toBe(1);
             }
+        });
+
+        it('should get meetupTimeOffset', async () => {
+            const time = await getMeetupTimeOffset(api);
+            expect(time.toNumber()).toBeDefined();
         });
 
         it('should get meetupLocation', async () => {

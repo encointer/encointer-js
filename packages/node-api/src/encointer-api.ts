@@ -33,7 +33,7 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupTimeOffset(api: ApiPromise): Promise<MeetupTimeOffsetType> {
-    return api.query.encointerCeremonies.MeetupTimeOffset<MeetupTimeOffsetType>();
+    return api.query.encointerCeremonies.meetupTimeOffset<MeetupTimeOffsetType>();
 }
 
 export async function getParticipantRegistration(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<Option<ParticipantRegistration>> {
