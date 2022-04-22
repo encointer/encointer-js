@@ -63,11 +63,11 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        // let res = await registerTestCommunity(api, alice);
-        //
-        // if (res.error !== undefined) {
-        //     console.log(`failed to register test community: ${JSON.stringify(res)}`);
-        // }
+        let res = await registerTestCommunity(api, alice);
+
+        if (res.error !== undefined) {
+            console.log(`failed to register test community: ${JSON.stringify(res)}`);
+        }
 
         cidMTA = communityIdentifierFromString(api.registry, testCommunityParams.cid)
         testCIndex = api.createType('CeremonyIndexType', 1)
@@ -75,7 +75,7 @@ describe('node-api', () => {
 
         // cidEDI = communityIdentifierFromString(api.registry, edisonPaulaCommunity.cid)
 
-        // await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
+        await registerAliceBobCharlieAndGoToAttesting(api, cidMTA)
 
     }, 80000);
 
