@@ -72,7 +72,7 @@ describe('node-api', () => {
             const dateTime = new Date(time.toNumber())
 
             // prints 13.08 CET normally.
-            // prints 13.25 CET if we artificially set the meetup time to 0.
+            // prints 13.25 CET if we artificially set the meetupOffset to 0.
             console.log(`datetime: ${dateTime.toLocaleTimeString("en-US")}`);
         });
     });
