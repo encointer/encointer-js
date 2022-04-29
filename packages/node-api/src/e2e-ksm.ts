@@ -71,6 +71,8 @@ describe('node-api', () => {
             const time = await getNextMeetupTime(api, location);
             const dateTime = new Date(time.toNumber())
 
+            // prints 13.08 CET normally.
+            // prints 13.25 CET if we artificially set the meetup time to 0.
             console.log(`datetime: ${dateTime.toLocaleTimeString("en-US")}`);
         });
     });
