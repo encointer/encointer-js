@@ -180,17 +180,11 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
         api.consts.encointerScheduler.momentsPerDay
     );
 
-    // enabling this does change the meetup time
-    // const zeroOffset = api.createType<MeetupTimeOffsetType>(
-    //     'MeetupTimeOffsetType',
-    //     0
-    // );
-
     _log(`getNextMeetupTime: attestingStart: ${attestingStart}`);
     _log(`getNextMeetupTime: meetupTimeOffset: ${offset}`);
     _log(`getNextMeetupTime: momentPerDay: ${oneDayT}`);
 
-    return meetupTime(location, attestingStart, oneDayT, zeroOffset)
+    return meetupTime(location, attestingStart, oneDayT, offset)
 }
 
 export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment> {
