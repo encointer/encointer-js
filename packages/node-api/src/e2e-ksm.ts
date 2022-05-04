@@ -3,14 +3,14 @@ import {options} from "@encointer/node-api/options";
 import {communityIdentifierFromString} from "../../util/src";
 import {
     CeremonyPhaseType,
-    CommunityIdentifier, stringToDegree,
+    CommunityIdentifier,
+    stringToDegree,
 } from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
-    getStartOfAttestingPhase,
-    getMeetupTimeOffset, getNextMeetupTime,
+    getMeetupTimeOffset,
+    getNextMeetupTime,
 } from './encointer-api';
-import {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('node-api', () => {
     let api: ApiPromise;
@@ -28,7 +28,7 @@ describe('node-api', () => {
             });
             console.log(`${chain} wss connected success`);
             console.log(
-                `rpc-methods ${await  api.rpc.rpc.methods()}`
+                `rpc-methods ${await api.rpc.rpc.methods()}`
             );
         } catch (err) {
             console.log(`connect ${chain} failed`);
