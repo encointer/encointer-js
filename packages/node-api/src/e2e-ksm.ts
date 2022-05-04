@@ -49,16 +49,6 @@ describe('node-api', () => {
             expect(result).toBeDefined();
         });
 
-        it('should getAttestingStart', async () => {
-            const [attestingStart, nextPhase, assigningDuration] = await Promise.all([
-                getStartOfAttestingPhase(api),
-                api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
-                api.query.encointerScheduler.phaseDurations<Moment>('Assigning')
-            ]);
-
-            expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() + assigningDuration.toNumber());
-        });
-
         it('should getMeetupTimeWithOffset', async () => {
             // @ts-ignore
             const locationsRpc = await api.rpc.encointer.getLocations(cidLeu);
@@ -71,8 +61,6 @@ describe('node-api', () => {
             const time = await getNextMeetupTime(api, location);
             const dateTime = new Date(time.toNumber())
 
-            // prints 13.08 CET normally.
-            // prints 13.25 CET if we artificially set the meetupOffset to 0.
             console.log(`datetime: ${dateTime.toLocaleTimeString("en-US")}`);
         });
     });
