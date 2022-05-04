@@ -8,9 +8,7 @@ on:
 
 jobs:
   no-tee:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -37,3 +35,14 @@ jobs:
 
       - name: Run integration tests
         run: yarn test:integration
+
+  kusama-parachain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run yarn install
+        run: yarn install
+
+      - name: Run integration tests
+        run: yarn test:ksm
