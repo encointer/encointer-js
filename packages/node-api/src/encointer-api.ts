@@ -174,10 +174,15 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
         getStartOfAttestingPhase(api),
         getMeetupTimeOffset(api),
     ]);
+
     const oneDayT = api.createType<Moment>(
         'Moment',
         api.consts.encointerScheduler.momentsPerDay
     );
+
+    _log(`getNextMeetupTime: attestingStart: ${attestingStart}`);
+    _log(`getNextMeetupTime: meetupTimeOffset: ${offset}`);
+    _log(`getNextMeetupTime: momentPerDay: ${oneDayT}`);
 
     return meetupTime(location, attestingStart, oneDayT, offset)
 }
@@ -253,4 +258,8 @@ function bootstrapperOrReputableQuery(
         const i = participantIndex(api.registry, pIndex.toNumber() - assigned.bootstrappers.toNumber() + 1);
         return api.query.encointerCeremonies.reputableRegistry<AccountId>([cid, cIndex], i);
     }
+}
+
+function _log(msg: String) {
+    console.log(`[encointer-js:api] ${msg}`)
 }
