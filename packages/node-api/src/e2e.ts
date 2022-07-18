@@ -220,7 +220,7 @@ describe('node-api', () => {
                     // @ts-ignore
                     await api.rpc.encointer.getLocations(cid)
                 } catch (e: any) {
-                    expect(e.toString()).toBe("Error: 3: Offchain storage not found: Key [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
+                    expect(e.toString()).toBe("Error: 3: Offchain storage not found: [99, 105, 100, 115, 103, 98, 115, 117, 118, 255, 255, 255, 255]");
                 }
 
             });
