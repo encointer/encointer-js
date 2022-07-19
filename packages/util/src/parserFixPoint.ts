@@ -28,6 +28,11 @@ export const parserFixPoint: ParserFixPointFactory = function (upper, lower) {
   const len = assertLength(upper, lower);
   return (raw: BN, precision: number = lower): number => {
     assert(raw.bitLength() <= len, 'Bit length is not equal to ' + len);
+
+    console.log(raw)
+    raw = raw.fromTwos(len)
+    console.log(raw)
+
     const bits: string = raw.toString(2, len);
     const lowerBits: string = (lower > bits.length
       ? bits.padStart(lower, '0')
