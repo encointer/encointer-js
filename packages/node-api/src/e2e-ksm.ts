@@ -35,7 +35,7 @@ describe('node-api', () => {
             await provider.disconnect();
         }
 
-        cidLeu = communityIdentifierFromString(api.registry, "u0qj92QX9PQ")
+        cidLeu = communityIdentifierFromString(api.registry, "u0qj9QqA2Q")
     }, 80000);
 
     afterAll(async () => {
