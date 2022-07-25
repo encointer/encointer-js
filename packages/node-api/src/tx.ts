@@ -75,7 +75,8 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
                         try {
                             const mod = dispatchError.asModule;
                             const error = api.registry.findMetaError(
-                                new Uint8Array([mod.index.toNumber(), mod.error.toNumber()])
+                                // @ts-ignore
+                                new Uint8Array([mod.index.toNumber(), mod.error[0]])
                             );
 
                             message = `${error.section}.${error.name}`;

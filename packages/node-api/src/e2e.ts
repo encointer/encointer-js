@@ -99,6 +99,16 @@ describe('node-api', () => {
 
             expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() - attestingDuration.toNumber());
         });
+
+        it("should parse DispatchErrors correcly", async () => {
+            const tx = api.tx.sudo.sudo(api.tx.encointerScheduler.nextPhase());
+            const bob = keyring.addFromUri("//Bob", { name: "Bob default" });
+            // this will fail because Bob is no sudoer
+            let result = await submitAndWatchTx(api, bob, tx);
+            if (result.error !== undefined) {
+                expect(result.error).toEqual("sudo.RequireSudo");
+            }
+        }, 80000);
     });
 
     describe('assignment', () => {
