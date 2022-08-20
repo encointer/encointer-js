@@ -17,5 +17,7 @@ jobs:
       run: yarn install
     - name: Build
       run: yarn build
+    - name: generate types
+      run: yarn generate:types
     - name: Run tests
       run: yarn test
