@@ -11,7 +11,7 @@ Encointer JavaScript API monorepo
 
 # Installation
 
-```js
+```bash
 yarn add @encointer/node-api @encointer/worker-api
 ```
 
@@ -59,6 +59,7 @@ console.log('Bob owns:', balance);
 
 ```
 // will prompt you to select version to increase, e.g. major, minor, patch etc. (Creates git tag!)
+// Note: `lerna version` will use the `version` hook defined in the root package.json. 
 lerna version --force-publish
 
 // apply changes from package.json to */build/package.json 
@@ -69,7 +70,3 @@ lerna publish from-package --contents build
 ```
 
 The lerna commands have been added as scripts to the `package.json`.
-
-**WARN** When the packages are linked in the `js_encointer_service` and yarn install is run, it will create a 
-`node_modules` folder inside the build folder. Do NOT publish this one. However, with the above sequence, this will be
-fine, as `yarn build` cleans the build directory first.
