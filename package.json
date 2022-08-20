@@ -1,8 +1,5 @@
 {
   "bugs": "https://github.com/encointer/encointer-js/issues",
-  "engines": {
-    "yarn": "^1.22.0"
-  },
   "homepage": "https://github.com/encointer/encointer-js#readme",
   "license": "Apache-2.0",
   "name": "root",
