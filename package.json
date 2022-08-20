@@ -25,6 +25,7 @@
     "@polkadot/dev": "^0.64.24",
     "@polkadot/types": "^7.1.1",
     "@types/jest": "^27.0.3",
+    "@types/node": "^18.7.8",
     "jest": "^27.5.1",
     "lerna": "^4.0.0",
     "ts-node": "^10.9.1",
