@@ -13,3 +13,11 @@ lerna-debug.log*
 
 # Dependency directories
 node_modules/
+
+# yarn 2 zero-install mode.
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
