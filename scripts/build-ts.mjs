@@ -914,8 +914,6 @@ async function main () {
     execSync('yarn build:extra');
   }
 
-  console.log(`Package: ${pkg}`);
-
   const repoPath = pkg.repository.url
     .split('https://github.com/')[1]
     .split('.git')[0];
