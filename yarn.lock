@@ -1744,7 +1744,7 @@ __metadata:
     "@polkadot/types": ^7.1.1
     "@polkadot/util": ^8.0.5
     ts-node: ^9.1.1
-    typescript: ^4.2.4
+    typescript: ^4.5.4
   languageName: unknown
   linkType: soft
 
@@ -14585,7 +14585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.5.4, typescript@npm:^4.2.4, typescript@npm:^4.5.4":
+"typescript@npm:4.5.4, typescript@npm:^4.5.4":
   version: 4.5.4
   resolution: "typescript@npm:4.5.4"
   bin:
@@ -14605,7 +14605,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.5.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.2.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.5.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
   version: 4.5.4
   resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=f456af"
   bin:
