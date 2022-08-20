@@ -18,10 +18,10 @@
     "generate:types": "cd packages/types && yarn generate:defs"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.14.0",
-    "@babel/register": "^7.13.16",
-    "@babel/runtime": "^7.14.0",
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/register": "^7.18.9",
+    "@babel/runtime": "^7.18.9",
     "@polkadot/dev": "^0.64.24",
     "@polkadot/types": "^7.1.1",
     "@types/jest": "^27.0.3",
