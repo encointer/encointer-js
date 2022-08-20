@@ -730,13 +730,13 @@ function lintInput (dir) {
     loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
       // Sadly, we have people copying and just changing all the headers without giving attribution -
       // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
-      if (n === 0 && (
-        !/\/\/ Copyright .* @polkadot\//.test(l) &&
-        !/\/\/ Auto-generated via `/.test(l) &&
-        !/#!\/usr\/bin\/env node/.test(l)
-      )) {
-        return createError(full, l, n, 'Invalid header definition');
-      }
+      // if (n === 0 && (
+      //   !/\/\/ Copyright .* @polkadot\//.test(l) &&
+      //   !/\/\/ Auto-generated via `/.test(l) &&
+      //   !/#!\/usr\/bin\/env node/.test(l)
+      // )) {
+      //   return createError(full, l, n, 'Invalid header definition');
+      // }
 
       return null;
     }, true)
@@ -812,9 +812,9 @@ function lintDependencies (dir, locals) {
           } else if (local) {
             const ref = local[0];
 
-            if (!(isTest && hasDevConfig ? devRefs : references).includes(ref)) {
-              return createError(full, l, n, `../${ref} not included in ${(isTest && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.build.json')} references`);
-            }
+            // if (!(isTest && hasDevConfig ? devRefs : references).includes(ref)) {
+            //   return createError(full, l, n, `../${ref} not included in ${(isTest && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.build.json')} references`);
+            // }
 
             if (!refsFound.includes(ref)) {
               refsFound.push(ref);
