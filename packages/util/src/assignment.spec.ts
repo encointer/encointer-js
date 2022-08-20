@@ -1,6 +1,6 @@
 'use strict';
 
-import {TypeRegistry, u64} from "@polkadot/types";
+import {TypeRegistry, u64, Vec} from "@polkadot/types";
 import {RegistryTypes} from "@polkadot/types/types";
 import {options as encointerOptions} from "@encointer/node-api";
 import {
@@ -15,9 +15,9 @@ import {
 } from "@encointer/util/assignment";
 import {
     AssignmentParams, CeremonyPhaseType,
-    MeetupIndexType,
+    MeetupIndexType, Location,
     ParticipantIndexType,
-    stringToDegree
+    stringToDegree, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
 } from "@encointer/types";
 import assert from "assert";
 import * as testCeremonies from "./test-ceremony-data";
@@ -32,34 +32,34 @@ describe('assignment', () => {
     });
 
     it('assignmentFn works', () => {
-        const pIndex = registry.createType('ParticipantIndexType', 6);
-        const params = registry.createType('AssignmentParams', [4, 5, 3]);
+        const pIndex = registry.createType<ParticipantIndexType>('ParticipantIndexType', 6);
+        const params = registry.createType<AssignmentParams>('AssignmentParams', [4, 5, 3]);
         const assignmentCount = registry.createType('u64', 5);
 
         expect(assignmentFn(pIndex, params, assignmentCount).toNumber()).toEqual(1)
     });
 
     it('meetupIndex works', () => {
-        const pIndex = registry.createType('ParticipantIndexType', 6);
-        const params = registry.createType('AssignmentParams', [4, 5, 3]);
-        const mIndex = registry.createType('MeetupIndexType', 5);
+        const pIndex = registry.createType<ParticipantIndexType>('ParticipantIndexType', 6);
+        const params = registry.createType<AssignmentParams>('AssignmentParams', [4, 5, 3]);
+        const mIndex = registry.createType<MeetupIndexType>('MeetupIndexType', 5);
 
         expect(meetupIndex(pIndex, params, mIndex).toNumber()).toEqual(2)
     });
 
     it('meetupLocation works', () => {
-        const mIndex = registry.createType('MeetupIndexType', 6);
-        const params = registry.createType('AssignmentParams', [4, 5, 3]);
-        const l = registry.createType('Location', {});
-        const locations = registry.createType('Vec<Location>', [l, l]);
+        const mIndex = registry.createType<MeetupIndexType>('MeetupIndexType', 6);
+        const params = registry.createType<AssignmentParams>('AssignmentParams', [4, 5, 3]);
+        const l = registry.createType<Location>('Location', {});
+        const locations = registry.createType<Vec<Location>>('Vec<Location>', [l, l]);
 
         expect(meetupLocation(mIndex, locations, params).unwrap()).toEqual(l)
     });
 
     it('meetup_location returns none if locations empty', () => {
-        const mIndex = registry.createType('MeetupIndexType', 6);
-        const params = registry.createType('AssignmentParams', [4, 5, 3]);
-        const locations = registry.createType('Vec<Location>', []);
+        const mIndex = registry.createType<MeetupIndexType>('MeetupIndexType', 6);
+        const params = registry.createType<AssignmentParams>('AssignmentParams', [4, 5, 3]);
+        const locations = registry.createType<Vec<Location>>('Vec<Location>', []);
 
         expect(meetupLocation(mIndex, locations, params).isNone)
     });
@@ -96,8 +96,8 @@ describe('assignment', () => {
         const oneDay = registry.createType('Moment', 360);
 
         it(`meetupTime ${test.description}`, () => {
-            const meetupOffset = registry.createType('MeetupTimeOffsetType', test.offset);
-            const location = registry.createType('Location', {
+            const meetupOffset = registry.createType<MeetupTimeOffsetType>('MeetupTimeOffsetType', test.offset);
+            const location = registry.createType<Location>('Location', {
                 lat: stringToDegree("0"), // irrelevant
                 lon: stringToDegree(test.longitude)
             });
@@ -135,19 +135,19 @@ describe('assignment', () => {
     })
 
     it('assignmentFnInverse works', () => {
-        let params = registry.createType('AssignmentParams', [113, 78, 23]);
-        let pCount = registry.createType('ParticipantIndexType', 118);
-        let n = registry.createType('ParticipantIndexType', 12);
+        let params = registry.createType<AssignmentParams>('AssignmentParams', [113, 78, 23]);
+        let pCount = registry.createType<ParticipantIndexType>('ParticipantIndexType', 118);
+        let n = registry.createType<ParticipantIndexType>('ParticipantIndexType', 12);
         checkAssignment(pCount, params, n);
 
-        params = registry.createType('AssignmentParams', [19, 1, 1]);
-        pCount = registry.createType('ParticipantIndexType', 20);
-        n = registry.createType('ParticipantIndexType', 2);
+        params = registry.createType<AssignmentParams>('AssignmentParams', [19, 1, 1]);
+        pCount = registry.createType<ParticipantIndexType>('ParticipantIndexType', 20);
+        n = registry.createType<ParticipantIndexType>('ParticipantIndexType', 2);
         checkAssignment(pCount, params, n);
 
-        params = registry.createType('AssignmentParams', [7, 1, 1]);
-        pCount = registry.createType('ParticipantIndexType', 10);
-        n = registry.createType('ParticipantIndexType', 1);
+        params = registry.createType<AssignmentParams>('AssignmentParams', [7, 1, 1]);
+        pCount = registry.createType<ParticipantIndexType>('ParticipantIndexType', 10);
+        n = registry.createType<ParticipantIndexType>('ParticipantIndexType', 1);
         checkAssignment(pCount, params, n);
     });
 
@@ -158,11 +158,11 @@ describe('assignment', () => {
     });
 
     it('computeMeetupIndex returns 0 for unassigned participant', () => {
-        const pIndex0 = registry.createType('ParticipantIndexType', 0);
-        const pIndex6 = registry.createType('ParticipantIndexType', 6);
-        let meetupCount = registry.createType('MeetupIndexType', 1);
-        let assignment = registry.createType('Assignment');
-        let assignmentCount = registry.createType('AssignmentCount', [3, 3, 3, 3]);
+        const pIndex0 = registry.createType<ParticipantIndexType>('ParticipantIndexType', 0);
+        const pIndex6 = registry.createType<ParticipantIndexType>('ParticipantIndexType', 6);
+        let meetupCount = registry.createType<MeetupIndexType>('MeetupIndexType', 1);
+        let assignment = registry.createType<Assignment>('Assignment');
+        let assignmentCount = registry.createType<AssignmentCount>('AssignmentCount', [3, 3, 3, 3]);
 
         const compute =
             (pindexes: ParticipantIndexes) => computeMeetupIndex(getRegistration(pindexes).unwrap(), assignment, assignmentCount, meetupCount)
@@ -186,7 +186,7 @@ describe('assignment', () => {
 
     ceremonyTestCases.forEach((ceremonyTestCase) => {
         it(`creates correct CommunityCeremonyStats for ${ceremonyTestCase.communityCeremony} `, () => {
-            const testCeremony = registry.createType('CommunityCeremonyStats', ceremonyTestCase)
+            const testCeremony = registry.createType<CommunityCeremonyStats>('CommunityCeremonyStats', ceremonyTestCase)
 
             expect(JSON.stringify(testCeremony)).toBe(JSON.stringify(ceremonyTestCase))
         });
@@ -200,11 +200,11 @@ describe('assignment', () => {
                 // @ts-ignore
                 it(`test computeMeetupIndex for ceremony ${ceremonyTestCase.communityCeremony}: for [mIndex, pIndex]: [${meetup.index}, ${registration[1].index}]`, () => {
 
-                    const testCeremony = registry.createType('CommunityCeremonyStats', ceremonyTestCase)
+                    const testCeremony = registry.createType<CommunityCeremonyStats>('CommunityCeremonyStats', ceremonyTestCase)
 
                     // console.log(`testCommunity: ${JSON.stringify(testCeremony)}`);
 
-                    const reg = registry.createType('ParticipantRegistration', registration[1]);
+                    const reg = registry.createType<ParticipantRegistration>('ParticipantRegistration', registration[1]);
 
                     expect(computeMeetupIndex(reg,
                             testCeremony.assignment,
