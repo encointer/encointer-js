@@ -96,7 +96,7 @@ function adjustJsPath (pkgCwd, pkgJson, dir, f, isDeclare) {
 }
 
 function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
-  if (f.startsWith('@polkadot')) {
+  if (f.startsWith('@encointer')) {
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
     const denoPkg = denoCreateName(thisPkg);
@@ -416,9 +416,9 @@ function tweakCjsPaths (buildDir) {
         fs
           .readFileSync(thisPath, 'utf8')
           .replace(
-            // require("@polkadot/$1/$2")
-            /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
-            'require("@polkadot/$1/cjs/$2")'
+            // require("@encointer/$1/$2")
+            /require\("@encointer\/([a-z-]*)\/(.*)"\)/g,
+            'require("@encointer/$1/cjs/$2")'
           )
       );
     });
