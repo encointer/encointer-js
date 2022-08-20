@@ -2,6 +2,14 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/// This file is almost identical to the one defined in `@polkadot-dev`. It is intended to normalize the publications
+/// of `@polkadot` packages. However, performs some code quality checks, which are universally useful. This script does:
+///
+/// * build the sources with`CommonJS` and `ESM` output
+/// * normalize the package.json's
+/// * lint the dependencies; make sure every import is indeed declared as a dependency.
+/// * Makes the output compatible with the new `deno` runtime: https://blog.logrocket.com/what-is-deno/
+
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
