@@ -2,8 +2,11 @@
 # generated package info files
 **/packageInfo.ts
 
+# build output
+**/build/
+**/build-cjs/
+
 # Logs
-build/
 logs
 *.log
 npm-debug.log*
