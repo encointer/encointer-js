@@ -5,6 +5,7 @@ import {
     CeremonyPhaseType,
     CommunityIdentifier,
     stringToDegree,
+    Location,
 } from "../../types/src";
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
@@ -53,7 +54,7 @@ describe('node-api', () => {
             // @ts-ignore
             const locationsRpc = await api.rpc.encointer.getLocations(cidLeu);
 
-            const location = api.createType("Location", {
+            const location = api.createType<Location>("Location", {
                 lat: stringToDegree(locationsRpc[0].lat),
                 lon: stringToDegree(locationsRpc[0].lon),
             })

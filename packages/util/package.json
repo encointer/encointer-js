@@ -1,29 +1,30 @@
 {
-  "name": "@encointer/util",
-  "version": "0.8.7",
-  "description": "Encointer JS utilities",
   "author": "Encointer authors & contributors",
-  "homepage": "https://github.com/encointer/encointer-js",
+  "bugs": "https://github.com/encointer/encointer-js/issues",
+  "description": "Encointer JS utilities",
+  "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/util#readme",
   "license": "MIT",
-  "main": "index.js",
-  "types": "./index.d.ts",
-  "type": "module",
+  "name": "@encointer/util",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
   "repository": {
+    "directory": "packages/util",
     "type": "git",
-    "url": "git+https://github.com/encointer/encointer-js.git"
+    "url": "https://github.com/encointer/encointer-js.git"
   },
-  "bugs": {
-    "url": "https://github.com/encointer/encointer-js/issues"
-  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./index.d.ts",
+  "version": "0.9.0-alpha.3",
+  "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.18.9",
-    "@polkadot/util": "^8.0.5",
-    "@types/bn.js": "^4.11.6",
+    "@polkadot/util": "^10.1.4",
+    "@polkadot/util-crypto": "^10.1.4",
+    "@types/bn.js": "^5.1.0",
     "assert": "^2.0.0",
-    "bn.js": "^4.12.0"
+    "bn.js": "^5.2.1"
   }
 }

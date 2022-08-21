@@ -94,7 +94,7 @@ export async function getMeetupLocation(api: ApiPromise, cid: CommunityIdentifie
 
 export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, meetupIndex: MeetupIndexType): Promise<Vec<AccountId>> {
     let registry = api.registry;
-    const mIndexZeroBased = registry.createType('MeetupIndexType', meetupIndex.toNumber() - 1);
+    const mIndexZeroBased = registry.createType<MeetupIndexType>('MeetupIndexType', meetupIndex.toNumber() - 1);
 
     const [meetupCount, assignmentParams, assignedCount] = await Promise.all([
         getMeetupCount(api, cid, cIndex),
@@ -204,11 +204,11 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
 export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
     // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
     const demurrageCommunity = await api.query.encointerBalances.demurragePerBlock<FixedI64F64>(cid)
-        .then((dc) => api.createType('Demurrage', dc.bits))
+        .then((dc) => api.createType<Demurrage>('Demurrage', dc.bits))
 
     if (demurrageCommunity.eq(0)) {
         const demurrageDefault = (api.consts.encointerBalances.defaultDemurrage as FixedI64F64).bits;
-        return api.createType('Demurrage', demurrageDefault);
+        return api.createType<Demurrage>('Demurrage', demurrageDefault);
     } else {
         return demurrageCommunity;
     }
@@ -220,8 +220,8 @@ export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): P
 export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifier): Promise<NominalIncomeType> {
     // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
     const [incomeCommunity, incomeDefault] = await Promise.all([
-        api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType('NominalIncomeType', cr.bits)),
-        api.query.encointerCeremonies.ceremonyReward<FixedI64F64>().then((cr) => api.createType('NominalIncomeType', cr.bits))
+        api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits)),
+        api.query.encointerCeremonies.ceremonyReward<FixedI64F64>().then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits))
     ])
 
     if (incomeCommunity.eq(0)) {

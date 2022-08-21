@@ -4,6 +4,7 @@ import {communityIdentifierFromString, communityIdentifierToString} from ".";
 import {TypeRegistry} from "@polkadot/types";
 import { options as encointerOptions} from "@encointer/node-api";
 import {RegistryTypes} from "@polkadot/types/types";
+import {CommunityIdentifier} from "@encointer/types";
 
 describe('cidUtils', () => {
     const cidStr = "gbsuv7YXq9G";
@@ -24,7 +25,7 @@ describe('cidUtils', () => {
     });
 
     it('should correctly format CommunityIdentifier', () => {
-        const cid = registry.createType('CommunityIdentifier', cidRaw);
+        const cid = registry.createType<CommunityIdentifier>('CommunityIdentifier', cidRaw);
 
         expect(
             communityIdentifierToString(cid)
