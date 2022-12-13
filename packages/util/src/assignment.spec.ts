@@ -108,6 +108,20 @@ describe('assignment', () => {
         })
     })
 
+    it(`meetupTime yields correct result in realworld scenario`, () => {
+        const attestingStart = registry.createType('Moment', "1671408000000"); // Mon Dec 19 2022 00:00:00 UTC
+        const oneDay = registry.createType('Moment', "86400000");
+        const meetupOffset = registry.createType('MeetupTimeOffsetType', "-2100000"); // 35min
+        const location = registry.createType('Location', {
+            lat: stringToDegree("0"), // irrelevant
+            lon: stringToDegree("-88.15") // greenbay
+        });
+
+        expect(
+            Math.abs(meetupTime(location, attestingStart, oneDay, meetupOffset).toNumber() - 1671470220000) // Mon Dec 19 2022 17:17:00 UTC
+        ).toBeLessThan(60000)
+    })
+
     const computeStartOfAttestingTestCases = [
         { currentPhase: 'Registering', expected: 105},
         { currentPhase: 'Assigning', expected: 100 },
