@@ -74,7 +74,7 @@ export default {
                         isOptional: true
                     }
                 ],
-                type: 'Vec<BusinessData>'
+                type: 'Vec<Business>'
             },
             bazaarGetOfferings: {
                 description: 'Get all offerings in a Community',
