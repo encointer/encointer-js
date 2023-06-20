@@ -64,7 +64,6 @@ describe('node-api', () => {
         }
 
         let res = await registerTestCommunity(api, alice);
-
         if (res.error !== undefined) {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
@@ -296,9 +295,7 @@ function registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<IS
     // (location, bootstrappers, metadata, demurrage, nominal_income)
     const params = [location, bootstrappers, meta, null, null];
 
-    const tx = api.tx.sudo.sudo(
-        api.tx.encointerCommunities.newCommunity(...params)
-    );
+    const tx = api.tx.encointerCommunities.newCommunity(...params);
 
     return submitAndWatchTx(api, signer, tx);
 }
