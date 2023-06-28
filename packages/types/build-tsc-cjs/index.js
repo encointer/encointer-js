@@ -26,28 +26,28 @@ const encointer = {
 exports.default = encointer;
 var types_1 = require("@polkadot/types");
 Object.defineProperty(exports, "createType", { enumerable: true, get: function () { return types_1.createType; } });
-const src_1 = require("@encointer/util/src");
+const index_js_1 = require("@encointer/util/index.js");
 /**
  * Converts a JS number to a fixed-point BN
  */
-exports.toEncointerBalance = src_1.toI64F64;
+exports.toEncointerBalance = index_js_1.toI64F64;
 /**
  * Converts a fixed-point string representation to a fixed-point BN
  */
-exports.stringToEncointerBalance = src_1.stringToI64F64;
+exports.stringToEncointerBalance = index_js_1.stringToI64F64;
 /**
  * Parse encointer balance from a fixed-point BN to a JS number
  */
-exports.parseEncointerBalance = src_1.parseI64F64;
+exports.parseEncointerBalance = index_js_1.parseI64F64;
 /**
  * Converts a JS number to a fixed-point BN
  */
-exports.toDegree = src_1.toI64F64;
+exports.toDegree = index_js_1.toI64F64;
 /**
  * Converts a fixed-point string representation to a fixed-point BN
  */
-exports.stringToDegree = src_1.stringToI64F64;
+exports.stringToDegree = index_js_1.stringToI64F64;
 /**
  * Parse a fixed-point BN to a JS number
  */
-exports.parseDegree = src_1.parseI64F64;
+exports.parseDegree = index_js_1.parseI64F64;

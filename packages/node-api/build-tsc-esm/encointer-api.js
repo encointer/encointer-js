@@ -1,5 +1,5 @@
-import { meetupLocation, assignmentFnInverse, meetupTime, computeMeetupIndex, getRegistration, computeStartOfAttestingPhase } from "@encointer/util/src/assignment.js";
-import { IndexRegistry } from "@encointer/node-api/src/interface.js";
+import { meetupLocation, assignmentFnInverse, meetupTime, computeMeetupIndex, getRegistration, computeStartOfAttestingPhase } from "@encointer/util/assignment.js";
+import { IndexRegistry } from "@encointer/node-api/interface.js";
 export async function getAssignment(api, cid, cIndex) {
     return api.query["encointerCeremonies"]["assignments"]([cid, cIndex]);
 }

@@ -27,6 +27,9 @@
     "test:ksm": "ts-node node_modules/jest/bin/jest.js --config jest.config-integration-ksm.js",
     "version": "yarn install && git stage yarn.lock"
   },
+  "dependencies": {
+    "jest-ts-webcompat-resolver": "^1.0.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.10",
@@ -45,8 +48,5 @@
   },
   "resolutions": {
     "typescript": "^5.1.3"
-  },
-  "dependencies": {
-    "jest-ts-webcompat-resolver": "^1.0.0"
   }
 }

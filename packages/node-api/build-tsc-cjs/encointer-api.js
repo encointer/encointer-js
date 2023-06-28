@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCeremonyIncome = exports.getDemurrage = exports.getStartOfAttestingPhase = exports.getNextMeetupTime = exports.getParticipantIndex = exports.getMeetupParticipants = exports.getMeetupLocation = exports.getMeetupIndex = exports.getParticipantRegistration = exports.getMeetupTimeOffset = exports.getMeetupCount = exports.getAssignmentCount = exports.getAssignment = void 0;
-const assignment_js_1 = require("@encointer/util/src/assignment.js");
-const interface_js_1 = require("@encointer/node-api/src/interface.js");
+const assignment_js_1 = require("@encointer/util/assignment.js");
+const interface_js_1 = require("@encointer/node-api/interface.js");
 async function getAssignment(api, cid, cIndex) {
     return api.query["encointerCeremonies"]["assignments"]([cid, cIndex]);
 }
