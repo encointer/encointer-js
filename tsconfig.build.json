@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "..",
+    "outDir": "./build",
+    "rootDir": "./src"
+  },
+  "exclude": [
+    "**/mod.ts",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ],
+  "references": []
+}
