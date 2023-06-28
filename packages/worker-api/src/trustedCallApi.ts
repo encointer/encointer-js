@@ -1,15 +1,15 @@
-import { IEncointerWorker, PubKeyPinPair } from "./interface"
-import {
+import type { IEncointerWorker, PubKeyPinPair } from "./interface.js"
+import type {
   BalanceTransferArgs, CommunityIdentifier,
   GrantReputationArgs,
   RegisterAttestationsArgs,
   RegisterParticipantArgs,
   TrustedCallSigned
-} from "@encointer/types";
-import { KeyringPair } from "@polkadot/keyring/types";
+} from "@encointer/types/index.js";
+import type { KeyringPair } from "@polkadot/keyring/types";
 import type { u32 } from "@polkadot/types";
 import bs58 from "bs58";
-import { toAccount } from "@encointer/util/common";
+import { toAccount } from "@encointer/util/common.js";
 
 export type TrustedCallArgs = (BalanceTransferArgs | RegisterParticipantArgs | RegisterAttestationsArgs | GrantReputationArgs);
 

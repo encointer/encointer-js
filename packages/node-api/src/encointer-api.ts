@@ -1,11 +1,11 @@
 import {ApiPromise} from "@polkadot/api";
-import {
+import type {
     Assignment,
     AssignmentCount,
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
     MeetupIndexType, MeetupTimeOffsetType, NominalIncomeType, ParticipantIndexType, ParticipantRegistration,
-} from "@encointer/types";
+} from "@encointer/types/index.js";
 import {
     meetupLocation,
     assignmentFnInverse,
@@ -13,27 +13,28 @@ import {
     computeMeetupIndex,
     getRegistration,
     computeStartOfAttestingPhase
-} from "@encointer/util/assignment";
+} from "@encointer/util/src/assignment.js";
 import {Vec} from "@polkadot/types";
-import {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
-import {Registry} from "@polkadot/types/types";
-import {IndexRegistry, IParticipantIndexQuery} from "@encointer/node-api/interface";
+import type {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
+import type {Registry} from "@polkadot/types/types";
+import {IndexRegistry} from "@encointer/node-api/src/interface.js";
+import type {IParticipantIndexQuery} from "@encointer/node-api/src/interface.js";
 import {Option} from "@polkadot/types-codec";
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
-    return api.query.encointerCeremonies.assignments<Assignment>([cid, cIndex]);
+    return api.query["encointerCeremonies"]["assignments"]<Assignment>([cid, cIndex]);
 }
 
 export async function getAssignmentCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<AssignmentCount> {
-    return api.query.encointerCeremonies.assignmentCounts<AssignmentCount>([cid, cIndex]);
+    return api.query["encointerCeremonies"]["assignmentCounts"]<AssignmentCount>([cid, cIndex]);
 }
 
 export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<MeetupIndexType> {
-    return api.query.encointerCeremonies.meetupCount<MeetupIndexType>([cid, cIndex]);
+    return api.query["encointerCeremonies"]["meetupCount"]<MeetupIndexType>([cid, cIndex]);
 }
 
 export async function getMeetupTimeOffset(api: ApiPromise): Promise<MeetupTimeOffsetType> {
-    return api.query.encointerCeremonies.meetupTimeOffset<MeetupTimeOffsetType>();
+    return api.query["encointerCeremonies"]["meetupTimeOffset"]<MeetupTimeOffsetType>();
 }
 
 export async function getParticipantRegistration(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): Promise<Option<ParticipantRegistration>> {
@@ -119,7 +120,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
     )
         .filter((pIndex) => pIndex.toNumber() < assignedCount.endorsees.toNumber())
         .map((pIndex) =>
-            api.query.encointerCeremonies.endorseeRegistry<AccountId>(
+            api.query["encointerCeremonies"]["endorseeRegistry"]<AccountId>(
                 [cid, cIndex],
                 participantIndex(api.registry, pIndex.toNumber() + 1)
             )
@@ -133,7 +134,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
     )
         .filter((pIndex) => pIndex.toNumber() < assignedCount.newbies.toNumber())
         .map((pIndex) =>
-            api.query.encointerCeremonies.newbieRegistry<AccountId>(
+            api.query["encointerCeremonies"]["newbieRegistry"]<AccountId>(
                 [cid, cIndex],
                 participantIndex(api.registry, pIndex.toNumber() + 1)
             )
@@ -177,7 +178,7 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
 
     const oneDayT = api.createType<Moment>(
         'Moment',
-        api.consts.encointerScheduler.momentsPerDay
+        api.consts["encointerScheduler"]["momentsPerDay"]
     );
 
     _log(`getNextMeetupTime: attestingStart: ${attestingStart}`);
@@ -189,10 +190,10 @@ export async function getNextMeetupTime(api: ApiPromise, location: Location): Pr
 
 export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment> {
     const [currentPhase, nextPhaseStart, assigningDuration, attestingDuration] = await Promise.all([
-        api.query.encointerScheduler.currentPhase<CeremonyPhaseType>(),
-        api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
-        api.query.encointerScheduler.phaseDurations<Moment>('Assigning'),
-        api.query.encointerScheduler.phaseDurations<Moment>('Attesting'),
+        api.query["encointerScheduler"]["currentPhase"]<CeremonyPhaseType>(),
+        api.query["encointerScheduler"]["nextPhaseTimestamp"]<Moment>(),
+        api.query["encointerScheduler"]["phaseDurations"]<Moment>('Assigning'),
+        api.query["encointerScheduler"]["phaseDurations"]<Moment>('Attesting'),
     ])
 
     return computeStartOfAttestingPhase(currentPhase, nextPhaseStart, assigningDuration, attestingDuration)
@@ -203,11 +204,11 @@ export async function getStartOfAttestingPhase(api: ApiPromise): Promise<Moment>
  */
 export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): Promise<Demurrage> {
     // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
-    const demurrageCommunity = await api.query.encointerBalances.demurragePerBlock<FixedI64F64>(cid)
+    const demurrageCommunity = await api.query["encointerBalances"]["demurragePerBlock"]<FixedI64F64>(cid)
         .then((dc) => api.createType<Demurrage>('Demurrage', dc.bits))
 
     if (demurrageCommunity.eq(0)) {
-        const demurrageDefault = (api.consts.encointerBalances.defaultDemurrage as FixedI64F64).bits;
+        const demurrageDefault = (api.consts["encointerBalances"]["defaultDemurrage"] as FixedI64F64).bits;
         return api.createType<Demurrage>('Demurrage', demurrageDefault);
     } else {
         return demurrageCommunity;
@@ -220,8 +221,8 @@ export async function getDemurrage(api: ApiPromise, cid: CommunityIdentifier): P
 export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifier): Promise<NominalIncomeType> {
     // See reasoning for `FixedI64F64` generic param: https://github.com/encointer/encointer-js/issues/47
     const [incomeCommunity, incomeDefault] = await Promise.all([
-        api.query.encointerCommunities.nominalIncome<FixedI64F64>(cid).then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits)),
-        api.query.encointerCeremonies.ceremonyReward<FixedI64F64>().then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits))
+        api.query["encointerCommunities"]["nominalIncome"]<FixedI64F64>(cid).then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits)),
+        api.query["encointerCeremonies"]["ceremonyReward"]<FixedI64F64>().then((cr) => api.createType<NominalIncomeType>('NominalIncomeType', cr.bits))
     ])
 
     if (incomeCommunity.eq(0)) {
@@ -233,7 +234,7 @@ export async function getCeremonyIncome(api: ApiPromise, cid: CommunityIdentifie
 
 function participantIndexQuery(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType, address: String): IParticipantIndexQuery {
     return (storage_key: IndexRegistry) =>
-        api.query.encointerCeremonies[storage_key]<ParticipantIndexType>([cid, cIndex], address)
+        api.query["encointerCeremonies"][storage_key]<ParticipantIndexType>([cid, cIndex], address)
 }
 
 function participantIndex(registry: Registry, ...params: unknown[]): ParticipantIndexType {
@@ -253,10 +254,10 @@ function bootstrapperOrReputableQuery(
 ): Promise<AccountId> {
     if (pIndex < assigned.bootstrappers) {
         const i = participantIndex(api.registry, pIndex.toNumber() + 1);
-        return api.query.encointerCeremonies.bootstrapperRegistry<AccountId>([cid, cIndex], i);
+        return api.query["encointerCeremonies"]["bootstrapperRegistry"]<AccountId>([cid, cIndex], i);
     } else {
         const i = participantIndex(api.registry, pIndex.toNumber() - assigned.bootstrappers.toNumber() + 1);
-        return api.query.encointerCeremonies.reputableRegistry<AccountId>([cid, cIndex], i);
+        return api.query["encointerCeremonies"]["reputableRegistry"]<AccountId>([cid, cIndex], i);
     }
 }
 

@@ -1,6 +1,6 @@
-import {AnyTuple} from "@polkadot/types/types";
-import {CodecHash} from "@polkadot/types/interfaces/runtime";
-import {ParticipantIndexType} from "@encointer/types";
+import type {AnyTuple} from "@polkadot/types/types";
+import type {CodecHash} from "@polkadot/types/interfaces/runtime";
+import type {ParticipantIndexType} from "@encointer/types/index.js";
 
 export interface IExtractEventResult {
     success: boolean,

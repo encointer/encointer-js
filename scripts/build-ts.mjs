@@ -10,16 +10,15 @@
 /// * lint the dependencies; make sure every import is indeed declared as a dependency.
 /// * makes the output compatible with the new `deno` runtime: https://blog.logrocket.com/what-is-deno/.
 
+// @ts-ignore
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import path from 'path';
-import rimraf from 'rimraf';
+import JSON5 from 'json5';
 
-import { copySync } from '@polkadot/dev/scripts/copy.mjs';
+// @ts-ignore
+import { copyDirSync, execSync, __dirname, mkdirpSync, rimrafSync } from '@polkadot/dev/scripts/util.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
-import { __dirname } from '@polkadot/dev/scripts/dirname.mjs';
-import { execSync } from '@polkadot/dev/scripts/execute.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -37,6 +36,10 @@ const IGNORE_IMPORTS = [
   '@jest/globals', 'react', 'react-native'
 ];
 
+/** @typedef {'babel' | 'esbuild' | 'swc' | 'tsc'} CompileType */
+/** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: { node?: string }; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
+
+
 // webpack build
 function buildWebpack () {
   const config = WP_CONFIGS.find((c) => fs.existsSync(path.join(process.cwd(), c)));
@@ -45,6 +48,10 @@ function buildWebpack () {
 }
 
 // compile via babel, either via supplied config or default
+/**
+ * @param {any} dir
+ * @param {string} type
+ */
 async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
   const outDir = path.join(process.cwd(), `build${type === 'esm' ? '' : '-cjs'}`);
@@ -70,16 +77,27 @@ async function buildBabel (dir, type) {
       ...CPX,
       `../../build/${dir}/src/**/*.d.ts`,
       `../../build/packages/${dir}/src/**/*.d.ts`
-    ].forEach((s) => copySync(s, 'build'));
+    ].forEach((s) => copyDirSync(s, 'build'));
   }
 }
 
+/**
+ * @param {fs.PathOrFileDescriptor} path
+ * @param {{ type?: string; }} json
+ */
 function witeJson (path, json) {
   fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function adjustJsPath (pkgCwd, pkgJson, dir, f, isDeclare) {
+/**
+ * @param {any} _pkgCwd
+ * @param {any} _pkgJson
+ * @param {string} dir
+ * @param {string} f
+ * @param {any} _isDeclare
+ */
+function adjustJsPath (_pkgCwd, _pkgJson, dir, f, _isDeclare) {
   if (f.startsWith('.')) {
     if (f.endsWith('.js') || f.endsWith('.json')) {
       // ignore, these are already fully-specified
@@ -103,6 +121,13 @@ function adjustJsPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   return null;
 }
 
+/**
+ * @param {string} pkgCwd
+ * @param {{ dependencies: { [x: string]: any; }; peerDependencies: { [x: string]: any; }; optionalDependencies: { [x: string]: any; }; devDependencies: { [x: string]: any; }; denoDependencies: { [x: string]: { split: (arg0: string) => [any, ...any[]]; }; }; name: any; }} pkgJson
+ * @param {string} dir
+ * @param {string} f
+ * @param {any} isDeclare
+ */
 function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   if (f.startsWith('@encointer')) {
     const parts = f.split('/');
@@ -258,6 +283,12 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
+/**
+ * @param {string} pkgCwd
+ * @param {any} pkgJson
+ * @param {fs.PathLike} dir
+ * @param {{ (pkgCwd: string, pkgJson: { dependencies: { [x: string]: any; }; peerDependencies: { [x: string]: any; }; optionalDependencies: { [x: string]: any; }; devDependencies: { [x: string]: any; }; denoDependencies: { [x: string]: { split: (arg0: string) => [any, ...any[]]; }; }; name: any; }, dir: string, f: string, isDeclare: any): string | null; (pkgCwd: any, pkgJson: any, dir: string, f: string, isDeclare: any): string | null; (arg0: any, arg1: any, arg2: any, arg3: any, arg4?: boolean | undefined): any; }} replacer
+ */
 function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
   if (!fs.existsSync(dir)) {
     return;
@@ -266,7 +297,7 @@ function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
   fs
     .readdirSync(dir)
     .forEach((p) => {
-      const thisPath = path.join(process.cwd(), dir, p);
+      const thisPath = path.join(process.cwd(), dir.toString(), p);
 
       if (fs.statSync(thisPath).isDirectory()) {
         rewriteEsmImports(pkgCwd, pkgJson, `${dir}/${p}`, replacer);
@@ -317,19 +348,31 @@ function buildDeno () {
   }
 
   // copy the sources as-is
-  ['src/**/*', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
+  ['src/**/*', 'README.md'].forEach((s) => copyDirSync(s, 'build-deno'));
 
   // remove unneeded directories
-  rimraf.sync('build-deno/cjs');
-  rimraf.sync('build-deno/**/*.spec.ts');
-  rimraf.sync('build-deno/**/*.rs');
+rimrafSync('build-deno/cjs');
+rimrafSync('build-deno/**/*.spec.ts');
+rimrafSync('build-deno/**/*.rs');
 }
 
+/**
+ * @param {string} [value]
+ * @returns {string}
+ */
 function relativePath (value) {
-  return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
+  return `${value && value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
 }
 
-// creates an entry for the cjs/esm name
+
+/**
+ * creates an entry for the cjs/esm name
+ *
+ * @param {string} rootDir
+ * @param {string} [jsPath]
+ * @param {boolean} [noTypes]
+ * @returns {[string, Record<string, unknown> | string]}
+ */
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
@@ -367,13 +410,20 @@ function createMapEntry (rootDir, jsPath, noTypes) {
   return [jsPath, field];
 }
 
-// find the names of all the files in a certain directory
+/**
+ * find the names of all the files in a certain directory
+ *
+ * @param {string} buildDir
+ * @param {string} [extra]
+ * @param {string[]} [exclude]
+ * @returns {[string, Record<String, unknown> | string][]}
+ */
 function findFiles (buildDir, extra = '', exclude = []) {
   const currDir = extra ? path.join(buildDir, extra) : buildDir;
 
   return fs
     .readdirSync(currDir)
-    .reduce((all, jsName) => {
+    .reduce((/** @type {[string, Record<String, unknown> | string][]} */ all, jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const fullPathEsm = path.join(buildDir, jsPath);
       const toDelete = (
@@ -410,6 +460,9 @@ function findFiles (buildDir, extra = '', exclude = []) {
     }, []);
 }
 
+/**
+ * @param {string} buildDir
+ */
 function tweakCjsPaths (buildDir) {
   const cjsDir = `${buildDir}-cjs`;
 
@@ -432,6 +485,9 @@ function tweakCjsPaths (buildDir) {
     });
 }
 
+/**
+ * @param {string} buildDir
+ */
 function tweakPackageInfo (buildDir) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
@@ -478,6 +534,10 @@ function tweakPackageInfo (buildDir) {
   }
 }
 
+/**
+ * @param {{ [x: string]: any; }} pkg
+ * @param {any[]} fields
+ */
 function moveFields (pkg, fields) {
   fields.forEach((k) => {
     if (typeof pkg[k] !== 'undefined') {
@@ -494,13 +554,14 @@ function moveFields (pkg, fields) {
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
-  mkdirp.sync(path.join(buildDir, 'cjs'));
+  mkdirpSync(path.join(buildDir, 'cjs'));
 
   witeJson(path.join(buildDir, 'cjs/package.json'), { type: 'commonjs' });
   tweakPackageInfo(buildDir);
   tweakCjsPaths(buildDir);
 
   const pkgPath = path.join(buildDir, 'package.json');
+    /** @type {PkgJson} */
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
   const listRoot = findFiles(buildDir, '', ['README.md', 'LICENSE']);
 
@@ -536,11 +597,13 @@ function buildExports () {
   }
 
   // Ensure the top-level entries always points to the CJS version
-  ['browser', 'react-native'].forEach((k) => {
-    if (typeof pkg[k] === 'string') {
-      const entry = pkg[k].startsWith('./')
-        ? pkg[k]
-        : `./${pkg[k]}`;
+  (/** @type {const} */ (['browser', 'react-native'])).forEach((k) => {
+    const value = pkg[k];
+
+    if (typeof value === 'string') {
+      const entry = value.startsWith('./')
+        ? value
+        : `./${value}`;
 
       pkg[k] = entry.replace(/^\.\//, './cjs/');
     }
@@ -610,9 +673,15 @@ function buildExports () {
   // copy from build-cjs to build/cjs
   [
     './build-cjs/**/*.js'
-  ].forEach((s) => copySync(s, 'build/cjs'));
+  ].forEach((s) => copyDirSync(s, 'build/cjs'));
 }
 
+/**
+ * Sorts a JSON file (typically package.json) by key
+ *
+ * @param {Record<string, unknown>} json
+ * @returns {Record<string, unknown>}
+ */
 function sortJson (json) {
   return Object
     .entries(json)
@@ -620,6 +689,11 @@ function sortJson (json) {
     .reduce((all, [k, v]) => ({ ...all, [k]: v }), {});
 }
 
+/**
+ * @param {string} repoPath
+ * @param {string | null} dir
+ * @param {PkgJson} json
+ */
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
@@ -640,14 +714,15 @@ function orderPackageJson (repoPath, dir, json) {
   const sorted = sortJson(json);
 
   // remove empty artifacts
-  ['engines'].forEach((d) => {
-    if (typeof json[d] === 'object' && Object.keys(json[d]).length === 0) {
+  (/** @type {const} */ (['engines'])).forEach((d) => {
+    const value = json[d];
+    if (typeof json[d] === 'object' && value && Object.keys(value).length === 0) {
       delete sorted[d];
     }
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'deno', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
+  (/** @type {const} */ (['browser', 'deno', 'electron', 'main', 'module', 'react-native'])).forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {
@@ -656,15 +731,17 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move bin, scripts & dependencies to the end
-  [
+  (/** @type {const} */ ([
     ['bin', 'scripts'],
     ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions']
-  ].forEach((a) =>
+  ])).forEach((a) =>
     a.forEach((d) => {
       delete sorted[d];
 
-      if (json[d] && Object.keys(json[d]).length) {
-        sorted[d] = sortJson(json[d]);
+      const value = json[d];
+
+      if (value && Object.keys(value).length) {
+        sorted[d] = sortJson(value);
       }
     })
   );
@@ -672,50 +749,70 @@ function orderPackageJson (repoPath, dir, json) {
   witeJson(path.join(process.cwd(), 'package.json'), sorted);
 }
 
+/**
+ * @param {string} full
+ * @param {any} line
+ * @param {number} lineNumber
+ * @param {string} error
+ */
 function createError (full, line, lineNumber, error) {
   return `${full}:: ${lineNumber >= 0 ? `line ${lineNumber + 1}:: ` : ''}${error}:: \n\n\t${line}\n`;
 }
 
+/**
+ * @param {any[]} errors
+ */
 function throwOnErrors (errors) {
   if (errors.length) {
     throw new Error(errors.join('\n'));
   }
 }
 
+/**
+ * @param {string[]} exts
+ * @param {string} dir
+ * @param {string} sub
+ * @param {(path: string, line: string, lineNumber: number) => string | null | undefined} fn
+ * @param {boolean} [allowComments]
+ * @returns {string[]}
+ */
 function loopFiles (exts, dir, sub, fn, allowComments = false) {
   return fs
     .readdirSync(sub)
-    .reduce((errors, inner) => {
+    .reduce((/** @type {string[]} */ errors, inner) => {
       const full = path.join(sub, inner);
 
       if (fs.statSync(full).isDirectory()) {
         return errors.concat(loopFiles(exts, dir, full, fn, allowComments));
       } else if (exts.some((e) => full.endsWith(e))) {
-        return errors.concat(
-          fs
-            .readFileSync(full, 'utf-8')
-            .split('\n')
-            .map((l, n) => {
-              const t = l
-                // no leading/trailing whitespace
-                .trim()
-                // anything starting with * (multi-line comments)
-                .replace(/^\*.*/, '')
-                // anything between /* ... */
-                .replace(/\/\*.*\*\//g, '')
-                // single line comments with // ...
-                .replace(allowComments ? /--------------------/ : /\/\/.*/, '');
+        fs
+          .readFileSync(full, 'utf-8')
+          .split('\n')
+          .forEach((l, n) => {
+            const t = l
+              // no leading/trailing whitespace
+              .trim()
+              // anything starting with * (multi-line comments)
+              .replace(/^\*.*/, '')
+              // anything between /* ... */
+              .replace(/\/\*.*\*\//g, '')
+              // single line comments with // ...
+              .replace(allowComments ? /--------------------/ : /\/\/.*/, '');
+            const r = fn(`${dir}/${full}`, t, n);
 
-              return fn(`${dir}/${full}`, t, n);
-            })
-            .filter((e) => !!e)
-        );
+            if (r) {
+              errors.push(r);
+            }
+          });
       }
 
       return errors;
     }, []);
 }
 
+/**
+ * @param {string} dir
+ */
 function lintOutput (dir) {
   throwOnErrors(
     loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
@@ -733,9 +830,12 @@ function lintOutput (dir) {
   );
 }
 
+/**
+ * @param {string} dir
+ */
 function lintInput (dir) {
   throwOnErrors(
-    loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
+    loopFiles(['.ts', '.tsx'], dir, 'src', (_full, _l, _n) => {
       // Sadly, we have people copying and just changing all the headers without giving attribution -
       // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
       // if (n === 0 && (
@@ -751,21 +851,29 @@ function lintInput (dir) {
   );
 }
 
+/**
+ * @param {string} config
+ * @returns {[string[], boolean, string[]]}
+ */
 function getReferences (config) {
   const configPath = path.join(process.cwd(), config);
 
   if (fs.existsSync(configPath)) {
     try {
+      // We use the JSON5 parser here since we may have comments
+      // (as allowed, per spec) in the actual tsconfig files
+      /** @type {{ references: { path: string }[] }} */
+      const tsconfig = JSON5.parse(fs.readFileSync(configPath, 'utf-8'));
+      const paths = tsconfig.references.map(({ path }) => path);
+
       return [
-        JSON
-          .parse(fs.readFileSync(configPath, 'utf-8'))
-          .references
-          .map(({ path }) =>
-            path
-              .replace('../', '')
-              .replace('/tsconfig.build.json', '')
-          ),
-        true
+        paths.map((path) =>
+          path
+            .replace('../', '')
+            .replace('/tsconfig.build.json', '')
+        ),
+        true,
+        paths
       ];
     } catch (error) {
       console.error(`Unable to parse ${configPath}`);
@@ -774,9 +882,13 @@ function getReferences (config) {
     }
   }
 
-  return [[], false];
+  return [[], false, []];
 }
 
+/**
+ * @param {string} dir
+ * @param {any[]} locals
+ */
 function lintDependencies (dir, locals) {
   const { dependencies = {}, devDependencies = {}, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
@@ -794,10 +906,13 @@ function lintDependencies (dir, locals) {
     ...deps
   ];
   const [references] = getReferences('tsconfig.build.json');
-  const [devRefs, hasDevConfig] = getReferences('tsconfig.spec.json');
+  //const [devRefs, hasDevConfig] = getReferences('tsconfig.spec.json');
+
+    /** @type {string[]} */
   const refsFound = [];
 
   throwOnErrors(
+    // @ts-ignore
     loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
       if (l.startsWith("import '") || (l.startsWith('import ') && l.includes(" from '"))) {
         const dep = l
@@ -844,6 +959,10 @@ function lintDependencies (dir, locals) {
   }
 }
 
+/**
+ * @param {string} label
+ * @param {{ (): void; (): void; (): void; }} fn
+ */
 function timeIt (label, fn) {
   const start = Date.now();
 
@@ -852,6 +971,11 @@ function timeIt (label, fn) {
   console.log(`${label} (${Date.now() - start}ms)`);
 }
 
+/**
+ * @param {any} repoPath
+ * @param {string} dir
+ * @param {any[][]} locals
+ */
 async function buildJs (repoPath, dir, locals) {
   const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
   const { name, version } = pkgJson;
@@ -896,7 +1020,7 @@ async function buildJs (repoPath, dir, locals) {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
 
-      buildDeno(pkgJson);
+      buildDeno();
 
       // adjust the import paths
       rewriteEsmImports(process.cwd(), pkgJson, 'build-deno', adjustDenoPath);

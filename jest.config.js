@@ -1,7 +1,7 @@
-const config = require('@polkadot/dev/config/jest.cjs');
+//const config = require('@polkadot/dev/config/jest.cjs');
 
 module.exports = {
-  ...config,
+  //...config,
   moduleNameMapper: {
     '@encointer/node-api(.*)$': '<rootDir>/packages/node-api/src/$1',
     '@encointer/worker-api(.*)$': '<rootDir>/packages/worker-api/src/$1',

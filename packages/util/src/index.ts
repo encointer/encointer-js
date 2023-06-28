@@ -1,9 +1,11 @@
-import {ToFixPointFn, toFixPoint, stringToFixPoint, StringToFixPointFn} from './toFixPoint';
-import {ParserFixPointFn, parserFixPoint} from './parserFixPoint';
+import {toFixPoint, stringToFixPoint} from './toFixPoint.js';
+import type {ToFixPointFn, StringToFixPointFn} from './toFixPoint.js';
+import {parserFixPoint} from './parserFixPoint.js';
+import type {ParserFixPointFn} from './parserFixPoint.js';
 
-export * from './cidUtil';
-export * from './toFixPoint';
-export * from './parserFixPoint';
+export * from './cidUtil.js';
+export * from './toFixPoint.js';
+export * from './parserFixPoint.js';
 
 export const parseI4F4: ParserFixPointFn = parserFixPoint(4, 4);
 

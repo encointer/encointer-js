@@ -1,7 +1,7 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { CeremonyIndexType, CeremonyPhaseType } from '@encointer/types/interfaces/ceremony';
+import type { CeremonyIndexType, CeremonyPhaseType } from '@encointer/types/interfaces/ceremony/index.js';
 import type { u32 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 

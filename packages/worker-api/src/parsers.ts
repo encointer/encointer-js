@@ -1,11 +1,11 @@
-import { parseI64F64 } from '@encointer/util';
+import { parseI64F64 } from '@encointer/util/index.js';
 import { u8aToBn, u8aToBuffer } from '@polkadot/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
 
-import type { IEncointerWorker } from './interface';
-import { BalanceEntry } from "@encointer/types";
+import type { IEncointerWorker } from './interface.js';
+import type { BalanceEntry } from "@encointer/types/index.js";
 
 export function parseBalance(self: IEncointerWorker, data: any): BalanceEntry {
   const balanceEntry = self.createType('BalanceEntry<BlockNumber>', data);

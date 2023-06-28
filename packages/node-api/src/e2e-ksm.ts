@@ -1,17 +1,17 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import {options} from "@encointer/node-api/options";
-import {communityIdentifierFromString} from "../../util/src";
-import {
+import {options} from "@encointer/node-api/src/options.js";
+import {communityIdentifierFromString} from "@encointer/util/src/index.js";
+import type {
     CeremonyPhaseType,
     CommunityIdentifier,
-    stringToDegree,
     Location,
-} from "../../types/src";
+} from "@encointer/types/src/index.js";
+import { stringToDegree } from '@encointer/types/src/index.js';
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
     getMeetupTimeOffset,
     getNextMeetupTime,
-} from './encointer-api';
+} from './encointer-api.js';
 
 describe('node-api', () => {
     let api: ApiPromise;
@@ -46,7 +46,7 @@ describe('node-api', () => {
 
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
-            const result = await api.query.encointerScheduler.currentPhase<CeremonyPhaseType>();
+            const result = await api.query['encointerScheduler']['currentPhase']<CeremonyPhaseType>();
             expect(result).toBeDefined();
         });
 

@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BalanceType } from '@encointer/types/interfaces/balances';
-import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
+import type { BalanceType } from '@encointer/types/interfaces/balances/index.js';
+import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony/index.js';
 import type { Option, Struct, Text, U8aFixed, i128 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 

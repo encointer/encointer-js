@@ -1,8 +1,8 @@
 'use strict';
 
 import {TypeRegistry, u64, Vec} from "@polkadot/types";
-import {RegistryTypes} from "@polkadot/types/types";
-import {options as encointerOptions} from "@encointer/node-api";
+import type {RegistryTypes} from "@polkadot/types/types";
+import {options as encointerOptions} from "@encointer/node-api/options.js";
 import {
     assignmentFn,
     assignmentFnInverse,
@@ -11,17 +11,18 @@ import {
     meetupIndex,
     meetupLocation,
     meetupTime,
-    modInv, ParticipantIndexes
-} from "@encointer/util/assignment";
-import {
+    modInv
+} from "@encointer/util/assignment.js";
+import type { ParticipantIndexes } from "@encointer/util/assignment.js";
+import type {
     AssignmentParams, CeremonyPhaseType,
     MeetupIndexType, Location,
-    ParticipantIndexType,
-    stringToDegree, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
-} from "@encointer/types";
+    ParticipantIndexType, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
+} from "@encointer/types/index.js";
+import { stringToDegree } from "@encointer/types/index.js";
 import assert from "assert";
-import * as testCeremonies from "./test-ceremony-data";
-import {Moment} from "@polkadot/types/interfaces/runtime";
+import * as testCeremonies from "./test-ceremony-data/index.js";
+import type {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
@@ -194,8 +195,8 @@ describe('assignment', () => {
 
 
     ceremonyTestCases.forEach((ceremonyTestCase) => {
-        ceremonyTestCase.meetups.forEach((meetup) => {
-            meetup.registrations.forEach((registration, index) => {
+        ceremonyTestCase.meetups.forEach((meetup: { registrations: any[]; index: any; }) => {
+            meetup.registrations.forEach((registration) => {
 
                 // @ts-ignore
                 it(`test computeMeetupIndex for ceremony ${ceremonyTestCase.communityCeremony}: for [mIndex, pIndex]: [${meetup.index}, ${registration[1].index}]`, () => {

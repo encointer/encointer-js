@@ -1,3 +1,3 @@
-export { EncointerWorker } from './worker';
+export { EncointerWorker } from './worker.js';
 
-export * from './interface';
+export * from './interface.js';

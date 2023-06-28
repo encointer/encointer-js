@@ -1,12 +1,12 @@
 import { TypeRegistry } from '@polkadot/types';
-import { RegistryTypes } from '@polkadot/types/types';
+import type { RegistryTypes } from '@polkadot/types/types';
 import { Keyring } from '@polkadot/keyring'
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
-import { options as encointerOptions } from '@encointer/node-api';
-import {communityIdentifierFromString, parseI64F64} from '@encointer/util';
+import { options as encointerOptions } from '@encointer/node-api/index.js';
+import {communityIdentifierFromString, parseI64F64} from '@encointer/util/index.js';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
@@ -20,14 +20,14 @@ import type {
   MeetupIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
   SchedulerState, TrustedCallSigned
-} from '@encointer/types';
+} from '@encointer/types/index.js';
 
-import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface';
-import { Request } from './interface';
-import { parseBalance, parseNodeRSA } from './parsers';
-import { callGetter } from './getterApi';
-import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
-import { toAccount } from "@encointer/util/common";
+import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface.js';
+import { Request } from './interface.js';
+import { parseBalance, parseNodeRSA } from './parsers.js';
+import { callGetter } from './getterApi.js';
+import { createTrustedCall } from "@encointer/worker-api/trustedCallApi.js";
+import { toAccount } from "@encointer/util/common.js";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Unwraps the value that is wrapped in all the Options and encoding from the worker.
@@ -88,8 +88,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       createWebSocket: (options.createWebSocket || undefined),
       packMessage: (data: any) => this.createType('ClientRequest', data).toU8a(),
       unpackMessage: (data: any) => parseGetterResponse(this, this.rqStack.shift() || '', data),
-      attachRequestId: (data: any, requestId: string | number): any => data,
-      extractRequestId: (data: any) => this.rsCount = ++this.rsCount
+      attachRequestId: (data: any): any => data,
+      extractRequestId: () => this.rsCount = ++this.rsCount
     });
     const {api, types} = options;
     this.#keyring = (options.keyring || undefined);

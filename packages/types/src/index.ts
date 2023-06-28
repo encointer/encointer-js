@@ -1,4 +1,4 @@
-import * as encointerDefs from './interfaces/definitions';
+import * as encointerDefs from './interfaces/definitions.js';
 
 function typesFromDefs(
   definitions: Record<string, { types: Record<string, any> }>,
@@ -26,17 +26,21 @@ function rpcsFromDefs(
     );
 }
 
-export * from './interfaces/index';
+export * from './interfaces/index.js';
+
+const userDefs: Record<string, any> = {
+  ...encointerDefs
+};
 
 const encointer = {
-    rpcs: rpcsFromDefs(encointerDefs),
+    rpcs: rpcsFromDefs(userDefs),
     types: typesFromDefs(encointerDefs),
 }
 
 export default encointer;
 export { createType } from '@polkadot/types';
 
-import {parseI64F64, stringToI64F64, toI64F64} from "@encointer/util";
+import {parseI64F64, stringToI64F64, toI64F64} from "@encointer/util/src";
 
 /**
  * Converts a JS number to a fixed-point BN
