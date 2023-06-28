@@ -2,6 +2,9 @@
   "author": "Encointer authors & contributors",
   "bugs": "https://github.com/encointer/encointer-js/issues",
   "description": "Encointer Worker API",
+  "engines": {
+    "node": ">=16"
+  },
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/worker-api#readme",
   "license": "GPL-3.0-or-later",
   "name": "@encointer/worker-api",

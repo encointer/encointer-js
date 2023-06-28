@@ -1,12 +1,12 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {options} from "@encointer/node-api/src/options.js";
-import {communityIdentifierFromString} from "@encointer/util/src/index.js";
+import {communityIdentifierFromString} from "@encointer/util/index.js";
 import type {
     CeremonyPhaseType,
     CommunityIdentifier,
     Location,
-} from "@encointer/types/src/index.js";
-import { stringToDegree } from '@encointer/types/src/index.js';
+} from "@encointer/types/index.js";
+import { stringToDegree } from '@encointer/types/index.js';
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
     getMeetupTimeOffset,
