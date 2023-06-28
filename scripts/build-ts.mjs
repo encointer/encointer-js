@@ -15,9 +15,10 @@ import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import path from 'path';
 import JSON5 from 'json5';
+import ts from 'typescript';
 
 // @ts-ignore
-import { copyDirSync, execSync, __dirname, mkdirpSync, rimrafSync } from '@polkadot/dev/scripts/util.mjs';
+import { copyDirSync, execSync, __dirname, mkdirpSync, rimrafSync, readdirSync } from '@polkadot/dev/scripts/util.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
@@ -39,6 +40,10 @@ const IGNORE_IMPORTS = [
 /** @typedef {'babel' | 'esbuild' | 'swc' | 'tsc'} CompileType */
 /** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: { node?: string }; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
 
+// We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
+// Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
+// https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
+const TARGET_TSES = ts.ScriptTarget.ES2021;
 
 // webpack build
 function buildWebpack () {
@@ -52,6 +57,7 @@ function buildWebpack () {
  * @param {any} dir
  * @param {string} type
  */
+// @ts-ignore
 async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
   const outDir = path.join(process.cwd(), `build${type === 'esm' ? '' : '-cjs'}`);
@@ -552,7 +558,7 @@ function moveFields (pkg, fields) {
 
 // iterate through all the files that have been built, creating an exports map
 function buildExports () {
-  const buildDir = path.join(process.cwd(), 'build');
+  const buildDir = path.join(process.cwd(), 'build-tsc');
 
   mkdirpSync(path.join(buildDir, 'cjs'));
 
@@ -971,6 +977,67 @@ function timeIt (label, fn) {
   console.log(`${label} (${Date.now() - start}ms)`);
 }
 
+
+/**
+ * compile via tsc, either via supplied config or default
+ *
+ * @param {CompileType} compileType
+ * @param {'cjs' | 'esm'} type
+ */
+async function compileJs (compileType, type) {
+  const buildDir = path.join(process.cwd(), `build-${compileType}-${type}`);
+
+  mkdirpSync(buildDir);
+
+  const files = readdirSync('src', ['.ts', '.tsx']).filter((/** @type {string} */ f) =>
+    !['.d.ts', '.manual.ts', '.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx', 'mod.ts'].some((e) =>
+      f.endsWith(e)
+    )
+  );
+
+  if (compileType === 'tsc') {
+    await timeIt(`Successfully compiled ${compileType} ${type}`, () => {
+      files.forEach((/** @type {string} */ filename) => {
+        // split src prefix, replace .ts extension with .js
+        const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
+
+        // Until we hit the es2022 target, all private fields are compiled to using
+        // WeakMap with less than stellar performannce of get/set on the polyfill. We
+        // replace usages of these with TS-only private fields.
+        //
+        // As used these are internal-only, completely hidden fields should be done via
+        // closures, see e.g. the common keypairs where this is done
+        const source = fs
+          .readFileSync(filename, 'utf-8')
+          .replace(/(this|other|source)\.#/g, '$1.__internal__')
+          .replace(/ {2}(async|readonly) #/g, '  private $1 __internal__')
+          .replace(/ {2}#/g, '  private __internal__');
+
+        // compile with the options aligning with our tsconfig
+        const { outputText } = ts.transpileModule(source, {
+          compilerOptions: {
+            esModuleInterop: true,
+            importHelpers: true,
+            jsx: filename.endsWith('.tsx')
+              ? ts.JsxEmit.ReactJSX
+              : undefined,
+            module: type === 'cjs'
+              ? ts.ModuleKind.CommonJS
+              : ts.ModuleKind.ESNext,
+            moduleResolution: ts.ModuleResolutionKind.NodeNext,
+            target: TARGET_TSES
+          }
+        });
+
+        mkdirpSync(path.dirname(outFile));
+        fs.writeFileSync(outFile, outputText);
+      });
+    });
+  } else {
+    throw new Error(`Unknown --compiler ${compileType}`);
+  }
+}
+
 /**
  * @param {any} repoPath
  * @param {string} dir
@@ -1017,19 +1084,46 @@ async function buildJs (repoPath, dir, locals) {
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack();
     } else {
-      await buildBabel(dir, 'cjs');
-      await buildBabel(dir, 'esm');
+      const compileType = 'tsc'
+      await compileJs(compileType, 'cjs');
+      await compileJs(compileType, 'esm');
 
       buildDeno();
 
-      // adjust the import paths
-      rewriteEsmImports(process.cwd(), pkgJson, 'build-deno', adjustDenoPath);
-      rewriteEsmImports(process.cwd(), pkgJson, 'build-swc-esm', adjustJsPath);
+      // Deno
+      await timeIt('Successfully compiled deno', () => {
+        buildDeno();
+      });
 
-      timeIt('Successfully built exports', () => buildExports());
-      timeIt('Successfully linted configs', () => {
+      await timeIt('Successfully rewrote imports', () => {
+        // adjust the import paths (deno imports from .ts - can remove this on typescript 5)
+        rewriteImports('build-deno', process.cwd(), pkgJson, adjustDenoPath);
+
+        // adjust all output js esm to have .js path imports
+        ['cjs', 'esm'].forEach((jsType) =>
+          rewriteImports(`build-${compileType}-${jsType}`, process.cwd(), pkgJson, adjustJsPath)
+        );
+      });
+
+      await timeIt('Successfully combined build', () => {
+        // adjust all packageInfo.js files for the correct usage
+        tweakPackageInfo(compileType);
+
+        // copy output files (after import rewriting)
+        copyBuildFiles(compileType, dir);
+      });
+
+      await timeIt('Successfully built exports', () => {
+        // everything combined now, delete what we don't need
+        deleteBuildFiles();
+
+        // build the package.json exports
+        buildExports();
+      });
+
+      await timeIt('Successfully linted configs', () => {
         lintOutput(dir);
-        lintDependencies(dir, locals);
+        lintDependencies(compileType, dir, locals);
       });
     }
   }
