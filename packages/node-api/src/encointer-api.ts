@@ -13,12 +13,12 @@ import {
     computeMeetupIndex,
     getRegistration,
     computeStartOfAttestingPhase
-} from "@encointer/util/src/assignment.js";
+} from "@encointer/util/assignment.js";
 import {Vec} from "@polkadot/types";
 import type {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
 import type {Registry} from "@polkadot/types/types";
-import {IndexRegistry} from "@encointer/node-api/src/interface.js";
-import type {IParticipantIndexQuery} from "@encointer/node-api/src/interface.js";
+import {IndexRegistry} from "@encointer/node-api/interface.js";
+import type {IParticipantIndexQuery} from "@encointer/node-api/interface.js";
 import {Option} from "@polkadot/types-codec";
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {

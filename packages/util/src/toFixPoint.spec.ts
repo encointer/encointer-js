@@ -5,7 +5,7 @@ import {
   stringToI64F64,
   toI16F16,
   toI32F32,
-} from './index.js';
+} from '.';
 
 import BN from 'bn.js';
 
