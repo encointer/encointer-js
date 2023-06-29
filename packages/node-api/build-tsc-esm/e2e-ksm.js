@@ -1,5 +1,5 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { options } from "@encointer/node-api/src/options.js";
+import { options } from "@encointer/node-api/options.js";
 import { communityIdentifierFromString } from "@encointer/util/index.js";
 import { stringToDegree } from '@encointer/types/index.js';
 import { cryptoWaitReady } from "@polkadot/util-crypto";

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const api_1 = require("@polkadot/api");
-const options_js_1 = require("@encointer/node-api/src/options.js");
+const options_js_1 = require("@encointer/node-api/options.js");
 const index_js_1 = require("@encointer/util/index.js");
 const index_js_2 = require("@encointer/types/index.js");
 const util_crypto_1 = require("@polkadot/util-crypto");
