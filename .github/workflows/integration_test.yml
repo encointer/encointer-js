@@ -23,7 +23,7 @@ jobs:
           name: encointer-node-notee-791926026dae7da9e10680f3109ff04f0cc3a908
           # in fact this action should download the latest artifact, but sometimes fails. Then we need to
           # set the `run_id` to force a download of an updated binary.
-          run_id: 2565176111
+          run_id: 5338501364
           path: node
           repo: encointer/encointer-node
 
