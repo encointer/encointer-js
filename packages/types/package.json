@@ -22,7 +22,7 @@
   "main": "index.js",
   "scripts": {
     "generate:defs": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces  --input ./src/interfaces",
-    "generate:meta": "node --experimental-specifier-resolution=node --loader ts-node/esm  node_modules/.bin/polkadot-types-from-chain --endpoint kusama.api.encointer.org --output ./src/interfaces"
+    "generate:meta": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-chain --endpoint wss://kusama.api.encointer.org --output ./src/interfaces"
   },
   "dependencies": {
     "@polkadot/api": "^10.9.1",
