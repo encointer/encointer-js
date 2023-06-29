@@ -87,7 +87,8 @@ async function getMeetupParticipants(api, cid, cIndex, meetupIndex) {
         ...endorsees_promises,
         ...newbie_promises
     ]);
-    return api.createType('Vec<AccountId>', participants.map((a) => a.toHex()));
+    return registry.createTypeUnsafe('Vec<AccountId>', participants.map((a) => a.toHex()));
+    //api.createType('Vec<AccountId>', participants.map((a) => a.toHex()))
 }
 exports.getMeetupParticipants = getMeetupParticipants;
 async function getParticipantIndex(api, cid, cIndex, address) {

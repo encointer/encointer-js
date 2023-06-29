@@ -93,8 +93,8 @@ describe('assignment', () => {
     ];
 
     meetupTimeTestCases.forEach((test) => {
-        const attestingStart = registry.createType('Moment', 0);
-        const oneDay = registry.createType('Moment', 360);
+        const attestingStart = registry.createTypeUnsafe<Moment>('Moment', [0]);
+        const oneDay = registry.createTypeUnsafe<Moment>('Moment', [360]);
 
         it(`meetupTime ${test.description}`, () => {
             const meetupOffset = registry.createType<MeetupTimeOffsetType>('MeetupTimeOffsetType', test.offset);
