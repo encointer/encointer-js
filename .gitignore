@@ -5,6 +5,9 @@
 # build output
 **/build/
 **/build-cjs/
+**/build-tsc-cjs/
+**/build-tsc-esm/
+**/build-tsc-js/
 
 # Logs
 logs
