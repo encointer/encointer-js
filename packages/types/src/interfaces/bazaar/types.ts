@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { PalletString } from '@encointer/types/interfaces/common/index.js';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community/index.js';
+import type { PalletString } from '@encointer/types/interfaces/common';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Struct, u32 } from '@polkadot/types-codec';
 import type { AccountId } from '@polkadot/types/interfaces/runtime';
 

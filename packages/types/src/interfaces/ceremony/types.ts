@@ -1,7 +1,7 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community/index.js';
+import type { CommunityIdentifier, Location, LocationRpc } from '@encointer/types/interfaces/community';
 import type { Enum, Option, Struct, Vec, i32, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';

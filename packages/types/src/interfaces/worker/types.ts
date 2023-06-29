@@ -1,9 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BalanceType } from '@encointer/types/interfaces/balances/index.js';
-import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony/index.js';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community/index.js';
+import type { BalanceType } from '@encointer/types/interfaces/balances';
+import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
+import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
