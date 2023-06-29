@@ -146,7 +146,7 @@ export async function getMeetupParticipants(api: ApiPromise, cid: CommunityIdent
         ...newbie_promises
     ]);
 
-    return registry.createTypeUnsafe<Vec<AccountId>>('Vec<AccountId>', participants.map((a) => a.toHex()));
+    return registry.createTypeUnsafe<Vec<AccountId>>('Vec<AccountId>', [participants.map((a) => a.toHex())]);
     //api.createType('Vec<AccountId>', participants.map((a) => a.toHex()))
 }
 
