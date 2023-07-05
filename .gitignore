@@ -27,3 +27,7 @@ node_modules/
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+
+
+tsconfig.build.tsbuildinfo

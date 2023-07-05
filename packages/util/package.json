@@ -3,7 +3,7 @@
   "bugs": "https://github.com/encointer/encointer-js/issues",
   "description": "Encointer JS utilities",
   "engines": {
-    "node": ">=16"
+    "node": ">=18.14"
   },
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/util#readme",
   "license": "MIT",

@@ -3,7 +3,7 @@
   "bugs": "https://github.com/encointer/encointer-js/issues",
   "description": "Encointer Node API",
   "engines": {
-    "node": ">=16"
+    "node": ">=18.14"
   },
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/node-api#readme",
   "license": "GPL-3.0-or-later",

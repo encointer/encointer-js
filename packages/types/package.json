@@ -3,7 +3,7 @@
   "bugs": "https://github.com/encointer/encointer-js/issues",
   "description": "Encointer type definitions for Polkadot.js",
   "engines": {
-    "node": ">=16"
+    "node": ">=18.14"
   },
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/types#readme",
   "license": "GPL-3.0-or-later",
