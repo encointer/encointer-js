@@ -5,6 +5,9 @@
 # build output
 **/build/
 **/build-cjs/
+**/build-tsc-cjs/
+**/build-tsc-esm/
+**/build-tsc-js/
 
 # Logs
 logs
@@ -24,3 +27,7 @@ node_modules/
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+
+
+tsconfig.build.tsbuildinfo

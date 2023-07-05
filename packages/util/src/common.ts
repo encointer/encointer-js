@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { KeyringPair } from "@polkadot/keyring/types";
-import { PubKeyPinPair } from "@encointer/worker-api";
+import type { KeyringPair } from "@polkadot/keyring/types";
+import type { PubKeyPinPair } from "@encointer/worker-api";
 import { Keyring } from "@polkadot/keyring";
 import { isPubKeyPinPair } from "@encointer/worker-api/interface";
 import BN from "bn.js";

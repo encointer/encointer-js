@@ -1,5 +1,5 @@
 import { TypeRegistry } from '@polkadot/types';
-import { RegistryTypes } from '@polkadot/types/types';
+import type { RegistryTypes } from '@polkadot/types/types';
 import { Keyring } from '@polkadot/keyring'
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
@@ -22,10 +22,10 @@ import type {
   SchedulerState, TrustedCallSigned
 } from '@encointer/types';
 
-import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface';
-import { Request } from './interface';
-import { parseBalance, parseNodeRSA } from './parsers';
-import { callGetter } from './getterApi';
+import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface.js';
+import { Request } from './interface.js';
+import { parseBalance, parseNodeRSA } from './parsers.js';
+import { callGetter } from './getterApi.js';
 import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
 import { toAccount } from "@encointer/util/common";
 
@@ -88,8 +88,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       createWebSocket: (options.createWebSocket || undefined),
       packMessage: (data: any) => this.createType('ClientRequest', data).toU8a(),
       unpackMessage: (data: any) => parseGetterResponse(this, this.rqStack.shift() || '', data),
-      attachRequestId: (data: any, requestId: string | number): any => data,
-      extractRequestId: (data: any) => this.rsCount = ++this.rsCount
+      attachRequestId: (data: any): any => data,
+      extractRequestId: () => this.rsCount = ++this.rsCount
     });
     const {api, types} = options;
     this.#keyring = (options.keyring || undefined);

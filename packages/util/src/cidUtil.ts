@@ -1,7 +1,7 @@
-import {CommunityIdentifier} from "@encointer/types";
+import type {CommunityIdentifier} from "@encointer/types";
 import { u8aToU8a} from "@polkadot/util";
 import { base58Decode, base58Encode } from '@polkadot/util-crypto/base58';
-import {Registry} from "@polkadot/types/types";
+import type {Registry} from "@polkadot/types/types";
 
 /***
  * Helper method to parse a string-formatted `CommunityIdentifier`.

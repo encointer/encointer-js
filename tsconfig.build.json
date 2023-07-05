@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "./packages",
+    "outDir": "./build",
+    "composite": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "lib": ["es2020", "dom"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "target": "es2020",
+    "skipLibCheck": true,
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "paths":
+    {
+      "@encointer/util": ["packages/util/src"],
+      "@encointer/util/*": ["packages/util/src/*"],
+      "@encointer/types": ["packages/types/src"],
+      "@encointer/types/*": ["packages/types/src/*"],
+      "@encointer/node-api": ["packages/node-api/src"],
+      "@encointer/node-api/*": ["packages/node-api/src/*"],
+      "@encointer/worker-api": ["packages/worker-api/src"],
+      "@encointer/worker-api/*": ["packages/worker-api/src/*"],
+      "@polkadot/api/augment": ["packages/types/src/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["packages/types/src/interfaces/augment-types.ts"]
+    },
+  },
+  "include": ["packages/**/*.ts", "packages/**/*.ts"],
+  "exclude": [
+    "**/mod.ts",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "references": []
+}
+
+

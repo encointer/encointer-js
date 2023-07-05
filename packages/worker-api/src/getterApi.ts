@@ -1,5 +1,5 @@
-import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, RequestArgs, CallOptions, WorkerMethod } from './interface';
-import  { Request } from './interface';
+import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, RequestArgs, CallOptions, WorkerMethod } from './interface.js';
+import  { Request } from './interface.js';
 
 const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;

@@ -64,7 +64,6 @@ describe('node-api', () => {
         }
 
         let res = await registerTestCommunity(api, alice);
-
         if (res.error !== undefined) {
             console.log(`failed to register test community: ${JSON.stringify(res)}`);
         }
@@ -86,22 +85,22 @@ describe('node-api', () => {
 
     describe('scheduler', () => {
         it('CurrentPhase should return promise', async () => {
-            const result = await api.query.encointerScheduler.currentPhase<CeremonyPhaseType>();
+            const result = await api.query['encointerScheduler']['currentPhase']<CeremonyPhaseType>();
             expect(result.isAttesting);
         });
 
         it('should getAttestingStart', async () => {
             const [attestingStart, nextPhase, attestingDuration] = await Promise.all([
                 getStartOfAttestingPhase(api),
-                api.query.encointerScheduler.nextPhaseTimestamp<Moment>(),
-                api.query.encointerScheduler.phaseDurations<Moment>('Attesting')
+                api.query['encointerScheduler']['nextPhaseTimestamp']<Moment>(),
+                api.query['encointerScheduler']['phaseDurations']<Moment>('Attesting')
             ]);
 
             expect(attestingStart.toNumber()).toBe(nextPhase.toNumber() - attestingDuration.toNumber());
         });
 
         it("should parse DispatchErrors correcly", async () => {
-            const tx = api.tx.sudo.sudo(api.tx.encointerScheduler.nextPhase());
+            const tx = api.tx['sudo']['sudo'](api.tx['encointerScheduler']['nextPhase']());
             const bob = keyring.addFromUri("//Bob", { name: "Bob default" });
             // this will fail because Bob is no sudoer
             let result = await submitAndWatchTx(api, bob, tx);
@@ -296,9 +295,7 @@ function registerTestCommunity(api: ApiPromise, signer: KeyringPair): Promise<IS
     // (location, bootstrappers, metadata, demurrage, nominal_income)
     const params = [location, bootstrappers, meta, null, null];
 
-    const tx = api.tx.sudo.sudo(
-        api.tx.encointerCommunities.newCommunity(...params)
-    );
+    const tx = api.tx['encointerCommunities']['newCommunity'](...params);
 
     return submitAndWatchTx(api, signer, tx);
 }
@@ -311,12 +308,12 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
     // Even though they are identical, we need to have three different objects because they are passed by reference in JS.
-    const tx1 = api.tx.encointerCeremonies.registerParticipant(cid, null)
-    const tx2 = api.tx.encointerCeremonies.registerParticipant(cid, null)
-    const tx3 = api.tx.encointerCeremonies.registerParticipant(cid, null)
+    const tx1 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
+    const tx2 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
+    const tx3 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
 
     // Charlie does not have funds
-    const transfer_tx = api.tx.balances.transfer(charlie.address, 10000000000000);
+    const transfer_tx = api.tx['balances']['transfer'](charlie.address, 10000000000000);
     await submitAndWatchTx(api, alice, transfer_tx)
         .then((result) => {
             if (result.error !== undefined) {
@@ -347,8 +344,8 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
 }
 
 function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
-    const tx = api.tx.sudo.sudo(
-        api.tx.encointerScheduler.nextPhase()
+    const tx = api.tx['sudo']['sudo'](
+        api.tx['encointerScheduler']['nextPhase']()
     );
     return submitAndWatchTx(api, signer, tx)
         .then((result) => {

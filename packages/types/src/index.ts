@@ -1,4 +1,4 @@
-import * as encointerDefs from './interfaces/definitions';
+import * as encointerDefs from './interfaces/definitions.js';
 
 function typesFromDefs(
   definitions: Record<string, { types: Record<string, any> }>,
@@ -26,10 +26,14 @@ function rpcsFromDefs(
     );
 }
 
-export * from './interfaces/index';
+export * from './interfaces/index.js';
+
+const userDefs: Record<string, any> = {
+  ...encointerDefs
+};
 
 const encointer = {
-    rpcs: rpcsFromDefs(encointerDefs),
+    rpcs: rpcsFromDefs(userDefs),
     types: typesFromDefs(encointerDefs),
 }
 

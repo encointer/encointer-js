@@ -1,9 +1,9 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { localDockerNetwork } from './testUtils/networks';
-import { EncointerWorker } from './worker';
+import { localDockerNetwork } from './testUtils/networks.js';
+import { EncointerWorker } from './worker.js';
 import WS from 'websocket';
-import { CommunityIdentifier } from "@encointer/types";
+import type { CommunityIdentifier } from "@encointer/types";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -24,7 +24,8 @@ describe('worker', () => {
       keyring: keyring,
       types: network.customTypes,
       // @ts-ignore
-      createWebSocket: (url) => new WebSocket(url)
+      createWebSocket: (url) => new WebSocket(url),
+      api: null,
     });
   });
 

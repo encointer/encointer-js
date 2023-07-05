@@ -1,6 +1,6 @@
 'use strict';
 
-import {parseI16F16, parseI32F32, parseI64F64, stringToI64F64} from '.';
+import {parseI16F16, parseI32F32, parseI64F64, stringToI64F64} from './index.js';
 
 import BN from 'bn.js';
 

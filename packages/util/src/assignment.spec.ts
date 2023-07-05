@@ -1,8 +1,8 @@
 'use strict';
 
 import {TypeRegistry, u64, Vec} from "@polkadot/types";
-import {RegistryTypes} from "@polkadot/types/types";
-import {options as encointerOptions} from "@encointer/node-api";
+import type {RegistryTypes} from "@polkadot/types/types";
+import {options as encointerOptions} from "@encointer/node-api/options";
 import {
     assignmentFn,
     assignmentFnInverse,
@@ -11,17 +11,18 @@ import {
     meetupIndex,
     meetupLocation,
     meetupTime,
-    modInv, ParticipantIndexes
+    modInv
 } from "@encointer/util/assignment";
-import {
+import type { ParticipantIndexes } from "@encointer/util/assignment";
+import type {
     AssignmentParams, CeremonyPhaseType,
     MeetupIndexType, Location,
-    ParticipantIndexType,
-    stringToDegree, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
+    ParticipantIndexType, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
 } from "@encointer/types";
+import { stringToDegree } from "@encointer/types";
 import assert from "assert";
-import * as testCeremonies from "./test-ceremony-data";
-import {Moment} from "@polkadot/types/interfaces/runtime";
+import * as testCeremonies from "./test-ceremony-data/index.js";
+import type {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('assignment', () => {
     const registry = new TypeRegistry()
@@ -92,8 +93,8 @@ describe('assignment', () => {
     ];
 
     meetupTimeTestCases.forEach((test) => {
-        const attestingStart = registry.createType('Moment', 0);
-        const oneDay = registry.createType('Moment', 360);
+        const attestingStart = registry.createTypeUnsafe<Moment>('Moment', [0]);
+        const oneDay = registry.createTypeUnsafe<Moment>('Moment', [360]);
 
         it(`meetupTime ${test.description}`, () => {
             const meetupOffset = registry.createType<MeetupTimeOffsetType>('MeetupTimeOffsetType', test.offset);
@@ -194,8 +195,8 @@ describe('assignment', () => {
 
 
     ceremonyTestCases.forEach((ceremonyTestCase) => {
-        ceremonyTestCase.meetups.forEach((meetup) => {
-            meetup.registrations.forEach((registration, index) => {
+        ceremonyTestCase.meetups.forEach((meetup: { registrations: any[]; index: any; }) => {
+            meetup.registrations.forEach((registration) => {
 
                 // @ts-ignore
                 it(`test computeMeetupIndex for ceremony ${ceremonyTestCase.communityCeremony}: for [mIndex, pIndex]: [${meetup.index}, ${registration[1].index}]`, () => {

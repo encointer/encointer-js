@@ -1,7 +1,7 @@
 import assert from 'assert';
 import BN from 'bn.js';
 
-import {assertLength, fractionalToRadix2, safeIntegerToRadix2} from './common';
+import {assertLength, fractionalToRadix2, safeIntegerToRadix2} from './common.js';
 
 export interface ToFixPointFn {
   (num: number): BN;

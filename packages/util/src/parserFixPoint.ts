@@ -1,7 +1,7 @@
 import BN from "bn.js";
 import assert from "assert";
 
-import { assertLength } from "./common";
+import { assertLength } from "./common.js";
 
 export interface ParserFixPointFn {
     (raw: BN, precision?: number): number;
