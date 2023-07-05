@@ -1242,7 +1242,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
       await timeIt('Successfully linted configs', () => {
         lintOutput(dir);
         // TODO commented out because i dont understand how tsconfig references work
-        //lintDependencies(compileType, dir, locals);
+        lintDependencies(compileType, dir, locals);
       });
     }
   }
