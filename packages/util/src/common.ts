@@ -1,8 +1,8 @@
 import assert from 'assert';
 import type { KeyringPair } from "@polkadot/keyring/types";
-import type { PubKeyPinPair } from "@encointer/worker-api/index.js";
+import type { PubKeyPinPair } from "@encointer/worker-api";
 import { Keyring } from "@polkadot/keyring";
-import { isPubKeyPinPair } from "@encointer/worker-api/interface.js";
+import { isPubKeyPinPair } from "@encointer/worker-api/interface";
 import BN from "bn.js";
 
 interface assertLengthFunc {

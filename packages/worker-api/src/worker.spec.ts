@@ -3,7 +3,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks.js';
 import { EncointerWorker } from './worker.js';
 import WS from 'websocket';
-import type { CommunityIdentifier } from "@encointer/types/index.js";
+import type { CommunityIdentifier } from "@encointer/types";
 
 const {w3cwebsocket: WebSocket} = WS;
 

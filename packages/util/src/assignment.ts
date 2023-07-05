@@ -6,8 +6,8 @@ import type {
     ParticipantIndexType,
     Location,
     Assignment, AssignmentCount, ParticipantRegistration, MeetupTimeOffsetType, CeremonyPhaseType
-} from "@encointer/types/index.js";
-import { parseDegree } from "@encointer/types/index.js";
+} from "@encointer/types";
+import { parseDegree } from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
 import {Option} from "@polkadot/types-codec";
 import type {Moment} from "@polkadot/types/interfaces/runtime";

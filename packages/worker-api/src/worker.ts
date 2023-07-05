@@ -5,8 +5,8 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
-import { options as encointerOptions } from '@encointer/node-api/index.js';
-import {communityIdentifierFromString, parseI64F64} from '@encointer/util/index.js';
+import { options as encointerOptions } from '@encointer/node-api';
+import {communityIdentifierFromString, parseI64F64} from '@encointer/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
@@ -20,14 +20,14 @@ import type {
   MeetupIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
   SchedulerState, TrustedCallSigned
-} from '@encointer/types/index.js';
+} from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface.js';
 import { Request } from './interface.js';
 import { parseBalance, parseNodeRSA } from './parsers.js';
 import { callGetter } from './getterApi.js';
-import { createTrustedCall } from "@encointer/worker-api/trustedCallApi.js";
-import { toAccount } from "@encointer/util/common.js";
+import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
+import { toAccount } from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Unwraps the value that is wrapped in all the Options and encoding from the worker.

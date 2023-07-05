@@ -6,7 +6,7 @@ import {ApiPromise} from "@polkadot/api";
 import type {ISubmittableResult} from "@polkadot/types/types";
 import type {SubmittableExtrinsic} from "@polkadot/api/promise/types";
 import type {KeyringPair} from "@polkadot/keyring/types";
-import type {IExtractEventResult, ISubmitAndWatchResult} from "@encointer/node-api/interface.js";
+import type {IExtractEventResult, ISubmitAndWatchResult} from "@encointer/node-api/interface";
 
 /**
  * Send `tx` and watch until it is included in a block returning the execution result.

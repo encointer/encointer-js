@@ -40,7 +40,7 @@ const encointer = {
 export default encointer;
 export { createType } from '@polkadot/types';
 
-import {parseI64F64, stringToI64F64, toI64F64} from "@encointer/util/index.js";
+import {parseI64F64, stringToI64F64, toI64F64} from "@encointer/util";
 
 /**
  * Converts a JS number to a fixed-point BN

@@ -5,11 +5,11 @@ import type {
   RegisterAttestationsArgs,
   RegisterParticipantArgs,
   TrustedCallSigned
-} from "@encointer/types/index.js";
+} from "@encointer/types";
 import type { KeyringPair } from "@polkadot/keyring/types";
 import type { u32 } from "@polkadot/types";
 import bs58 from "bs58";
-import { toAccount } from "@encointer/util/common.js";
+import { toAccount } from "@encointer/util/common";
 
 export type TrustedCallArgs = (BalanceTransferArgs | RegisterParticipantArgs | RegisterAttestationsArgs | GrantReputationArgs);
 

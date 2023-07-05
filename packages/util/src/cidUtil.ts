@@ -1,4 +1,4 @@
-import type {CommunityIdentifier} from "@encointer/types/index.js";
+import type {CommunityIdentifier} from "@encointer/types";
 import { u8aToU8a} from "@polkadot/util";
 import { base58Decode, base58Encode } from '@polkadot/util-crypto/base58';
 import type {Registry} from "@polkadot/types/types";

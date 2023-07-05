@@ -2,7 +2,7 @@
 
 import {TypeRegistry, u64, Vec} from "@polkadot/types";
 import type {RegistryTypes} from "@polkadot/types/types";
-import {options as encointerOptions} from "@encointer/node-api/options.js";
+import {options as encointerOptions} from "@encointer/node-api/options";
 import {
     assignmentFn,
     assignmentFnInverse,
@@ -12,14 +12,14 @@ import {
     meetupLocation,
     meetupTime,
     modInv
-} from "@encointer/util/assignment.js";
-import type { ParticipantIndexes } from "@encointer/util/assignment.js";
+} from "@encointer/util/assignment";
+import type { ParticipantIndexes } from "@encointer/util/assignment";
 import type {
     AssignmentParams, CeremonyPhaseType,
     MeetupIndexType, Location,
     ParticipantIndexType, MeetupTimeOffsetType, Assignment, AssignmentCount, CommunityCeremonyStats, ParticipantRegistration
-} from "@encointer/types/index.js";
-import { stringToDegree } from "@encointer/types/index.js";
+} from "@encointer/types";
+import { stringToDegree } from "@encointer/types";
 import assert from "assert";
 import * as testCeremonies from "./test-ceremony-data/index.js";
 import type {Moment} from "@polkadot/types/interfaces/runtime";

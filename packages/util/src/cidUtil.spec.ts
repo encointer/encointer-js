@@ -2,9 +2,9 @@
 
 import {communityIdentifierFromString, communityIdentifierToString} from "./index.js";
 import {TypeRegistry} from "@polkadot/types";
-import { options as encointerOptions} from "@encointer/node-api/index.js";
+import { options as encointerOptions} from "@encointer/node-api/index";
 import type {RegistryTypes} from "@polkadot/types/types";
-import type {CommunityIdentifier} from "@encointer/types/index.js";
+import type {CommunityIdentifier} from "@encointer/types";
 
 describe('cidUtils', () => {
     const cidStr = "gbsuv7YXq9G";

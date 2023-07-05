@@ -5,7 +5,7 @@ import type {
     CeremonyIndexType, CeremonyPhaseType,
     CommunityIdentifier, Demurrage, FixedI64F64, Location,
     MeetupIndexType, MeetupTimeOffsetType, NominalIncomeType, ParticipantIndexType, ParticipantRegistration,
-} from "@encointer/types/index.js";
+} from "@encointer/types";
 import {
     meetupLocation,
     assignmentFnInverse,
@@ -13,12 +13,12 @@ import {
     computeMeetupIndex,
     getRegistration,
     computeStartOfAttestingPhase
-} from "@encointer/util/assignment.js";
+} from "@encointer/util/assignment";
 import {Vec} from "@polkadot/types";
 import type {AccountId, Moment} from "@polkadot/types/interfaces/runtime";
 import type {Registry} from "@polkadot/types/types";
-import {IndexRegistry} from "@encointer/node-api/interface.js";
-import type {IParticipantIndexQuery} from "@encointer/node-api/interface.js";
+import {IndexRegistry} from "@encointer/node-api/interface";
+import type {IParticipantIndexQuery} from "@encointer/node-api/interface";
 import {Option} from "@polkadot/types-codec";
 
 export async function getAssignment(api: ApiPromise, cid: CommunityIdentifier, cIndex: CeremonyIndexType): Promise<Assignment> {
@@ -34,6 +34,7 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupTimeOffset(api: ApiPromise): Promise<MeetupTimeOffsetType> {
+    console.log('HUHU1337')
     return api.query["encointerCeremonies"]["meetupTimeOffset"]<MeetupTimeOffsetType>();
 }
 
