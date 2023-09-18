@@ -103,6 +103,14 @@ export interface MeetupAssignment extends ITuple<[MeetupIndexType, Option<Locati
 /** @name MeetupIndexType */
 export interface MeetupIndexType extends u64 {}
 
+/** @name MeetupResult */
+export interface MeetupResult extends Enum {
+  readonly isOk: boolean;
+  readonly isVotesNotDependable: boolean;
+  readonly isMeetupValidationIndexOutOfBounds: boolean;
+  readonly type: 'Ok' | 'VotesNotDependable' | 'MeetupValidationIndexOutOfBounds';
+}
+
 /** @name MeetupTimeOffsetType */
 export interface MeetupTimeOffsetType extends i32 {}
 
