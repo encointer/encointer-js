@@ -407,6 +407,7 @@ const testCommunityParams = {
         "assets": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
     },
     cid: "sqm1v79dF6b",
+    rules: "loCo",
     bootstrappers: [
         "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
