@@ -3,8 +3,19 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CeremonyIndexType } from '@encointer/types/interfaces/ceremony';
-import type { Option, Struct, Text, U8aFixed, i128 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Text, U8aFixed, i128 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
+import type { AccountId } from '@polkadot/types/interfaces/runtime';
+
+/** @name AnnouncementSigner */
+export interface AnnouncementSigner extends Enum {
+  readonly isBip340: boolean;
+  readonly asBip340: Bip340;
+  readonly type: 'Bip340';
+}
+
+/** @name Bip340 */
+export interface Bip340 extends AccountId {}
 
 /** @name CidDigest */
 export interface CidDigest extends U8aFixed {}
@@ -31,6 +42,16 @@ export interface CommunityMetadataType extends Struct {
   readonly assets: Text;
   readonly theme: Option<Text>;
   readonly url: Option<Text>;
+  readonly announcementSigner: Option<AnnouncementSigner>;
+  readonly rules: CommunityRules;
+}
+
+/** @name CommunityRules */
+export interface CommunityRules extends Enum {
+  readonly isLoCo: boolean;
+  readonly isLoCoFlex: boolean;
+  readonly isBeeDance: boolean;
+  readonly type: 'LoCo' | 'LoCoFlex' | 'BeeDance';
 }
 
 /** @name DegreeFixed */

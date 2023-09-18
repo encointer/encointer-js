@@ -32,7 +32,18 @@ export default {
       symbol: 'Text',
       assets: 'Text',
       theme: 'Option<Text>',
-      url: 'Option<Text>'
+      url: 'Option<Text>',
+      announcementSigner: 'Option<AnnouncementSigner>',
+      rules: 'CommunityRules',
     },
+    CommunityRules: {
+      _enum: ['LoCo', 'LoCoFlex', 'BeeDance']
+    },
+    AnnouncementSigner: {
+      _enum: {
+        bip340: 'Bip340',
+      }
+    },
+    Bip340: 'AccountId',
   }
 };
