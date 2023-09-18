@@ -69,7 +69,7 @@ describe('node-api', () => {
     describe('ceremonies', () => {
         it('should get meetupTimeOffset', async () => {
             const time = await getMeetupTimeOffset(api);
-            expect(time.toNumber()).toBe(-2_100_000);
+            expect(time.toNumber()).toBe(16500000);
         });
     });
 
