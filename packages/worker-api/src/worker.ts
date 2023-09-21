@@ -22,12 +22,12 @@ import type {
   SchedulerState, TrustedCallSigned
 } from '@encointer/types';
 
-import type { IEncointerWorker, WorkerOptions, CallOptions, PubKeyPinPair } from './interface.js';
+import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface.js';
 import { Request } from './interface.js';
 import { parseBalance, parseNodeRSA } from './parsers.js';
 import { callGetter } from './getterApi.js';
 import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
-import { toAccount } from "@encointer/util/common";
+import { toAccount, PubKeyPinPair } from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Unwraps the value that is wrapped in all the Options and encoding from the worker.
