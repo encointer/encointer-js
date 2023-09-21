@@ -1,8 +1,6 @@
 import assert from 'assert';
 import type { KeyringPair } from "@polkadot/keyring/types";
-import type { PubKeyPinPair } from "@encointer/worker-api";
 import { Keyring } from "@polkadot/keyring";
-import { isPubKeyPinPair } from "@encointer/worker-api/interface";
 import BN from "bn.js";
 
 interface assertLengthFunc {
@@ -16,6 +14,15 @@ export const assertLength: assertLengthFunc = function (upper, lower) {
   assert(!(len & (len - 1)), `Bit length should be power of 2, provided ${len}`);
   return len;
 };
+
+export interface PubKeyPinPair {
+  pubKey: string,
+  pin: string,
+}
+
+export function isPubKeyPinPair(pair: KeyringPair | PubKeyPinPair) {
+  return (pair as PubKeyPinPair).pin !== undefined;
+}
 
 export const toAccount = (accountOrPubKey: (KeyringPair | PubKeyPinPair), keyring?: Keyring): KeyringPair => {
   if (isPubKeyPinPair(accountOrPubKey)) {

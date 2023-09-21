@@ -17,15 +17,6 @@ export interface WorkerOptions {
   createWebSocket?: (url: string) => WebSocket;
 }
 
-export interface PubKeyPinPair {
-  pubKey: string,
-  pin: string,
-}
-
-export function isPubKeyPinPair(pair: KeyringPair | PubKeyPinPair) {
-  return (pair as PubKeyPinPair).pin !== undefined;
-}
-
 export interface TrustedGetterArgs {
   cid: string;
   account: KeyringPair;
