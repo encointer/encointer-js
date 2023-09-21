@@ -404,7 +404,9 @@ const testCommunityParams = {
     meta: {
         "name": "Mediterranea",
         "symbol": "MTA",
-        "assets": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD"
+        "assets": "QmP2fzfikh7VqTu8pvzd2G2vAd4eK7EaazXTEgqGN6AWoD",
+        "announcementSigner": null,
+        "rules": "LoCo"
     },
     cid: "sqm1v79dF6b",
     bootstrappers: [
