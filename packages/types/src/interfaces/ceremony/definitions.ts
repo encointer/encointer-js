@@ -14,6 +14,13 @@ export default {
     AttestationIndexType: 'u64',
     MeetupAssignment: '(MeetupIndexType, Option<Location>)',
     MeetupTimeOffsetType: 'i32',
+    MeetupResult: {
+      _enum: [
+        'Ok',
+        'VotesNotDependable',
+        'MeetupValidationIndexOutOfBounds',
+      ]
+    },
     Reputation: {
       _enum: ['Unverified', 'UnverifiedReputable', 'VerifiedUnlinked', 'VerifiedLinked']
     },
