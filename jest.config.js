@@ -6,6 +6,11 @@
 const fs = require("fs");
 const { defaults } = require("jest-config");
 
+const https = require('https');
+
+// Override certificate validation to accept all certificates (including self-signed ones)
+https.globalAgent.options.rejectUnauthorized = false;
+
 module.exports = {
     moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
     modulePathIgnorePatterns: [
