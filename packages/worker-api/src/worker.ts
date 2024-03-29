@@ -16,7 +16,7 @@ import type { KeyringPair } from '@polkadot/keyring/types';
 import type { Vec, u32, u64 } from '@polkadot/types';
 import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runtime';
 import type {
-  Attestation, BalanceEntry, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
+  Attestation, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
   MeetupIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
   SchedulerState, TrustedCallSigned
@@ -153,8 +153,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return await callGetter<SchedulerState>(this, [Request.PublicGetter, 'scheduler_state', 'SchedulerState'], {cid}, options)
   }
 
-  public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<BalanceEntry> {
-    return await callGetter<BalanceEntry>(this, [Request.TrustedGetter, 'balance', 'BalanceEntry'], {
+  public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
       cid,
       account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
