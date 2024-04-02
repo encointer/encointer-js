@@ -2,10 +2,9 @@ import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks.js';
 import { EncointerWorker } from './worker.js';
-import WS from 'websocket';
+import WebSocket from 'ws';
 import type { CommunityIdentifier } from "@encointer/types";
 
-const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
   const network = localDockerNetwork();
@@ -66,29 +65,26 @@ describe('worker', () => {
     });
 
     describe('openAndCloseWorks', () => {
-        it('should return value', async () => {
+        it('should return value', function (done) {
+          // Create WebSocket client
+          const ws = new WebSocket(network.worker, {
+            rejectUnauthorized: false,
+          });
 
-            let unresolvedPromise = new Promise((resolve, _) => {
-                const ws = new WebSocket("wss://127.0.0.1:2000", 'tls');
+          ws.on('open', () => {
+            // Send a message to the server
+            ws.send('Hello, server!');
+          });
 
-                ws.onopen = () => {
-                    console.log('WebSocket opened');
-                    ws.send("hello");
-                    ws.close();
-                    resolve("");
-                };
+          ws.on('message', (message) => {
+            console.log(`Received message from server: ${message}`);
+            // Assert that the server echoes the message back
+            expect(message).toBe('Hello, server!');
 
-                ws.onmessage = (message) => {
-                    console.log('Received message:', message.data);
-                };
-
-                ws.onclose = () => {
-                    console.log('WebSocket closed');
-                };
-            });
-
-            await unresolvedPromise;
-            console.log("Test finished")
+            // Close the WebSocket client and server
+            ws.close();
+            done()
+          });
         });
     });
 
