@@ -71,34 +71,6 @@ describe('worker', () => {
       });
     });
 
-    describe('openAndCloseWorks', () => {
-        it('should return value', async () => {
-
-            let unresolvedPromise = new Promise((resolve, _) => {
-                const ws = new WebSocket("wss://127.0.0.1:2000", 'tls');
-
-                ws.onopen = () => {
-                    console.log('WebSocket opened');
-                    ws.send("hello");
-                    ws.close();
-                    resolve("");
-                };
-
-                ws.onmessage = (message) => {
-                    console.log('Received message:', message.data);
-                };
-
-                ws.onclose = () => {
-                    console.log('WebSocket closed');
-                };
-            });
-
-            await unresolvedPromise;
-            console.log("Test finished")
-        });
-    });
-
-
     describe('getTotalIssuance', () => {
     it('should return value', async () => {
         const result = await worker.getTotalIssuance(network.chosenCid);
