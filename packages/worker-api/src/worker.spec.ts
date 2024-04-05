@@ -71,101 +71,104 @@ describe('worker', () => {
       });
     });
 
-    describe('getTotalIssuance', () => {
-    it('should return value', async () => {
-        const result = await worker.getTotalIssuance(network.chosenCid);
-        // console.log('getTotalIssuance', result);
-        expect(result).toBeDefined();
+    // Tests specific for the encointer protocol
+    describe('encointer-worker', () => {
+      describe('getTotalIssuance', () => {
+        it('should return value', async () => {
+          const result = await worker.getTotalIssuance(network.chosenCid);
+          // console.log('getTotalIssuance', result);
+          expect(result).toBeDefined();
+        });
       });
-    });
 
-    describe('getParticipantCount', () => {
-      it('should return default value', async () => {
-        const result = await worker.getParticipantCount(network.chosenCid);
-        expect(result).toBe(0);
+      describe('getParticipantCount', () => {
+        it('should return default value', async () => {
+          const result = await worker.getParticipantCount(network.chosenCid);
+          expect(result).toBe(0);
+        });
       });
-    });
 
-    describe('getMeetupCount', () => {
-      it('should return default value', async () => {
-        const result = await worker.getMeetupCount(network.chosenCid);
-        expect(result).toBe(0);
+      describe('getMeetupCount', () => {
+        it('should return default value', async () => {
+          const result = await worker.getMeetupCount(network.chosenCid);
+          expect(result).toBe(0);
+        });
       });
-    });
 
-    describe('getCeremonyReward', () => {
-      it('should return default value', async () => {
-        const result = await worker.getCeremonyReward(network.chosenCid);
-        expect(result).toBe(1);
+      describe('getCeremonyReward', () => {
+        it('should return default value', async () => {
+          const result = await worker.getCeremonyReward(network.chosenCid);
+          expect(result).toBe(1);
+        });
       });
-    });
 
-    describe('getLocationTolerance', () => {
-      it('should return default value', async () => {
-        const result = await worker.getLocationTolerance(network.chosenCid);
-        expect(result).toBe(1000);
+      describe('getLocationTolerance', () => {
+        it('should return default value', async () => {
+          const result = await worker.getLocationTolerance(network.chosenCid);
+          expect(result).toBe(1000);
+        });
       });
-    });
 
-    describe('getTimeTolerance', () => {
-      it('should return default value', async () => {
-        const result = await worker.getTimeTolerance(network.chosenCid);
-        expect(result.toNumber()).toBe(600000);
+      describe('getTimeTolerance', () => {
+        it('should return default value', async () => {
+          const result = await worker.getTimeTolerance(network.chosenCid);
+          expect(result.toNumber()).toBe(600000);
+        });
       });
-    });
 
-    describe('getSchedulerState', () => {
-      it('should return value', async () => {
-        const result = await worker.getSchedulerState(network.chosenCid);
-        // console.log('schedulerStateResult', result);
-        expect(result).toBeDefined();
+      describe('getSchedulerState', () => {
+        it('should return value', async () => {
+          const result = await worker.getSchedulerState(network.chosenCid);
+          // console.log('schedulerStateResult', result);
+          expect(result).toBeDefined();
+        });
       });
-    });
 
-    describe('getBalance', () => {
-      it('should return value', async () => {
-        const result = await worker.getBalance({
-          pubKey: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
-          pin: '1234'
-        }, network.chosenCid);
-        // console.log('getBalance', result);
-        expect(result).toBeDefined();
+      describe('getBalance', () => {
+        it('should return value', async () => {
+          const result = await worker.getBalance({
+            pubKey: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
+            pin: '1234'
+          }, network.chosenCid);
+          // console.log('getBalance', result);
+          expect(result).toBeDefined();
+        });
       });
-    });
 
-    describe('getRegistration', () => {
-      it('should return default value', async () => {
-        await cryptoWaitReady();
-        const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
-        const result = await worker.getParticipantIndex(bob, network.chosenCid);
-        expect(result.toNumber()).toBe(0);
+      describe('getRegistration', () => {
+        it('should return default value', async () => {
+          await cryptoWaitReady();
+          const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+          const result = await worker.getParticipantIndex(bob, network.chosenCid);
+          expect(result.toNumber()).toBe(0);
+        });
       });
-    });
 
-    describe('getMeetupIndex', () => {
-      it('should return default value', async () => {
-        await cryptoWaitReady();
-        const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
-        const result = await worker.getMeetupIndex(bob, network.chosenCid);
-        expect(result.toNumber()).toBe(0);
+      describe('getMeetupIndex', () => {
+        it('should return default value', async () => {
+          await cryptoWaitReady();
+          const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+          const result = await worker.getMeetupIndex(bob, network.chosenCid);
+          expect(result.toNumber()).toBe(0);
+        });
       });
-    });
 
-    describe('getAttestations', () => {
-      it('should be empty', async () => {
-        await cryptoWaitReady();
-        const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
-        const result = await worker.getAttestations(bob, network.chosenCid);
-        expect(result.toJSON()).toStrictEqual([]);
+      describe('getAttestations', () => {
+        it('should be empty', async () => {
+          await cryptoWaitReady();
+          const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+          const result = await worker.getAttestations(bob, network.chosenCid);
+          expect(result.toJSON()).toStrictEqual([]);
+        });
       });
-    });
 
-    describe('getMeetupRegistry method', () => {
-      it('should be empty', async () => {
-        await cryptoWaitReady();
-        const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
-        const result = await worker.getMeetupRegistry(bob, network.chosenCid);
-        expect(result.toJSON()).toStrictEqual([]);
+      describe('getMeetupRegistry method', () => {
+        it('should be empty', async () => {
+          await cryptoWaitReady();
+          const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+          const result = await worker.getMeetupRegistry(bob, network.chosenCid);
+          expect(result.toJSON()).toStrictEqual([]);
+        });
       });
     });
   });
