@@ -39,11 +39,31 @@ export default {
         trusted: 'TrustedGetterSigned'
       }
     },
-    ClientRequest: {
+    RpcReturnValue: {
+      value: 'Vec<u8>',
+      do_watch: 'bool',
+      status: 'DirectRequestStatus'
+    },
+    DirectRequestStatus: {
       _enum: {
-        PubKeyWorker: null,
-        MuRaPortWorker: null,
-        StfState: '(Getter, ShardIdentifier)'
+        Ok: null,
+        TrustedOperationStatus: 'TrustedOperationStatus',
+        Error: null
+      }
+    },
+    TrustedOperationStatus: {
+      _enum: {
+        Submitted: null,
+        Future: null,
+        Ready: null,
+        BroadCast: null,
+        InSidechainBlock: 'Hash',
+        Retracted: null,
+        FinalityTimeout: null,
+        Finalized: null,
+        Usurped: null,
+        Dropped: null,
+        Invalid: null
       }
     },
     WorkerEncoded: 'Vec<u8>',

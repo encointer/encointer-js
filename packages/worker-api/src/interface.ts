@@ -10,6 +10,22 @@ export interface IEncointerWorker extends WebSocketAsPromised {
   open: () => Promise<Event>;
 }
 
+export interface JsonRpcRequest {
+  jsonrpc: string;
+  method: string;
+  params?: any;
+  id: number | string;
+}
+
+export function createJsonRpcRequest(method: string, params: any, id: number | string): JsonRpcRequest {
+  return {
+    jsonrpc: '2.0',
+    method: method,
+    params: params,
+    id: id
+  };
+}
+
 export interface WorkerOptions {
   keyring?: Keyring;
   api: any;

@@ -1,4 +1,12 @@
-import type { IEncointerWorker, TrustedGetterArgs, PublicGetterArgs, RequestArgs, CallOptions, WorkerMethod } from './interface.js';
+import {
+  type IEncointerWorker,
+  type TrustedGetterArgs,
+  type PublicGetterArgs,
+  type RequestArgs,
+  type CallOptions,
+  type WorkerMethod,
+  createJsonRpcRequest
+} from './interface.js';
 import  { Request } from './interface.js';
 
 const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
@@ -9,12 +17,6 @@ const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserTyp
       requestId
     }
   )
-}
-
-const clientRequest = (self: IEncointerWorker, request: string) => {
-  return self.createType( 'ClientRequest', {
-    [request]: null
-  });
 }
 
 const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
@@ -70,7 +72,7 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
       result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
     case Request.Worker:
-      result = sendWorkerRequest(self, clientRequest(self, method), parserType, options)
+      result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
       break;
     default:
       result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)

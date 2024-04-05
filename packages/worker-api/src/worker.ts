@@ -45,6 +45,14 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
   if (data === 'Could not decode request') {
     throw new Error(`Worker error: ${data}`);
   }
+
+  console.log(`Getter response: ${data}`);
+  const json = JSON.parse(data);
+
+  const value = hexToU8a(json["result"]);
+  const returnValue = self.createType('RpcReturnValue', value);
+  console.log(`RpcReturnValue ${JSON.stringify(returnValue)}`);
+
   let parsedData: any;
   try {
     switch (responseType) {
@@ -60,7 +68,11 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
       case 'NodeRSA':
-        parsedData = parseNodeRSA(data);
+        const jsonStr = self.createType('String', returnValue.value);
+        // Todo: For some reason there are 2 non-utf characters, where I don't know where
+        // they come from currently.
+        // console.log(`jsonStr.sub(2): ${jsonStr.toJSON().substring(2)}`);
+        parsedData = parseNodeRSA(jsonStr.toJSON().substring(2));
         break
       default:
         parsedData = unwrapWorkerResponse(self, data);
@@ -86,7 +98,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   constructor(url: string, options: WorkerOptions = {} as WorkerOptions) {
     super(url, {
       createWebSocket: (options.createWebSocket || undefined),
-      packMessage: (data: any) => this.createType('ClientRequest', data).toU8a(),
+      packMessage: (data: any) => JSON.stringify(data),
       unpackMessage: (data: any) => parseGetterResponse(this, this.rqStack.shift() || '', data),
       attachRequestId: (data: any): any => data,
       extractRequestId: () => this.rsCount = ++this.rsCount
@@ -122,7 +134,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   }
 
   public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
-    return await callGetter<NodeRSA>(this, [Request.Worker, 'PubKeyWorker', 'NodeRSA'], {}, options)
+    return await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
   }
 
   public async getTotalIssuance(cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {

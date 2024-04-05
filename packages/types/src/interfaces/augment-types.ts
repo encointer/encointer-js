@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { BalanceTransferArgs, ClientRequest, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { BalanceTransferArgs, DirectRequestStatus, Enclave, Getter, GetterArgs, GrantReputationArgs, PublicGetter, RegisterAttestationsArgs, RegisterParticipantArgs, Request, RpcReturnValue, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, TrustedOperationStatus, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
 import type { BitVec, Bool, Bytes, F32, F64, I128, I16, I256, I32, I64, I8, ISize, Json, Null, OptionBool, Raw, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, f32, f64, i128, i16, i256, i32, i64, i8, isize, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types-codec';
 import type { AssetApproval, AssetApprovalKey, AssetBalance, AssetDestroyWitness, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -242,7 +242,6 @@ declare module '@polkadot/types/types/registry' {
     ClassDetails: ClassDetails;
     ClassId: ClassId;
     ClassMetadata: ClassMetadata;
-    ClientRequest: ClientRequest;
     CodecHash: CodecHash;
     CodeHash: CodeHash;
     CodeSource: CodeSource;
@@ -367,6 +366,7 @@ declare module '@polkadot/types/types/registry' {
     Digest: Digest;
     DigestItem: DigestItem;
     DigestOf: DigestOf;
+    DirectRequestStatus: DirectRequestStatus;
     DispatchClass: DispatchClass;
     DispatchError: DispatchError;
     DispatchErrorModule: DispatchErrorModule;
@@ -947,6 +947,7 @@ declare module '@polkadot/types/types/registry' {
     RoundSnapshot: RoundSnapshot;
     RoundState: RoundState;
     RpcMethods: RpcMethods;
+    RpcReturnValue: RpcReturnValue;
     RuntimeApiMetadataLatest: RuntimeApiMetadataLatest;
     RuntimeApiMetadataV15: RuntimeApiMetadataV15;
     RuntimeApiMethodMetadataV15: RuntimeApiMethodMetadataV15;
@@ -1156,6 +1157,7 @@ declare module '@polkadot/types/types/registry' {
     TrustedCallSigned: TrustedCallSigned;
     TrustedGetter: TrustedGetter;
     TrustedGetterSigned: TrustedGetterSigned;
+    TrustedOperationStatus: TrustedOperationStatus;
     Type: Type;
     u128: u128;
     U128: U128;

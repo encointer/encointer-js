@@ -4,7 +4,7 @@
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
@@ -12,13 +12,13 @@ import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 /** @name BalanceTransferArgs */
 export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]> {}
 
-/** @name ClientRequest */
-export interface ClientRequest extends Enum {
-  readonly isPubKeyWorker: boolean;
-  readonly isMuRaPortWorker: boolean;
-  readonly isStfState: boolean;
-  readonly asStfState: ITuple<[Getter, ShardIdentifier]>;
-  readonly type: 'PubKeyWorker' | 'MuRaPortWorker' | 'StfState';
+/** @name DirectRequestStatus */
+export interface DirectRequestStatus extends Enum {
+  readonly isOk: boolean;
+  readonly isTrustedOperationStatus: boolean;
+  readonly asTrustedOperationStatus: TrustedOperationStatus;
+  readonly isError: boolean;
+  readonly type: 'Ok' | 'TrustedOperationStatus' | 'Error';
 }
 
 /** @name Enclave */
@@ -75,6 +75,13 @@ export interface Request extends Struct {
   readonly cyphertext: WorkerEncoded;
 }
 
+/** @name RpcReturnValue */
+export interface RpcReturnValue extends Struct {
+  readonly value: Bytes;
+  readonly do_watch: bool;
+  readonly status: DirectRequestStatus;
+}
+
 /** @name ShardIdentifier */
 export interface ShardIdentifier extends Hash {}
 
@@ -117,6 +124,23 @@ export interface TrustedGetter extends Enum {
 export interface TrustedGetterSigned extends Struct {
   readonly getter: TrustedGetter;
   readonly signature: Signature;
+}
+
+/** @name TrustedOperationStatus */
+export interface TrustedOperationStatus extends Enum {
+  readonly isSubmitted: boolean;
+  readonly isFuture: boolean;
+  readonly isReady: boolean;
+  readonly isBroadCast: boolean;
+  readonly isInSidechainBlock: boolean;
+  readonly asInSidechainBlock: Hash;
+  readonly isRetracted: boolean;
+  readonly isFinalityTimeout: boolean;
+  readonly isFinalized: boolean;
+  readonly isUsurped: boolean;
+  readonly isDropped: boolean;
+  readonly isInvalid: boolean;
+  readonly type: 'Submitted' | 'Future' | 'Ready' | 'BroadCast' | 'InSidechainBlock' | 'Retracted' | 'FinalityTimeout' | 'Finalized' | 'Usurped' | 'Dropped' | 'Invalid';
 }
 
 /** @name WorkerEncoded */
