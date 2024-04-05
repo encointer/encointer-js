@@ -24,7 +24,13 @@ describe('worker', () => {
       keyring: keyring,
       types: network.customTypes,
       // @ts-ignore
-      createWebSocket: (url) => new WebSocket(url),
+      createWebSocket: (url) => new WebSocket(
+          url,
+          undefined,
+          undefined,
+          undefined,
+          { rejectUnauthorized: false }
+          ),
       api: null,
     });
   });
