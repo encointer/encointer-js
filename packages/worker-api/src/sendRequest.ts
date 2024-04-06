@@ -20,10 +20,10 @@ const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserTyp
   )
 }
 
-const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
+const sendTrustedGetterRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestTrustedGetter(self, method, args), parser, options)
 
-const sendPublicRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
+const sendPublicGetterRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
 
 export const callGetter = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
@@ -35,16 +35,19 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
   let parserType: string = options.debug ? 'raw': parser;
   switch (getterType) {
     case Request.TrustedGetter:
-      result = sendTrustedRequest(self, method, parserType, args as TrustedGetterArgs, options)
+      result = sendTrustedGetterRequest(self, method, parserType, args as TrustedGetterArgs, options)
       break;
     case Request.PublicGetter:
-      result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
+      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
     case Request.Worker:
       result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
       break;
+    case Request.TrustedCall:
+      result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
+      break;
     default:
-      result = sendPublicRequest(self, method, parserType, args as PublicGetterArgs, options)
+      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
   }
   return result as Promise<T>
