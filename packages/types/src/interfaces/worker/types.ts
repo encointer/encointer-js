@@ -2,15 +2,17 @@
 /* eslint-disable */
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-import type { Attestation, ProofOfAttendance } from '@encointer/types/interfaces/ceremony';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-import type { Bytes, Enum, Option, Struct, Text, Vec, bool, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Struct, Text, bool, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceTransferArgs */
-export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, CommunityIdentifier, BalanceType]> {}
+export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, BalanceType]> {}
+
+/** @name BalanceUnshieldArgs */
+export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
 
 /** @name DirectRequestStatus */
 export interface DirectRequestStatus extends Enum {
@@ -41,9 +43,6 @@ export interface Getter extends Enum {
 /** @name GetterArgs */
 export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}
 
-/** @name GrantReputationArgs */
-export interface GrantReputationArgs extends ITuple<[AccountId, CommunityIdentifier, AccountId]> {}
-
 /** @name ParentchainId */
 export interface ParentchainId extends Enum {
   readonly isIntegritee: boolean;
@@ -71,12 +70,6 @@ export interface PublicGetter extends Enum {
   readonly type: 'TotalIssuance' | 'ParticipantCount' | 'MeetupCount' | 'CeremonyReward' | 'LocationTolerance' | 'TimeTolerance' | 'SchedulerState';
 }
 
-/** @name RegisterAttestationsArgs */
-export interface RegisterAttestationsArgs extends ITuple<[AccountId, Vec<Attestation>]> {}
-
-/** @name RegisterParticipantArgs */
-export interface RegisterParticipantArgs extends ITuple<[AccountId, CommunityIdentifier, Option<ProofOfAttendance>]> {}
-
 /** @name Request */
 export interface Request extends Struct {
   readonly shard: ShardIdentifier;
@@ -97,13 +90,9 @@ export interface ShardIdentifier extends Hash {}
 export interface TrustedCall extends Enum {
   readonly isBalanceTransfer: boolean;
   readonly asBalanceTransfer: BalanceTransferArgs;
-  readonly isCeremoniesRegisterParticipant: boolean;
-  readonly asCeremoniesRegisterParticipant: RegisterParticipantArgs;
-  readonly isCeremoniesRegisterAttestations: boolean;
-  readonly asCeremoniesRegisterAttestations: RegisterAttestationsArgs;
-  readonly isCeremoniesGrantReputation: boolean;
-  readonly asCeremoniesGrantReputation: GrantReputationArgs;
-  readonly type: 'BalanceTransfer' | 'CeremoniesRegisterParticipant' | 'CeremoniesRegisterAttestations' | 'CeremoniesGrantReputation';
+  readonly isBalanceUnshield: boolean;
+  readonly asBalanceUnshield: BalanceUnshieldArgs;
+  readonly type: 'BalanceTransfer' | 'BalanceUnshield';
 }
 
 /** @name TrustedCallSigned */

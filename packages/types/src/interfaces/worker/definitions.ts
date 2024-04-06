@@ -77,9 +77,7 @@ export default {
     TrustedCall: {
       _enum: {
         balance_transfer: 'BalanceTransferArgs',
-        ceremonies_register_participant: 'RegisterParticipantArgs',
-        ceremonies_register_attestations: 'RegisterAttestationsArgs',
-        ceremonies_grant_reputation: 'GrantReputationArgs'
+        balance_unshield: 'BalanceUnshieldArgs',
       }
     },
     Vault: '(AccountId, ParentchainId)',
@@ -90,9 +88,7 @@ export default {
         TargetB: null,
       }
     },
-    BalanceTransferArgs: '(AccountId, AccountId, CommunityIdentifier, BalanceType)',
-    RegisterParticipantArgs: '(AccountId, CommunityIdentifier, Option<ProofOfAttendance<MultiSignature, AccountId>>)',
-    RegisterAttestationsArgs: '(AccountId, Vec<Attestation<MultiSignature, AccountId, u64>>)',
-    GrantReputationArgs: '(AccountId, CommunityIdentifier, AccountId)'
+    BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
+    BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
   }
 }

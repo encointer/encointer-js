@@ -8,7 +8,11 @@ import {
   createJsonRpcRequest
 } from './interface.js';
 import  { Request } from './interface.js';
-import {clientRequestGetter, clientRequestTrustedGetter} from "@encointer/worker-api/requests.js";
+import {
+  clientRequestGetter,
+  clientRequestTrustedGetter,
+} from "@encointer/worker-api/requests.js";
+import type {ShardIdentifier, TrustedCallSigned} from "@encointer/types";
 
 const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
@@ -43,12 +47,26 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
     case Request.Worker:
       result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
       break;
-    case Request.TrustedCall:
-      result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
-      break;
     default:
       result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, options)
       break;
   }
   return result as Promise<T>
 }
+
+export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCallSigned, shard: ShardIdentifier, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
+  if( !self.isOpened ) {
+    await self.open();
+  }
+
+  let result: Promise<any>;
+  let parserType: string = options.debug ? 'raw': parser;
+
+  const r = self.createType(
+      'Request', { shard, cyphertext: call.toU8a() }
+  );
+
+  result = sendWorkerRequest(self, createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1), parserType, options)
+  return result as Promise<T>
+}
+

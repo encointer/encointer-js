@@ -1,33 +1,35 @@
-import { TypeRegistry } from '@polkadot/types';
-import type { RegistryTypes } from '@polkadot/types/types';
-import { Keyring } from '@polkadot/keyring'
-import { hexToU8a, u8aToHex } from '@polkadot/util';
+import type {u32, u64, Vec} from '@polkadot/types';
+import {TypeRegistry} from '@polkadot/types';
+import type {RegistryTypes} from '@polkadot/types/types';
+import {Keyring} from '@polkadot/keyring'
+import {hexToU8a, u8aToHex} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
-import { options as encointerOptions } from '@encointer/node-api';
+import {options as encointerOptions} from '@encointer/node-api';
 import {communityIdentifierFromString, parseI64F64} from '@encointer/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
 
 
-import type { KeyringPair } from '@polkadot/keyring/types';
-import type { Vec, u32, u64 } from '@polkadot/types';
-import type { AccountId, Balance, Moment } from '@polkadot/types/interfaces/runtime';
+import type {KeyringPair} from '@polkadot/keyring/types';
+import type {AccountId, Balance, Moment} from '@polkadot/types/interfaces/runtime';
 import type {
-  Attestation, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
+  Attestation,
+  BalanceTransferArgs,
+  CommunityIdentifier,
   MeetupIndexType,
-  ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
-  SchedulerState, TrustedCallSigned, Vault
+  ParticipantIndexType,
+  SchedulerState, ShardIdentifier,
+  Vault
 } from '@encointer/types';
 
-import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface.js';
-import { Request } from './interface.js';
-import { parseBalance, parseNodeRSA } from './parsers.js';
-import { callGetter } from './sendRequest.js';
-import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
-import { toAccount, PubKeyPinPair } from "@encointer/util/common";
+import {type CallOptions, type IEncointerWorker, Request, type WorkerOptions} from './interface.js';
+import {parseBalance, parseNodeRSA} from './parsers.js';
+import {callGetter, sendTrustedCall} from './sendRequest.js';
+import {createTrustedCall} from "@encointer/worker-api/requests.js";
+import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Unwraps the value that is wrapped in all the Options and encoding from the worker.
@@ -144,6 +146,13 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
   }
 
+  public async getNonce(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<u32> {
+    return await callGetter<u32>(this, [Request.TrustedGetter, 'nonce', 'u32'], {
+      shard: cid,
+      account: toAccount(accountOrPubKey, this.#keyring)
+    }, options)
+  }
+
   public async getTotalIssuance(cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
     return await callGetter<Balance>(this, [Request.PublicGetter, 'total_issuance', 'Balance'], {cid}, options)
   }
@@ -174,7 +183,7 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
     return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
-      cid,
+      shard: cid,
       account: toAccount(accountOrPubKey, this.#keyring)
     }, options)
   }
@@ -207,19 +216,9 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }, options)
   }
 
-  public trustedCallBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: BalanceTransferArgs): TrustedCallSigned {
-    return createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
-  }
-
-  public trustedCallRegisterParticipant(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: RegisterParticipantArgs): TrustedCallSigned {
-    return createTrustedCall(this, ['ceremonies_register_participant', 'RegisterParticipantArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
-  }
-
-  public trustedCallRegisterAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: RegisterAttestationsArgs): TrustedCallSigned {
-    return createTrustedCall(this, ['ceremonies_register_attestations', 'RegisterAttestationsArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
-  }
-
-  public trustedCallGrantReputation(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: CommunityIdentifier, mrenclave: string, nonce: u32, params: GrantReputationArgs): TrustedCallSigned {
-    return createTrustedCall(this, ['ceremonies_grant_reputation', 'GrantReputationArgs'], accountOrPubKey, cid, mrenclave, nonce, params)
+  public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<any> {
+        const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+        const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
+        return sendTrustedCall<u32>(this, call, shard, 'u32', options);
   }
 }
