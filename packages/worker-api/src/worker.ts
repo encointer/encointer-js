@@ -57,14 +57,14 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
   try {
     switch (responseType) {
       case 'raw':
-        parsedData = unwrapWorkerResponse(self, data);
+        parsedData = unwrapWorkerResponse(self, returnValue.value);
         break;
       case 'BalanceEntry':
-        parsedData = unwrapWorkerResponse(self, data);
+        parsedData = unwrapWorkerResponse(self, returnValue.value);
         parsedData = parseBalance(self, parsedData);
         break;
       case 'I64F64':
-        parsedData = unwrapWorkerResponse(self, data);
+        parsedData = unwrapWorkerResponse(self, returnValue.value);
         parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
       case 'NodeRSA':
@@ -78,7 +78,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         parsedData = self.createType(responseType, returnValue.value);
         break
       default:
-        parsedData = unwrapWorkerResponse(self, data);
+        parsedData = unwrapWorkerResponse(self, returnValue.value);
         parsedData = self.createType(responseType, parsedData);
         break;
     }
