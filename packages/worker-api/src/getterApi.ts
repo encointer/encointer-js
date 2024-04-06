@@ -8,6 +8,7 @@ import {
   createJsonRpcRequest
 } from './interface.js';
 import  { Request } from './interface.js';
+import {clientRequestGetter, clientRequestTrustedGetter} from "@encointer/worker-api/requests.js";
 
 const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
@@ -17,38 +18,6 @@ const sendWorkerRequest = (self: IEncointerWorker, clientRequest: any, parserTyp
       requestId
     }
   )
-}
-
-const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
-  const { cid } = args;
-  const getter = self.createType('PublicGetter', {
-    [request]: cid
-  });
-  return {
-    StfState: [{ public: getter }, cid]
-  }
-}
-
-const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, args: TrustedGetterArgs) => {
-  const {shard, account} = args;
-  const address = account.address;
-  const getter = self.createType('TrustedGetter', {
-    [request]: address
-  });
-
-  const signature = account.sign(getter.toU8a());
-  const g = self.createType( 'Getter',{
-    trusted: {
-      getter,
-      signature,
-    }
-  });
-
-  const r = self.createType(
-      'Request', { shard: shard, cyphertext: g.toU8a() }
-  );
-
-  return createJsonRpcRequest('state_executeGetter', [r.toHex()],1)
 }
 
 const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
