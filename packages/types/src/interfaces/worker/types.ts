@@ -5,7 +5,7 @@ import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Bytes, Enum, Struct, Text, bool, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { Signature } from '@polkadot/types/interfaces/extrinsics';
+import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceTransferArgs */
@@ -99,7 +99,7 @@ export interface TrustedCall extends Enum {
 export interface TrustedCallSigned extends Struct {
   readonly call: TrustedCall;
   readonly nonce: u32;
-  readonly signature: Signature;
+  readonly signature: MultiSignature;
 }
 
 /** @name TrustedGetter */
@@ -116,7 +116,7 @@ export interface TrustedGetter extends Enum {
 /** @name TrustedGetterSigned */
 export interface TrustedGetterSigned extends Struct {
   readonly getter: TrustedGetter;
-  readonly signature: Signature;
+  readonly signature: MultiSignature;
 }
 
 /** @name TrustedOperationStatus */

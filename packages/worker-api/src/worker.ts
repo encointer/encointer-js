@@ -55,6 +55,11 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
   const returnValue = self.createType('RpcReturnValue', value);
   console.log(`RpcReturnValue ${JSON.stringify(returnValue)}`);
 
+  if (returnValue.status.isError) {
+    const errorMsg = self.createType('String', returnValue.value);
+    throw new Error(`RPC Error: ${errorMsg}`);
+  }
+
   let parsedData: any;
   try {
     switch (responseType) {

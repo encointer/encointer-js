@@ -72,7 +72,7 @@ describe('worker', () => {
       });
     });
 
-    describe('balance transfer should workd', () => {
+    describe('balance transfer should work', () => {
       it('should return value', async () => {
         const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
         const params = worker.createType('BalanceTransferArgs', [alice.address, bob.address, 1100000000000])

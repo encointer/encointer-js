@@ -29,7 +29,7 @@ export default {
     },
     TrustedGetterSigned: {
       getter: 'TrustedGetter',
-      signature: 'Signature'
+      signature: 'MultiSignature'
     },
     Getter: {
       _enum: {
@@ -72,7 +72,7 @@ export default {
     TrustedCallSigned: {
       call: 'TrustedCall',
       nonce: 'u32',
-      signature: 'Signature'
+      signature: 'MultiSignature'
     },
     TrustedCall: {
       _enum: {

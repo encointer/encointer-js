@@ -40,7 +40,7 @@ export const clientRequestTrustedGetter = (self: IEncointerWorker, request: stri
     const g = self.createType( 'Getter',{
         trusted: {
             getter,
-            signature,
+            signature: { Sr25519: signature },
         }
     });
 
