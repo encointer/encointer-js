@@ -48,7 +48,10 @@ export const clientRequestTrustedGetter = (self: IEncointerWorker, request: stri
 
     const s = self.createType('ShardIdentifier', bs58.decode(shard));
     const r = self.createType(
-        'Request', { shard: s, cyphertext: g.toU8a() }
+        'Request', {
+            shard: s,
+            cyphertext: g.toHex()
+        }
     );
 
     return createJsonRpcRequest('state_executeGetter', [r.toHex()],1);
