@@ -71,6 +71,18 @@ describe('worker', () => {
       });
     });
 
+    describe('getBalance', () => {
+      it('should return value', async () => {
+        const result = await worker.getBalance({
+          pubKey: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
+          pin: '1234'
+        }, network.chosenCid);
+        // console.log('getBalance', result);
+        expect(result).toBeDefined();
+      });
+    });
+
+
     // Tests specific for the encointer protocol
     describe('encointer-worker', () => {
       describe('getTotalIssuance', () => {
@@ -120,17 +132,6 @@ describe('worker', () => {
         it('should return value', async () => {
           const result = await worker.getSchedulerState(network.chosenCid);
           // console.log('schedulerStateResult', result);
-          expect(result).toBeDefined();
-        });
-      });
-
-      describe('getBalance', () => {
-        it('should return value', async () => {
-          const result = await worker.getBalance({
-            pubKey: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
-            pin: '1234'
-          }, network.chosenCid);
-          // console.log('getBalance', result);
           expect(result).toBeDefined();
         });
       });

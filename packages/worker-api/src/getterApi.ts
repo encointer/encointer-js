@@ -28,27 +28,27 @@ const clientRequestGetter = (self: IEncointerWorker, request: string, args: Publ
     StfState: [{ public: getter }, cid]
   }
 }
-const requestParams = (self: IEncointerWorker, address: string, shard: string) =>
-  self.createType('(AccountId, CommunityIdentifier)', [address, shard]);
 
 const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, args: TrustedGetterArgs) => {
-  const {cid, account} = args;
+  const {shard, account} = args;
   const address = account.address;
   const getter = self.createType('TrustedGetter', {
-    [request]: requestParams(self, address, cid)
+    [request]: address
   });
+
   const signature = account.sign(getter.toU8a());
-  return {
-    StfState: [
-      {
-        trusted: {
-          getter,
-          signature
-        }
-      },
-      cid
-    ]
-  }
+  const g = self.createType( 'Getter',{
+    trusted: {
+      getter,
+      signature,
+    }
+  });
+
+  const r = self.createType(
+      'Request', { shard: shard, cyphertext: g.toU8a() }
+  );
+
+  return createJsonRpcRequest('state_executeGetter', [r.toHex()],1)
 }
 
 const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>

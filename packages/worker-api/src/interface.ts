@@ -33,8 +33,13 @@ export interface WorkerOptions {
   createWebSocket?: (url: string) => WebSocket;
 }
 
-export interface TrustedGetterArgs {
+export interface TrustedGetterArgsDeprecated {
   cid: string;
+  account: KeyringPair;
+}
+
+export interface TrustedGetterArgs {
+  shard: string;
   account: KeyringPair;
 }
 
@@ -42,7 +47,7 @@ export interface PublicGetterArgs {
   cid: string;
 }
 
-export type RequestArgs = PublicGetterArgs | TrustedGetterArgs | { }
+export type RequestArgs = PublicGetterArgs | TrustedGetterArgs | TrustedGetterArgsDeprecated |  { }
 
 export interface CallOptions {
   timeout: number;
