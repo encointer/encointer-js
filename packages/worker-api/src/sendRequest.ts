@@ -26,7 +26,7 @@ const sendTrustedRequest = (self: IEncointerWorker, method: string, parser: stri
 const sendPublicRequest = (self: IEncointerWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
 
-export const sendRequest = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const callGetter = async <T>(self: IEncointerWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }

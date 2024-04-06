@@ -25,7 +25,7 @@ import type {
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface.js';
 import { Request } from './interface.js';
 import { parseBalance, parseNodeRSA } from './parsers.js';
-import { callGetter } from './getterApi.js';
+import { callGetter } from './sendRequest.js';
 import { createTrustedCall } from "@encointer/worker-api/trustedCallApi";
 import { toAccount, PubKeyPinPair } from "@encointer/util/common";
 
