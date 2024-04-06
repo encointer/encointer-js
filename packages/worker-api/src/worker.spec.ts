@@ -71,6 +71,14 @@ describe('worker', () => {
       });
     });
 
+    describe('getShardVault', () => {
+      it('should return value', async () => {
+        const result = await worker.getShardVault();
+        console.log('ShardVault', result.toHuman());
+        expect(result).toBeDefined();
+      });
+    });
+
     describe('getBalance', () => {
       it('should return value', async () => {
         const result = await worker.getBalance({

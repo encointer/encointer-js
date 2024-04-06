@@ -44,6 +44,14 @@ export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}
 /** @name GrantReputationArgs */
 export interface GrantReputationArgs extends ITuple<[AccountId, CommunityIdentifier, AccountId]> {}
 
+/** @name ParentchainId */
+export interface ParentchainId extends Enum {
+  readonly isIntegritee: boolean;
+  readonly isTargetA: boolean;
+  readonly isTargetB: boolean;
+  readonly type: 'Integritee' | 'TargetA' | 'TargetB';
+}
+
 /** @name PublicGetter */
 export interface PublicGetter extends Enum {
   readonly isTotalIssuance: boolean;
@@ -107,17 +115,13 @@ export interface TrustedCallSigned extends Struct {
 
 /** @name TrustedGetter */
 export interface TrustedGetter extends Enum {
-  readonly isBalance: boolean;
-  readonly asBalance: ITuple<[AccountId, CommunityIdentifier]>;
-  readonly isParticipantIndex: boolean;
-  readonly asParticipantIndex: ITuple<[AccountId, CommunityIdentifier]>;
-  readonly isMeetupIndex: boolean;
-  readonly asMeetupIndex: ITuple<[AccountId, CommunityIdentifier]>;
-  readonly isAttestations: boolean;
-  readonly asAttestations: ITuple<[AccountId, CommunityIdentifier]>;
-  readonly isMeetupRegistry: boolean;
-  readonly asMeetupRegistry: ITuple<[AccountId, CommunityIdentifier]>;
-  readonly type: 'Balance' | 'ParticipantIndex' | 'MeetupIndex' | 'Attestations' | 'MeetupRegistry';
+  readonly isFreeBalance: boolean;
+  readonly asFreeBalance: AccountId;
+  readonly isReservedBalance: boolean;
+  readonly asReservedBalance: AccountId;
+  readonly isNonce: boolean;
+  readonly asNonce: AccountId;
+  readonly type: 'FreeBalance' | 'ReservedBalance' | 'Nonce';
 }
 
 /** @name TrustedGetterSigned */
@@ -142,6 +146,9 @@ export interface TrustedOperationStatus extends Enum {
   readonly isInvalid: boolean;
   readonly type: 'Submitted' | 'Future' | 'Ready' | 'BroadCast' | 'InSidechainBlock' | 'Retracted' | 'FinalityTimeout' | 'Finalized' | 'Usurped' | 'Dropped' | 'Invalid';
 }
+
+/** @name Vault */
+export interface Vault extends ITuple<[AccountId, ParentchainId]> {}
 
 /** @name WorkerEncoded */
 export interface WorkerEncoded extends Bytes {}

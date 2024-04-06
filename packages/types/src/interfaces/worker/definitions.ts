@@ -22,11 +22,9 @@ export default {
     },
     TrustedGetter: {
       _enum: {
-        balance: '(AccountId, CommunityIdentifier)',
-        participant_index: '(AccountId, CommunityIdentifier)',
-        meetup_index: '(AccountId, CommunityIdentifier)',
-        attestations: '(AccountId, CommunityIdentifier)',
-        meetup_registry: '(AccountId, CommunityIdentifier)'
+        free_balance: 'AccountId',
+        reserved_balance: 'AccountId',
+        nonce: 'AccountId',
       }
     },
     TrustedGetterSigned: {
@@ -82,6 +80,14 @@ export default {
         ceremonies_register_participant: 'RegisterParticipantArgs',
         ceremonies_register_attestations: 'RegisterAttestationsArgs',
         ceremonies_grant_reputation: 'GrantReputationArgs'
+      }
+    },
+    Vault: '(AccountId, ParentchainId)',
+    ParentchainId: {
+      _enum: {
+        Integritee: null,
+        TargetA: null,
+        TargetB: null,
       }
     },
     BalanceTransferArgs: '(AccountId, AccountId, CommunityIdentifier, BalanceType)',

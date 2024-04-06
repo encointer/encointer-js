@@ -19,7 +19,7 @@ import type {
   Attestation, BalanceTransferArgs, CommunityIdentifier, GrantReputationArgs,
   MeetupIndexType,
   ParticipantIndexType, RegisterAttestationsArgs, RegisterParticipantArgs,
-  SchedulerState, TrustedCallSigned
+  SchedulerState, TrustedCallSigned, Vault
 } from '@encointer/types';
 
 import type { IEncointerWorker, WorkerOptions, CallOptions } from './interface.js';
@@ -73,6 +73,9 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         // they come from currently.
         // console.log(`jsonStr.sub(2): ${jsonStr.toJSON().substring(2)}`);
         parsedData = parseNodeRSA(jsonStr.toJSON().substring(2));
+        break
+      case 'Vault':
+        parsedData = self.createType(responseType, returnValue.value);
         break
       default:
         parsedData = unwrapWorkerResponse(self, data);
@@ -135,6 +138,10 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
     return await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
+  }
+
+  public async getShardVault(options: CallOptions = {} as CallOptions): Promise<Vault> {
+    return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
   }
 
   public async getTotalIssuance(cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
