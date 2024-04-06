@@ -1,6 +1,8 @@
 import type { KeyringPair } from '@polkadot/keyring/types';
 import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
+import type {u8} from "@polkadot/types-codec";
+import type {Vec} from "@polkadot/types";
 
 export interface IEncointerWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -8,6 +10,7 @@ export interface IEncointerWorker extends WebSocketAsPromised {
   keyring: () => Keyring | undefined;
   createType: (apiType: string, obj?: any) => any;
   open: () => Promise<Event>;
+  encrypt: (data: Uint8Array) => Vec<u8>
 }
 
 export interface JsonRpcRequest {

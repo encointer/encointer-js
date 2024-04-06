@@ -64,8 +64,10 @@ export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCa
 
   console.log(`TrustedCall: ${JSON.stringify(call)}`);
 
+  const cyphertext = self.encrypt(call.toU8a());
+
   const r = self.createType(
-      'Request', { shard, cyphertext: call.toHex() }
+      'Request', { shard, cyphertext: cyphertext }
   );
 
   result = sendWorkerRequest(self, createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1), parserType, options)

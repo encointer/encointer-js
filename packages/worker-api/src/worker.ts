@@ -2,7 +2,7 @@ import type {u32, u64, Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
 import {Keyring} from '@polkadot/keyring'
-import {hexToU8a} from '@polkadot/util';
+import {bufferToU8a, compactAddLength, hexToU8a, u8aToBuffer} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
@@ -21,7 +21,7 @@ import type {
   CommunityIdentifier,
   MeetupIndexType,
   ParticipantIndexType,
-  SchedulerState, ShardIdentifier,
+  SchedulerState, ShardIdentifier, TrustedCallSigned,
   Vault
 } from '@encointer/types';
 
@@ -30,6 +30,7 @@ import {parseBalance, parseNodeRSA} from './parsers.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
 import {createTrustedCall} from "@encointer/worker-api/requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
+import type {u8} from "@polkadot/types-codec";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
@@ -97,6 +98,8 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   #keyring?: Keyring;
 
+  #shieldingKey?: NodeRSA
+
   rsCount: number;
 
   rqStack: string[];
@@ -123,6 +126,13 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }
   }
 
+  public encrypt(data: Uint8Array): Vec<u8> {
+    const buffer = u8aToBuffer(data);
+    const cypherTextBuffer = this.shieldingKey().encrypt(buffer);
+    const cypherArray = bufferToU8a(cypherTextBuffer);
+    return this.createType('Vec<u8>', compactAddLength(cypherArray))
+  }
+
   public createType(apiType: string, obj?: any): any {
     return this.#registry.createType(apiType as never, obj)
   }
@@ -133,6 +143,14 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
 
   public setKeyring(keyring: Keyring): void {
     this.#keyring = keyring;
+  }
+
+  public shieldingKey(): NodeRSA | undefined {
+    return this.#shieldingKey;
+  }
+
+  public setShieldingKey(shieldingKey: NodeRSA): void {
+    this.#shieldingKey = shieldingKey;
   }
 
   public cidFromStr(cidStr: String): CommunityIdentifier {
@@ -220,6 +238,15 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
   public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<any> {
         const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
-        return sendTrustedCall<u32>(this, call, shard, 'u32', options);
+        return this.sendTrustedCall<u32>(call, shard, 'u32', options);
+  }
+
+  async sendTrustedCall<T>(call: TrustedCallSigned, shard: ShardIdentifier, parser: string, options: CallOptions = {} as CallOptions):  Promise<T> {
+    if (this.shieldingKey() == undefined) {
+      const key = await this.getShieldingKey(options);
+      this.setShieldingKey(key);
+    }
+
+    return sendTrustedCall(this, call, shard, parser, options);
   }
 }
