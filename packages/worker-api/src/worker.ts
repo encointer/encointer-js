@@ -2,7 +2,7 @@ import type {u32, u64, Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
 import {Keyring} from '@polkadot/keyring'
-import {hexToU8a, u8aToHex} from '@polkadot/util';
+import {hexToU8a} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
@@ -32,15 +32,10 @@ import {createTrustedCall} from "@encointer/worker-api/requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 
 const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
-  /// Unwraps the value that is wrapped in all the Options and encoding from the worker.
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
   /// instantiates the <type> with its default value.
-  const dataTyped = self.createType('Option<WorkerEncoded>', hexToU8a('0x'.concat(data)))
-    .unwrapOrDefault(); // (Option<Value.enc>.enc+whitespacePad)
-  const trimmed = u8aToHex(dataTyped).replace(/(20)+$/, '');
-  const unwrappedData = self.createType('Option<WorkerEncoded>', hexToU8a(trimmed))
-    .unwrapOrDefault();
-  return unwrappedData
+  const dataTyped = self.createType('Option<WorkerEncoded>', data)
+  return dataTyped.unwrapOrDefault();
 }
 
 const parseGetterResponse = (self: IEncointerWorker, responseType: string, data: string) => {
@@ -86,6 +81,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         break
       default:
         parsedData = unwrapWorkerResponse(self, returnValue.value);
+        console.log(`unwrapped data ${parsedData}`);
         parsedData = self.createType(responseType, parsedData);
         break;
     }

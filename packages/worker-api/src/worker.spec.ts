@@ -59,7 +59,7 @@ describe('worker', () => {
     describe('getBalance', () => {
       it('should return value', async () => {
         const result = await worker.getBalance(alice, network.mrenclave);
-        console.log('getBalance', result);
+        console.log('getBalance toNumber:', result.toString(10));
         expect(result).toBeDefined();
       });
     });
