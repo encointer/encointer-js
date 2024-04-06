@@ -1,7 +1,6 @@
 import {
     createJsonRpcRequest,
-    type IEncointerWorker,
-    type PublicGetterArgs,
+    type IEncointerWorker, type PublicGetterArgs,
     type TrustedGetterArgs
 } from "@encointer/worker-api/interface.js";
 import type {BalanceTransferArgs, BalanceUnshieldArgs, ShardIdentifier, TrustedCallSigned} from "@encointer/types";
@@ -10,15 +9,24 @@ import {PubKeyPinPair, toAccount} from "@encointer/util/common.js";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 
-// Todo: this one is deprecated and needs to be rewritten like the trusted getter below/
+// Todo: Properly resolve cid vs shard
 export const clientRequestGetter = (self: IEncointerWorker, request: string, args: PublicGetterArgs) => {
     const { cid } = args;
     const getter = self.createType('PublicGetter', {
         [request]: cid
     });
-    return {
-        StfState: [{ public: getter }, cid]
-    }
+
+    const g = self.createType( 'Getter',{
+        public: {
+            getter,
+        }
+    });
+
+    const r = self.createType(
+        'Request', { shard: cid, cyphertext: g.toU8a() }
+    );
+
+    return createJsonRpcRequest('state_executeGetter', [r.toHex()],1);
 }
 
 export const clientRequestTrustedGetter = (self: IEncointerWorker, request: string, args: TrustedGetterArgs) => {
@@ -40,7 +48,7 @@ export const clientRequestTrustedGetter = (self: IEncointerWorker, request: stri
         'Request', { shard: shard, cyphertext: g.toU8a() }
     );
 
-    return createJsonRpcRequest('state_executeGetter', [r.toHex()],1)
+    return createJsonRpcRequest('state_executeGetter', [r.toHex()],1);
 }
 
 export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs);
