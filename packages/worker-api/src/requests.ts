@@ -83,6 +83,6 @@ export const createTrustedCall = (
     return self.createType('TrustedCallSigned', {
         call: call,
         nonce: nonce,
-        signature: toAccount(accountOrPubKey, self.keyring()).sign(payload)
+        signature: { Sr25519: toAccount(accountOrPubKey, self.keyring()).sign(payload) },
     });
 }
