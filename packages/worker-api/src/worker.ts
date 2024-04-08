@@ -14,7 +14,7 @@ import NodeRSA from 'node-rsa';
 
 
 import type {KeyringPair} from '@polkadot/keyring/types';
-import type {AccountId, Balance, Moment} from '@polkadot/types/interfaces/runtime';
+import type {AccountId, Balance, Hash, Moment} from '@polkadot/types/interfaces/runtime';
 import type {
   Attestation,
   BalanceTransferArgs,
@@ -74,11 +74,14 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
         const jsonStr = self.createType('String', returnValue.value);
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
-        // console.log(`jsonStr.sub(2): ${jsonStr.toJSON().substring(2)}`);
+        console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
         parsedData = parseNodeRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
         parsedData = self.createType(responseType, returnValue.value);
+        break
+      case 'TrustedOperationResult':
+        parsedData = self.createType('Hash', returnValue.value);
         break
       default:
         parsedData = unwrapWorkerResponse(self, returnValue.value);
@@ -235,18 +238,19 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
     }, options)
   }
 
-  public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<any> {
+  public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
         const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
-        return this.sendTrustedCall<u32>(call, shard, 'u32', options);
+        return this.sendTrustedCall(call, shard, options);
   }
 
-  async sendTrustedCall<T>(call: TrustedCallSigned, shard: ShardIdentifier, parser: string, options: CallOptions = {} as CallOptions):  Promise<T> {
+  async sendTrustedCall(call: TrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
     if (this.shieldingKey() == undefined) {
       const key = await this.getShieldingKey(options);
+      console.log(`Setting the shielding pubKey of the worker.`)
       this.setShieldingKey(key);
     }
 
-    return sendTrustedCall(this, call, shard, true, parser, options);
+    return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', options);
   }
 }

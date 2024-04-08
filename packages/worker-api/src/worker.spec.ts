@@ -77,7 +77,7 @@ describe('worker', () => {
         const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
         const params = worker.createType('BalanceTransferArgs', [alice.address, bob.address, 1100000000000])
         const result = await worker.trustedBalanceTransfer(alice, shard, network.mrenclave, params);
-        console.log('balance transfer result', result);
+        console.log('balance transfer result', result.toHuman());
         expect(result).toBeDefined();
       });
     });
