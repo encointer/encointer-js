@@ -83,6 +83,16 @@ describe('worker', () => {
       });
     });
 
+    describe('balance unshield should work', () => {
+      it('should return value', async () => {
+        const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
+        const params = worker.createType('BalanceUnshieldArgs', [alice.address, bob.address, 1100000000000, shard])
+        const result = await worker.balanceUnshieldFunds(alice, shard, network.mrenclave, params);
+        console.log('balance unshield result', result.toHuman());
+        expect(result).toBeDefined();
+      });
+    });
+
     // Tests specific for the encointer protocol
     describe('encointer-worker', () => {
       describe('getTotalIssuance', () => {

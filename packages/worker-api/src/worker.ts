@@ -17,7 +17,7 @@ import type {KeyringPair} from '@polkadot/keyring/types';
 import type {AccountId, Balance, Hash, Moment} from '@polkadot/types/interfaces/runtime';
 import type {
   Attestation,
-  BalanceTransferArgs,
+  BalanceTransferArgs, BalanceUnshieldArgs,
   CommunityIdentifier,
   MeetupIndexType,
   ParticipantIndexType,
@@ -242,6 +242,12 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
         const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
         return this.sendTrustedCall(call, shard, options);
+  }
+
+  public async balanceUnshieldFunds(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceUnshieldArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
+    const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+    const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
+    return this.sendTrustedCall(call, shard, options);
   }
 
   async sendTrustedCall(call: TrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
