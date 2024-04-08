@@ -54,7 +54,7 @@ export const callGetter = async <T>(self: IEncointerWorker, workerMethod: Worker
   return result as Promise<T>
 }
 
-export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCallSigned, shard: ShardIdentifier, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
@@ -64,7 +64,18 @@ export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCa
 
   console.log(`TrustedCall: ${JSON.stringify(call)}`);
 
-  const cyphertext = self.encrypt(call.toU8a());
+  let top;
+  if (direct) {
+    top = self.createType('TrustedOperation', {
+      direct_call: call
+    })
+  } else {
+    top = self.createType('TrustedOperation', {
+      indirect_call: call
+    })
+  }
+
+  const cyphertext = self.encrypt(top.toU8a());
 
   const r = self.createType(
       'Request', { shard, cyphertext: cyphertext }

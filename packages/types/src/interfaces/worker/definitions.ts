@@ -69,6 +69,13 @@ export default {
       shard: 'ShardIdentifier',
       cyphertext: 'WorkerEncoded'
     },
+    TrustedOperation: {
+      _enum: {
+        indirect_call: 'TrustedCallSigned',
+        direct_call: 'TrustedCallSigned',
+        get: 'Getter'
+      }
+    },
     TrustedCallSigned: {
       call: 'TrustedCall',
       nonce: 'u32',

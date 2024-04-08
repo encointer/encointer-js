@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { BalanceTransferArgs, BalanceUnshieldArgs, DirectRequestStatus, Enclave, Getter, GetterArgs, ParentchainId, PublicGetter, Request, RpcReturnValue, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { BalanceTransferArgs, BalanceUnshieldArgs, DirectRequestStatus, Enclave, Getter, GetterArgs, ParentchainId, PublicGetter, Request, RpcReturnValue, ShardIdentifier, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, TrustedOperation, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
 import type { BitVec, Bool, Bytes, F32, F64, I128, I16, I256, I32, I64, I8, ISize, Json, Null, OptionBool, Raw, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, f32, f64, i128, i16, i256, i32, i64, i8, isize, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types-codec';
 import type { AssetApproval, AssetApprovalKey, AssetBalance, AssetDestroyWitness, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -1156,6 +1156,7 @@ declare module '@polkadot/types/types/registry' {
     TrustedCallSigned: TrustedCallSigned;
     TrustedGetter: TrustedGetter;
     TrustedGetterSigned: TrustedGetterSigned;
+    TrustedOperation: TrustedOperation;
     TrustedOperationStatus: TrustedOperationStatus;
     Type: Type;
     u128: u128;

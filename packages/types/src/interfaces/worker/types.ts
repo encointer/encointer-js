@@ -119,6 +119,17 @@ export interface TrustedGetterSigned extends Struct {
   readonly signature: MultiSignature;
 }
 
+/** @name TrustedOperation */
+export interface TrustedOperation extends Enum {
+  readonly isIndirectCall: boolean;
+  readonly asIndirectCall: TrustedCallSigned;
+  readonly isDirectCall: boolean;
+  readonly asDirectCall: TrustedCallSigned;
+  readonly isGet: boolean;
+  readonly asGet: Getter;
+  readonly type: 'IndirectCall' | 'DirectCall' | 'Get';
+}
+
 /** @name TrustedOperationStatus */
 export interface TrustedOperationStatus extends Enum {
   readonly isSubmitted: boolean;

@@ -247,6 +247,6 @@ export class EncointerWorker extends WebSocketAsPromised implements IEncointerWo
       this.setShieldingKey(key);
     }
 
-    return sendTrustedCall(this, call, shard, parser, options);
+    return sendTrustedCall(this, call, shard, true, parser, options);
   }
 }
