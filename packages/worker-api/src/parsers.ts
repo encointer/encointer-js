@@ -38,6 +38,9 @@ export function parseNodeRSA(data: any): NodeRSA {
 function setKeyOpts(key: NodeRSA) {
   key.setOptions(
     {
+      // Enforce using the pure javascript implementations, as
+      // compatibility with node's crypto is broken and leads
+      // to bad outputs.
       environment: 'browser',
       encryptionScheme: {
         scheme: 'pkcs1_oaep',
