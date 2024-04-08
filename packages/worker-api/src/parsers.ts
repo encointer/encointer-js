@@ -38,6 +38,7 @@ export function parseNodeRSA(data: any): NodeRSA {
 function setKeyOpts(key: NodeRSA) {
   key.setOptions(
     {
+      environment: 'browser',
       encryptionScheme: {
         scheme: 'pkcs1_oaep',
         hash: 'sha256',
