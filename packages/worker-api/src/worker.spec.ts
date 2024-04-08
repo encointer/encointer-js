@@ -30,6 +30,7 @@ describe('worker', () => {
           undefined,
           undefined,
           undefined,
+          // Allow the worker's self-signed certificate
           { rejectUnauthorized: false }
           ),
       api: null,
