@@ -83,8 +83,12 @@ export default {
     },
     TrustedCall: {
       _enum: {
+        noop: 'AccountId',
+        balance_set_balance: 'BalanceSetBalanceArgs',
         balance_transfer: 'BalanceTransferArgs',
         balance_unshield: 'BalanceUnshieldArgs',
+        balance_shield: 'BalanceShieldArgs',
+        timestamp_set: 'TimestampSetArgs',
       }
     },
     Vault: '(AccountId, ParentchainId)',
@@ -95,7 +99,10 @@ export default {
         TargetB: null,
       }
     },
+    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
     BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
     BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
+    BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
+    TimestampSetArgs: '(AccountId, H160, BalanceType)',
   }
 }

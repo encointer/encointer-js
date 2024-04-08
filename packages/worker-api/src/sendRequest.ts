@@ -75,6 +75,8 @@ export const sendTrustedCall = async <T>(self: IEncointerWorker, call: TrustedCa
     })
   }
 
+  console.log(`TrustedOperation: ${JSON.stringify(top)}`);
+
   const cyphertext = self.encrypt(top.toU8a());
 
   const r = self.createType(
