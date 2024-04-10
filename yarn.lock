@@ -810,6 +810,7 @@ __metadata:
     "@types/bs58": ^4.0.1
     bs58: ^4.0.1
     node-rsa: ^1.1.1
+    promised-map: ^1.0.0
     websocket: ^1.0.34
     websocket-as-promised: ^2.0.1
   peerDependencies:
