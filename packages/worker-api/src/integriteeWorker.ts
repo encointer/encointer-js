@@ -13,9 +13,9 @@ import type {
 
 import {type CallOptions, Request} from './interface.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
-import {createTrustedCall} from "@encointer/worker-api/requests.js";
+import {createTrustedCall} from "./requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
-import {Worker} from "@encointer/worker-api/worker.js";
+import {Worker} from "./worker.js";
 
 export class IntegriteeWorker extends Worker {
 

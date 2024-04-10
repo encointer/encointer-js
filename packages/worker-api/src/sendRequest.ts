@@ -11,7 +11,7 @@ import  { Request } from './interface.js';
 import {
   clientRequestGetter,
   clientRequestTrustedGetter,
-} from "@encointer/worker-api/requests.js";
+} from "./requests.js";
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
 const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
