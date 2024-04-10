@@ -10,8 +10,10 @@ import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier
 import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, CommunityReputation, Meetup, MeetupAssignment, MeetupIndexType, MeetupResult, MeetupTimeOffsetType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType, Reputation } from '@encointer/types/interfaces/ceremony';
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
+import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
+import type { BalanceSetBalanceArgs, BalanceShieldArgs, BalanceTransferArgs, BalanceUnshieldArgs, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, TimestampSetArgs } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { BalanceSetBalanceArgs, BalanceShieldArgs, BalanceTransferArgs, BalanceUnshieldArgs, DirectRequestStatus, Enclave, Getter, GetterArgs, ParentchainId, PublicGetter, Request, RpcReturnValue, ShardIdentifier, TimestampSetArgs, TrustedCall, TrustedCallSigned, TrustedGetter, TrustedGetterSigned, TrustedOperation, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { DirectRequestStatus, Enclave, GetterArgs, ParentchainId, Request, RpcReturnValue, ShardIdentifier, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
 import type { BitVec, Bool, Bytes, F32, F64, I128, I16, I256, I32, I64, I8, ISize, Json, Null, OptionBool, Raw, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, f32, f64, i128, i16, i256, i32, i64, i8, isize, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types-codec';
 import type { AssetApproval, AssetApprovalKey, AssetBalance, AssetDestroyWitness, AssetDetails, AssetMetadata, TAssetBalance, TAssetDepositBalance } from '@polkadot/types/interfaces/assets';
@@ -409,6 +411,14 @@ declare module '@polkadot/types/types/registry' {
     Enclave: Enclave;
     EncodedFinalityProofs: EncodedFinalityProofs;
     EncodedJustification: EncodedJustification;
+    EncointerBalanceTransferArgs: EncointerBalanceTransferArgs;
+    EncointerGetter: EncointerGetter;
+    EncointerGetterArgs: EncointerGetterArgs;
+    EncointerPublicGetter: EncointerPublicGetter;
+    EncointerTrustedCall: EncointerTrustedCall;
+    EncointerTrustedCallSigned: EncointerTrustedCallSigned;
+    EncointerTrustedGetter: EncointerTrustedGetter;
+    EncointerTrustedGetterSigned: EncointerTrustedGetterSigned;
     Epoch: Epoch;
     EpochAuthorship: EpochAuthorship;
     Era: Era;
@@ -545,7 +555,6 @@ declare module '@polkadot/types/types/registry' {
     FungiblesAccessError: FungiblesAccessError;
     Gas: Gas;
     GeoHash: GeoHash;
-    Getter: Getter;
     GetterArgs: GetterArgs;
     GiltBid: GiltBid;
     GlobalValidationData: GlobalValidationData;
@@ -558,6 +567,7 @@ declare module '@polkadot/types/types/registry' {
     GrandpaPrecommit: GrandpaPrecommit;
     GrandpaPrevote: GrandpaPrevote;
     GrandpaSignedPrecommit: GrandpaSignedPrecommit;
+    GrantReputationArgs: GrantReputationArgs;
     GroupIndex: GroupIndex;
     GroupRotationInfo: GroupRotationInfo;
     H1024: H1024;
@@ -630,6 +640,13 @@ declare module '@polkadot/types/types/registry' {
     InstantiateReturnValueTo267: InstantiateReturnValueTo267;
     InstructionV2: InstructionV2;
     InstructionWeights: InstructionWeights;
+    IntegriteeGetter: IntegriteeGetter;
+    IntegriteePublicGetter: IntegriteePublicGetter;
+    IntegriteeTrustedCall: IntegriteeTrustedCall;
+    IntegriteeTrustedCallSigned: IntegriteeTrustedCallSigned;
+    IntegriteeTrustedGetter: IntegriteeTrustedGetter;
+    IntegriteeTrustedGetterSigned: IntegriteeTrustedGetterSigned;
+    IntegriteeTrustedOperation: IntegriteeTrustedOperation;
     InteriorMultiLocation: InteriorMultiLocation;
     InvalidDisputeStatementKind: InvalidDisputeStatementKind;
     InvalidTransaction: InvalidTransaction;
@@ -879,7 +896,6 @@ declare module '@polkadot/types/types/registry' {
     ProxyDefinition: ProxyDefinition;
     ProxyState: ProxyState;
     ProxyType: ProxyType;
-    PublicGetter: PublicGetter;
     PvfCheckStatement: PvfCheckStatement;
     PvfExecTimeoutKind: PvfExecTimeoutKind;
     PvfPrepTimeoutKind: PvfPrepTimeoutKind;
@@ -914,7 +930,9 @@ declare module '@polkadot/types/types/registry' {
     ReferendumInfoFinished: ReferendumInfoFinished;
     ReferendumInfoTo239: ReferendumInfoTo239;
     ReferendumStatus: ReferendumStatus;
+    RegisterAttestationsArgs: RegisterAttestationsArgs;
     RegisteredParachainInfo: RegisteredParachainInfo;
+    RegisterParticipantArgs: RegisterParticipantArgs;
     RegistrarIndex: RegistrarIndex;
     RegistrarInfo: RegistrarInfo;
     Registration: Registration;
@@ -1155,11 +1173,6 @@ declare module '@polkadot/types/types/registry' {
     TreasuryProposal: TreasuryProposal;
     TrieId: TrieId;
     TrieIndex: TrieIndex;
-    TrustedCall: TrustedCall;
-    TrustedCallSigned: TrustedCallSigned;
-    TrustedGetter: TrustedGetter;
-    TrustedGetterSigned: TrustedGetterSigned;
-    TrustedOperation: TrustedOperation;
     TrustedOperationStatus: TrustedOperationStatus;
     Type: Type;
     u128: u128;

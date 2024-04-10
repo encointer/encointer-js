@@ -1,24 +1,10 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-import type { Bytes, Enum, Struct, Text, bool, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Struct, Text, bool, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, H160, Hash } from '@polkadot/types/interfaces/runtime';
-
-/** @name BalanceSetBalanceArgs */
-export interface BalanceSetBalanceArgs extends ITuple<[AccountId, AccountId, BalanceType, BalanceType]> {}
-
-/** @name BalanceShieldArgs */
-export interface BalanceShieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ParentchainId]> {}
-
-/** @name BalanceTransferArgs */
-export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, BalanceType]> {}
-
-/** @name BalanceUnshieldArgs */
-export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
+import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name DirectRequestStatus */
 export interface DirectRequestStatus extends Enum {
@@ -37,15 +23,6 @@ export interface Enclave extends Struct {
   readonly url: Text;
 }
 
-/** @name Getter */
-export interface Getter extends Enum {
-  readonly isPublic: boolean;
-  readonly asPublic: PublicGetter;
-  readonly isTrusted: boolean;
-  readonly asTrusted: TrustedGetterSigned;
-  readonly type: 'Public' | 'Trusted';
-}
-
 /** @name GetterArgs */
 export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}
 
@@ -55,25 +32,6 @@ export interface ParentchainId extends Enum {
   readonly isTargetA: boolean;
   readonly isTargetB: boolean;
   readonly type: 'Integritee' | 'TargetA' | 'TargetB';
-}
-
-/** @name PublicGetter */
-export interface PublicGetter extends Enum {
-  readonly isTotalIssuance: boolean;
-  readonly asTotalIssuance: CommunityIdentifier;
-  readonly isParticipantCount: boolean;
-  readonly asParticipantCount: CommunityIdentifier;
-  readonly isMeetupCount: boolean;
-  readonly asMeetupCount: CommunityIdentifier;
-  readonly isCeremonyReward: boolean;
-  readonly asCeremonyReward: CommunityIdentifier;
-  readonly isLocationTolerance: boolean;
-  readonly asLocationTolerance: CommunityIdentifier;
-  readonly isTimeTolerance: boolean;
-  readonly asTimeTolerance: CommunityIdentifier;
-  readonly isSchedulerState: boolean;
-  readonly asSchedulerState: CommunityIdentifier;
-  readonly type: 'TotalIssuance' | 'ParticipantCount' | 'MeetupCount' | 'CeremonyReward' | 'LocationTolerance' | 'TimeTolerance' | 'SchedulerState';
 }
 
 /** @name Request */
@@ -91,61 +49,6 @@ export interface RpcReturnValue extends Struct {
 
 /** @name ShardIdentifier */
 export interface ShardIdentifier extends Hash {}
-
-/** @name TimestampSetArgs */
-export interface TimestampSetArgs extends ITuple<[AccountId, H160, BalanceType]> {}
-
-/** @name TrustedCall */
-export interface TrustedCall extends Enum {
-  readonly isNoop: boolean;
-  readonly asNoop: AccountId;
-  readonly isBalanceSetBalance: boolean;
-  readonly asBalanceSetBalance: BalanceSetBalanceArgs;
-  readonly isBalanceTransfer: boolean;
-  readonly asBalanceTransfer: BalanceTransferArgs;
-  readonly isBalanceUnshield: boolean;
-  readonly asBalanceUnshield: BalanceUnshieldArgs;
-  readonly isBalanceShield: boolean;
-  readonly asBalanceShield: BalanceShieldArgs;
-  readonly isTimestampSet: boolean;
-  readonly asTimestampSet: TimestampSetArgs;
-  readonly type: 'Noop' | 'BalanceSetBalance' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'TimestampSet';
-}
-
-/** @name TrustedCallSigned */
-export interface TrustedCallSigned extends Struct {
-  readonly call: TrustedCall;
-  readonly nonce: u32;
-  readonly signature: MultiSignature;
-}
-
-/** @name TrustedGetter */
-export interface TrustedGetter extends Enum {
-  readonly isFreeBalance: boolean;
-  readonly asFreeBalance: AccountId;
-  readonly isReservedBalance: boolean;
-  readonly asReservedBalance: AccountId;
-  readonly isNonce: boolean;
-  readonly asNonce: AccountId;
-  readonly type: 'FreeBalance' | 'ReservedBalance' | 'Nonce';
-}
-
-/** @name TrustedGetterSigned */
-export interface TrustedGetterSigned extends Struct {
-  readonly getter: TrustedGetter;
-  readonly signature: MultiSignature;
-}
-
-/** @name TrustedOperation */
-export interface TrustedOperation extends Enum {
-  readonly isIndirectCall: boolean;
-  readonly asIndirectCall: TrustedCallSigned;
-  readonly isDirectCall: boolean;
-  readonly asDirectCall: TrustedCallSigned;
-  readonly isGet: boolean;
-  readonly asGet: Getter;
-  readonly type: 'IndirectCall' | 'DirectCall' | 'Get';
-}
 
 /** @name TrustedOperationStatus */
 export interface TrustedOperationStatus extends Enum {

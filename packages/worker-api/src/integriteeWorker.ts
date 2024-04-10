@@ -8,7 +8,7 @@ import type {KeyringPair} from '@polkadot/keyring/types';
 import type {Balance, Hash} from '@polkadot/types/interfaces/runtime';
 import type {
     BalanceTransferArgs, BalanceUnshieldArgs,
-    ShardIdentifier, TrustedCallSigned,
+    ShardIdentifier, IntegriteeTrustedCallSigned,
 } from '@encointer/types';
 
 import {type CallOptions, Request} from './interface.js';
@@ -45,7 +45,7 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(call, shard, options);
     }
 
-    async sendTrustedCall(call: TrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
+    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
         if (this.shieldingKey() == undefined) {
             const key = await this.getShieldingKey(options);
             console.log(`Setting the shielding pubKey of the worker.`)

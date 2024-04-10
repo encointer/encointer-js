@@ -12,7 +12,7 @@ import {
   clientRequestGetter,
   clientRequestTrustedGetter,
 } from "@encointer/worker-api/requests.js";
-import type {ShardIdentifier, TrustedCallSigned} from "@encointer/types";
+import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
 const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
@@ -54,7 +54,7 @@ export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, a
   return result as Promise<T>
 }
 
-export const sendTrustedCall = async <T>(self: IWorker, call: TrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
@@ -66,11 +66,11 @@ export const sendTrustedCall = async <T>(self: IWorker, call: TrustedCallSigned,
 
   let top;
   if (direct) {
-    top = self.createType('TrustedOperation', {
+    top = self.createType('IntegriteeTrustedOperation', {
       direct_call: call
     })
   } else {
-    top = self.createType('TrustedOperation', {
+    top = self.createType('IntegriteeTrustedOperation', {
       indirect_call: call
     })
   }

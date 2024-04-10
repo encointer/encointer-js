@@ -5,12 +5,17 @@ import {communityIdentifierFromString} from '@encointer/util';
 import NodeRSA from 'node-rsa';
 
 import type {
-    CommunityIdentifier, MeetupIndexType, ParticipantIndexType, SchedulerState, ShardIdentifier, TrustedCallSigned,
+    CommunityIdentifier,
+    MeetupIndexType,
+    ParticipantIndexType,
+    SchedulerState,
+    ShardIdentifier,
+    EncointerTrustedCallSigned,
+    Attestation,
 } from '@encointer/types';
 
 import {type CallOptions, Request} from './interface.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
-import {createTrustedCall} from "@encointer/worker-api/requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import type {KeyringPair} from "@polkadot/keyring/types";
 import {Worker} from "@encointer/worker-api/worker.js";
@@ -92,25 +97,14 @@ export class EncointerWorker extends Worker {
         }, options)
     }
 
-    public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
-        const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
-        return this.sendTrustedCall(call, shard, options);
-    }
-
-    public async balanceUnshieldFunds(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceUnshieldArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
-        const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
-        return this.sendTrustedCall(call, shard, options);
-    }
-
-    async sendTrustedCall(call: TrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
-        if (this.shieldingKey() == undefined) {
-            const key = await this.getShieldingKey(options);
-            console.log(`Setting the shielding pubKey of the worker.`)
-            this.setShieldingKey(key);
-        }
-
-        return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', options);
-    }
+    // Todo: `sendTrustedCall` must be generic over the trusted call or we have to duplicate code for encointer.
+    // async sendTrustedCall(call: EncointerTrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions):  Promise<Hash> {
+    //     if (this.shieldingKey() == undefined) {
+    //         const key = await this.getShieldingKey(options);
+    //         console.log(`Setting the shielding pubKey of the worker.`)
+    //         this.setShieldingKey(key);
+    //     }
+    //
+    //     return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', options);
+    // }
 }
