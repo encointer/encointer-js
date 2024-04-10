@@ -1,6 +1,6 @@
 import {
     createJsonRpcRequest,
-    type IIntegriteeWorker, type PublicGetterArgs,
+    type IWorker, type PublicGetterArgs,
     type TrustedGetterArgs
 } from "@encointer/worker-api/interface.js";
 import type {BalanceTransferArgs, BalanceUnshieldArgs, ShardIdentifier, TrustedCallSigned} from "@encointer/types";
@@ -10,7 +10,7 @@ import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 
 // Todo: Properly resolve cid vs shard
-export const clientRequestGetter = (self: IIntegriteeWorker, request: string, args: PublicGetterArgs) => {
+export const clientRequestGetter = (self: IWorker, request: string, args: PublicGetterArgs) => {
     const { cid } = args;
     const getter = self.createType('PublicGetter', {
         [request]: cid
@@ -29,7 +29,7 @@ export const clientRequestGetter = (self: IIntegriteeWorker, request: string, ar
     return createJsonRpcRequest('state_executeGetter', [r.toHex()],1);
 }
 
-export const clientRequestTrustedGetter = (self: IIntegriteeWorker, request: string, args: TrustedGetterArgs) => {
+export const clientRequestTrustedGetter = (self: IWorker, request: string, args: TrustedGetterArgs) => {
     const {shard, account} = args;
     const address = account.address;
     const getter = self.createType('TrustedGetter', {
@@ -62,7 +62,7 @@ export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs);
 export type TrustedCallVariant = [string, string]
 
 export const createTrustedCall = (
-    self: IIntegriteeWorker,
+    self: IWorker,
     trustedCall: TrustedCallVariant,
     accountOrPubKey: (KeyringPair | PubKeyPinPair),
     shard: ShardIdentifier,

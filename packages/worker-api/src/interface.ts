@@ -4,7 +4,7 @@ import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {Vec} from "@polkadot/types";
 
-export interface IIntegriteeWorker extends WebSocketAsPromised {
+export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
   rqStack: string[];
   keyring: () => Keyring | undefined;

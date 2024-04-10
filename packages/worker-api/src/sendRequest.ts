@@ -1,5 +1,5 @@
 import {
-  type IIntegriteeWorker,
+  type IWorker,
   type TrustedGetterArgs,
   type PublicGetterArgs,
   type RequestArgs,
@@ -14,7 +14,7 @@ import {
 } from "@encointer/worker-api/requests.js";
 import type {ShardIdentifier, TrustedCallSigned} from "@encointer/types";
 
-const sendWorkerRequest = (self: IIntegriteeWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
+const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
   return self.sendRequest(
     clientRequest, {
@@ -24,13 +24,13 @@ const sendWorkerRequest = (self: IIntegriteeWorker, clientRequest: any, parserTy
   )
 }
 
-const sendTrustedGetterRequest = (self: IIntegriteeWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
+const sendTrustedGetterRequest = (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestTrustedGetter(self, method, args), parser, options)
 
-const sendPublicGetterRequest = (self: IIntegriteeWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
+const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
 
-export const callGetter = async <T>(self: IIntegriteeWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
@@ -54,7 +54,7 @@ export const callGetter = async <T>(self: IIntegriteeWorker, workerMethod: Worke
   return result as Promise<T>
 }
 
-export const sendTrustedCall = async <T>(self: IIntegriteeWorker, call: TrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const sendTrustedCall = async <T>(self: IWorker, call: TrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
