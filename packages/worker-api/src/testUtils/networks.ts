@@ -46,6 +46,20 @@ export const localDockerNetwork = () => {
   };
 };
 
+export const paseoNetwork = () => {
+  return {
+    chain: 'wss://rpc.ibp.network/paseo:443',
+    // reverse proxy to the worker
+    worker: 'wss://scv1.paseo.api.incognitee.io:443',
+    genesisHash: '',
+    mrenclave: '7RuM6U4DLEtrTnVntDjDPBCAN4LbCGRpnmcTYUGhLqc7',
+    // abused as shard vault
+    chosenCid: '5CBWPstfcW7dPYGdUG4kVDZSQq9Q9Ed65LT2Eu1inhJRoY8e',
+    customTypes: {},
+    palletOverrides: {}
+  };
+};
+
 // Type overrides needed for the v3.8 tag of the encointer-node repo.
 const TypeOverrides_V3_8 = {
   CurrencyIdentifier: 'Hash',

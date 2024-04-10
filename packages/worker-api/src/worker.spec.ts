@@ -1,13 +1,13 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { localDockerNetwork } from './testUtils/networks.js';
+import { paseoNetwork } from './testUtils/networks.js';
 import { Worker } from './worker.js';
 import WS from 'websocket';
 
 const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-  const network = localDockerNetwork();
+  const network = paseoNetwork();
   let keyring: Keyring;
   let worker: Worker;
   beforeAll(async () => {
@@ -24,8 +24,9 @@ describe('worker', () => {
           undefined,
           undefined,
           undefined,
-          // Allow the worker's self-signed certificate
-          { rejectUnauthorized: false }
+          // Allow the worker's self-signed certificate, needed in non-reverse proxy setups
+          // where we talk to the worker directly.
+          // { rejectUnauthorized: false }
           ),
       api: null,
     });
@@ -34,7 +35,7 @@ describe('worker', () => {
   // skip it, as this requires a worker (and hence a node) to be running
   // To my knowledge jest does not have an option to run skipped tests specifically, does it?
   // Todo: add proper CI to test this too.
-  describe.skip('needs worker and node running', () => {
+  describe('needs worker and node running', () => {
     describe('getWorkerPubKey', () => {
       it('should return value', async () => {
         const result = await worker.getShieldingKey();
