@@ -37,10 +37,10 @@
     "websocket": "^1.0.34",
     "websocket-as-promised": "^2.0.1"
   },
-  "peerDependencies": {
-    "@polkadot/x-randomvalues": "^12.3.2"
-  },
   "devDependencies": {
     "@types/bs58": "^4.0.1"
+  },
+  "peerDependencies": {
+    "@polkadot/x-randomvalues": "^12.3.2"
   }
 }
