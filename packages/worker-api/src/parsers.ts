@@ -4,10 +4,10 @@ import { u8aToBn, u8aToBuffer } from '@polkadot/util';
 // @ts-ignore
 import NodeRSA from 'node-rsa';
 
-import type { IEncointerWorker } from './interface.js';
+import type { IWorker } from './interface.js';
 import type { BalanceEntry } from "@encointer/types";
 
-export function parseBalance(self: IEncointerWorker, data: any): BalanceEntry {
+export function parseBalance(self: IWorker, data: any): BalanceEntry {
   const balanceEntry = self.createType('BalanceEntry<BlockNumber>', data);
   // Todo: apply demurrage
   return self.createType('BalanceEntry<BlockNumber>',
@@ -38,6 +38,10 @@ export function parseNodeRSA(data: any): NodeRSA {
 function setKeyOpts(key: NodeRSA) {
   key.setOptions(
     {
+      // Enforce using the pure javascript implementations by
+      // setting the `browser` environment, as compatibility
+      // with node's crypto is broken and leads to bad outputs.
+      environment: 'browser',
       encryptionScheme: {
         scheme: 'pkcs1_oaep',
         hash: 'sha256',

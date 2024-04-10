@@ -36,13 +36,13 @@ export const chainbrickNetwork = () => {
 // Note: `mrenclave` is not deterministic, this needs to be edited for every worker build.
 export const localDockerNetwork = () => {
   return {
-    chain: 'ws://127.0.0.1:9979',
-    worker: 'ws://127.0.0.1:2079',
+    chain: 'ws://127.0.0.1:9944',
+    worker: 'wss://127.0.0.1:2000',
     genesisHash: '0x388c446a804e24e77ae89f5bb099edb60cacc2ac7c898ce175bdaa08629c1439',
-    mrenclave: '4SkU25tusVChcrUprW8X22QoEgamCgj3HKQeje7j8Z4E',
+    mrenclave: 'HjkQuPjBn531Hkji2Dsj4CEYCGpqCc3aXqETMCM7x7z4',
     chosenCid: '4Xgnkpg4RwXjFegLzYKgY6Y3jCSPmxyPmNvfs42Uvsuh',
-    customTypes: TypeOverrides_V3_8,
-    palletOverrides: PalletOverrides_V3_8
+    customTypes: {},
+    palletOverrides: {}
   };
 };
 

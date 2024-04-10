@@ -5,3 +5,5 @@ export { default as ceremony } from './ceremony/definitions.js';
 export { default as community } from './community/definitions.js';
 export { default as scheduler } from './scheduler/definitions.js';
 export { default as worker } from './worker/definitions.js';
+export { default as encointerWorker } from './encointerWorker/definitions.js'
+export { default as integriteeWorker } from './integriteeWorker/definitions.js'
