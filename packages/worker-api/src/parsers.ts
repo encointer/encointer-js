@@ -4,10 +4,10 @@ import { u8aToBn, u8aToBuffer } from '@polkadot/util';
 // @ts-ignore
 import NodeRSA from 'node-rsa';
 
-import type { IEncointerWorker } from './interface.js';
+import type { IIntegriteeWorker } from './interface.js';
 import type { BalanceEntry } from "@encointer/types";
 
-export function parseBalance(self: IEncointerWorker, data: any): BalanceEntry {
+export function parseBalance(self: IIntegriteeWorker, data: any): BalanceEntry {
   const balanceEntry = self.createType('BalanceEntry<BlockNumber>', data);
   // Todo: apply demurrage
   return self.createType('BalanceEntry<BlockNumber>',

@@ -4,7 +4,7 @@ import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {Vec} from "@polkadot/types";
 
-export interface IEncointerWorker extends WebSocketAsPromised {
+export interface IIntegriteeWorker extends WebSocketAsPromised {
   rsCount: number;
   rqStack: string[];
   keyring: () => Keyring | undefined;
@@ -36,11 +36,6 @@ export interface WorkerOptions {
   createWebSocket?: (url: string) => WebSocket;
 }
 
-export interface TrustedGetterArgsDeprecated {
-  cid: string;
-  account: KeyringPair;
-}
-
 export interface TrustedGetterArgs {
   shard: string;
   account: KeyringPair;
@@ -50,7 +45,7 @@ export interface PublicGetterArgs {
   cid: string;
 }
 
-export type RequestArgs = PublicGetterArgs | TrustedGetterArgs | TrustedGetterArgsDeprecated |  { }
+export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
 export interface CallOptions {
   timeout: number;

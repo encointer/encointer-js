@@ -25,21 +25,21 @@ import type {
   Vault
 } from '@encointer/types';
 
-import {type CallOptions, type IEncointerWorker, Request, type WorkerOptions} from './interface.js';
+import {type CallOptions, type IIntegriteeWorker, Request, type WorkerOptions} from './interface.js';
 import {parseBalance, parseNodeRSA} from './parsers.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
 import {createTrustedCall} from "@encointer/worker-api/requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import type {u8} from "@polkadot/types-codec";
 
-const unwrapWorkerResponse = (self: IEncointerWorker, data: string) => {
+const unwrapWorkerResponse = (self: IIntegriteeWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
   /// instantiates the <type> with its default value.
   const dataTyped = self.createType('Option<WorkerEncoded>', data)
   return dataTyped.unwrapOrDefault();
 }
 
-const parseGetterResponse = (self: IEncointerWorker, responseType: string, data: string) => {
+const parseGetterResponse = (self: IIntegriteeWorker, responseType: string, data: string) => {
   if (data === 'Could not decode request') {
     throw new Error(`Worker error: ${data}`);
   }
@@ -95,7 +95,7 @@ const parseGetterResponse = (self: IEncointerWorker, responseType: string, data:
   return parsedData;
 }
 
-export class EncointerWorker extends WebSocketAsPromised implements IEncointerWorker {
+export class EncointerWorker extends WebSocketAsPromised implements IIntegriteeWorker {
 
   readonly #registry: TypeRegistry;
 
