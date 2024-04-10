@@ -125,6 +125,10 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     return this.createType('Vec<u8>', compactAddLength(cypherArray))
   }
 
+  public registry(): TypeRegistry {
+    return this.#registry
+  }
+
   public createType(apiType: string, obj?: any): any {
     return this.#registry.createType(apiType as never, obj)
   }

@@ -5,16 +5,16 @@ import {communityIdentifierFromString} from '@encointer/util';
 import NodeRSA from 'node-rsa';
 
 import type {
-    CommunityIdentifier, ShardIdentifier,
+    CommunityIdentifier, MeetupIndexType, ParticipantIndexType, SchedulerState, ShardIdentifier, TrustedCallSigned,
 } from '@encointer/types';
 
-import {type CallOptions} from './interface.js';
+import {type CallOptions, Request} from './interface.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
 import {createTrustedCall} from "@encointer/worker-api/requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import type {KeyringPair} from "@polkadot/keyring/types";
 import {Worker} from "@encointer/worker-api/worker.js";
-import type {AccountId, Balance, Hash} from "@polkadot/types/interfaces/runtime";
+import type {AccountId, Balance, Hash, Moment} from "@polkadot/types/interfaces/runtime";
 
 export class EncointerWorker extends Worker {
 
@@ -60,28 +60,28 @@ export class EncointerWorker extends Worker {
     public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
             shard: cid,
-            account: toAccount(accountOrPubKey, this.#keyring)
+            account: toAccount(accountOrPubKey,this.keyring())
         }, options)
     }
 
     public async getParticipantIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<ParticipantIndexType> {
         return await callGetter<ParticipantIndexType>(this, [Request.TrustedGetter, 'participant_index', 'ParticipantIndexType'], {
             cid,
-            account: toAccount(accountOrPubKey, this.#keyring)
+            account: toAccount(accountOrPubKey,this.keyring())
         }, options)
     }
 
     public async getMeetupIndex(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<MeetupIndexType> {
         return await callGetter<MeetupIndexType>(this, [Request.TrustedGetter, 'meetup_index', 'MeetupIndexType'], {
             cid,
-            account: toAccount(accountOrPubKey, this.#keyring)
+            account: toAccount(accountOrPubKey,this.keyring())
         }, options)
     }
 
     public async getAttestations(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Vec<Attestation>> {
         return await callGetter<Vec<Attestation>>(this, [Request.TrustedGetter, 'attestations', 'Vec<Attestation>'], {
             cid,
-            account: toAccount(accountOrPubKey, this.#keyring)
+            account: toAccount(accountOrPubKey,this.keyring())
         }, options)
     }
 

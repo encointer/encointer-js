@@ -3,7 +3,6 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks.js';
 import { EncointerWorker } from './encointerWorker.js';
 import WS from 'websocket';
-import {KeyringPair} from "@polkadot/keyring/types";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -11,14 +10,14 @@ describe('worker', () => {
     const network = localDockerNetwork();
     let keyring: Keyring;
     let worker: EncointerWorker;
-    let alice: KeyringPair;
-    let charlie: KeyringPair;
+    // let alice: KeyringPair;
+    // let charlie: KeyringPair;
     beforeAll(async () => {
         jest.setTimeout(90000);
         await cryptoWaitReady();
         keyring = new Keyring({type: 'sr25519'});
-        alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
-        charlie = keyring.addFromUri('//Charlie', {name: 'Bob default'});
+        // alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
+        // charlie = keyring.addFromUri('//Charlie', {name: 'Bob default'});
 
         worker = new EncointerWorker(network.worker, {
             keyring: keyring,

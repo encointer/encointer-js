@@ -3,7 +3,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { localDockerNetwork } from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import WS from 'websocket';
-import {KeyringPair} from "@polkadot/keyring/types";
+import {type KeyringPair} from "@polkadot/keyring/types";
 import bs58 from "bs58";
 
 const {w3cwebsocket: WebSocket} = WS;
