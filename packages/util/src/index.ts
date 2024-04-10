@@ -6,6 +6,7 @@ import type {ParserFixPointFn} from './parserFixPoint.js';
 export * from './cidUtil.js';
 export * from './toFixPoint.js';
 export * from './parserFixPoint.js';
+export * from './common.js';
 
 export const parseI4F4: ParserFixPointFn = parserFixPoint(4, 4);
 
