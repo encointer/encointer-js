@@ -13,13 +13,13 @@ describe('worker', () => {
   let keyring: Keyring;
   let worker: EncointerWorker;
   let alice: KeyringPair;
-  let bob: KeyringPair;
+  let charlie: KeyringPair;
   beforeAll(async () => {
     jest.setTimeout(90000);
     await cryptoWaitReady();
     keyring = new Keyring({type: 'sr25519'});
     alice = keyring.addFromUri('//Alice', {name: 'Alice default'});
-    bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
+    charlie = keyring.addFromUri('//Charlie', {name: 'Bob default'});
 
     worker = new EncointerWorker(network.worker, {
       keyring: keyring,
@@ -59,7 +59,7 @@ describe('worker', () => {
 
     describe('getBalance', () => {
       it('should return value', async () => {
-        const result = await worker.getBalance(alice, network.mrenclave);
+        const result = await worker.getBalance(charlie, network.mrenclave);
         console.log('getBalance toNumber:', result.toString(10));
         expect(result).toBeDefined();
       });
@@ -76,7 +76,7 @@ describe('worker', () => {
     describe('balance transfer should work', () => {
       it('should return value', async () => {
         const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
-        const params = worker.createType('BalanceTransferArgs', [alice.address, bob.address, 1100000000000])
+        const params = worker.createType('BalanceTransferArgs', [alice.address, charlie.address, 1100000000000])
         const result = await worker.trustedBalanceTransfer(alice, shard, network.mrenclave, params);
         console.log('balance transfer result', result.toHuman());
         expect(result).toBeDefined();
@@ -86,7 +86,7 @@ describe('worker', () => {
     describe('balance unshield should work', () => {
       it('should return value', async () => {
         const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
-        const params = worker.createType('BalanceUnshieldArgs', [alice.address, bob.address, 1100000000000, shard])
+        const params = worker.createType('BalanceUnshieldArgs', [alice.address, charlie.address, 1100000000000, shard])
         const result = await worker.balanceUnshieldFunds(alice, shard, network.mrenclave, params);
         console.log('balance unshield result', result.toHuman());
         expect(result).toBeDefined();
