@@ -812,6 +812,8 @@ __metadata:
     node-rsa: ^1.1.1
     websocket: ^1.0.34
     websocket-as-promised: ^2.0.1
+  peerDependencies:
+    "@polkadot/x-randomvalues": ^12.3.2
   languageName: unknown
   linkType: soft
 
@@ -3598,7 +3600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.3.1":
+"@types/node@npm:20.3.2, @types/node@npm:^20.3.1":
   version: 20.3.2
   resolution: "@types/node@npm:20.3.2"
   checksum: 5929ce2b9b12b1e2a2304a0921a953c72a81f5753ad39ac43b99ce6312fbb2b4fb5bc6b60d64a2550704e3223cd5de1299467d36085ac69888899db978f2653a
@@ -13227,8 +13229,10 @@ __metadata:
     "@polkadot/dev": ^0.75.22
     "@polkadot/types": ^10.9.1
     "@types/jest": ^28.1.7
+    "@types/node": 20.3.2
     "@types/websocket": ^1.0.5
     jest: ^29.5.0
+    jest-resolve: ^29.5.0
     jest-ts-webcompat-resolver: ^1.0.0
     lerna: ^5.4.3
     ts-jest: ^29.1.0
