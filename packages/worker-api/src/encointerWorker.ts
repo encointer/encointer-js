@@ -9,17 +9,15 @@ import type {
     MeetupIndexType,
     ParticipantIndexType,
     SchedulerState,
-    ShardIdentifier,
-    EncointerTrustedCallSigned,
     Attestation,
 } from '@encointer/types';
 
 import {type CallOptions, Request} from './interface.js';
-import {callGetter, sendTrustedCall} from './sendRequest.js';
+import {callGetter} from './sendRequest.js';
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import type {KeyringPair} from "@polkadot/keyring/types";
 import {Worker} from "@encointer/worker-api/worker.js";
-import type {AccountId, Balance, Hash, Moment} from "@polkadot/types/interfaces/runtime";
+import type {AccountId, Balance, Moment} from "@polkadot/types/interfaces/runtime";
 
 export class EncointerWorker extends Worker {
 
