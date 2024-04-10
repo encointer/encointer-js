@@ -19,6 +19,8 @@ import type {KeyringPair} from "@polkadot/keyring/types";
 import {Worker} from "@encointer/worker-api/worker.js";
 import type {AccountId, Balance, Moment} from "@polkadot/types/interfaces/runtime";
 
+// Todo: This code is a WIP and will not work as is: https://github.com/encointer/encointer-js/issues/91
+
 export class EncointerWorker extends Worker {
 
     public cidFromStr(cidStr: String): CommunityIdentifier {
