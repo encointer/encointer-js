@@ -119,7 +119,7 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     if (api) {
       // add the metadata derived types to the registry and overwrite
       // existing definitions for types with the same name.
-      this.#registry.register(api.registry().types);
+      this.#registry.register(api.registry.types);
     }
   }
 
