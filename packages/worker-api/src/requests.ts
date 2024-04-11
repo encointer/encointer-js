@@ -2,10 +2,10 @@ import {
     createJsonRpcRequest,
     type IWorker, type PublicGetterArgs,
     type TrustedGetterArgs
-} from "@encointer/worker-api/interface.js";
+} from "./interface.js";
 import type {BalanceTransferArgs, BalanceUnshieldArgs, ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 import type {KeyringPair} from "@polkadot/keyring/types";
-import {type PubKeyPinPair, toAccount} from "@encointer/util/common.js";
+import {type PubKeyPinPair, toAccount} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 

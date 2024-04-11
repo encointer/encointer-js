@@ -104,14 +104,12 @@ export class Worker extends WebSocketAsPromised implements IWorker {
       attachRequestId: (data: any): any => data,
       extractRequestId: () => this.rsCount = ++this.rsCount
     });
-    const {api, types} = options;
     this.#keyring = (options.keyring || undefined);
     this.#registry = new TypeRegistry();
     this.rsCount = 0;
     this.rqStack = [] as string[]
-    if (api) {
-      this.#registry = api.registry;
-    } else if (types) {
+
+    if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
     } else {
       this.#registry.register(encointerOptions().types as RegistryTypes);
