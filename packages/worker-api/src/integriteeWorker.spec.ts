@@ -76,8 +76,14 @@ describe('worker', () => {
         describe('balance transfer should work', () => {
             it('should return value', async () => {
                 const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
-                const params = worker.createType('BalanceTransferArgs', [alice.address, charlie.address, 1100000000000])
-                const result = await worker.trustedBalanceTransfer(alice, shard, network.mrenclave, params);
+                const result = await worker.trustedBalanceTransfer(
+                    alice,
+                    shard,
+                    network.mrenclave,
+                    alice.address,
+                    charlie.address,
+                    1100000000000
+                );
                 console.log('balance transfer result', result.toHuman());
                 expect(result).toBeDefined();
             });
@@ -86,8 +92,14 @@ describe('worker', () => {
         describe('balance unshield should work', () => {
             it('should return value', async () => {
                 const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
-                const params = worker.createType('BalanceUnshieldArgs', [alice.address, charlie.address, 1100000000000, shard])
-                const result = await worker.balanceUnshieldFunds(alice, shard, network.mrenclave, params);
+                const result = await worker.balanceUnshieldFunds(
+                    alice,
+                    shard,
+                    network.mrenclave,
+                    alice.address,
+                    charlie.address,
+                    1100000000000
+                );
                 console.log('balance unshield result', result.toHuman());
                 expect(result).toBeDefined();
             });

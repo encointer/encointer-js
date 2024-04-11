@@ -7,7 +7,6 @@ import NodeRSA from 'node-rsa';
 import type {KeyringPair} from '@polkadot/keyring/types';
 import type {Balance, Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    BalanceTransferArgs, BalanceUnshieldArgs,
     ShardIdentifier, IntegriteeTrustedCallSigned,
 } from '@encointer/types';
 
@@ -33,14 +32,32 @@ export class IntegriteeWorker extends Worker {
         }, options)
     }
 
-    public async trustedBalanceTransfer(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceTransferArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
+    public async trustedBalanceTransfer(
+        accountOrPubKey: KeyringPair | PubKeyPinPair,
+        shard: ShardIdentifier,
+        mrenclave: string,
+        from: String,
+        to: String,
+        amount: number,
+        options: CallOptions = {} as CallOptions
+    ): Promise<Hash> {
         const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+        const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
         return this.sendTrustedCall(call, shard, options);
     }
 
-    public async balanceUnshieldFunds(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: ShardIdentifier, mrenclave: string, params: BalanceUnshieldArgs, options: CallOptions = {} as CallOptions): Promise<Hash> {
+    public async balanceUnshieldFunds(
+        accountOrPubKey: KeyringPair | PubKeyPinPair,
+        shard: ShardIdentifier,
+        mrenclave: string,
+        fromIncognitoAddress: string,
+        toPublicAddress: string,
+        amount: number,
+        options: CallOptions = {} as CallOptions
+    ): Promise<Hash> {
         const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+        const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shard])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], accountOrPubKey, shard, mrenclave, nonce, params);
         return this.sendTrustedCall(call, shard, options);
     }
