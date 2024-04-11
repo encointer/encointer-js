@@ -148,7 +148,9 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   }
 
   public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
-    return await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
+    const key = await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
+    this.setShieldingKey(key);
+    return key;
   }
 
   public async getShardVault(options: CallOptions = {} as CallOptions): Promise<Vault> {
