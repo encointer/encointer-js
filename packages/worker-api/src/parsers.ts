@@ -6,6 +6,7 @@ import NodeRSA from 'node-rsa';
 
 import type { IWorker } from './interface.js';
 import type { BalanceEntry } from "@encointer/types";
+import BN from "bn.js";
 
 export function parseBalance(self: IWorker, data: any): BalanceEntry {
   const balanceEntry = self.createType('BalanceEntry<BlockNumber>', data);
@@ -25,12 +26,12 @@ export function parseBalanceType(data: any): number {
 export function parseNodeRSA(data: any): NodeRSA {
   const keyJson = JSON.parse(data);
   keyJson.n = u8aToBuffer(keyJson.n).reverse();
-  keyJson.e = u8aToBuffer(keyJson.e).reverse();
+  keyJson.e = new BN(keyJson.e);
   const key = new NodeRSA();
   setKeyOpts(key);
   key.importKey({
     n: keyJson.n,
-    e: keyJson.e
+    e: keyJson.e.toNumber()
   }, 'components-public');
   return key;
 }
