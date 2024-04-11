@@ -109,12 +109,17 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     this.#registry = new TypeRegistry();
     this.rsCount = 0;
     this.rqStack = [] as string[]
-    if (api) {
-      this.#registry = api.registry;
-    } else if (types) {
+
+    if (types) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
     } else {
       this.#registry.register(encointerOptions().types as RegistryTypes);
+    }
+
+    if (api) {
+      // add the metadata derived types to the registry and overwrite
+      // existing definitions for types with the same name.
+      this.#registry.register(api.registry().types);
     }
   }
 
