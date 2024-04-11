@@ -3,6 +3,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, Vec} from "@polkadot/types";
+import type {RegistryTypes} from "@polkadot/types/types";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -32,8 +33,7 @@ export function createJsonRpcRequest(method: string, params: any, id: number | s
 
 export interface WorkerOptions {
   keyring?: Keyring;
-  api: any;
-  types: any;
+  types?: RegistryTypes;
   createWebSocket?: (url: string) => WebSocket;
 }
 
