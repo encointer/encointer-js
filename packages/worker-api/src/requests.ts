@@ -80,7 +80,7 @@ export const createTrustedCall = (
 
     const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...hash.toU8a(), ...shard.toU8a()]);
 
-    return self.createType('IntegriteeIntegriteeTrustedCallSigned', {
+    return self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
         signature: { Sr25519: toAccount(accountOrPubKey, self.keyring()).sign(payload) },
