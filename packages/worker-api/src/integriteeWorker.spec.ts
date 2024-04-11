@@ -4,7 +4,6 @@ import { localDockerNetwork } from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import WS from 'websocket';
 import {type KeyringPair} from "@polkadot/keyring/types";
-import bs58 from "bs58";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -75,7 +74,7 @@ describe('worker', () => {
 
         describe('balance transfer should work', () => {
             it('should return value', async () => {
-                const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
+                const shard = network.mrenclave;
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
@@ -91,7 +90,7 @@ describe('worker', () => {
 
         describe('balance unshield should work', () => {
             it('should return value', async () => {
-                const shard = worker.createType('ShardIdentifier', bs58.decode(network.mrenclave));
+                const shard = network.mrenclave;
                 const result = await worker.balanceUnshieldFunds(
                     alice,
                     shard,
