@@ -19,16 +19,16 @@ import bs58 from "bs58";
 
 export class IntegriteeWorker extends Worker {
 
-    public async getNonce(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<u32> {
+    public async getNonce(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string, options: CallOptions = {} as CallOptions): Promise<u32> {
         return await callGetter<u32>(this, [Request.TrustedGetter, 'nonce', 'u32'], {
-            shard: cid,
+            shard: shard,
             account: toAccount(accountOrPubKey, this.keyring())
         }, options)
     }
 
-    public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, cid: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
-            shard: cid,
+            shard: shard,
             account: toAccount(accountOrPubKey, this.keyring())
         }, options)
     }
@@ -42,7 +42,7 @@ export class IntegriteeWorker extends Worker {
         amount: number,
         options: CallOptions = {} as CallOptions
     ): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+        const nonce = await this.getNonce(accountOrPubKey, shard, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shardT, mrenclave, nonce, params);
