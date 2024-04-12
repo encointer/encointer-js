@@ -54,7 +54,7 @@ export const paseoNetwork = () => {
     genesisHash: '',
     mrenclave: '7RuM6U4DLEtrTnVntDjDPBCAN4LbCGRpnmcTYUGhLqc7',
     // abused as shard vault
-    chosenCid: '5CBWPstfcW7dPYGdUG4kVDZSQq9Q9Ed65LT2Eu1inhJRoY8e',
+    chosenCid: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
     customTypes: {},
     palletOverrides: {}
   };
