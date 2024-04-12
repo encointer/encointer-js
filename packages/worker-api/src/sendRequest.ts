@@ -86,7 +86,7 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
   const rpc = createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1);
   result = sendWorkerRequest(self, rpc, parserType, options)
 
-  console.log(`[sendTrustedCall] sent request: ${rpc}`);
+  console.log(`[sendTrustedCall] sent request: ${JSON.stringify(rpc)}`);
 
   return result as Promise<T>
 }
