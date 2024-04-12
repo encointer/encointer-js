@@ -33,7 +33,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
     throw new Error(`Worker error: ${data}`);
   }
 
-  console.log(`Getter response: ${data}`);
+  // console.log(`Getter response: ${data}`);
   const json = JSON.parse(data);
 
   const value = hexToU8a(json["result"]);
@@ -70,6 +70,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         parsedData = self.createType(responseType, returnValue.value);
         break
       case 'TrustedOperationResult':
+        console.log(`Got TrustedOperationResult`)
         parsedData = self.createType('Hash', returnValue.value);
         break
       default:
