@@ -23,6 +23,15 @@ export function parseBalanceType(data: any): number {
   return parseI64F64(u8aToBn(data));
 }
 
+/**
+ * Parse a public key retrieved from the worker into `NodeRsa`.
+ *
+ * Note: This code is relatively sensitive: Changes here could lead
+ * to errors parsing and encryption errors in the browser, probably
+ * because of inconsistencies of node's `Buffer and the `buffer`
+ * polyfill in browser.
+ * @param data
+ */
 export function parseNodeRSA(data: any): NodeRSA {
   const keyJson = JSON.parse(data);
   keyJson.n = new BN(keyJson.n);
@@ -30,7 +39,11 @@ export function parseNodeRSA(data: any): NodeRSA {
   const key = new NodeRSA();
   setKeyOpts(key);
   key.importKey({
+    // Important: use string here, not buffer, otherwise the browser will
+    // misinterpret the `n`.
     n: keyJson.n.toString(10),
+    // Important: use number here, not buffer, otherwise the browser will
+    // misinterpret the `e`.
     e: keyJson.e.toNumber()
   }, 'components-public');
   return key;
