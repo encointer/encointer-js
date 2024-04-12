@@ -25,12 +25,12 @@ export function parseBalanceType(data: any): number {
 
 export function parseNodeRSA(data: any): NodeRSA {
   const keyJson = JSON.parse(data);
-  keyJson.n = u8aToBuffer(keyJson.n).reverse();
+  keyJson.n = new BN(keyJson.n);
   keyJson.e = new BN(keyJson.e);
   const key = new NodeRSA();
   setKeyOpts(key);
   key.importKey({
-    n: keyJson.n,
+    n: keyJson.n.toString(10),
     e: keyJson.e.toNumber()
   }, 'components-public');
   return key;
