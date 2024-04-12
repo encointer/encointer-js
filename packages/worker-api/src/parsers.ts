@@ -1,5 +1,5 @@
 import { parseI64F64 } from '@encointer/util';
-import { u8aToBn, u8aToBuffer } from '@polkadot/util';
+import { u8aToBn } from '@polkadot/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
