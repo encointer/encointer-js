@@ -34,7 +34,7 @@ export function parseBalanceType(data: any): number {
  */
 export function parseNodeRSA(data: any): NodeRSA {
   const keyJson = JSON.parse(data);
-  keyJson.n = new BN(keyJson.n);
+  keyJson.n = new BN(keyJson.n, 'le');
   keyJson.e = new BN(keyJson.e);
   const key = new NodeRSA();
   setKeyOpts(key);
