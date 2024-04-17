@@ -1,5 +1,5 @@
 import { parseI64F64 } from '@encointer/util';
-import { u8aToBn, u8aToBuffer } from '@polkadot/util';
+import { u8aToBn } from '@polkadot/util';
 
 // @ts-ignore
 import NodeRSA from 'node-rsa';
@@ -23,14 +23,27 @@ export function parseBalanceType(data: any): number {
   return parseI64F64(u8aToBn(data));
 }
 
+/**
+ * Parse a public key retrieved from the worker into `NodeRsa`.
+ *
+ * Note: This code is relatively sensitive: Changes here could lead
+ * to errors parsing and encryption errors in the browser, probably
+ * because of inconsistencies of node's `Buffer and the `buffer`
+ * polyfill in browser.
+ * @param data
+ */
 export function parseNodeRSA(data: any): NodeRSA {
   const keyJson = JSON.parse(data);
-  keyJson.n = u8aToBuffer(keyJson.n).reverse();
+  keyJson.n = new BN(keyJson.n, 'le');
   keyJson.e = new BN(keyJson.e);
   const key = new NodeRSA();
   setKeyOpts(key);
   key.importKey({
-    n: keyJson.n,
+    // Important: use string here, not buffer, otherwise the browser will
+    // misinterpret the `n`.
+    n: keyJson.n.toString(10),
+    // Important: use number here, not buffer, otherwise the browser will
+    // misinterpret the `e`.
     e: keyJson.e.toNumber()
   }, 'components-public');
   return key;

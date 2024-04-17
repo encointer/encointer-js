@@ -74,7 +74,7 @@ describe('worker', () => {
 
         describe('balance transfer should work', () => {
             it('should return value', async () => {
-                const shard = network.mrenclave;
+                const shard = network.chosenCid;
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
@@ -90,7 +90,7 @@ describe('worker', () => {
 
         describe('balance unshield should work', () => {
             it('should return value', async () => {
-                const shard = network.mrenclave;
+                const shard = network.chosenCid;
                 const result = await worker.balanceUnshieldFunds(
                     alice,
                     shard,

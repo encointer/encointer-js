@@ -62,7 +62,7 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
   let result: Promise<any>;
   let parserType: string = options.debug ? 'raw': parser;
 
-  console.log(`TrustedCall: ${JSON.stringify(call)}`);
+  // console.log(`TrustedCall: ${JSON.stringify(call)}`);
 
   let top;
   if (direct) {
@@ -83,7 +83,11 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
       'Request', { shard, cyphertext: cyphertext }
   );
 
-  result = sendWorkerRequest(self, createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1), parserType, options)
+  const rpc = createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1);
+  result = sendWorkerRequest(self, rpc, parserType, options)
+
+  console.log(`[sendTrustedCall] sent request: ${JSON.stringify(rpc)}`);
+
   return result as Promise<T>
 }
 
