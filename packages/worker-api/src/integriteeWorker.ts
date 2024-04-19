@@ -58,7 +58,7 @@ export class IntegriteeWorker extends Worker {
         amount: number,
         options: CallOptions = {} as CallOptions
     ): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, mrenclave, options);
+        const nonce = await this.getNonce(accountOrPubKey, shard, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], accountOrPubKey, shardT, mrenclave, nonce, params);
