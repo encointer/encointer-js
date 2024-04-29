@@ -2,7 +2,7 @@ import { parseI64F64 } from '@encointer/util';
 import { u8aToBn } from '@polkadot/util';
 
 // @ts-ignore
-import NodeRSA from 'node-rsa';
+import NodeRSA from '@learntheropes/node-rsa';
 
 import type { IWorker } from './interface.js';
 import type { BalanceEntry } from "@encointer/types";

@@ -1,7 +1,7 @@
 import type {u32} from '@polkadot/types';
 
 // @ts-ignore
-import NodeRSA from 'node-rsa';
+import NodeRSA from '@learntheropes/node-rsa';
 
 
 import type {KeyringPair} from '@polkadot/keyring/types';

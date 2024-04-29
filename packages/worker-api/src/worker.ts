@@ -10,7 +10,7 @@ import {options as encointerOptions} from '@encointer/node-api';
 import {parseI64F64} from '@encointer/util';
 
 // @ts-ignore
-import NodeRSA from 'node-rsa';
+import NodeRSA from '@learntheropes/node-rsa';
 
 import type {
   Vault

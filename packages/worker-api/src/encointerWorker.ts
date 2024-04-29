@@ -2,7 +2,7 @@ import type {u32, u64, Vec} from '@polkadot/types';
 import {communityIdentifierFromString} from '@encointer/util';
 
 // @ts-ignore
-import NodeRSA from 'node-rsa';
+import NodeRSA from '@learntheropes/node-rsa';
 
 import type {
     CommunityIdentifier,
