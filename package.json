@@ -28,7 +28,6 @@
     "version": "yarn install && git stage yarn.lock"
   },
   "dependencies": {
-    "@learntheropes/node-rsa": "^1.1.3",
     "@types/node": "20.3.2",
     "jest-resolve": "^29.5.0",
     "jest-ts-webcompat-resolver": "^1.0.0"
