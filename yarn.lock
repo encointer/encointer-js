@@ -801,7 +801,7 @@ __metadata:
     "@encointer/node-api": ^0.12.4
     "@encointer/types": ^0.12.4
     "@encointer/util": ^0.12.4
-    "@learntheropes/node-rsa": ^1.1.3
+    "@learntheropes/node-rsa": ~1.1.2
     "@polkadot/api": ^10.9.1
     "@polkadot/keyring": ^12.3.2
     "@polkadot/types": ^10.9.1
@@ -1277,7 +1277,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@learntheropes/node-rsa@npm:^1.1.3":
+"@learntheropes/node-rsa@npm:~1.1.2":
   version: 1.1.3
   resolution: "@learntheropes/node-rsa@npm:1.1.3"
   dependencies:
