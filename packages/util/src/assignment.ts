@@ -11,7 +11,7 @@ import { parseDegree } from "@encointer/types";
 import {u64, Vec} from "@polkadot/types";
 import {Option} from "@polkadot/types-codec";
 import type {Moment} from "@polkadot/types/interfaces/runtime";
-import assert from "assert";
+// import assert from "assert";
 
 /**
  * Performs the same meetup assignment as the encointer-ceremonies pallet.
@@ -234,7 +234,7 @@ export function assignmentFnInverse(
         }
 
         // never observed in practice
-        assert(t3 >= 0, `[assignment_fn_inverse]: t3 smaller 0: ${t3}`);
+        // assert(t3 >= 0, `[assignment_fn_inverse]: t3 smaller 0: ${t3}`);
 
         participants.push(t3)
 

@@ -1,7 +1,7 @@
 import BN from "bn.js";
-import assert from "assert";
+// import assert from "assert";
 
-import { assertLength } from "./common.js";
+// import { assertLength } from "./common.js";
 
 export interface ParserFixPointFn {
     (raw: BN, precision?: number): number;
@@ -25,9 +25,10 @@ export interface ParserFixPointFactory {
 /// raw: substrate_fixed::types::I<upper>F<lower> as I<upper+lower>
 /// precision: 0..lower number bits in fractional part to process
 export const parserFixPoint: ParserFixPointFactory = function (upper, lower) {
-    const len = assertLength(upper, lower);
+    // const len = assertLength(upper, lower);
+    const len = upper + lower;
     return (raw: BN, precision: number = lower): number => {
-        assert(raw.bitLength() <= len, "Bit length is not equal to " + len);
+        // assert(raw.bitLength() <= len, "Bit length is not equal to " + len);
 
         raw = raw.fromTwos(len);
 
