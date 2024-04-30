@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { strict as assert } from 'assert';
 import type { KeyringPair } from "@polkadot/keyring/types";
 import { Keyring } from "@polkadot/keyring";
 import BN from "bn.js";

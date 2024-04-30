@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { strict as assert } from 'assert';
 import BN from 'bn.js';
 
 import {assertLength, fractionalToRadix2, safeIntegerToRadix2} from './common.js';
