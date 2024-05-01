@@ -4,7 +4,6 @@ import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, Vec} from "@polkadot/types";
 import type {RegistryTypes} from "@polkadot/types/types";
-import BN from "bn.js";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -12,7 +11,7 @@ export interface IWorker extends WebSocketAsPromised {
   keyring: () => Keyring | undefined;
   createType: (apiType: string, obj?: any) => any;
   open: () => Promise<Event>;
-  encrypt: (data: Uint8Array, inputEndian?: BN.Endianness, outputEndian?: BN.Endianness) => Promise<Vec<u8>>
+  encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
 }
 
@@ -50,10 +49,8 @@ export interface PublicGetterArgs {
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
 export interface CallOptions {
-  timeout?: number;
-  debug?: boolean;
-  inputEndian?: BN.Endianness;
-  outputEndian?: BN.Endianness;
+  timeout: number;
+  debug: boolean;
 }
 
 export enum Request {
