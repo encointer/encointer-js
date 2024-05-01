@@ -1,5 +1,16 @@
 import BN from "bn.js";
 
+type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
+
+let cryptoProvider: any;
+
+if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
+    cryptoProvider = window.crypto;
+} else {
+    const { Crypto } = require("@peculiar/webcrypto");
+    cryptoProvider = new Crypto();
+}
+
 export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
     const keyJson = JSON.parse(data);
 
@@ -8,7 +19,7 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
     const eArrayBuffer = new Uint8Array(new BN(keyJson.e).toArray());
 
     // Import the components into CryptoKey
-    const publicKey = await window.crypto.subtle.importKey(
+    const publicKey = await cryptoProvider.subtle.importKey(
         "jwk",
         {
             kty: "RSA",
@@ -26,14 +37,14 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
 
     console.log(`PublicKey: ${JSON.stringify(publicKey)}`);
 
-    const exported = window.crypto.subtle.exportKey("jwk", publicKey);
-    console.log(`PublicKey: ${JSON.stringify(exported)}`);
+    const exported = cryptoProvider.subtle.exportKey("jwk", publicKey);
+    console.log(`PublicKey: ${JSON.stringify({pubkey: buf2hex(exported)})}`);
 
     return publicKey;
 }
 
 export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
-    const encryptedData = await window.crypto.subtle.encrypt(
+    const encryptedData = await cryptoProvider.subtle.encrypt(
         {
             name: "RSA-OAEP",
         },
@@ -42,7 +53,7 @@ export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKe
         data
     );
 
-    console.log(`EncryptedData: ${JSON.stringify(encryptedData)}`);
+    console.log(`EncryptedData: ${JSON.stringify({encrypted: buf2hex(encryptedData)})}`);
 
     return encryptedData;
 }
@@ -54,4 +65,8 @@ function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
+}
+
+function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
+    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
