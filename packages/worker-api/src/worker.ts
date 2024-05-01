@@ -116,6 +116,7 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   }
 
   public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
+    // @ts-ignore
     const cypherTextBuffer = await encryptWithPublicKey(data, this.shieldingKey() as CryptoKey);
     const cypherArray = new Uint8Array(cypherTextBuffer);
     return this.createType('Vec<u8>', compactAddLength(cypherArray))
@@ -154,15 +155,4 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   public async getShardVault(options: CallOptions = {} as CallOptions): Promise<Vault> {
     return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
   }
-}
-
-export function swapEndianness(uint8Array: Uint8Array): Uint8Array {
-  const length = uint8Array.length;
-  const swappedArray = new Uint8Array(length);
-
-  for (let i = 0; i < length; i++) {
-    swappedArray[length - i - 1] = uint8Array[i];
-  }
-
-  return swappedArray;
 }
