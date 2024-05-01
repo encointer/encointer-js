@@ -24,7 +24,7 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
 
     // Convert Base64url-encoded components to ArrayBuffer
     const nArrayBuffer = new Uint8Array(new BN(keyJson.n, 'le').toArray());
-    const eArrayBuffer = new Uint8Array(new BN(keyJson.e).toArray());
+    const eArrayBuffer = new Uint8Array(new BN(keyJson.e, 'le').toArray());
 
     // Import the components into CryptoKey
     const publicKey = await cryptoProvider.subtle.importKey(
