@@ -2,24 +2,22 @@ import type {Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
 import {Keyring} from '@polkadot/keyring'
-import {bufferToU8a, compactAddLength, hexToU8a, u8aToBn} from '@polkadot/util';
+import {compactAddLength, hexToU8a} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
 import {options as encointerOptions} from '@encointer/node-api';
 import {parseI64F64} from '@encointer/util';
 
-// @ts-ignore
-import NodeRSA from '@learntheropes/node-rsa';
-
 import type {
   Vault
 } from '@encointer/types';
 
 import {type CallOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
-import {encryptWithPublicKey, parseBalance, parseWebCryptoRSA} from './parsers.js';
+import {parseBalance} from './parsers.js';
 import {callGetter} from './sendRequest.js';
 import type {u8} from "@polkadot/types-codec";
+import {parseWebCryptoRSA, encryptWithPublicKey} from "@encointer/worker-api/webCryptoRSA.js";
 
 const unwrapWorkerResponse = (self: IWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
@@ -59,7 +57,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         parsedData = unwrapWorkerResponse(self, returnValue.value);
         parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
-      case 'NodeRSA':
+      case 'CryptoKey':
         const jsonStr = self.createType('String', returnValue.value);
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
@@ -91,7 +89,7 @@ export class Worker extends WebSocketAsPromised implements IWorker {
 
   #keyring?: Keyring;
 
-  #shieldingKey?: NodeRSA
+  #shieldingKey?: CryptoKey
 
   rsCount: number;
 
@@ -118,7 +116,8 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   }
 
   public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
-    const cypherTextBuffer = await encryptWithPublicKey(data, this.shieldingKey());
+    // @ts-ignore
+    const cypherTextBuffer = await encryptWithPublicKey(data, this.shieldingKey() as CryptoKey);
     const cypherArray = new Uint8Array(cypherTextBuffer);
     return this.createType('Vec<u8>', compactAddLength(cypherArray))
   }
@@ -139,16 +138,16 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     this.#keyring = keyring;
   }
 
-  public shieldingKey(): NodeRSA | undefined {
+  public shieldingKey(): CryptoKey | undefined {
     return this.#shieldingKey;
   }
 
-  public setShieldingKey(shieldingKey: NodeRSA): void {
+  public setShieldingKey(shieldingKey: CryptoKey): void {
     this.#shieldingKey = shieldingKey;
   }
 
-  public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
-    const key = await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
+  public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<CryptoKey> {
+    const key = await callGetter<CryptoKey>(this, [Request.Worker, 'author_getShieldingKey', 'CryptoKey'], {}, options)
     this.setShieldingKey(key);
     return key;
   }
