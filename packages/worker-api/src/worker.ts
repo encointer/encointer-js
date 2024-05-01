@@ -16,8 +16,8 @@ import type {
 import {type CallOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
 import {parseBalance} from './parsers.js';
 import {callGetter} from './sendRequest.js';
+import {parseWebCryptoRSA, encryptWithPublicKey} from "./webCryptoRSA.js";
 import type {u8} from "@polkadot/types-codec";
-import {parseWebCryptoRSA, encryptWithPublicKey} from "@encointer/worker-api/webCryptoRSA.js";
 
 const unwrapWorkerResponse = (self: IWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
