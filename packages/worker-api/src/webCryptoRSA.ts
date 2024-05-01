@@ -1,7 +1,7 @@
 import BN from "bn.js";
 
 /**
- * Provides crypto in both, the browser and in the node-js environment (like our tests)
+ * Provides crypto the browser via the native crypto, and in the node-js environment (like our tests)
  * via the `@peculiar/webcrypto` polyfill.
  */
 let cryptoProvider: any;
@@ -14,7 +14,7 @@ if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
 }
 
 /**
- * Type dependent on our environment browser vs. node-js.
+ * Type depending on our environment browser vs. node-js.
  */
 type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
 
