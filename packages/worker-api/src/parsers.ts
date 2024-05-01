@@ -1,12 +1,11 @@
-import { parseI64F64 } from '@encointer/util';
-import { u8aToBn } from '@polkadot/util';
+import {parseI64F64} from '@encointer/util';
+import {u8aToBn} from '@polkadot/util';
 
-// @ts-ignore
-import NodeRSA from '@learntheropes/node-rsa';
-
-import type { IWorker } from './interface.js';
-import type { BalanceEntry } from "@encointer/types";
+import type {IWorker} from './interface.js';
+import type {BalanceEntry} from "@encointer/types";
 import BN from "bn.js";
+
+import cryptoProvider, {type CryptoKey} from './cryptoProvider.js'
 
 export function parseBalance(self: IWorker, data: any): BalanceEntry {
   const balanceEntry = self.createType('BalanceEntry<BlockNumber>', data);
@@ -23,44 +22,72 @@ export function parseBalanceType(data: any): number {
   return parseI64F64(u8aToBn(data));
 }
 
-/**
- * Parse a public key retrieved from the worker into `NodeRsa`.
- *
- * Note: This code is relatively sensitive: Changes here could lead
- * to errors parsing and encryption errors in the browser, probably
- * because of inconsistencies of node's `Buffer and the `buffer`
- * polyfill in browser.
- * @param data
- */
-export function parseNodeRSA(data: any): NodeRSA {
+export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
   const keyJson = JSON.parse(data);
-  keyJson.n = new BN(keyJson.n, 'le');
-  keyJson.e = new BN(keyJson.e);
-  const key = new NodeRSA();
-  setKeyOpts(key);
-  key.importKey({
-    // Important: use string here, not buffer, otherwise the browser will
-    // misinterpret the `n`.
-    n: keyJson.n.toString(10),
-    // Important: use number here, not buffer, otherwise the browser will
-    // misinterpret the `e`.
-    e: keyJson.e.toNumber()
-  }, 'components-public');
-  return key;
+
+  // Convert Base64url-encoded components to ArrayBuffer
+  const nArrayBuffer = new Uint8Array(new BN(keyJson.n, 'le').toArray());
+  const eArrayBuffer = new Uint8Array(new BN(keyJson.e).toArray());
+
+  // Import the components into CryptoKey
+  const publicKey = await cryptoProvider.subtle.importKey(
+      "jwk",
+      {
+        kty: "RSA",
+        e: uint8ArrayToBase64Url(eArrayBuffer),
+        n: uint8ArrayToBase64Url(nArrayBuffer),
+        ext: true,
+      },
+      {
+        name: "RSA-OAEP",
+        hash: "SHA-256",
+      },
+      true,
+      ["encrypt"]
+  );
+
+  console.log(`PublicKey: ${JSON.stringify(publicKey)}`);
+  console.log(`PublicKey: ${JSON.stringify(publicKey.e)}`);
+  console.log(`PublicKey: ${JSON.stringify(publicKey.n)}`);
+
+  return publicKey;
 }
 
-function setKeyOpts(key: NodeRSA) {
-  key.setOptions(
-    {
-      // Enforce using the pure javascript implementations by
-      // setting the `browser` environment, as compatibility
-      // with node's crypto is broken and leads to bad outputs.
-      environment: 'browser',
-      encryptionScheme: {
-        scheme: 'pkcs1_oaep',
-        hash: 'sha256',
-        label: ''
-      }
-    }
+export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
+    const encryptedData = await cryptoProvider.subtle.encrypt(
+      {
+        name: "RSA-OAEP",
+      },
+        // @ts-ignore
+        publicKey,
+        data
   );
+
+  console.log(`EncryptedData: ${encryptedData}`);
+
+  return encryptedData;
+}
+
+// function setKeyOpts(key: NodeRSA) {
+//   key.setOptions(
+//     {
+//       // Enforce using the pure javascript implementations by
+//       // setting the `browser` environment, as compatibility
+//       // with node's crypto is broken and leads to bad outputs.
+//       environment: 'browser',
+//       encryptionScheme: {
+//         scheme: 'pkcs1_oaep',
+//         hash: 'sha256',
+//         label: ''
+//       }
+//     }
+//   );
+// }
+
+function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
+    const base64String = btoa(String.fromCharCode(...uint8Array));
+    return base64String
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
 }

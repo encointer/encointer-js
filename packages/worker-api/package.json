@@ -25,7 +25,7 @@
     "@encointer/node-api": "^0.12.5-alpha.4",
     "@encointer/types": "^0.12.5-alpha.4",
     "@encointer/util": "^0.12.5-alpha.4",
-    "@learntheropes/node-rsa": "~1.1.3",
+    "@peculiar/webcrypto": "^1.4.6",
     "@polkadot/api": "^10.9.1",
     "@polkadot/keyring": "^12.3.2",
     "@polkadot/types": "^10.9.1",

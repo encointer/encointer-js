@@ -2,7 +2,7 @@ import type {Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
 import {Keyring} from '@polkadot/keyring'
-import {bufferToU8a, compactAddLength, hexToU8a, u8aToBuffer} from '@polkadot/util';
+import {bufferToU8a, compactAddLength, hexToU8a, u8aToBn} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
@@ -17,7 +17,7 @@ import type {
 } from '@encointer/types';
 
 import {type CallOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
-import {parseBalance, parseNodeRSA} from './parsers.js';
+import {encryptWithPublicKey, parseBalance, parseWebCryptoRSA} from './parsers.js';
 import {callGetter} from './sendRequest.js';
 import type {u8} from "@polkadot/types-codec";
 
@@ -64,7 +64,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
         console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
-        parsedData = parseNodeRSA(jsonStr.toJSON().substring(2));
+        parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
         parsedData = self.createType(responseType, returnValue.value);
@@ -117,10 +117,9 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     }
   }
 
-  public encrypt(data: Uint8Array): Vec<u8> {
-    const buffer = u8aToBuffer(data);
-    const cypherTextBuffer = this.shieldingKey().encrypt(buffer);
-    const cypherArray = bufferToU8a(cypherTextBuffer);
+  public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
+    const cypherTextBuffer = await encryptWithPublicKey(data, this.shieldingKey());
+    const cypherArray = new Uint8Array(cypherTextBuffer);
     return this.createType('Vec<u8>', compactAddLength(cypherArray))
   }
 
