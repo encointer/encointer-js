@@ -8,7 +8,7 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
     const eArrayBuffer = new Uint8Array(new BN(keyJson.e).toArray());
 
     // Import the components into CryptoKey
-    const publicKey = await crypto.subtle.importKey(
+    const publicKey = await window.crypto.subtle.importKey(
         "jwk",
         {
             kty: "RSA",
@@ -26,14 +26,14 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
 
     console.log(`PublicKey: ${JSON.stringify(publicKey)}`);
 
-    const exported = crypto.subtle.exportKey("jwk", publicKey);
+    const exported = window.crypto.subtle.exportKey("jwk", publicKey);
     console.log(`PublicKey: ${JSON.stringify(exported)}`);
 
     return publicKey;
 }
 
 export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
-    const encryptedData = await crypto.subtle.encrypt(
+    const encryptedData = await window.crypto.subtle.encrypt(
         {
             name: "RSA-OAEP",
         },
