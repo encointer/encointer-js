@@ -1,7 +1,9 @@
 import BN from "bn.js";
 
-type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
-
+/**
+ * Provides crypto in both, the browser and in the node-js environment (like our tests)
+ * via the `@peculiar/webcrypto` polyfill.
+ */
 let cryptoProvider: any;
 
 if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
@@ -10,6 +12,12 @@ if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
     const { Crypto } = require("@peculiar/webcrypto");
     cryptoProvider = new Crypto();
 }
+
+/**
+ * Type dependent on our environment browser vs. node-js.
+ */
+type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
+
 
 export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
     const keyJson = JSON.parse(data);
