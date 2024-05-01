@@ -18,6 +18,7 @@ import {parseBalance} from './parsers.js';
 import {callGetter} from './sendRequest.js';
 import {parseWebCryptoRSA, encryptWithPublicKey} from "./webCryptoRSA.js";
 import type {u8} from "@polkadot/types-codec";
+import BN from "bn.js";
 
 const unwrapWorkerResponse = (self: IWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
@@ -115,11 +116,16 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     }
   }
 
-  public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
-    // @ts-ignore
-    const cypherTextBuffer = await encryptWithPublicKey(data, this.shieldingKey() as CryptoKey);
+  public async encrypt(data: Uint8Array, inputEndian: BN.Endianness = 'le', outputEndian: BN.Endianness = 'le'): Promise<Vec<u8>> {
+    const dataBE = new BN(data, inputEndian);
+    const dataArrayBE = new Uint8Array(dataBE.toArray());
+
+    const cypherTextBuffer = await encryptWithPublicKey(dataArrayBE, this.shieldingKey() as CryptoKey);
     const cypherArray = new Uint8Array(cypherTextBuffer);
-    return this.createType('Vec<u8>', compactAddLength(cypherArray))
+
+    const be = new BN(cypherArray, outputEndian)
+    const beArray = new Uint8Array(be.toArray());
+    return this.createType('Vec<u8>', compactAddLength(beArray))
   }
 
   public registry(): TypeRegistry {
