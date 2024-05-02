@@ -117,14 +117,20 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   }
 
   public async encrypt(data: Uint8Array, inputEndian: BN.Endianness = 'le', outputEndian: BN.Endianness = 'le'): Promise<Vec<u8>> {
-    const dataBE = new BN(data, inputEndian);
+
+    const inputData = inputEndian === 'le' ? data : changeByteAndBitEndianness(data);
+    const dataBE = new BN(inputData);
     const dataArrayBE = new Uint8Array(dataBE.toArray());
 
     const cypherTextBuffer = await encryptWithPublicKey(dataArrayBE, this.shieldingKey() as CryptoKey);
     const cypherArray = new Uint8Array(cypherTextBuffer);
 
-    const be = new BN(cypherArray, outputEndian)
+    const outputData = outputEndian === 'le' ? cypherArray : changeByteAndBitEndianness(cypherArray);
+    const be = new BN(outputData)
     const beArray = new Uint8Array(be.toArray());
+
+    console.log(`${JSON.stringify({encrypted_array: beArray})}`)
+
     return this.createType('Vec<u8>', compactAddLength(beArray))
   }
 
@@ -161,4 +167,30 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   public async getShardVault(options: CallOptions = {} as CallOptions): Promise<Vault> {
     return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
   }
+}
+
+function changeEndianness(bytes: Uint8Array): Uint8Array {
+  const reversedBytes = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) {
+    reversedBytes[i] = bytes[bytes.length - i - 1];
+  }
+  return reversedBytes;
+}
+
+function changeBitEndianness(value: number): number {
+  let result = 0;
+  for (let i = 0; i < 8; i++) {
+    result = (result << 1) | (value & 1);
+    value >>= 1;
+  }
+  return result;
+}
+
+function changeByteAndBitEndianness(bytes: Uint8Array): Uint8Array {
+  const reversedBytes = changeEndianness(bytes);
+  const changedBytes = new Uint8Array(reversedBytes.length);
+  for (let i = 0; i < reversedBytes.length; i++) {
+    changedBytes[i] = changeBitEndianness(reversedBytes[i]);
+  }
+  return changedBytes;
 }
