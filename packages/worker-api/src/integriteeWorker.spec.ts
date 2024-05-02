@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { paseoNetwork } from './testUtils/networks.js';
+import { localDockerNetwork } from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import WS from 'websocket';
 import {type KeyringPair} from "@polkadot/keyring/types";
@@ -8,7 +8,7 @@ import {type KeyringPair} from "@polkadot/keyring/types";
 const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-    const network = paseoNetwork();
+    const network = localDockerNetwork();
     let keyring: Keyring;
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
@@ -71,7 +71,7 @@ describe('worker', () => {
                 expect(result).toBeDefined();
             });
         });
-
+        //
         // describe('balance transfer should work', () => {
         //     it('should return value', async () => {
         //         const shard = network.chosenCid;
@@ -88,7 +88,7 @@ describe('worker', () => {
         //     });
         // });
 
-        describe('balance unshield should work be/be', () => {
+        describe('balance unshield should work', () => {
             it('should return value', async () => {
                 const shard = network.chosenCid;
 
@@ -99,61 +99,6 @@ describe('worker', () => {
                     alice.address,
                     charlie.address,
                     1100000000000,
-                    {inputEndian: "be", outputEndian: "be"}
-                );
-                console.log('balance unshield result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('balance unshield should work be/le', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-
-                const result = await worker.balanceUnshieldFunds(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000,
-                    {inputEndian: "be", outputEndian: "le"}
-                );
-                console.log('balance unshield result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('balance unshield should work le/be', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-
-                const result = await worker.balanceUnshieldFunds(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000,
-                    {inputEndian: "le", outputEndian: "be"}
-                );
-                console.log('balance unshield result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('balance unshield should work le/le', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-
-                const result = await worker.balanceUnshieldFunds(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000,
-                    {inputEndian: "le", outputEndian: "le"}
                 );
                 console.log('balance unshield result', result.toHuman());
                 expect(result).toBeDefined();
