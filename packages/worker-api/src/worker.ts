@@ -169,6 +169,15 @@ export class Worker extends WebSocketAsPromised implements IWorker {
   }
 }
 
+function changeByteAndBitEndianness(bytes: Uint8Array): Uint8Array {
+  const reversedBytes = changeEndianness(bytes);
+  const changedBytes = new Uint8Array(reversedBytes.length);
+  for (let i = 0; i < reversedBytes.length; i++) {
+    changedBytes[i] = changeBitEndianness(reversedBytes[i]);
+  }
+  return changedBytes;
+}
+
 function changeEndianness(bytes: Uint8Array): Uint8Array {
   const reversedBytes = new Uint8Array(bytes.length);
   for (let i = 0; i < bytes.length; i++) {
@@ -178,19 +187,11 @@ function changeEndianness(bytes: Uint8Array): Uint8Array {
 }
 
 function changeBitEndianness(value: number): number {
-  let result = 0;
-  for (let i = 0; i < 8; i++) {
-    result = (result << 1) | (value & 1);
-    value >>= 1;
-  }
-  return result;
-}
-
-function changeByteAndBitEndianness(bytes: Uint8Array): Uint8Array {
-  const reversedBytes = changeEndianness(bytes);
-  const changedBytes = new Uint8Array(reversedBytes.length);
-  for (let i = 0; i < reversedBytes.length; i++) {
-    changedBytes[i] = changeBitEndianness(reversedBytes[i]);
-  }
-  return changedBytes;
+  // Bit reversal algorithm: https://graphics.stanford.edu/~seander/bithacks.html#ReverseByteWith64Bits
+  value = ((value >> 1) & 0x55555555) | ((value & 0x55555555) << 1);
+  value = ((value >> 2) & 0x33333333) | ((value & 0x33333333) << 2);
+  value = ((value >> 4) & 0x0F0F0F0F) | ((value & 0x0F0F0F0F) << 4);
+  value = ((value >> 8) & 0x00FF00FF) | ((value & 0x00FF00FF) << 8);
+  value = (value >> 16) | (value << 16);
+  return value >>> 24; // Unsigned right shift to discard excess bits
 }
