@@ -71,6 +71,6 @@ function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
         .replace(/=+$/, "");
 }
 
-function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
+export function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
     return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
