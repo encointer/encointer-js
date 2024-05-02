@@ -52,8 +52,6 @@ export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 export interface CallOptions {
   timeout?: number;
   debug?: boolean;
-  inputEndian?: BN.Endianness;
-  outputEndian?: BN.Endianness;
 }
 
 export enum Request {
