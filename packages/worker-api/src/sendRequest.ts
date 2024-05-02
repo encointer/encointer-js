@@ -77,7 +77,7 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
 
   console.log(`TrustedOperation: ${JSON.stringify(top)}`);
 
-  const cyphertext = self.encrypt(top.toU8a());
+  const cyphertext = await self.encrypt(top.toU8a());
 
   const r = self.createType(
       'Request', { shard, cyphertext: cyphertext }

@@ -11,7 +11,7 @@ export interface IWorker extends WebSocketAsPromised {
   keyring: () => Keyring | undefined;
   createType: (apiType: string, obj?: any) => any;
   open: () => Promise<Event>;
-  encrypt: (data: Uint8Array) => Vec<u8>
+  encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
 }
 
@@ -49,8 +49,8 @@ export interface PublicGetterArgs {
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
 export interface CallOptions {
-  timeout: number;
-  debug: boolean;
+  timeout?: number;
+  debug?: boolean;
 }
 
 export enum Request {

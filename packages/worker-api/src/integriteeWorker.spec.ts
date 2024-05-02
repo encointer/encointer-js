@@ -91,13 +91,14 @@ describe('worker', () => {
         describe('balance unshield should work', () => {
             it('should return value', async () => {
                 const shard = network.chosenCid;
+
                 const result = await worker.balanceUnshieldFunds(
                     alice,
                     shard,
                     network.mrenclave,
                     alice.address,
                     charlie.address,
-                    1100000000000
+                    1100000000000,
                 );
                 console.log('balance unshield result', result.toHuman());
                 expect(result).toBeDefined();

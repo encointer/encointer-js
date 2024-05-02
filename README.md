@@ -11,6 +11,12 @@ Encointer JavaScript API monorepo
 
 # Installation
 
+## Crypto library
+The worker uses the webcrypto api if it is run in the browser. This library is only
+defined if you access the webpage with `localhost` in firefox. It is not available
+on `127.0.0.1` or `0.0.0.0` due to browser security policies.
+
+
 ```bash
 yarn add @encointer/node-api @encointer/worker-api
 ```

@@ -1,7 +1,6 @@
-import assert from 'assert';
 import BN from 'bn.js';
 
-import {assertLength, fractionalToRadix2, safeIntegerToRadix2} from './common.js';
+import {fractionalToRadix2, safeIntegerToRadix2} from './common.js';
 
 export interface ToFixPointFn {
   (num: number): BN;
@@ -20,7 +19,7 @@ export interface StringToFixPointFactory {
 }
 
 export const toFixPoint: ToFixPointFactory = function (upper, lower) {
-  assertLength(upper, lower);
+  // assertLength(upper, lower);
   return (num: number): BN => {
     const [upperBits, lowerBits] = num.toString(2).split('.');
 
@@ -29,7 +28,7 @@ export const toFixPoint: ToFixPointFactory = function (upper, lower) {
 };
 
 export const stringToFixPoint: StringToFixPointFactory = function (upper, lower) {
-  assertLength(upper, lower);
+  // assertLength(upper, lower);
   return (num: string): BN => {
     let [integers, fractions] = num.split('.');
 
@@ -52,9 +51,9 @@ export const stringToFixPoint: StringToFixPointFactory = function (upper, lower)
  * @param fractions_count amount of fractional bits in the fixed-point type.
  */
 const toFixed = function(integers: string, fractions: string, integer_count: number, fractions_count: number): BN {
-  assertLength(integer_count, fractions_count);
+  // assertLength(integer_count, fractions_count);
 
-  assert(integers.length <= integer_count, 'Number is larger than maximum in '.concat(integer_count.toString(), 'bit'));
+  // assert(integers.length <= integer_count, 'Number is larger than maximum in '.concat(integer_count.toString(), 'bit'));
 
   if (fractions !== undefined) {
    const bits = integers.concat(fractions.length > fractions_count ? fractions.substring(0, fractions_count) : fractions.padEnd(fractions_count, '0'));

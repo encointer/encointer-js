@@ -2,24 +2,21 @@ import type {Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
 import {Keyring} from '@polkadot/keyring'
-import {bufferToU8a, compactAddLength, hexToU8a, u8aToBuffer} from '@polkadot/util';
+import {compactAddLength, hexToU8a} from '@polkadot/util';
 
 import WebSocketAsPromised from 'websocket-as-promised';
 
 import {options as encointerOptions} from '@encointer/node-api';
 import {parseI64F64} from '@encointer/util';
 
-// @ts-ignore
-import NodeRSA from '@learntheropes/node-rsa';
-
-import type {
-  Vault
-} from '@encointer/types';
+import type {Vault} from '@encointer/types';
 
 import {type CallOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
-import {parseBalance, parseNodeRSA} from './parsers.js';
+import {parseBalance} from './parsers.js';
 import {callGetter} from './sendRequest.js';
+import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {u8} from "@polkadot/types-codec";
+import BN from "bn.js";
 
 const unwrapWorkerResponse = (self: IWorker, data: string) => {
   /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
@@ -59,12 +56,12 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         parsedData = unwrapWorkerResponse(self, returnValue.value);
         parsedData = parseI64F64(self.createType('i128', parsedData));
         break;
-      case 'NodeRSA':
+      case 'CryptoKey':
         const jsonStr = self.createType('String', returnValue.value);
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
         console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
-        parsedData = parseNodeRSA(jsonStr.toJSON().substring(2));
+        parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
         parsedData = self.createType(responseType, returnValue.value);
@@ -91,7 +88,7 @@ export class Worker extends WebSocketAsPromised implements IWorker {
 
   #keyring?: Keyring;
 
-  #shieldingKey?: NodeRSA
+  #shieldingKey?: CryptoKey
 
   rsCount: number;
 
@@ -117,11 +114,19 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     }
   }
 
-  public encrypt(data: Uint8Array): Vec<u8> {
-    const buffer = u8aToBuffer(data);
-    const cypherTextBuffer = this.shieldingKey().encrypt(buffer);
-    const cypherArray = bufferToU8a(cypherTextBuffer);
-    return this.createType('Vec<u8>', compactAddLength(cypherArray))
+  public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
+    const dataBE = new BN(data);
+    const dataArrayBE = new Uint8Array(dataBE.toArray());
+
+    const cypherTextBuffer = await encryptWithPublicKey(dataArrayBE, this.shieldingKey() as CryptoKey);
+
+    const outputData = new Uint8Array(cypherTextBuffer);
+    const be = new BN(outputData)
+    const beArray = new Uint8Array(be.toArray());
+
+    // console.log(`${JSON.stringify({encrypted_array: beArray})}`)
+
+    return this.createType('Vec<u8>', compactAddLength(beArray))
   }
 
   public registry(): TypeRegistry {
@@ -140,16 +145,16 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     this.#keyring = keyring;
   }
 
-  public shieldingKey(): NodeRSA | undefined {
+  public shieldingKey(): CryptoKey | undefined {
     return this.#shieldingKey;
   }
 
-  public setShieldingKey(shieldingKey: NodeRSA): void {
+  public setShieldingKey(shieldingKey: CryptoKey): void {
     this.#shieldingKey = shieldingKey;
   }
 
-  public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<NodeRSA> {
-    const key = await callGetter<NodeRSA>(this, [Request.Worker, 'author_getShieldingKey', 'NodeRSA'], {}, options)
+  public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<CryptoKey> {
+    const key = await callGetter<CryptoKey>(this, [Request.Worker, 'author_getShieldingKey', 'CryptoKey'], {}, options)
     this.setShieldingKey(key);
     return key;
   }

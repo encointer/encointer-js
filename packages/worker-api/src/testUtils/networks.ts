@@ -39,8 +39,8 @@ export const localDockerNetwork = () => {
     chain: 'ws://127.0.0.1:9944',
     worker: 'wss://127.0.0.1:2000',
     genesisHash: '0x388c446a804e24e77ae89f5bb099edb60cacc2ac7c898ce175bdaa08629c1439',
-    mrenclave: 'HjkQuPjBn531Hkji2Dsj4CEYCGpqCc3aXqETMCM7x7z4',
-    chosenCid: 'HjkQuPjBn531Hkji2Dsj4CEYCGpqCc3aXqETMCM7x7z4',
+    mrenclave: '9jm9Wm4DwGxsUUPA1cvcWWxyTuynpJ2YeEcNGnm8nztk',
+    chosenCid: '9jm9Wm4DwGxsUUPA1cvcWWxyTuynpJ2YeEcNGnm8nztk',
     customTypes: {},
     palletOverrides: {}
   };
