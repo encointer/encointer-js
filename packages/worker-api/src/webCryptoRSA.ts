@@ -45,9 +45,6 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
 
     console.log(`PublicKey: ${JSON.stringify(publicKey)}`);
 
-    const exported = await cryptoProvider.subtle.exportKey("jwk", publicKey);
-    console.log(`PublicKey: ${JSON.stringify(exported)}`);
-
     return publicKey;
 }
 
@@ -60,7 +57,7 @@ export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKe
         data
     );
 
-    console.log(`EncryptedData: ${JSON.stringify({encrypted: buf2hex(encryptedData)})}`);
+    // console.log(`EncryptedData: ${JSON.stringify({encrypted: buf2hex(encryptedData)})}`);
 
     return encryptedData;
 }
