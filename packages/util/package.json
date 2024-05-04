@@ -20,13 +20,13 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.12.5",
+  "version": "0.13.0-alpha.0",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.18.9",
-    "@polkadot/util": "^12.3.2",
-    "@polkadot/util-crypto": "^12.3.2",
-    "@types/bn.js": "^5.1.1",
+    "@polkadot/util": "^12.6.2",
+    "@polkadot/util-crypto": "^12.6.2",
+    "@types/bn.js": "^5.1.5",
     "assert": "^2.0.0",
     "bn.js": "^5.2.1"
   }
