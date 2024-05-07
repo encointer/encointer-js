@@ -147,6 +147,7 @@ export interface Reputation extends Enum {
   readonly isUnverifiedReputable: boolean;
   readonly isVerifiedUnlinked: boolean;
   readonly isVerifiedLinked: boolean;
+  readonly asVerifiedLinked: CeremonyIndexType;
   readonly type: 'Unverified' | 'UnverifiedReputable' | 'VerifiedUnlinked' | 'VerifiedLinked';
 }
 
