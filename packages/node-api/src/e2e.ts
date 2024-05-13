@@ -307,6 +307,15 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
+    // Charlie does not have funds
+    const transfer_tx = api.tx['balances']['transfer'](charlie.address, 10000000000000);
+    await submitAndWatchTx(api, alice, transfer_tx)
+        .then((result) => {
+            if (result.error !== undefined) {
+                console.log(`failed fund Charlie: ${JSON.stringify(result)}`);
+            }
+        })
+
     await registerParticipant(api, alice, cid);
     await registerParticipant(api, bob, cid);
     await registerParticipant(api, charlie, cid);
