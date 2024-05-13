@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-DOCKER_TAG=${1:-1.5.4}
+DOCKER_TAG=${1:-1.8.3}
 
 echo "Encointer node docker tag: ${DOCKER_TAG}"
 
