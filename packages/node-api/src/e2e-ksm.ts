@@ -76,7 +76,7 @@ describe('node-api', () => {
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
         describe('encointer', () => {
-            it('encointer.GetAllCommunities should return empty vec', async () => {
+            it('encointer.GetAllCommunities should return LEU community', async () => {
                 // @ts-ignore
                 const cidNames = await api.rpc.encointer.getAllCommunities();
                 expect(cidNames[0].cid).toStrictEqual(cidLeu);

@@ -307,13 +307,8 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const bob = keyring.addFromUri('//Bob', {name: 'Bob default'});
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
-    // Even though they are identical, we need to have three different objects because they are passed by reference in JS.
-    const tx1 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
-    const tx2 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
-    const tx3 = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
-
     // Charlie does not have funds
-    const transfer_tx = api.tx['balances']['transfer'](charlie.address, 10000000000000);
+    const transfer_tx = api.tx['balances']['transferKeepAlive'](charlie.address, 10000000000000);
     await submitAndWatchTx(api, alice, transfer_tx)
         .then((result) => {
             if (result.error !== undefined) {
@@ -321,20 +316,9 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
             }
         })
 
-    let results = await Promise.all([
-        submitAndWatchTx(api, alice, tx1),
-        submitAndWatchTx(api, bob, tx2),
-        submitAndWatchTx(api, charlie, tx3),
-    ])
-
-    const signers = [alice, bob, charlie];
-    results.forEach((result, index) => {
-        if (result.error !== undefined) {
-            console.log(`failed register ${signers[index].address}: ${JSON.stringify(result)}`);
-        } else {
-            console.log(`registered ${signers[index].address}: result: ${JSON.stringify(result)}`);
-        }
-    })
+    await registerParticipant(api, alice, cid);
+    await registerParticipant(api, bob, cid);
+    await registerParticipant(api, charlie, cid);
 
     // go to assigning phase
     await nextPhase(api, alice);
@@ -343,16 +327,26 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     await nextPhase(api, alice);
 }
 
-function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
+async function registerParticipant(api: ApiPromise, signer: KeyringPair, cid: CommunityIdentifier): Promise<void> {
+    const tx = api.tx['encointerCeremonies']['registerParticipant'](cid, null)
+
+    const result = await submitAndWatchTx(api, signer, tx)
+
+    if (result.error !== undefined) {
+        console.log(`failed register ${signer.address}: ${JSON.stringify(result)}`);
+    } else {
+        console.log(`registered ${signer.address}: result: ${JSON.stringify(result)}`);
+    }
+}
+
+async function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
     const tx = api.tx['sudo']['sudo'](
         api.tx['encointerScheduler']['nextPhase']()
     );
-    return submitAndWatchTx(api, signer, tx)
-        .then((result) => {
-            if (result.error !== undefined) {
-                console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
-            }
-        });
+    let result = await submitAndWatchTx(api, signer, tx);
+    if (result.error !== undefined) {
+        console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
+    }
 }
 
 const defaultDemurrage = 2078506789235;
