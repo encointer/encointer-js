@@ -308,7 +308,7 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     const charlie = keyring.addFromUri('//Charlie', {name: 'Charlie default'});
 
     // Charlie does not have funds
-    const transfer_tx = api.tx['balances']['transfer'](charlie.address, 10000000000000);
+    const transfer_tx = api.tx['balances']['transferKeepAlive'](charlie.address, 10000000000000);
     await submitAndWatchTx(api, alice, transfer_tx)
         .then((result) => {
             if (result.error !== undefined) {
