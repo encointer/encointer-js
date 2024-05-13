@@ -15,23 +15,8 @@ jobs:
       - name: Run yarn install
         run: yarn install
 
-      - name: Download encointer-node
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build-and-test.yml
-          name: encointer-node-notee-3e805e3283a7348ff70f22224478db5b5366395b
-          # in fact this action should download the latest artifact, but sometimes fails. Then we need to
-          # set the `run_id` to force a download of an updated binary.
-          run_id: 6253043495
-          path: node
-          repo: encointer/encointer-node
-
       - name: Run encointer-node
-        run: |
-          ls -alt node
-          chmod +x node/encointer-node-notee
-          ./node/encointer-node-notee --tmp --dev --enable-offchain-indexing true --rpc-methods unsafe &
+        run: ./scripts/docker_run_encointer_node_notee.sh &
 
       - name: Run integration tests
         run: yarn test:integration
