@@ -343,16 +343,14 @@ async function registerAliceBobCharlieAndGoToAttesting(api: ApiPromise, cid: Com
     await nextPhase(api, alice);
 }
 
-function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
+async function nextPhase(api: ApiPromise, signer: KeyringPair): Promise<void> {
     const tx = api.tx['sudo']['sudo'](
         api.tx['encointerScheduler']['nextPhase']()
     );
-    return submitAndWatchTx(api, signer, tx)
-        .then((result) => {
-            if (result.error !== undefined) {
-                console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
-            }
-        });
+    let result = await submitAndWatchTx(api, signer, tx);
+    if (result.error !== undefined) {
+        console.log(`failed to go to next phase: ${JSON.stringify(result)}`);
+    }
 }
 
 const defaultDemurrage = 2078506789235;
