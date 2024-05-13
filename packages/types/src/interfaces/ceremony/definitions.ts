@@ -22,7 +22,12 @@ export default {
       ]
     },
     Reputation: {
-      _enum: ['Unverified', 'UnverifiedReputable', 'VerifiedUnlinked', 'VerifiedLinked']
+      _enum: {
+        unverified: null,
+        unverifiedReputable: null,
+        verifiedUnlinked: null,
+        verifiedLinked: 'CeremonyIndexType',
+      }
     },
     CommunityReputation: {
       communityIdentifier: 'CommunityIdentifier',
