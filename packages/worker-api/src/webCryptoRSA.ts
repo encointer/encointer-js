@@ -1,4 +1,5 @@
 import BN from "bn.js";
+import { Crypto } from "@peculiar/webcrypto";
 
 /**
  * Provides crypto the browser via the native crypto, and in the node-js environment (like our tests)
@@ -9,7 +10,6 @@ let cryptoProvider: any;
 if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
     cryptoProvider = window.crypto;
 } else {
-    const { Crypto } = require("@peculiar/webcrypto");
     cryptoProvider = new Crypto();
 }
 
