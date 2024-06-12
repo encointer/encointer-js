@@ -18,20 +18,20 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.14.1",
+  "version": "0.14.2-alpha.0",
   "main": "index.js",
   "scripts": {
     "generate:defs": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces  --input ./src/interfaces",
     "generate:meta": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-chain --endpoint wss://kusama.api.encointer.org --output ./src/interfaces"
   },
   "dependencies": {
-    "@polkadot/api": "^11.0.2",
-    "@polkadot/types": "^11.0.2",
-    "@polkadot/types-codec": "^11.0.2",
+    "@polkadot/api": "^11.2.1",
+    "@polkadot/types": "^11.2.1",
+    "@polkadot/types-codec": "^11.2.1",
     "@polkadot/util": "^12.6.2"
   },
   "devDependencies": {
-    "@polkadot/typegen": "11.0.2",
+    "@polkadot/typegen": "11.2.1",
     "@types/node": "^20.3.1",
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
