@@ -8,10 +8,12 @@ import type {
 
 import {type CallOptions, Request} from './interface.js';
 import {callGetter, sendTrustedCall} from './sendRequest.js';
-import {createTrustedCall} from "./requests.js";
+import {createTrustedCall, signTrustedCall} from "./requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import {Worker} from "./worker.js";
 import bs58 from "bs58";
+import type {Signer} from "@polkadot/types/types";
+import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export class IntegriteeWorker extends Worker {
 
@@ -30,35 +32,39 @@ export class IntegriteeWorker extends Worker {
     }
 
     public async trustedBalanceTransfer(
-        accountOrPubKey: KeyringPair | PubKeyPinPair,
+        account: AddressOrPair,
         shard: string,
         mrenclave: string,
         from: String,
         to: String,
         amount: number,
-        options: CallOptions = {} as CallOptions
+        options: CallOptions = {} as CallOptions,
+        signer?: Signer
     ): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, shard, options);
+        const nonce = await this.getNonce(account, shard, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
-        const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], accountOrPubKey, shardT, mrenclave, nonce, params);
-        return this.sendTrustedCall(call, shardT, options);
+        const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signer);
+        return this.sendTrustedCall(signed, shardT, options);
     }
 
     public async balanceUnshieldFunds(
-        accountOrPubKey: KeyringPair | PubKeyPinPair,
+        account: AddressOrPair,
         shard: string,
         mrenclave: string,
         fromIncognitoAddress: string,
         toPublicAddress: string,
         amount: number,
-        options: CallOptions = {} as CallOptions
+        options: CallOptions = {} as CallOptions,
+        signer?: Signer
     ): Promise<Hash> {
-        const nonce = await this.getNonce(accountOrPubKey, shard, options);
+        const nonce = await this.getNonce(account, shard, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
-        const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], accountOrPubKey, shardT, mrenclave, nonce, params);
-        return this.sendTrustedCall(call, shardT, options);
+        const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signer);
+        return this.sendTrustedCall(signed, shardT, options);
     }
 
     async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions): Promise<Hash> {

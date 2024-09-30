@@ -3,11 +3,18 @@ import {
     type IWorker, type PublicGetterArgs,
     type TrustedGetterArgs
 } from "./interface.js";
-import type {BalanceTransferArgs, BalanceUnshieldArgs, ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
-import type {KeyringPair} from "@polkadot/keyring/types";
-import {type PubKeyPinPair, toAccount} from "@encointer/util";
+import type {
+    BalanceTransferArgs,
+    BalanceUnshieldArgs,
+    ShardIdentifier,
+    IntegriteeTrustedCallSigned,
+    IntegriteeTrustedCall
+} from "@encointer/types";
+import {signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
+import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
+import type {Signer} from "@polkadot/types/types";
 
 // Todo: Properly resolve cid vs shard
 export const clientRequestGetter = (self: IWorker, request: string, args: PublicGetterArgs) => {
@@ -64,25 +71,33 @@ export type TrustedCallVariant = [string, string]
 export const createTrustedCall = (
     self: IWorker,
     trustedCall: TrustedCallVariant,
-    accountOrPubKey: (KeyringPair | PubKeyPinPair),
+    params: TrustedCallArgs
+): IntegriteeTrustedCall => {
+    const [variant, argType] = trustedCall;
+
+    return self.createType('IntegriteeTrustedCall', {
+        [variant]: self.createType(argType, params)
+    });
+}
+
+export async function signTrustedCall(
+    self: IWorker,
+    call: IntegriteeTrustedCall,
+    account: AddressOrPair,
     shard: ShardIdentifier,
     mrenclave: string,
     nonce: u32,
-    params: TrustedCallArgs
-): IntegriteeTrustedCallSigned => {
-
-    const [variant, argType] = trustedCall;
+    signer?: Signer,
+): Promise<IntegriteeTrustedCallSigned> {
     const hash = self.createType('Hash', bs58.decode(mrenclave));
 
-    const call = self.createType('IntegriteeTrustedCall', {
-        [variant]: self.createType(argType, params)
-    });
-
     const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...hash.toU8a(), ...shard.toU8a()]);
+
+    const signature = await signPayload(account, payload, signer);
 
     return self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
-        signature: { Sr25519: toAccount(accountOrPubKey, self.keyring()).sign(payload) },
+        signature: {Sr25519: signature},
     });
 }
