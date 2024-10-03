@@ -4,6 +4,7 @@ import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, Vec} from "@polkadot/types";
 import type {RegistryTypes} from "@polkadot/types/types";
+import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -13,6 +14,21 @@ export interface IWorker extends WebSocketAsPromised {
   open: () => Promise<Event>;
   encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
+}
+
+export interface ISubmittableGetter<Type> {
+
+  worker: IWorker;
+
+  shard: ShardIdentifier;
+
+  getter: IntegriteeGetter;
+
+  returnType: string,
+
+  into_rpc(): JsonRpcRequest;
+
+  send(): Promise<Type>;
 }
 
 export interface JsonRpcRequest {

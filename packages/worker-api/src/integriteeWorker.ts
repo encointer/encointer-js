@@ -3,12 +3,17 @@ import type {u32} from '@polkadot/types';
 import type {KeyringPair} from '@polkadot/keyring/types';
 import type {Balance, Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    ShardIdentifier, IntegriteeTrustedCallSigned,
+    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter,
 } from '@encointer/types';
-
-import {type CallOptions, Request} from './interface.js';
-import {callGetter, sendTrustedCall} from './sendRequest.js';
-import {createTrustedCall, signTrustedCall} from "./requests.js";
+import {
+    type CallOptions,
+    type ISubmittableGetter,
+    type IWorker,
+    Request,
+    type JsonRpcRequest,
+} from './interface.js';
+import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
+import {createGetterRpc, createTrustedCall, signTrustedCall, submittableGetter} from "./requests.js";
 import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import {Worker} from "./worker.js";
 import bs58 from "bs58";
@@ -29,6 +34,14 @@ export class IntegriteeWorker extends Worker {
             shard: shard,
             account: toAccount(accountOrPubKey, this.keyring())
         }, options)
+    }
+
+    public async getBalanceGetter(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string): Promise<SubmittableGetter<Balance>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: toAccount(accountOrPubKey, this.keyring())
+        }
+        return await submittableGetter<Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
     }
 
     public async trustedBalanceTransfer(
@@ -74,5 +87,28 @@ export class IntegriteeWorker extends Worker {
         }
 
         return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', options);
+    }
+}
+
+export class SubmittableGetter<Type> implements ISubmittableGetter<Type> {
+    worker: IWorker;
+    shard: ShardIdentifier;
+    getter: IntegriteeGetter;
+    returnType: string;
+
+    constructor(worker: IWorker, shard: ShardIdentifier, getter: IntegriteeGetter, returnType: string) {
+        this.worker = worker;
+        this.shard = shard;
+        this.getter = getter;
+        this.returnType = returnType;
+    }
+
+    into_rpc(): JsonRpcRequest {
+        return createGetterRpc(this.worker, this.getter, this.shard);
+    }
+
+    send(options?: CallOptions): Promise<Type> {
+        const rpc = this.into_rpc();
+        return sendWorkerRequest(this.worker, rpc, this.returnType, options);
     }
 }

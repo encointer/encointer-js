@@ -14,11 +14,12 @@ import {
 } from "./requests.js";
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
-const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options: CallOptions): Promise<any> =>{
+export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options?: CallOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
+  const timeout = options && options.timeout ? options.timeout : undefined;
   return self.sendRequest(
     clientRequest, {
-      timeout: options.timeout,
+      timeout: timeout,
       requestId
     }
   )
