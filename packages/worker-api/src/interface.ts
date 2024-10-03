@@ -16,9 +16,9 @@ export interface IWorker extends WebSocketAsPromised {
   registry: () => TypeRegistry
 }
 
-export interface ISubmittableGetter<Type> {
+export interface ISubmittableGetter<W extends IWorker, Type> {
 
-  worker: IWorker;
+  worker: W;
 
   shard: ShardIdentifier;
 

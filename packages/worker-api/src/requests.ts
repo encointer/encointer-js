@@ -32,11 +32,11 @@ export const clientRequestGetterRpc = (self: IWorker, request: string, args: Pub
     return createGetterRpc(self, g, shardT);
 }
 
-export const submittableGetter = async <T>(self: IWorker, request: string, args: TrustedGetterArgs, returnType: string)=> {
+export const submittableGetter = async <W extends IWorker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
     const signedGetter = await createSignedGetter(self, request, account)
-    return new SubmittableGetter<T>(self, shardT, signedGetter, returnType);
+    return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
 }
 
 export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
