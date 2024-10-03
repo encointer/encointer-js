@@ -24,32 +24,36 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export class IntegriteeWorker extends Worker {
 
-    public async getNonce(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<u32> {
+    public async getNonce(accountOrPubKey: AddressOrPair, shard: string, singer?: Signer, options: CallOptions = {} as CallOptions): Promise<u32> {
         return await callGetter<u32>(this, [Request.TrustedGetter, 'nonce', 'u32'], {
             shard: shard,
-            account: accountOrPubKey
+            account: accountOrPubKey,
+            signer: singer
         }, options)
     }
 
-    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
         const trustedGetterArgs = {
             shard: shard,
-            account: accountOrPubKey
+            account: accountOrPubKey,
+            signer: signer,
         }
         return await submittableGetter<IntegriteeWorker, Balance>(this, 'nonce', trustedGetterArgs,'u32');
     }
 
-    public async getBalance(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    public async getBalance(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer, options: CallOptions = {} as CallOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
             shard: shard,
-            account: accountOrPubKey
+            account: accountOrPubKey,
+            signer: signer
         }, options)
     }
 
-    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer,): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
         const trustedGetterArgs = {
             shard: shard,
-            account: accountOrPubKey
+            account: accountOrPubKey,
+            signer: signer
         }
         return await submittableGetter<IntegriteeWorker, Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
     }
@@ -64,7 +68,7 @@ export class IntegriteeWorker extends Worker {
         options: CallOptions = {} as CallOptions,
         signer?: Signer
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, options);
+        const nonce = await this.getNonce(account, shard, signer, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
@@ -82,7 +86,7 @@ export class IntegriteeWorker extends Worker {
         options: CallOptions = {} as CallOptions,
         signer?: Signer
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, options);
+        const nonce = await this.getNonce(account, shard, signer, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
