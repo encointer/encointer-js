@@ -27,6 +27,14 @@ export class IntegriteeWorker extends Worker {
         }, options)
     }
 
+    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<Balance>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: accountOrPubKey
+        }
+        return await submittableGetter<Balance>(this, 'nonce', trustedGetterArgs,'u32');
+    }
+
     public async getBalance(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
             shard: shard,

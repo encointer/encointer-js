@@ -67,6 +67,7 @@ describe('worker', () => {
         describe('getBalanceGetter', () => {
             it('should return value', async () => {
                 const getter = await worker.getBalanceGetter(charlie, network.mrenclave);
+                console.log(`BalanceGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getBalance toNumber:', result.toString(10));
                 expect(result).toBeDefined();
@@ -76,6 +77,16 @@ describe('worker', () => {
         describe('getNonce', () => {
             it('should return value', async () => {
                 const result = await worker.getNonce(alice, network.mrenclave);
+                console.log('getNonce', result);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('getNonceGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.getNonceGetter(charlie, network.mrenclave);
+                console.log(`NonceGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
                 console.log('getNonce', result);
                 expect(result).toBeDefined();
             });

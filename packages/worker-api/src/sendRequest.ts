@@ -25,8 +25,8 @@ export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType:
   )
 }
 
-const sendTrustedGetterRequest = (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
-  sendWorkerRequest(self, clientRequestTrustedGetterRpc(self, method, args), parser, options)
+const sendTrustedGetterRequest = async (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
+  sendWorkerRequest(self, await clientRequestTrustedGetterRpc(self, method, args), parser, options)
 
 const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
   sendWorkerRequest(self, clientRequestGetterRpc(self, method, args), parser, options)
