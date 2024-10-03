@@ -17,7 +17,7 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {Signer} from "@polkadot/types/types";
 
 // Todo: Properly resolve cid vs shard
-export const clientRequestGetter = (self: IWorker, request: string, args: PublicGetterArgs) => {
+export const clientRequestGetterRpc = (self: IWorker, request: string, args: PublicGetterArgs) => {
     const {cid} = args;
     const getter = self.createType('IntegriteePublicGetter', {
         [request]: cid
@@ -32,7 +32,7 @@ export const clientRequestGetter = (self: IWorker, request: string, args: Public
     return createGetterRpc(self, g, cid);
 }
 
-export const clientRequestTrustedGetter = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
+export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
     const {shard, account} = args;
     const trustedGetter = createTrustedGetter(self, request, args);
     const signedGetter = await signTrustedGetter(self, account, trustedGetter);

@@ -9,8 +9,8 @@ import {
 } from './interface.js';
 import  { Request } from './interface.js';
 import {
-  clientRequestGetter,
-  clientRequestTrustedGetter,
+  clientRequestGetterRpc,
+  clientRequestTrustedGetterRpc,
 } from "./requests.js";
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
@@ -25,10 +25,10 @@ const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string
 }
 
 const sendTrustedGetterRequest = (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
-  sendWorkerRequest(self, clientRequestTrustedGetter(self, method, args), parser, options)
+  sendWorkerRequest(self, clientRequestTrustedGetterRpc(self, method, args), parser, options)
 
 const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
-  sendWorkerRequest(self, clientRequestGetter(self, method, args), parser, options)
+  sendWorkerRequest(self, clientRequestGetterRpc(self, method, args), parser, options)
 
 export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
   if( !self.isOpened ) {
