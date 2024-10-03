@@ -1,4 +1,5 @@
 import {createJsonRpcRequest, type IWorker, type PublicGetterArgs, type TrustedGetterArgs} from "./interface.js";
+import {SubmittableGetter} from "./integriteeWorker.js";
 import type {
     BalanceTransferArgs,
     BalanceUnshieldArgs,
@@ -13,7 +14,6 @@ import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {Signer} from "@polkadot/types/types";
-import {SubmittableGetter} from "@encointer/worker-api/integriteeWorker.js";
 
 // Todo: Properly resolve cid vs shard
 export const clientRequestGetterRpc = (self: IWorker, request: string, args: PublicGetterArgs) => {
