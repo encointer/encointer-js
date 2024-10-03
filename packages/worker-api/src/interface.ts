@@ -3,8 +3,9 @@ import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
-import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
+import {Worker} from "./worker.js";
+import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -16,7 +17,7 @@ export interface IWorker extends WebSocketAsPromised {
   registry: () => TypeRegistry
 }
 
-export interface ISubmittableGetter<W extends IWorker, Type> {
+export interface ISubmittableGetter<W extends Worker, Type> {
 
   worker: W;
 

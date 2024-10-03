@@ -7,13 +7,12 @@ import type {
 import {
     type CallOptions,
     type ISubmittableGetter,
-    type IWorker,
     Request,
     type JsonRpcRequest,
 } from './interface.js';
+import {Worker} from "./worker.js";
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
 import {createGetterRpc, createTrustedCall, signTrustedCall, submittableGetter} from "./requests.js";
-import {Worker} from "./worker.js";
 import bs58 from "bs58";
 import type {Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
@@ -96,7 +95,7 @@ export class IntegriteeWorker extends Worker {
     }
 }
 
-export class SubmittableGetter<W extends IWorker, Type> implements ISubmittableGetter<W, Type> {
+export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGetter<W, Type> {
     worker: W;
     shard: ShardIdentifier;
     getter: IntegriteeGetter;

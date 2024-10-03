@@ -1,5 +1,6 @@
 import {createJsonRpcRequest, type IWorker, type PublicGetterArgs, type TrustedGetterArgs} from "./interface.js";
 import {SubmittableGetter} from "./integriteeWorker.js";
+import {Worker} from "./worker.js";
 import type {
     BalanceTransferArgs,
     BalanceUnshieldArgs,
@@ -32,7 +33,7 @@ export const clientRequestGetterRpc = (self: IWorker, request: string, args: Pub
     return createGetterRpc(self, g, shardT);
 }
 
-export const submittableGetter = async <W extends IWorker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
+export const submittableGetter = async <W extends Worker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
     const signedGetter = await createSignedGetter(self, request, account)
