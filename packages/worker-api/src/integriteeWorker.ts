@@ -27,12 +27,12 @@ export class IntegriteeWorker extends Worker {
         }, options)
     }
 
-    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<Balance>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey
         }
-        return await submittableGetter<IntegriteeWorker, Balance>(this, 'nonce', trustedGetterArgs,'u32');
+        return await submittableGetter<Balance>(this, 'nonce', trustedGetterArgs,'u32');
     }
 
     public async getBalance(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
@@ -42,12 +42,12 @@ export class IntegriteeWorker extends Worker {
         }, options)
     }
 
-    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<Balance>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey
         }
-        return await submittableGetter<IntegriteeWorker, Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
+        return await submittableGetter<Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
     }
 
     public async trustedBalanceTransfer(
@@ -96,13 +96,13 @@ export class IntegriteeWorker extends Worker {
     }
 }
 
-export class SubmittableGetter<W extends IWorker, Type> implements ISubmittableGetter<W, Type> {
-    worker: W;
+export class SubmittableGetter<Type> implements ISubmittableGetter<Type> {
+    worker: IWorker;
     shard: ShardIdentifier;
     getter: IntegriteeGetter;
     returnType: string;
 
-    constructor(worker: W, shard: ShardIdentifier, getter: IntegriteeGetter, returnType: string) {
+    constructor(worker: IWorker, shard: ShardIdentifier, getter: IntegriteeGetter, returnType: string) {
         this.worker = worker;
         this.shard = shard;
         this.getter = getter;
