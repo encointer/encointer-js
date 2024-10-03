@@ -8,11 +8,16 @@ import {
     type CallOptions,
     type ISubmittableGetter,
     Request,
-    type JsonRpcRequest,
+    type JsonRpcRequest, type TrustedGetterArgs,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
-import {createGetterRpc, createTrustedCall, signTrustedCall, submittableGetter} from "./requests.js";
+import {
+    createGetterRpc,
+    createSignedGetter,
+    createTrustedCall,
+    signTrustedCall,
+} from "./requests.js";
 import bs58 from "bs58";
 import type {Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
@@ -116,4 +121,11 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
         const rpc = this.into_rpc();
         return sendWorkerRequest(this.worker, rpc, this.returnType, options);
     }
+}
+
+export const submittableGetter = async <W extends Worker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
+    const {shard, account} = args;
+    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
+    const signedGetter = await createSignedGetter(self, request, account)
+    return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
 }
