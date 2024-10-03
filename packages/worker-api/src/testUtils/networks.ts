@@ -52,7 +52,7 @@ export const paseoNetwork = () => {
     // reverse proxy to the worker
     worker: 'wss://scv1.paseo.api.incognitee.io:443',
     genesisHash: '',
-    mrenclave: '7RuM6U4DLEtrTnVntDjDPBCAN4LbCGRpnmcTYUGhLqc7',
+    mrenclave: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
     // abused as shard vault
     chosenCid: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
     customTypes: {},
