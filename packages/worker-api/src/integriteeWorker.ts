@@ -1,6 +1,5 @@
 import type {u32} from '@polkadot/types';
 
-import type {KeyringPair} from '@polkadot/keyring/types';
 import type {Balance, Hash} from '@polkadot/types/interfaces/runtime';
 import type {
     ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter,
@@ -14,7 +13,6 @@ import {
 } from './interface.js';
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
 import {createGetterRpc, createTrustedCall, signTrustedCall, submittableGetter} from "./requests.js";
-import {PubKeyPinPair, toAccount} from "@encointer/util/common";
 import {Worker} from "./worker.js";
 import bs58 from "bs58";
 import type {Signer} from "@polkadot/types/types";
@@ -22,24 +20,24 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export class IntegriteeWorker extends Worker {
 
-    public async getNonce(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string, options: CallOptions = {} as CallOptions): Promise<u32> {
+    public async getNonce(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<u32> {
         return await callGetter<u32>(this, [Request.TrustedGetter, 'nonce', 'u32'], {
             shard: shard,
-            account: toAccount(accountOrPubKey, this.keyring())
+            account: accountOrPubKey
         }, options)
     }
 
-    public async getBalance(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    public async getBalance(accountOrPubKey: AddressOrPair, shard: string, options: CallOptions = {} as CallOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
             shard: shard,
-            account: toAccount(accountOrPubKey, this.keyring())
+            account: accountOrPubKey
         }, options)
     }
 
-    public async getBalanceGetter(accountOrPubKey: KeyringPair | PubKeyPinPair, shard: string): Promise<SubmittableGetter<Balance>> {
+    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string): Promise<SubmittableGetter<Balance>> {
         const trustedGetterArgs = {
             shard: shard,
-            account: toAccount(accountOrPubKey, this.keyring())
+            account: accountOrPubKey
         }
         return await submittableGetter<Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
     }

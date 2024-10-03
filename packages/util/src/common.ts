@@ -65,12 +65,16 @@ export async function signPayload(account: AddressOrPair, payload: Uint8Array, s
   }
 
   if (isFunction(signer.signRaw)) {
-    const address = isKeyringPair(account) ? account.address : account.toString();
+    const address = asString(account);
     const result = await signer.signRaw({address, type: "bytes", data: u8aToHex(payload) });
     return hexToU8a(result.signature);
   } else {
     throw new Error('Invalid signer interface need to `signRaw` has to be defined.');
   }
+}
+
+export function asString(addressOrPair: AddressOrPair): string {
+  return isKeyringPair(addressOrPair) ? addressOrPair.address : addressOrPair.toString();
 }
 
 export function isKeyringPair (account: string | IKeyringPair | AccountId | Address): account is IKeyringPair {

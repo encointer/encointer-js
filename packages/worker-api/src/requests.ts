@@ -8,12 +8,11 @@ import type {
     IntegriteeTrustedGetter,
     ShardIdentifier
 } from "@encointer/types";
-import {signPayload} from "@encointer/util";
+import {asString, signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {Signer} from "@polkadot/types/types";
-import type {KeyringPair} from "@polkadot/keyring/types";
 import {SubmittableGetter} from "@encointer/worker-api/integriteeWorker.js";
 
 // Todo: Properly resolve cid vs shard
@@ -47,13 +46,12 @@ export const clientRequestTrustedGetterRpc = async (self: IWorker, request: stri
     return createGetterRpc(self, signedGetter, shardT);
 }
 
-export const createSignedGetter = async (self: IWorker, request: string, account: KeyringPair) => {
-    const trustedGetter = createTrustedGetter(self, request, account);
+export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair) => {
+    const trustedGetter = createTrustedGetter(self, request, asString(account));
     return await signTrustedGetter(self, account, trustedGetter);
 }
 
-export const createTrustedGetter = (self: IWorker, request: string, account: KeyringPair) => {
-    const address = account.address;
+export const createTrustedGetter = (self: IWorker, request: string, address: string) => {
     return self.createType('IntegriteeTrustedGetter', {
         [request]: address
     });

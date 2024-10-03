@@ -1,10 +1,10 @@
-import type { KeyringPair } from '@polkadot/keyring/types';
 import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, Vec} from "@polkadot/types";
-import type {RegistryTypes} from "@polkadot/types/types";
+import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
+import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -55,7 +55,8 @@ export interface WorkerOptions {
 
 export interface TrustedGetterArgs {
   shard: string;
-  account: KeyringPair;
+  account: AddressOrPair;
+  signer?: Signer
 }
 
 export interface PublicGetterArgs {
