@@ -58,7 +58,7 @@ export const createTrustedGetter = (self: IWorker, request: string, address: str
 }
 
 export async function signTrustedGetter(self: IWorker, account: AddressOrPair, getter: IntegriteeTrustedGetter, signer?: Signer): Promise<IntegriteeGetter> {
-    const signature = signPayload(account, getter.toU8a(), signer);
+    const signature = await signPayload(account, getter.toU8a(), signer);
     const g = self.createType('IntegriteeGetter', {
         trusted: {
             getter,
