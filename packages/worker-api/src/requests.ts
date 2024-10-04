@@ -64,6 +64,7 @@ export async function signTrustedGetter(self: IWorker, account: AddressOrPair, g
     });
 
     console.log(`TrustedGetter: ${JSON.stringify(g)}`);
+    console.log(`TrustedGetter Encoded: ${g.toU8a()}`);
     return g;
 }
 
