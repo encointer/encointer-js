@@ -18,10 +18,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.15.0-alpha.7",
+  "version": "0.15.0-alpha.8",
   "main": "index.js",
   "dependencies": {
-    "@encointer/types": "^0.15.0-alpha.7",
+    "@encointer/types": "^0.15.0-alpha.8",
     "@polkadot/api": "^11.2.1",
     "tslib": "^2.6.2"
   },
