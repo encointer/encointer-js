@@ -103,13 +103,13 @@ export const signTrustedCall = async (
     shard: ShardIdentifier,
     mrenclave: string,
     nonce: u32,
-    signer?: Signer,
+    options?: TrustedSignerOptions,
 ): Promise<IntegriteeTrustedCallSigned> => {
     const hash = self.createType('Hash', bs58.decode(mrenclave));
 
     const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...hash.toU8a(), ...shard.toU8a()]);
 
-    const signature = await signPayload(account, payload, signer);
+    const signature = await signPayload(account, payload, options?.signer);
 
     return self.createType('IntegriteeTrustedCallSigned', {
         call: call,

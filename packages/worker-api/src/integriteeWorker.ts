@@ -72,7 +72,7 @@ export class IntegriteeWorker extends Worker {
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
-        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signer);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, { signer: signer });
         return this.sendTrustedCall(signed, shardT, options);
     }
 
@@ -90,7 +90,7 @@ export class IntegriteeWorker extends Worker {
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
-        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signer);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, { signer: signer });
         return this.sendTrustedCall(signed, shardT, options);
     }
 
