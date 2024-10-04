@@ -5,7 +5,6 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {IKeyringPair, Signer} from "@polkadot/types/types";
 import {hexToU8a, isFunction, u8aToHex} from "@polkadot/util";
 import type {AccountId, Address} from "@polkadot/types/interfaces/runtime";
-import {Json} from "@polkadot/types-codec";
 
 // interface assertLengthFunc {
 //   (upper: number, lower: number): number
