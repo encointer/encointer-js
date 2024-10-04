@@ -1,9 +1,11 @@
-import type { KeyringPair } from '@polkadot/keyring/types';
 import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
-import type {TypeRegistry, Vec} from "@polkadot/types";
-import type {RegistryTypes} from "@polkadot/types/types";
+import type {TypeRegistry, u32, Vec} from "@polkadot/types";
+import type {RegistryTypes, Signer} from "@polkadot/types/types";
+import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
+import {Worker} from "./worker.js";
+import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -13,6 +15,21 @@ export interface IWorker extends WebSocketAsPromised {
   open: () => Promise<Event>;
   encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
+}
+
+export interface ISubmittableGetter<W extends Worker, Type> {
+
+  worker: W;
+
+  shard: ShardIdentifier;
+
+  getter: IntegriteeGetter;
+
+  returnType: string,
+
+  into_rpc(): JsonRpcRequest;
+
+  send(): Promise<Type>;
 }
 
 export interface JsonRpcRequest {
@@ -39,7 +56,21 @@ export interface WorkerOptions {
 
 export interface TrustedGetterArgs {
   shard: string;
-  account: KeyringPair;
+  account: AddressOrPair;
+  signer?: Signer
+}
+
+/**
+ * Signer options.
+ *
+ * In the future, this might include other things.
+ */
+export interface TrustedSignerOptions {
+  // If this is null, we assume that the account is a Pair.
+  signer?: Signer;
+
+  // If the nonce is null, it will be fetched.
+  nonce?: u32;
 }
 
 export interface PublicGetterArgs {
@@ -48,7 +79,7 @@ export interface PublicGetterArgs {
 
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
-export interface CallOptions {
+export interface RequestOptions {
   timeout?: number;
   debug?: boolean;
 }

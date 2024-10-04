@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { localDockerNetwork } from './testUtils/networks.js';
+import { paseoNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import WS from 'websocket';
 import {type KeyringPair} from "@polkadot/keyring/types";
@@ -8,7 +8,7 @@ import {type KeyringPair} from "@polkadot/keyring/types";
 const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-    const network = localDockerNetwork();
+    const network = paseoNetwork();
     let keyring: Keyring;
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
@@ -64,9 +64,29 @@ describe('worker', () => {
             });
         });
 
+        describe('getBalanceGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.getBalanceGetter(charlie, network.mrenclave);
+                console.log(`BalanceGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('getBalance toNumber:', result.toString(10));
+                expect(result).toBeDefined();
+            });
+        });
+
         describe('getNonce', () => {
             it('should return value', async () => {
                 const result = await worker.getNonce(alice, network.mrenclave);
+                console.log('getNonce', result);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('getNonceGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.getNonceGetter(charlie, network.mrenclave);
+                console.log(`NonceGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
                 console.log('getNonce', result);
                 expect(result).toBeDefined();
             });

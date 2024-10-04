@@ -1,6 +1,10 @@
 import type { KeyringPair } from "@polkadot/keyring/types";
 import { Keyring } from "@polkadot/keyring";
 import BN from "bn.js";
+import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
+import type {IKeyringPair, Signer} from "@polkadot/types/types";
+import {hexToU8a, isFunction, u8aToHex} from "@polkadot/util";
+import type {AccountId, Address} from "@polkadot/types/interfaces/runtime";
 
 // interface assertLengthFunc {
 //   (upper: number, lower: number): number
@@ -44,6 +48,40 @@ export const unlockKeypair = (pair: PubKeyPinPair, keyring: Keyring): KeyringPai
   return keyPair;
 }
 
+/**
+ * Slightly different from polkadot-js' approach, but we want to handle the same interface like they
+ * do.
+ * @param account
+ * @param payload
+ * @param signer
+ */
+export async function signPayload(account: AddressOrPair, payload: Uint8Array, signer?: Signer): Promise<Uint8Array> {
+  if (isKeyringPair(account)) {
+    return account.sign(payload);
+  }
+
+  // console.log(`signer: ${JSON.stringify(signer)}`)
+
+  if (signer === undefined) {
+    throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
+  }
+
+  if (isFunction(signer.signRaw)) {
+    const address = asString(account);
+    const result = await signer.signRaw({address, type: "bytes", data: u8aToHex(payload) });
+    return hexToU8a(result.signature);
+  } else {
+    throw new Error('Invalid signer interface, `signRaw` has to be defined.');
+  }
+}
+
+export function asString(addressOrPair: AddressOrPair): string {
+  return isKeyringPair(addressOrPair) ? addressOrPair.address : addressOrPair.toString();
+}
+
+export function isKeyringPair (account: string | IKeyringPair | AccountId | Address): account is IKeyringPair {
+  return isFunction((account as IKeyringPair).sign);
+}
 
 /**
  * Our fixed point integer values go until I64, which means that it may be > 53 bits.
