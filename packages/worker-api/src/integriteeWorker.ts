@@ -49,7 +49,7 @@ export class IntegriteeWorker extends Worker {
         }, options)
     }
 
-    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer,): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
@@ -65,8 +65,8 @@ export class IntegriteeWorker extends Worker {
         from: String,
         to: String,
         amount: number,
+        signer?: Signer,
         options: CallOptions = {} as CallOptions,
-        signer?: Signer
     ): Promise<Hash> {
         const nonce = await this.getNonce(account, shard, signer, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
@@ -83,8 +83,8 @@ export class IntegriteeWorker extends Worker {
         fromIncognitoAddress: string,
         toPublicAddress: string,
         amount: number,
+        signer?: Signer,
         options: CallOptions = {} as CallOptions,
-        signer?: Signer
     ): Promise<Hash> {
         const nonce = await this.getNonce(account, shard, signer, options);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
