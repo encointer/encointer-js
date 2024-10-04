@@ -93,7 +93,7 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
-    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, requestOptions: RequestOptions = {} as RequestOptions): Promise<Hash> {
+    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, requestOptions?: RequestOptions): Promise<Hash> {
         if (this.shieldingKey() == undefined) {
             console.log(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
             await this.getShieldingKey(requestOptions);
