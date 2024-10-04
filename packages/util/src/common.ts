@@ -60,7 +60,7 @@ export async function signPayload(account: AddressOrPair, payload: Uint8Array, s
     return account.sign(payload);
   }
 
-  console.log(`signer: ${JSON.stringify(signer)}`)
+  // console.log(`signer: ${JSON.stringify(signer)}`)
 
   if (signer === undefined) {
     throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
@@ -71,7 +71,7 @@ export async function signPayload(account: AddressOrPair, payload: Uint8Array, s
     const result = await signer.signRaw({address, type: "bytes", data: u8aToHex(payload) });
     return hexToU8a(result.signature);
   } else {
-    throw new Error('Invalid signer interface need to `signRaw` has to be defined.');
+    throw new Error('Invalid signer interface, `signRaw` has to be defined.');
   }
 }
 
