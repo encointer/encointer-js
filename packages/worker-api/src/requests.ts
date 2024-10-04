@@ -39,7 +39,7 @@ export const clientRequestGetterRpc = (self: IWorker, request: string, args: Pub
 export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account, { signer: args?.signer });
+    const signedGetter = await createSignedGetter(self, request, account, {signer: args?.signer});
     return createGetterRpc(self, signedGetter, shardT);
 }
 
@@ -111,14 +111,9 @@ export const signTrustedCall = async (
 
     const signature = await signPayload(account, payload, options?.signer);
 
-    const callSigned = self.createType('IntegriteeTrustedCallSigned', {
+    return self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
         signature: {Sr25519: signature},
     });
-
-    console.log(`[TrustedCallSigned]: ${JSON.stringify(callSigned)}`);
-    console.log(`[TrustedCallSigned]: ${callSigned.toU8a()}`);
-
-    return callSigned;
 }
