@@ -76,7 +76,7 @@ export interface PublicGetterArgs {
 
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
-export interface CallOptions {
+export interface RequestOptions {
   timeout?: number;
   debug?: boolean;
 }

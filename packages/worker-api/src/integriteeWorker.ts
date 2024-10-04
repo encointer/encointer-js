@@ -5,10 +5,10 @@ import type {
     ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter,
 } from '@encointer/types';
 import {
-    type CallOptions,
+    type RequestOptions,
     type ISubmittableGetter,
     Request,
-    type JsonRpcRequest, type TrustedGetterArgs,
+    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
@@ -19,41 +19,40 @@ import {
     signTrustedCall,
 } from "./requests.js";
 import bs58 from "bs58";
-import type {Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export class IntegriteeWorker extends Worker {
 
-    public async getNonce(accountOrPubKey: AddressOrPair, shard: string, singer?: Signer, options: CallOptions = {} as CallOptions): Promise<u32> {
+    public async getNonce(accountOrPubKey: AddressOrPair, shard: string, singerOptions?: TrustedSignerOptions, requestOptions?: RequestOptions): Promise<u32> {
         return await callGetter<u32>(this, [Request.TrustedGetter, 'nonce', 'u32'], {
             shard: shard,
             account: accountOrPubKey,
-            signer: singer
-        }, options)
+            signer: singerOptions?.signer
+        }, requestOptions)
     }
 
-    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getNonceGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
-            signer: signer,
+            signer: signerOptions?.signer,
         }
         return await submittableGetter<IntegriteeWorker, Balance>(this, 'nonce', trustedGetterArgs,'u32');
     }
 
-    public async getBalance(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer, options: CallOptions = {} as CallOptions): Promise<Balance> {
+    public async getBalance(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions, requestOptions?: RequestOptions): Promise<Balance> {
         return await callGetter<Balance>(this, [Request.TrustedGetter, 'free_balance', 'Balance'], {
             shard: shard,
             account: accountOrPubKey,
-            signer: signer
-        }, options)
+            signer: signerOptions?.signer
+        }, requestOptions)
     }
 
-    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string, signer?: Signer): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+    public async getBalanceGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
-            signer: signer
+            signer: signerOptions?.signer
         }
         return await submittableGetter<IntegriteeWorker, Balance>(this, 'free_balance', trustedGetterArgs,'Balance');
     }
@@ -65,15 +64,15 @@ export class IntegriteeWorker extends Worker {
         from: String,
         to: String,
         amount: number,
-        signer?: Signer,
-        options: CallOptions = {} as CallOptions,
+        signerOptions?: TrustedSignerOptions,
+        requestOptions?: RequestOptions,
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, signer, options);
+        const nonce = await this.getNonce(account, shard, signerOptions, requestOptions);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
-        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, { signer: signer });
-        return this.sendTrustedCall(signed, shardT, options);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
     public async balanceUnshieldFunds(
@@ -83,24 +82,24 @@ export class IntegriteeWorker extends Worker {
         fromIncognitoAddress: string,
         toPublicAddress: string,
         amount: number,
-        signer?: Signer,
-        options: CallOptions = {} as CallOptions,
+        signerOptions?: TrustedSignerOptions,
+        requestOptions?: RequestOptions,
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, signer, options);
+        const nonce = await this.getNonce(account, shard, signerOptions, requestOptions);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
-        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, { signer: signer });
-        return this.sendTrustedCall(signed, shardT, options);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
-    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, options: CallOptions = {} as CallOptions): Promise<Hash> {
+    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, requestOptions: RequestOptions = {} as RequestOptions): Promise<Hash> {
         if (this.shieldingKey() == undefined) {
             console.log(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
-            await this.getShieldingKey(options);
+            await this.getShieldingKey(requestOptions);
         }
 
-        return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', options);
+        return sendTrustedCall<Hash>(this, call, shard, true, 'TrustedOperationResult', requestOptions);
     }
 }
 
@@ -121,9 +120,9 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
         return createGetterRpc(this.worker, this.getter, this.shard);
     }
 
-    send(options?: CallOptions): Promise<Type> {
+    send(requestOptions?: RequestOptions): Promise<Type> {
         const rpc = this.into_rpc();
-        return sendWorkerRequest(this.worker, rpc, this.returnType, options);
+        return sendWorkerRequest(this.worker, rpc, this.returnType, requestOptions);
     }
 }
 

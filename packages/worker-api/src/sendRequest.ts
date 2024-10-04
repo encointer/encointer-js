@@ -3,7 +3,7 @@ import {
   type TrustedGetterArgs,
   type PublicGetterArgs,
   type RequestArgs,
-  type CallOptions,
+  type RequestOptions,
   type WorkerMethod,
   createJsonRpcRequest
 } from './interface.js';
@@ -14,7 +14,7 @@ import {
 } from "./requests.js";
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
-export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options?: CallOptions): Promise<any> =>{
+export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options?: RequestOptions): Promise<any> =>{
   const requestId = self.rqStack.push(parserType) + self.rsCount;
   const timeout = options && options.timeout ? options.timeout : undefined;
   return self.sendRequest(
@@ -25,37 +25,37 @@ export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType:
   )
 }
 
-const sendTrustedGetterRequest = async (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options: CallOptions) =>
+const sendTrustedGetterRequest = async (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options?: RequestOptions) =>
   sendWorkerRequest(self, await clientRequestTrustedGetterRpc(self, method, args), parser, options)
 
-const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options: CallOptions) =>
+const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options?: RequestOptions) =>
   sendWorkerRequest(self, clientRequestGetterRpc(self, method, args), parser, options)
 
-export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, args: RequestArgs, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, args: RequestArgs, requestOptions?: RequestOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
   const [getterType, method, parser] = workerMethod;
   let result: Promise<any>;
-  let parserType: string = options.debug ? 'raw': parser;
+  let parserType: string = requestOptions?.debug ? 'raw': parser;
   switch (getterType) {
     case Request.TrustedGetter:
-      result = sendTrustedGetterRequest(self, method, parserType, args as TrustedGetterArgs, options)
+      result = sendTrustedGetterRequest(self, method, parserType, args as TrustedGetterArgs, requestOptions)
       break;
     case Request.PublicGetter:
-      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, options)
+      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, requestOptions)
       break;
     case Request.Worker:
-      result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, options)
+      result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, requestOptions)
       break;
     default:
-      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, options)
+      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, requestOptions)
       break;
   }
   return result as Promise<T>
 }
 
-export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: CallOptions = {} as CallOptions): Promise<T> => {
+export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: RequestOptions = {} as RequestOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }

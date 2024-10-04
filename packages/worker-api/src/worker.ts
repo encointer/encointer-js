@@ -11,7 +11,7 @@ import {parseI64F64} from '@encointer/util';
 
 import type {Vault} from '@encointer/types';
 
-import {type CallOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
+import {type RequestOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
 import {parseBalance} from './parsers.js';
 import {callGetter} from './sendRequest.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
@@ -153,13 +153,13 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     this.#shieldingKey = shieldingKey;
   }
 
-  public async getShieldingKey(options: CallOptions = {} as CallOptions): Promise<CryptoKey> {
+  public async getShieldingKey(options: RequestOptions = {} as RequestOptions): Promise<CryptoKey> {
     const key = await callGetter<CryptoKey>(this, [Request.Worker, 'author_getShieldingKey', 'CryptoKey'], {}, options)
     this.setShieldingKey(key);
     return key;
   }
 
-  public async getShardVault(options: CallOptions = {} as CallOptions): Promise<Vault> {
+  public async getShardVault(options: RequestOptions = {} as RequestOptions): Promise<Vault> {
     return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
   }
 }
