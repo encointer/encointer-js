@@ -60,6 +60,16 @@ export interface TrustedGetterArgs {
   signer?: Signer
 }
 
+/**
+ * Signer options.
+ *
+ * In the future, this might include a nonce, etc.
+ */
+export interface TrustedSignerOptions {
+  // If this is null, we assume that the account is a Pair
+  signer?: Signer
+}
+
 export interface PublicGetterArgs {
   cid: string;
 }

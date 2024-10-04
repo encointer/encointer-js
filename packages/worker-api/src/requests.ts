@@ -1,4 +1,10 @@
-import {createJsonRpcRequest, type IWorker, type PublicGetterArgs, type TrustedGetterArgs} from "./interface.js";
+import {
+    createJsonRpcRequest,
+    type IWorker,
+    type PublicGetterArgs,
+    type TrustedGetterArgs,
+    type TrustedSignerOptions
+} from "./interface.js";
 import type {
     BalanceTransferArgs,
     BalanceUnshieldArgs,
@@ -34,13 +40,13 @@ export const clientRequestGetterRpc = (self: IWorker, request: string, args: Pub
 export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account)
+    const signedGetter = await createSignedGetter(self, request, account, { signer: args?.signer });
     return createGetterRpc(self, signedGetter, shardT);
 }
 
-export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair) => {
+export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair, options: TrustedSignerOptions) => {
     const trustedGetter = createTrustedGetter(self, request, asString(account));
-    return await signTrustedGetter(self, account, trustedGetter);
+    return await signTrustedGetter(self, account, trustedGetter, options);
 }
 
 export const createTrustedGetter = (self: IWorker, request: string, address: string) => {
@@ -49,8 +55,8 @@ export const createTrustedGetter = (self: IWorker, request: string, address: str
     });
 }
 
-export async function signTrustedGetter(self: IWorker, account: AddressOrPair, getter: IntegriteeTrustedGetter, signer?: Signer): Promise<IntegriteeGetter> {
-    const signature = await signPayload(account, getter.toU8a(), signer);
+export async function signTrustedGetter(self: IWorker, account: AddressOrPair, getter: IntegriteeTrustedGetter, options?: TrustedSignerOptions): Promise<IntegriteeGetter> {
+    const signature = await signPayload(account, getter.toU8a(), options?.signer);
     const g = self.createType('IntegriteeGetter', {
         trusted: {
             getter,

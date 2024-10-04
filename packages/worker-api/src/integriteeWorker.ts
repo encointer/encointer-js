@@ -130,6 +130,6 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
 export const submittableGetter = async <W extends Worker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account)
+    const signedGetter = await createSignedGetter(self, request, account, { signer: args?.signer })
     return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
 }

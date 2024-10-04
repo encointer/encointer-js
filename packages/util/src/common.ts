@@ -63,9 +63,9 @@ export async function signPayload(account: AddressOrPair, payload: Uint8Array, s
 
   console.log(`signer: ${JSON.stringify(signer)}`)
 
-  // if (signer === null) {
-  //   throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
-  // }
+  if (signer === undefined) {
+    throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
+  }
 
   if (isFunction(signer.signRaw)) {
     const address = asString(account);
