@@ -67,7 +67,7 @@ export class IntegriteeWorker extends Worker {
         signerOptions?: TrustedSignerOptions,
         requestOptions?: RequestOptions,
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, signerOptions, requestOptions);
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions, requestOptions);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
         const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
@@ -85,7 +85,7 @@ export class IntegriteeWorker extends Worker {
         signerOptions?: TrustedSignerOptions,
         requestOptions?: RequestOptions,
     ): Promise<Hash> {
-        const nonce = await this.getNonce(account, shard, signerOptions, requestOptions);
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions, requestOptions);
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);

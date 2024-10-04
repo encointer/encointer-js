@@ -1,7 +1,7 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
-import type {TypeRegistry, Vec} from "@polkadot/types";
+import type {TypeRegistry, u32, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import {Worker} from "./worker.js";
@@ -63,11 +63,14 @@ export interface TrustedGetterArgs {
 /**
  * Signer options.
  *
- * In the future, this might include a nonce, etc.
+ * In the future, this might include other things.
  */
 export interface TrustedSignerOptions {
-  // If this is null, we assume that the account is a Pair
-  signer?: Signer
+  // If this is null, we assume that the account is a Pair.
+  signer?: Signer;
+
+  // If the nonce is null, it will be fetched.
+  nonce?: u32;
 }
 
 export interface PublicGetterArgs {
