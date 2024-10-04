@@ -18,7 +18,6 @@ import {asString, signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
-import type {Signer} from "@polkadot/types/types";
 
 // Todo: Properly resolve cid vs shard
 export const clientRequestGetterRpc = (self: IWorker, request: string, args: PublicGetterArgs) => {
