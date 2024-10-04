@@ -5,6 +5,7 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {IKeyringPair, Signer} from "@polkadot/types/types";
 import {hexToU8a, isFunction, u8aToHex} from "@polkadot/util";
 import type {AccountId, Address} from "@polkadot/types/interfaces/runtime";
+import {Json} from "@polkadot/types-codec";
 
 // interface assertLengthFunc {
 //   (upper: number, lower: number): number
@@ -60,9 +61,11 @@ export async function signPayload(account: AddressOrPair, payload: Uint8Array, s
     return account.sign(payload);
   }
 
-  if (signer === undefined) {
-    throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
-  }
+  console.log(`signer: ${JSON.stringify(signer)}`)
+
+  // if (signer === null) {
+  //   throw new Error('Invalid signer, either pass a Pair as account or a Signer.');
+  // }
 
   if (isFunction(signer.signRaw)) {
     const address = asString(account);
