@@ -111,9 +111,14 @@ export const signTrustedCall = async (
 
     const signature = await signPayload(account, payload, options?.signer);
 
-    return self.createType('IntegriteeTrustedCallSigned', {
+    const callSigned = self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
         signature: {Sr25519: signature},
     });
+
+    console.log(`[TrustedCallSigned]: ${JSON.stringify(callSigned)}`);
+    console.log(`[TrustedCallSigned]: ${callSigned.toU8a()}`);
+
+    return callSigned;
 }
