@@ -2,7 +2,6 @@
 /* eslint-disable */
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
 import type { Enum, Struct, u32 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
@@ -41,21 +40,10 @@ export interface IntegriteeGetter extends Enum {
 
 /** @name IntegriteePublicGetter */
 export interface IntegriteePublicGetter extends Enum {
-  readonly isTotalIssuance: boolean;
-  readonly asTotalIssuance: CommunityIdentifier;
-  readonly isParticipantCount: boolean;
-  readonly asParticipantCount: CommunityIdentifier;
-  readonly isMeetupCount: boolean;
-  readonly asMeetupCount: CommunityIdentifier;
-  readonly isCeremonyReward: boolean;
-  readonly asCeremonyReward: CommunityIdentifier;
-  readonly isLocationTolerance: boolean;
-  readonly asLocationTolerance: CommunityIdentifier;
-  readonly isTimeTolerance: boolean;
-  readonly asTimeTolerance: CommunityIdentifier;
-  readonly isSchedulerState: boolean;
-  readonly asSchedulerState: CommunityIdentifier;
-  readonly type: 'TotalIssuance' | 'ParticipantCount' | 'MeetupCount' | 'CeremonyReward' | 'LocationTolerance' | 'TimeTolerance' | 'SchedulerState';
+  readonly isGuessTheNumberLastLuckyNumber: boolean;
+  readonly isGuessTheNumberLastWinningDistance: boolean;
+  readonly isGuessTheNumberInfo: boolean;
+  readonly type: 'GuessTheNumberLastLuckyNumber' | 'GuessTheNumberLastWinningDistance' | 'GuessTheNumberInfo';
 }
 
 /** @name IntegriteeTrustedCall */

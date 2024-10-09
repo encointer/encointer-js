@@ -3,13 +3,9 @@ export default {
   types: {
     IntegriteePublicGetter: {
       _enum: {
-        total_issuance: 'CommunityIdentifier',
-        participant_count: 'CommunityIdentifier',
-        meetup_count: 'CommunityIdentifier',
-        ceremony_reward: 'CommunityIdentifier',
-        location_tolerance: 'CommunityIdentifier',
-        time_tolerance: 'CommunityIdentifier',
-        scheduler_state: 'CommunityIdentifier'
+        guess_the_number_last_lucky_number: null,
+        guess_the_number_last_winning_distance: null,
+        guess_the_number_info: null,
       }
     },
     IntegriteeTrustedGetter: {
