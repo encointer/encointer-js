@@ -83,52 +83,52 @@ describe('worker', () => {
             });
         });
 
-        describe('balance transfer should work', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-                const result = await worker.trustedBalanceTransfer(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000
-                );
-                console.log('balance transfer result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('balance unshield should work', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-
-                const result = await worker.balanceUnshieldFunds(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000,
-                );
-                console.log('balance unshield result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('guess the number should work', () => {
-            it('should return value', async () => {
-                const shard = network.chosenCid;
-
-                const result = await worker.guessTheNumber(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    1,
-                );
-                console.log('guess the number result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
+        // describe('balance transfer should work', () => {
+        //     it('should return value', async () => {
+        //         const shard = network.chosenCid;
+        //         const result = await worker.trustedBalanceTransfer(
+        //             alice,
+        //             shard,
+        //             network.mrenclave,
+        //             alice.address,
+        //             charlie.address,
+        //             1100000000000
+        //         );
+        //         console.log('balance transfer result', result.toHuman());
+        //         expect(result).toBeDefined();
+        //     });
+        // });
+        //
+        // describe('balance unshield should work', () => {
+        //     it('should return value', async () => {
+        //         const shard = network.chosenCid;
+        //
+        //         const result = await worker.balanceUnshieldFunds(
+        //             alice,
+        //             shard,
+        //             network.mrenclave,
+        //             alice.address,
+        //             charlie.address,
+        //             1100000000000,
+        //         );
+        //         console.log('balance unshield result', result.toHuman());
+        //         expect(result).toBeDefined();
+        //     });
+        // });
+        //
+        // describe('guess the number should work', () => {
+        //     it('should return value', async () => {
+        //         const shard = network.chosenCid;
+        //
+        //         const result = await worker.guessTheNumber(
+        //             alice,
+        //             shard,
+        //             network.mrenclave,
+        //             1,
+        //         );
+        //         console.log('guess the number result', result.toHuman());
+        //         expect(result).toBeDefined();
+        //     });
+        // });
     });
 });

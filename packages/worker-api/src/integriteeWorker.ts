@@ -1,6 +1,6 @@
 import type {Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter, GuessType, GuessTheNumberArgs, GuessTheNumberInfo,
+    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter, GuessType, GuessTheNumberInfo,
 } from '@encointer/types';
 import {
     type RequestOptions,
