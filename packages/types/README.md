@@ -31,7 +31,7 @@ export default {
 };
 ```
 
-A subsequent `yarn generate:defs` updates the types.
+A subsequent `yarn generate:types` updates the types.
 
 To update the polkadot types, upgrade the `@polkadot/types` package and generate the types again.
 
