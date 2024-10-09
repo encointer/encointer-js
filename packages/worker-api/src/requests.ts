@@ -19,11 +19,16 @@ import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
-// Todo: Properly resolve cid vs shard
 export const clientRequestGetterRpc = (self: IWorker, request: string, args: PublicGetterArgs) => {
-    const {cid} = args;
+    const {shard} = args;
+    const getter = createIntegriteeGetterPublic(self, request);
+    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
+    return createGetterRpc(self, getter, shardT);
+}
+
+export const createIntegriteeGetterPublic = (self: IWorker, request: string) => {
     const getter = self.createType('IntegriteePublicGetter', {
-        [request]: cid
+        [request]: null
     });
 
     const g = self.createType('IntegriteeGetter', {
@@ -31,9 +36,8 @@ export const clientRequestGetterRpc = (self: IWorker, request: string, args: Pub
             getter,
         }
     });
-    const shardT = self.createType('ShardIdentifier', bs58.decode(cid));
 
-    return createGetterRpc(self, g, shardT);
+    return g;
 }
 
 export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {

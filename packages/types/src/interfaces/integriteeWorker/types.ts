@@ -2,12 +2,11 @@
 /* eslint-disable */
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
-import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
-import type { Enum, Struct, u32 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Vec, u32 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, H160 } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, H160, Moment } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceSetBalanceArgs */
 export interface BalanceSetBalanceArgs extends ITuple<[AccountId, AccountId, BalanceType, BalanceType]> {}
@@ -21,6 +20,26 @@ export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, Balan
 /** @name BalanceUnshieldArgs */
 export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
 
+/** @name GuessTheNumberArgs */
+export interface GuessTheNumberArgs extends ITuple<[AccountId, GuessType]> {}
+
+/** @name GuessTheNumberInfo */
+export interface GuessTheNumberInfo extends Struct {
+  readonly account: AccountId;
+  readonly balance: Balance;
+  readonly winnings: Balance;
+  readonly next_round_timestamp: Moment;
+  readonly last_winners: Vec<AccountId>;
+  readonly maybe_last_lucky_number: Option<GuessType>;
+  readonly maybe_last_winning_distance: Option<GuessType>;
+}
+
+/** @name GuessTheNumberSetWinningsArgs */
+export interface GuessTheNumberSetWinningsArgs extends ITuple<[AccountId, Balance]> {}
+
+/** @name GuessType */
+export interface GuessType extends u32 {}
+
 /** @name IntegriteeGetter */
 export interface IntegriteeGetter extends Enum {
   readonly isPublic: boolean;
@@ -32,38 +51,33 @@ export interface IntegriteeGetter extends Enum {
 
 /** @name IntegriteePublicGetter */
 export interface IntegriteePublicGetter extends Enum {
-  readonly isTotalIssuance: boolean;
-  readonly asTotalIssuance: CommunityIdentifier;
-  readonly isParticipantCount: boolean;
-  readonly asParticipantCount: CommunityIdentifier;
-  readonly isMeetupCount: boolean;
-  readonly asMeetupCount: CommunityIdentifier;
-  readonly isCeremonyReward: boolean;
-  readonly asCeremonyReward: CommunityIdentifier;
-  readonly isLocationTolerance: boolean;
-  readonly asLocationTolerance: CommunityIdentifier;
-  readonly isTimeTolerance: boolean;
-  readonly asTimeTolerance: CommunityIdentifier;
-  readonly isSchedulerState: boolean;
-  readonly asSchedulerState: CommunityIdentifier;
-  readonly type: 'TotalIssuance' | 'ParticipantCount' | 'MeetupCount' | 'CeremonyReward' | 'LocationTolerance' | 'TimeTolerance' | 'SchedulerState';
+  readonly isGuessTheNumberLastLuckyNumber: boolean;
+  readonly isGuessTheNumberLastWinningDistance: boolean;
+  readonly isGuessTheNumberInfo: boolean;
+  readonly type: 'GuessTheNumberLastLuckyNumber' | 'GuessTheNumberLastWinningDistance' | 'GuessTheNumberInfo';
 }
 
 /** @name IntegriteeTrustedCall */
 export interface IntegriteeTrustedCall extends Enum {
   readonly isNoop: boolean;
   readonly asNoop: AccountId;
-  readonly isBalanceSetBalance: boolean;
-  readonly asBalanceSetBalance: BalanceSetBalanceArgs;
+  readonly isTimestampSet: boolean;
+  readonly asTimestampSet: TimestampSetArgs;
   readonly isBalanceTransfer: boolean;
   readonly asBalanceTransfer: BalanceTransferArgs;
   readonly isBalanceUnshield: boolean;
   readonly asBalanceUnshield: BalanceUnshieldArgs;
   readonly isBalanceShield: boolean;
   readonly asBalanceShield: BalanceShieldArgs;
-  readonly isTimestampSet: boolean;
-  readonly asTimestampSet: TimestampSetArgs;
-  readonly type: 'Noop' | 'BalanceSetBalance' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'TimestampSet';
+  readonly isGuessTheNumberSetWinnings: boolean;
+  readonly asGuessTheNumberSetWinnings: GuessTheNumberSetWinningsArgs;
+  readonly isGuessTheNumberPushByOneDay: boolean;
+  readonly asGuessTheNumberPushByOneDay: AccountId;
+  readonly isGuessTheNumber: boolean;
+  readonly asGuessTheNumber: GuessTheNumberArgs;
+  readonly isBalanceSetBalance: boolean;
+  readonly asBalanceSetBalance: BalanceSetBalanceArgs;
+  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'GuessTheNumberSetWinnings' | 'GuessTheNumberPushByOneDay' | 'GuessTheNumber' | 'BalanceSetBalance';
 }
 
 /** @name IntegriteeTrustedCallSigned */

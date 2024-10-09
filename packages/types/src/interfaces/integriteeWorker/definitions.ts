@@ -3,13 +3,9 @@ export default {
   types: {
     IntegriteePublicGetter: {
       _enum: {
-        total_issuance: 'CommunityIdentifier',
-        participant_count: 'CommunityIdentifier',
-        meetup_count: 'CommunityIdentifier',
-        ceremony_reward: 'CommunityIdentifier',
-        location_tolerance: 'CommunityIdentifier',
-        time_tolerance: 'CommunityIdentifier',
-        scheduler_state: 'CommunityIdentifier'
+        guess_the_number_last_lucky_number: null,
+        guess_the_number_last_winning_distance: null,
+        guess_the_number_info: null,
       }
     },
     IntegriteeTrustedGetter: {
@@ -42,17 +38,32 @@ export default {
     IntegriteeTrustedCall: {
       _enum: {
         noop: 'AccountId',
-        balance_set_balance: 'BalanceSetBalanceArgs',
+        timestamp_set: 'TimestampSetArgs',
         balance_transfer: 'BalanceTransferArgs',
         balance_unshield: 'BalanceUnshieldArgs',
         balance_shield: 'BalanceShieldArgs',
-        timestamp_set: 'TimestampSetArgs',
+        guess_the_number_set_winnings: 'GuessTheNumberSetWinningsArgs',
+        guess_the_number_push_by_one_day: 'AccountId',
+        guess_the_number: 'GuessTheNumberArgs',
+        balance_set_balance: 'BalanceSetBalanceArgs',
       }
     },
-    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
-    BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
-    BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
-    BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
+    GuessType: 'u32',
+    GuessTheNumberInfo: {
+      account: 'AccountId',
+      balance: 'Balance',
+      winnings: 'Balance',
+      next_round_timestamp: 'Moment',
+      last_winners: 'Vec<AccountId>',
+      maybe_last_lucky_number: 'Option<GuessType>',
+      maybe_last_winning_distance: 'Option<GuessType>',
+    },
+    GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
+    GuessTheNumberArgs: '(AccountId, GuessType)',
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
+    BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
+    BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
+    BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
+    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
   }
 }
