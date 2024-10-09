@@ -74,7 +74,7 @@ export interface TrustedSignerOptions {
 }
 
 export interface PublicGetterArgs {
-  cid: string;
+  shard: string;
 }
 
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }

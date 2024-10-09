@@ -1,17 +1,17 @@
 import type {Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter,
+    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter, GuessType, GuessTheNumberArgs, GuessTheNumberInfo,
 } from '@encointer/types';
 import {
     type RequestOptions,
     type ISubmittableGetter,
     Request,
-    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions,
+    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions, type PublicGetterArgs,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
 import {
-    createGetterRpc,
+    createGetterRpc, createIntegriteeGetterPublic,
     createSignedGetter,
     createTrustedCall,
     signTrustedCall,
@@ -44,6 +44,28 @@ export class IntegriteeWorker extends Worker {
             signer: signerOptions?.signer,
         }
         return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', trustedGetterArgs,'AccountInfo');
+    }
+
+    public getGuessTheNumberLastLuckyNumberGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessType> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, GuessType>(this, 'guess_the_number_last_lucky_number', publicGetterArgs,'GuessType');
+    }
+
+    public getGuessTheNumberWinningDistanceGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessType> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, GuessType>(this, 'guess_the_number_last_winning_distance', publicGetterArgs,'GuessType');
+    }
+
+
+    public getGuessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, GuessTheNumberInfo>(this, 'guess_the_number_info', publicGetterArgs,'GuessTheNumberInfo');
     }
 
     public async trustedBalanceTransfer(
@@ -137,5 +159,12 @@ export const submittableGetter = async <W extends Worker, T>(self: W, request: s
     const {shard, account} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
     const signedGetter = await createSignedGetter(self, request, account, { signer: args?.signer })
+    return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
+}
+
+export const submittablePublicGetter = <W extends Worker, T>(self: W, request: string, args: PublicGetterArgs, returnType: string)=> {
+    const {shard} = args;
+    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
+    const signedGetter = createIntegriteeGetterPublic(self, request)
     return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
 }

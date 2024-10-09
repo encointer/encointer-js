@@ -49,6 +49,15 @@ export default {
       }
     },
     GuessType: 'u32',
+    GuessTheNumberInfo: {
+      account: 'AccountId',
+      balance: 'Balance',
+      winnings: 'Balance',
+      next_round_timestamp: 'Moment',
+      last_winners: 'Vec<AccountId>',
+      maybe_last_lucky_number: 'Option<GuessType>',
+      maybe_last_winning_distance: 'Option<GuessType>',
+    },
     GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
     GuessTheNumberArgs: '(AccountId, GuessType)',
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
