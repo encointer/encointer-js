@@ -4,7 +4,7 @@
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
 import type { Bytes, Enum, Struct, Text, bool, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, H256, Hash } from '@polkadot/types/interfaces/runtime';
 
 /** @name DirectRequestStatus */
 export interface DirectRequestStatus extends Enum {
@@ -22,6 +22,9 @@ export interface Enclave extends Struct {
   readonly timestamp: u64;
   readonly url: Text;
 }
+
+/** @name EnclaveFingerprint */
+export interface EnclaveFingerprint extends H256 {}
 
 /** @name GetterArgs */
 export interface GetterArgs extends ITuple<[AccountId, CommunityIdentifier]> {}

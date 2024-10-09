@@ -1,13 +1,13 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { paseoNetwork } from './testUtils/networks.js';
+import {localDockerNetwork} from './testUtils/networks.js';
 import { Worker } from './worker.js';
 import WS from 'websocket';
 
 const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-  const network = paseoNetwork();
+  const network = localDockerNetwork();
   let keyring: Keyring;
   let worker: Worker;
   beforeAll(async () => {
@@ -48,6 +48,14 @@ describe('worker', () => {
       it('should return value', async () => {
         const result = await worker.getShardVault();
         console.log('ShardVault', result.toHuman());
+        expect(result).toBeDefined();
+      });
+    });
+
+    describe('getFingerprint', () => {
+      it('should return value', async () => {
+        const result = await worker.getFingerprint();
+        console.log('Fingerprint', result.toHuman());
         expect(result).toBeDefined();
       });
     });
