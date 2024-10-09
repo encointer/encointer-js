@@ -2,6 +2,7 @@ export default {
   rpc: {},
   types: {
     ShardIdentifier: 'Hash',
+    EnclaveFingerprint: 'H256',
     GetterArgs: '(AccountId, CommunityIdentifier)',
     Enclave: {
       pubkey: 'AccountId',

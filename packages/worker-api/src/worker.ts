@@ -9,7 +9,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import {options as encointerOptions} from '@encointer/node-api';
 import {parseI64F64} from '@encointer/util';
 
-import type {Vault} from '@encointer/types';
+import type {EnclaveFingerprint, Vault} from '@encointer/types';
 
 import {type RequestOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
 import {parseBalance} from './parsers.js';
@@ -64,6 +64,9 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
+        parsedData = self.createType(responseType, returnValue.value);
+        break
+      case 'EnclaveFingerprint':
         parsedData = self.createType(responseType, returnValue.value);
         break
       case 'TrustedOperationResult':
@@ -161,5 +164,9 @@ export class Worker extends WebSocketAsPromised implements IWorker {
 
   public async getShardVault(options: RequestOptions = {} as RequestOptions): Promise<Vault> {
     return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
+  }
+
+  public async getFingerprint(options: RequestOptions = {} as RequestOptions): Promise<EnclaveFingerprint> {
+    return await callGetter<EnclaveFingerprint>(this, [Request.Worker, 'author_getFingerprint', 'EnclaveFingerprint'], {}, options)
   }
 }

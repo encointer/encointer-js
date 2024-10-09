@@ -1,13 +1,13 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { paseoNetwork } from './testUtils/networks.js';
+import {localDockerNetwork} from './testUtils/networks.js';
 import { Worker } from './worker.js';
 import WS from 'websocket';
 
 const {w3cwebsocket: WebSocket} = WS;
 
-describe('worker', () => {
-  const network = paseoNetwork();
+describe.skip('worker', () => {
+  const network = localDockerNetwork();
   let keyring: Keyring;
   let worker: Worker;
   beforeAll(async () => {
@@ -26,7 +26,7 @@ describe('worker', () => {
           undefined,
           // Allow the worker's self-signed certificate, needed in non-reverse proxy setups
           // where we talk to the worker directly.
-          // { rejectUnauthorized: false }
+          { rejectUnauthorized: false }
           ),
       api: null,
     });
@@ -48,6 +48,14 @@ describe('worker', () => {
       it('should return value', async () => {
         const result = await worker.getShardVault();
         console.log('ShardVault', result.toHuman());
+        expect(result).toBeDefined();
+      });
+    });
+
+    describe('getFingerprint', () => {
+      it('should return value', async () => {
+        const result = await worker.getFingerprint();
+        console.log('Fingerprint', result.toString());
         expect(result).toBeDefined();
       });
     });
