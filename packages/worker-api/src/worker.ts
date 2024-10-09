@@ -63,7 +63,10 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
         parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
-      case 'Vault' || 'EnclaveFingerprint':
+      case 'Vault':
+        parsedData = self.createType(responseType, returnValue.value);
+        break
+      case 'EnclaveFingerprint':
         parsedData = self.createType(responseType, returnValue.value);
         break
       case 'TrustedOperationResult':
