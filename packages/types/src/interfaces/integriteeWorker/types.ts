@@ -75,13 +75,9 @@ export interface IntegriteeTrustedCallSigned extends Struct {
 
 /** @name IntegriteeTrustedGetter */
 export interface IntegriteeTrustedGetter extends Enum {
-  readonly isFreeBalance: boolean;
-  readonly asFreeBalance: AccountId;
-  readonly isReservedBalance: boolean;
-  readonly asReservedBalance: AccountId;
-  readonly isNonce: boolean;
-  readonly asNonce: AccountId;
-  readonly type: 'FreeBalance' | 'ReservedBalance' | 'Nonce';
+  readonly isAccountInfo: boolean;
+  readonly asAccountInfo: AccountId;
+  readonly type: 'AccountInfo';
 }
 
 /** @name IntegriteeTrustedGetterSigned */

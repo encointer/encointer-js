@@ -14,9 +14,7 @@ export default {
     },
     IntegriteeTrustedGetter: {
       _enum: {
-        free_balance: 'AccountId',
-        reserved_balance: 'AccountId',
-        nonce: 'AccountId',
+        account_info: 'AccountId',
       }
     },
     IntegriteeTrustedGetterSigned: {
