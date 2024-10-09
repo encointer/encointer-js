@@ -42,17 +42,23 @@ export default {
     IntegriteeTrustedCall: {
       _enum: {
         noop: 'AccountId',
-        balance_set_balance: 'BalanceSetBalanceArgs',
+        timestamp_set: 'TimestampSetArgs',
         balance_transfer: 'BalanceTransferArgs',
         balance_unshield: 'BalanceUnshieldArgs',
         balance_shield: 'BalanceShieldArgs',
-        timestamp_set: 'TimestampSetArgs',
+        guess_the_number_set_winnings: 'GuessTheNumberSetWinningsArgs',
+        guess_the_number_push_by_one_day: 'AccountId',
+        guess_the_number: 'GuessTheNumberArgs',
+        balance_set_balance: 'BalanceSetBalanceArgs',
       }
     },
-    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
-    BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
-    BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
-    BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
+    GuessType: 'u32',
+    GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
+    GuessTheNumberArgs: '(AccountId, GuessType)',
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
+    BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
+    BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
+    BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
+    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
   }
 }
