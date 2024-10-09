@@ -26,7 +26,7 @@ describe('worker', () => {
           undefined,
           // Allow the worker's self-signed certificate, needed in non-reverse proxy setups
           // where we talk to the worker directly.
-          // { rejectUnauthorized: false }
+          { rejectUnauthorized: false }
           ),
       api: null,
     });

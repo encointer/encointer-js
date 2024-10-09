@@ -3,10 +3,10 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
-import type { Enum, Struct, u32 } from '@polkadot/types-codec';
+import type { Enum, Option, Struct, Vec, u32 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, Balance, H160 } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, H160, Moment } from '@polkadot/types/interfaces/runtime';
 
 /** @name BalanceSetBalanceArgs */
 export interface BalanceSetBalanceArgs extends ITuple<[AccountId, AccountId, BalanceType, BalanceType]> {}
@@ -22,6 +22,17 @@ export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, Balan
 
 /** @name GuessTheNumberArgs */
 export interface GuessTheNumberArgs extends ITuple<[AccountId, GuessType]> {}
+
+/** @name GuessTheNumberInfo */
+export interface GuessTheNumberInfo extends Struct {
+  readonly account: AccountId;
+  readonly balance: Balance;
+  readonly winnings: Balance;
+  readonly next_round_timestamp: Moment;
+  readonly last_winners: Vec<AccountId>;
+  readonly maybe_last_lucky_number: Option<GuessType>;
+  readonly maybe_last_winning_distance: Option<GuessType>;
+}
 
 /** @name GuessTheNumberSetWinningsArgs */
 export interface GuessTheNumberSetWinningsArgs extends ITuple<[AccountId, Balance]> {}
