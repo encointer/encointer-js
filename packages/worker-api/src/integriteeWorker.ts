@@ -20,6 +20,7 @@ import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type { AccountInfo } from "@polkadot/types/interfaces/system";
 import type {u32} from "@polkadot/types-codec";
+import {asString} from "@encointer/util";
 
 export class IntegriteeWorker extends Worker {
 
@@ -78,6 +79,23 @@ export class IntegriteeWorker extends Worker {
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT, requestOptions);
+    }
+
+    public async guessTheNumber(
+        account: AddressOrPair,
+        shard: string,
+        mrenclave: string,
+        guess: number,
+        signerOptions?: TrustedSignerOptions,
+        requestOptions?: RequestOptions,
+    ): Promise<Hash> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions, requestOptions)
+
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        const params = this.createType('GuessTheNumberArgs', [asString(account), guess])
+        const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberArgs'], params);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
