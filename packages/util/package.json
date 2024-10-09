@@ -20,7 +20,7 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.15.0",
+  "version": "0.15.1-alpha.0",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.18.9",
