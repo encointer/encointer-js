@@ -59,7 +59,7 @@ describe('worker', () => {
         describe('getNonce', () => {
             it('should return value', async () => {
                 const result = await worker.getNonce(alice, network.mrenclave);
-                console.log('getAccountInfo', result);
+                console.log('Nonce', result);
                 expect(result).toBeDefined();
             });
         });
