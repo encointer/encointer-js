@@ -9,7 +9,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import {options as encointerOptions} from '@encointer/node-api';
 import {parseI64F64} from '@encointer/util';
 
-import type {Vault, EnclaveFingerprint} from '@encointer/types';
+import type {EnclaveFingerprint, Vault} from '@encointer/types';
 
 import {type RequestOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
 import {parseBalance} from './parsers.js';

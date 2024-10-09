@@ -3,6 +3,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {localDockerNetwork} from './testUtils/networks.js';
 import { Worker } from './worker.js';
 import WS from 'websocket';
+import bs58 from "bs58";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -55,7 +56,10 @@ describe('worker', () => {
     describe('getFingerprint', () => {
       it('should return value', async () => {
         const result = await worker.getFingerprint();
-        console.log('Fingerprint', result.toHuman());
+        // console.log('Fingerprint', result);
+
+        const f = worker.createType('EnclaveFingerPrint', bs58.decode(result.toString()))
+        console.log('Fingerprint1', f);
         expect(result).toBeDefined();
       });
     });
