@@ -76,7 +76,7 @@ describe('worker', () => {
 
         describe('getAccountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.getAccountInfoGetter(charlie, network.mrenclave);
+                const getter = await worker.accountInfoGetter(charlie, network.mrenclave);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo', result);
@@ -86,7 +86,7 @@ describe('worker', () => {
 
         describe('getGuessTheNumberInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.getGuessTheNumberInfoGetter(network.mrenclave);
+                const getter = worker.guessTheNumberInfoGetter(network.mrenclave);
                 console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('GuessTheNumberInfo:', result);

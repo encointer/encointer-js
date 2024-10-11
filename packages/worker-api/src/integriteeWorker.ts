@@ -38,20 +38,20 @@ export class IntegriteeWorker extends Worker {
     }
 
     public async getAccountInfo(accountOrPubKey: AddressOrPair, shard: string, singerOptions?: TrustedSignerOptions, requestOptions?: RequestOptions): Promise<AccountInfo> {
-        const getter = await this.getAccountInfoGetter(accountOrPubKey, shard, singerOptions);
+        const getter = await this.accountInfoGetter(accountOrPubKey, shard, singerOptions);
         return getter.send(requestOptions);
     }
 
-    public async getAccountInfoGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+    public async accountInfoGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
-        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
     }
 
-    public getGuessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+    public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
         const publicGetterArgs = {
             shard: shard,
         }
@@ -67,7 +67,7 @@ export class IntegriteeWorker extends Worker {
         }
         const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
         const getterParams = guessTheNumberTrustedGetter(this, 'attempts', args);
-        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
     }
 
     public async trustedBalanceTransfer(
@@ -160,7 +160,7 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
     }
 }
 
-export const submittableGetter = async <W extends Worker, T>(self: W, request: string, account: AddressOrPair, args: TrustedGetterArgs, trustedGetterParams: TrustedGetterParams, returnType: string)=> {
+export const submittableTrustedGetter = async <W extends Worker, T>(self: W, request: string, account: AddressOrPair, args: TrustedGetterArgs, trustedGetterParams: TrustedGetterParams, returnType: string)=> {
     const {shard} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
     const signedGetter = await createSignedGetter(self, request, account, trustedGetterParams, { signer: args?.signer })
