@@ -40,8 +40,9 @@ export interface GuessTheNumberInfo extends Struct {
 }
 
 /** @name GuessTheNumberPublicGetter */
-export interface GuessTheNumberPublicGetter extends Struct {
-  readonly guess_the_number_info: null;
+export interface GuessTheNumberPublicGetter extends Enum {
+  readonly isGuessTheNumberInfo: boolean;
+  readonly type: 'GuessTheNumberInfo';
 }
 
 /** @name GuessTheNumberSetWinningsArgs */
@@ -59,8 +60,10 @@ export interface GuessTheNumberTrustedCall extends Enum {
 }
 
 /** @name GuessTheNumberTrustedGetter */
-export interface GuessTheNumberTrustedGetter extends Struct {
-  readonly attempts: AttemptsArg;
+export interface GuessTheNumberTrustedGetter extends Enum {
+  readonly isAttempts: boolean;
+  readonly asAttempts: AttemptsArg;
+  readonly type: 'Attempts';
 }
 
 /** @name GuessType */

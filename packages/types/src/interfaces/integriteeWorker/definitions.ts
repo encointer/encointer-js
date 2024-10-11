@@ -194,10 +194,14 @@ export default {
     BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
     BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
     GuessTheNumberPublicGetter: {
-      guess_the_number_info: 'null',
+      _enum: {
+        guess_the_number_info: null,
+      }
     },
     GuessTheNumberTrustedGetter: {
-      attempts: 'AttemptsArg'
+      _enum: {
+        attempts: 'AttemptsArg'
+      }
     },
     AttemptsArg: {
       origin: 'AccountId'
