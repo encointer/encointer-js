@@ -210,7 +210,7 @@ export default {
       _enum: {
         set_winnings: 'GuessTheNumberSetWinningsArgs',
         push_by_one_day: 'AccountId',
-        guess: 'GuessTheNumberArgs',
+        guess: 'GuessArgs',
       }
     },
     GuessType: 'u32',
@@ -224,6 +224,6 @@ export default {
       maybe_last_winning_distance: 'Option<GuessType>',
     },
     GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
-    GuessTheNumberArgs: '(AccountId, GuessType)',
+    GuessArgs: '(AccountId, GuessType)',
   }
 }

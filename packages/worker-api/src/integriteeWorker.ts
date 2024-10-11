@@ -125,8 +125,8 @@ export class IntegriteeWorker extends Worker {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions, requestOptions)
 
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
-        const params = this.createType('GuessTheNumberArgs', [asString(account), guess])
-        const guessThNumberCall = guessTheNumberCall(this, ['guess', 'GuessTheNumberArgs'], params);
+        const params = this.createType('GuessArgs', [asString(account), guess])
+        const guessThNumberCall = guessTheNumberCall(this, ['guess', 'GuessArgs'], params);
         const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberTrustedCall'], guessThNumberCall);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
 

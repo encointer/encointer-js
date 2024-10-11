@@ -25,8 +25,8 @@ export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, Balan
 /** @name BalanceUnshieldArgs */
 export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
 
-/** @name GuessTheNumberArgs */
-export interface GuessTheNumberArgs extends ITuple<[AccountId, GuessType]> {}
+/** @name GuessArgs */
+export interface GuessArgs extends ITuple<[AccountId, GuessType]> {}
 
 /** @name GuessTheNumberInfo */
 export interface GuessTheNumberInfo extends Struct {
@@ -55,7 +55,7 @@ export interface GuessTheNumberTrustedCall extends Enum {
   readonly isPushByOneDay: boolean;
   readonly asPushByOneDay: AccountId;
   readonly isGuess: boolean;
-  readonly asGuess: GuessTheNumberArgs;
+  readonly asGuess: GuessArgs;
   readonly type: 'SetWinnings' | 'PushByOneDay' | 'Guess';
 }
 
