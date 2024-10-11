@@ -1,25 +1,34 @@
 import type {Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter,
+    ShardIdentifier,
+    IntegriteeTrustedCallSigned,
+    IntegriteeGetter,
+    GuessTheNumberInfo,
+    GuessTheNumberTrustedCall, GuessTheNumberPublicGetter, GuessTheNumberTrustedGetter, AttemptsArg,
 } from '@encointer/types';
 import {
     type RequestOptions,
     type ISubmittableGetter,
-    Request,
-    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions,
+    type JsonRpcRequest,
+    type TrustedGetterArgs,
+    type TrustedSignerOptions,
+    type PublicGetterArgs,
+    type IWorker,
+    type PublicGetterParams, type TrustedGetterParams,
 } from './interface.js';
 import {Worker} from "./worker.js";
-import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
+import {sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
 import {
-    createGetterRpc,
+    createGetterRpc, createIntegriteeGetterPublic,
     createSignedGetter,
     createTrustedCall,
-    signTrustedCall,
+    signTrustedCall, type TrustedCallArgs, type TrustedCallVariant,
 } from "./requests.js";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type { AccountInfo } from "@polkadot/types/interfaces/system";
 import type {u32} from "@polkadot/types-codec";
+import {asString} from "@encointer/util";
 
 export class IntegriteeWorker extends Worker {
 
@@ -29,20 +38,43 @@ export class IntegriteeWorker extends Worker {
     }
 
     public async getAccountInfo(accountOrPubKey: AddressOrPair, shard: string, singerOptions?: TrustedSignerOptions, requestOptions?: RequestOptions): Promise<AccountInfo> {
-        return await callGetter<AccountInfo>(this, [Request.TrustedGetter, 'account_info', 'AccountInfo'], {
-            shard: shard,
-            account: accountOrPubKey,
-            signer: singerOptions?.signer
-        }, requestOptions)
+        const getter = await this.accountInfoGetter(accountOrPubKey, shard, singerOptions);
+        return getter.send(requestOptions);
     }
 
-    public async getAccountInfoGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+    public async accountInfoGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
-        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', trustedGetterArgs,'AccountInfo');
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
+    }
+
+    public parentchainsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, GuessTheNumberInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
+    }
+
+    public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        const getterParams = guessTheNumberPublicGetter(this, 'guess_the_number_info');
+        return submittablePublicGetter<IntegriteeWorker, GuessTheNumberInfo>(this, 'guess_the_number', publicGetterArgs, getterParams, 'GuessTheNumberInfo');
+    }
+
+    public async guessTheNumberAttemptsTrustedGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: accountOrPubKey,
+            signer: signerOptions?.signer,
+        }
+        const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = guessTheNumberTrustedGetter(this, 'attempts', args);
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
     }
 
     public async trustedBalanceTransfer(
@@ -82,6 +114,26 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
+    public async guessTheNumber(
+        account: AddressOrPair,
+        shard: string,
+        mrenclave: string,
+        guess: number,
+        signerOptions?: TrustedSignerOptions,
+        requestOptions?: RequestOptions,
+    ): Promise<Hash> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions, requestOptions)
+
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        const params = this.createType('GuessArgs', [asString(account), guess])
+        const guessThNumberCall = guessTheNumberCall(this, ['guess', 'GuessArgs'], params);
+        const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberTrustedCall'], guessThNumberCall);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+
+        console.log(`GuessTheNumber ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT, requestOptions);
+    }
+
     async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, requestOptions?: RequestOptions): Promise<Hash> {
         if (this.shieldingKey() == undefined) {
             console.log(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
@@ -115,9 +167,50 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
     }
 }
 
-export const submittableGetter = async <W extends Worker, T>(self: W, request: string, args: TrustedGetterArgs, returnType: string)=> {
-    const {shard, account} = args;
+export const submittableTrustedGetter = async <W extends Worker, T>(self: W, request: string, account: AddressOrPair, args: TrustedGetterArgs, trustedGetterParams: TrustedGetterParams, returnType: string)=> {
+    const {shard} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account, { signer: args?.signer })
+    const signedGetter = await createSignedGetter(self, request, account, trustedGetterParams, { signer: args?.signer })
     return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
+}
+
+export const submittablePublicGetter = <W extends Worker, T>(self: W, request: string, args: PublicGetterArgs, publicGetterParams: PublicGetterParams, returnType: string)=> {
+    const {shard} = args;
+    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
+    const signedGetter = createIntegriteeGetterPublic(self, request, publicGetterParams)
+    return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
+}
+
+export const guessTheNumberPublicGetter = (
+    self: IWorker,
+    getterVariant: string,
+): GuessTheNumberPublicGetter => {
+    return self.createType('GuessTheNumberPublicGetter', {
+        [getterVariant]: null
+    });
+}
+
+export const guessTheNumberTrustedGetter = (
+    self: IWorker,
+    getterVariant: string,
+    params: GuessTheNumberTrustedGetterParams
+): GuessTheNumberTrustedGetter => {
+    return self.createType('GuessTheNumberTrustedGetter', {
+        [getterVariant]: params
+    });
+}
+
+export type GuessTheNumberTrustedGetterParams = AttemptsArg | null;
+
+
+export const guessTheNumberCall = (
+    self: IWorker,
+    callVariant: TrustedCallVariant,
+    params: TrustedCallArgs
+): GuessTheNumberTrustedCall => {
+    const [variant, argType] = callVariant;
+
+    return self.createType('GuessTheNumberTrustedCall', {
+        [variant]: self.createType(argType, params)
+    });
 }

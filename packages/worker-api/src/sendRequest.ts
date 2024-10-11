@@ -1,17 +1,11 @@
 import {
   type IWorker,
-  type TrustedGetterArgs,
-  type PublicGetterArgs,
   type RequestArgs,
   type RequestOptions,
   type WorkerMethod,
   createJsonRpcRequest
 } from './interface.js';
 import  { Request } from './interface.js';
-import {
-  clientRequestGetterRpc,
-  clientRequestTrustedGetterRpc,
-} from "./requests.js";
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
 export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options?: RequestOptions): Promise<any> =>{
@@ -25,13 +19,7 @@ export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType:
   )
 }
 
-const sendTrustedGetterRequest = async (self: IWorker, method: string, parser: string, args: TrustedGetterArgs, options?: RequestOptions) =>
-  sendWorkerRequest(self, await clientRequestTrustedGetterRpc(self, method, args), parser, options)
-
-const sendPublicGetterRequest = (self: IWorker, method: string, parser: string, args: PublicGetterArgs, options?: RequestOptions) =>
-  sendWorkerRequest(self, clientRequestGetterRpc(self, method, args), parser, options)
-
-export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, args: RequestArgs, requestOptions?: RequestOptions): Promise<T> => {
+export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, _args: RequestArgs, requestOptions?: RequestOptions): Promise<T> => {
   if( !self.isOpened ) {
     await self.open();
   }
@@ -39,18 +27,11 @@ export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, a
   let result: Promise<any>;
   let parserType: string = requestOptions?.debug ? 'raw': parser;
   switch (getterType) {
-    case Request.TrustedGetter:
-      result = sendTrustedGetterRequest(self, method, parserType, args as TrustedGetterArgs, requestOptions)
-      break;
-    case Request.PublicGetter:
-      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, requestOptions)
-      break;
     case Request.Worker:
       result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, requestOptions)
       break;
     default:
-      result = sendPublicGetterRequest(self, method, parserType, args as PublicGetterArgs, requestOptions)
-      break;
+      throw "Invalid request variant, public and trusted have been removed for the integritee worker"
   }
   return result as Promise<T>
 }

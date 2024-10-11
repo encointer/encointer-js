@@ -2,9 +2,9 @@
 /* eslint-disable */
 
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-import type { Bytes, Enum, Struct, Text, bool, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, bool, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { AccountId, H256, Hash } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, BlockNumber, H256, Hash, Moment } from '@polkadot/types/interfaces/runtime';
 
 /** @name DirectRequestStatus */
 export interface DirectRequestStatus extends Enum {
@@ -35,6 +35,24 @@ export interface ParentchainId extends Enum {
   readonly isTargetA: boolean;
   readonly isTargetB: boolean;
   readonly type: 'Integritee' | 'TargetA' | 'TargetB';
+}
+
+/** @name ParentchainInfo */
+export interface ParentchainInfo extends Struct {
+  readonly id: ParentchainId;
+  readonly genesis_hash: Option<Hash>;
+  readonly block_number: Option<BlockNumber>;
+  readonly now: Option<Moment>;
+  readonly creation_block_number: Option<BlockNumber>;
+  readonly creation_timestamp: Option<Moment>;
+}
+
+/** @name ParentchainsInfo */
+export interface ParentchainsInfo extends Struct {
+  readonly integritee: ParentchainInfo;
+  readonly target_a: ParentchainInfo;
+  readonly target_b: ParentchainInfo;
+  readonly shielding_target: ParentchainId;
 }
 
 /** @name Request */
