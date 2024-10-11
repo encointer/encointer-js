@@ -48,7 +48,7 @@ export class IntegriteeWorker extends Worker {
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
-        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, null, 'AccountInfo');
+        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
     }
 
     public getGuessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
