@@ -51,6 +51,13 @@ export class IntegriteeWorker extends Worker {
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
     }
 
+    public parentchainsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, GuessTheNumberInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
+    }
+
     public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
         const publicGetterArgs = {
             shard: shard,

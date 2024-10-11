@@ -74,17 +74,27 @@ describe('worker', () => {
             });
         });
 
-        describe('getAccountInfoGetter', () => {
+        describe('accountInfoGetter', () => {
             it('should return value', async () => {
                 const getter = await worker.accountInfoGetter(charlie, network.mrenclave);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
-                console.log('getAccountInfo', result);
+                console.log('getAccountInfo:', result);
                 expect(result).toBeDefined();
             });
         });
 
-        describe('getGuessTheNumberInfoGetter', () => {
+        describe('parentchainsInfoGetter', () => {
+            it('should return value', async () => {
+                const getter = worker.parentchainsInfoGetter(network.mrenclave);
+                console.log(`parentchainsInfoGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('parentchainsInfoGetter:', result);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('guessTheNumberInfoGetter', () => {
             it('should return value', async () => {
                 const getter = worker.guessTheNumberInfoGetter(network.mrenclave);
                 console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
@@ -94,7 +104,7 @@ describe('worker', () => {
             });
         });
 
-        describe('getGuessTheNumberAttemptsGetter', () => {
+        describe('guessTheNumberAttemptsGetter', () => {
             it('should return value', async () => {
                 const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.mrenclave);
                 console.log(`Attempts: ${JSON.stringify(getter)}`);

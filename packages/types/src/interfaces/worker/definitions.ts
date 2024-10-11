@@ -50,5 +50,19 @@ export default {
         TargetB: null,
       }
     },
+    ParentchainsInfo: {
+      integritee: 'ParentchainInfo',
+      target_a: 'ParentchainInfo',
+      target_b: 'ParentchainInfo',
+      shielding_target: 'ParentchainId',
+    },
+    ParentchainInfo: {
+      id: 'ParentchainId',
+      genesis_hash: 'Option<Hash>',
+      block_number: 'Option<BlockNumber>',
+      now: 'Option<Moment>',
+      creation_block_number: 'Option<BlockNumber>',
+      creation_timestamp: 'Option<Moment>',
+    },
   }
 }
