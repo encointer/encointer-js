@@ -31,7 +31,7 @@ export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, _
       result = sendWorkerRequest(self, createJsonRpcRequest(method, [], 1), parserType, requestOptions)
       break;
     default:
-      throw "Invalid request variant, public and trusted have been remove for the integritee worker"
+      throw "Invalid request variant, public and trusted have been removed for the integritee worker"
   }
   return result as Promise<T>
 }
