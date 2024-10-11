@@ -6,7 +6,7 @@ import {
 import type {
     BalanceTransferArgs,
     BalanceUnshieldArgs, GuessTheNumberTrustedCall,
-    IntegriteeGetter, IntegriteePublicGetter,
+    IntegriteeGetter,
     IntegriteeTrustedCall,
     IntegriteeTrustedCallSigned,
     IntegriteeTrustedGetter,
@@ -18,21 +18,12 @@ import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export const createIntegriteeGetterPublic = (self: IWorker, request: string, publicGetterParams: PublicGetterParams) => {
-    const getter = publicGetter(self, request, publicGetterParams);
-
     const g = self.createType('IntegriteeGetter', {
         public: {
-            getter
+            [request]: publicGetterParams ,
         }
     });
-
     return g;
-}
-
-export function publicGetter(self: IWorker, request: string, publicGetterParams: PublicGetterParams): IntegriteePublicGetter {
-    return self.createType('IntegriteePublicGetter', {
-        [request]: publicGetterParams
-    });
 }
 
 export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair, trustedGetterParams: TrustedGetterParams, options: TrustedSignerOptions) => {
