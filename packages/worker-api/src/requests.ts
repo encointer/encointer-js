@@ -1,8 +1,6 @@
 import {
     createJsonRpcRequest,
-    type IWorker,
-    type PublicGetterArgs,
-    type TrustedGetterArgs,
+    type IWorker, type PublicGetterParams, type TrustedGetterParams,
     type TrustedSignerOptions
 } from "./interface.js";
 import type {
@@ -14,21 +12,14 @@ import type {
     IntegriteeTrustedGetter,
     ShardIdentifier
 } from "@encointer/types";
-import {asString, signPayload} from "@encointer/util";
+import {signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
-export const clientRequestGetterRpc = (self: IWorker, request: string, args: PublicGetterArgs) => {
-    const {shard} = args;
-    const getter = createIntegriteeGetterPublic(self, request);
-    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    return createGetterRpc(self, getter, shardT);
-}
-
-export const createIntegriteeGetterPublic = (self: IWorker, request: string) => {
+export const createIntegriteeGetterPublic = (self: IWorker, request: string, publicGetterParams: PublicGetterParams) => {
     const getter = self.createType('IntegriteePublicGetter', {
-        [request]: null
+        [request]: publicGetterParams
     });
 
     const g = self.createType('IntegriteeGetter', {
@@ -40,21 +31,14 @@ export const createIntegriteeGetterPublic = (self: IWorker, request: string) => 
     return g;
 }
 
-export const clientRequestTrustedGetterRpc = async (self: IWorker, request: string, args: TrustedGetterArgs) => {
-    const {shard, account} = args;
-    const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account, {signer: args?.signer});
-    return createGetterRpc(self, signedGetter, shardT);
-}
-
-export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair, options: TrustedSignerOptions) => {
-    const trustedGetter = createTrustedGetter(self, request, asString(account));
+export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair, trustedGetterParams: TrustedGetterParams, options: TrustedSignerOptions) => {
+    const trustedGetter = createTrustedGetter(self, request, trustedGetterParams);
     return await signTrustedGetter(self, account, trustedGetter, options);
 }
 
-export const createTrustedGetter = (self: IWorker, request: string, address: string) => {
+export const createTrustedGetter = (self: IWorker, request: string, params: TrustedGetterParams) => {
     return self.createType('IntegriteeTrustedGetter', {
-        [request]: address
+        [request]: params
     });
 }
 

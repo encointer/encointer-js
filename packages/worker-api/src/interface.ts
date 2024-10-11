@@ -5,7 +5,12 @@ import type {TypeRegistry, u32, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import {Worker} from "./worker.js";
-import type {IntegriteeGetter, ShardIdentifier} from "@encointer/types";
+import type {
+  GuessTheNumberPublicGetter,
+  GuessTheNumberTrustedGetter,
+  IntegriteeGetter,
+  ShardIdentifier
+} from "@encointer/types";
 
 export interface IWorker extends WebSocketAsPromised {
   rsCount: number;
@@ -60,6 +65,8 @@ export interface TrustedGetterArgs {
   signer?: Signer
 }
 
+export type TrustedGetterParams = string | GuessTheNumberTrustedGetter | null
+
 /**
  * Signer options.
  *
@@ -76,6 +83,8 @@ export interface TrustedSignerOptions {
 export interface PublicGetterArgs {
   shard: string;
 }
+
+export type PublicGetterParams = GuessTheNumberPublicGetter | null
 
 export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
 
