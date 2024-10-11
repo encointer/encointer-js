@@ -65,8 +65,9 @@ export class IntegriteeWorker extends Worker {
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
-
-        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, null,'AccountInfo');
+        const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = guessTheNumberTrustedGetter(this, 'attempts', args);
+        return await submittableGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
     }
 
     public async trustedBalanceTransfer(

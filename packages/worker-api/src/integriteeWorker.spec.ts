@@ -84,6 +84,26 @@ describe('worker', () => {
             });
         });
 
+        describe('getGuessTheNumberInfoGetter', () => {
+            it('should return value', async () => {
+                const getter = worker.getGuessTheNumberInfoGetter(network.mrenclave);
+                console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('GuessTheNumberInfo:', result);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('getGuessTheNumberAttemptsGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.mrenclave);
+                console.log(`Attempts: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('Attempts:', result);
+                expect(result).toBeDefined();
+            });
+        });
+
         // describe('balance transfer should work', () => {
         //     it('should return value', async () => {
         //         const shard = network.chosenCid;
