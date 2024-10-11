@@ -7,7 +7,7 @@ import {
 } from "./interface.js";
 import type {
     BalanceTransferArgs,
-    BalanceUnshieldArgs,
+    BalanceUnshieldArgs, GuessTheNumberTrustedCall,
     IntegriteeGetter,
     IntegriteeTrustedCall,
     IntegriteeTrustedCallSigned,
@@ -84,7 +84,7 @@ export const createGetterRpc = (self: IWorker, getter: IntegriteeGetter, shard: 
 }
 
 
-export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs);
+export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs | GuessTheNumberTrustedCall);
 
 export type TrustedCallVariant = [string, string]
 

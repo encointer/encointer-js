@@ -1,12 +1,17 @@
 import type {Hash} from '@polkadot/types/interfaces/runtime';
 import type {
-    ShardIdentifier, IntegriteeTrustedCallSigned, IntegriteeGetter, GuessType, GuessTheNumberArgs, GuessTheNumberInfo,
+    ShardIdentifier,
+    IntegriteeTrustedCallSigned,
+    IntegriteeGetter,
+    GuessType,
+    GuessTheNumberInfo,
+    GuessTheNumberTrustedCall,
 } from '@encointer/types';
 import {
     type RequestOptions,
     type ISubmittableGetter,
     Request,
-    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions, type PublicGetterArgs,
+    type JsonRpcRequest, type TrustedGetterArgs, type TrustedSignerOptions, type PublicGetterArgs, type IWorker,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {callGetter, sendTrustedCall, sendWorkerRequest} from './sendRequest.js';
@@ -14,7 +19,7 @@ import {
     createGetterRpc, createIntegriteeGetterPublic,
     createSignedGetter,
     createTrustedCall,
-    signTrustedCall,
+    signTrustedCall, type TrustedCallArgs, type TrustedCallVariant,
 } from "./requests.js";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
@@ -117,8 +122,11 @@ export class IntegriteeWorker extends Worker {
 
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('GuessTheNumberArgs', [asString(account), guess])
-        const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberArgs'], params);
+        const guessThNumberCall = guessTheNumberCall(this, ['guess', 'GuessTheNumberArgs'], params);
+        const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberTrustedCall'], guessThNumberCall);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+
+        console.log(`GuessTheNumber ${JSON.stringify(signed)}`);
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
@@ -167,4 +175,16 @@ export const submittablePublicGetter = <W extends Worker, T>(self: W, request: s
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
     const signedGetter = createIntegriteeGetterPublic(self, request)
     return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
+}
+
+export const guessTheNumberCall = (
+    self: IWorker,
+    callVariant: TrustedCallVariant,
+    params: TrustedCallArgs
+): GuessTheNumberTrustedCall => {
+    const [variant, argType] = callVariant;
+
+    return self.createType('GuessTheNumberTrustedCall', {
+        [variant]: self.createType(argType, params)
+    });
 }
