@@ -8,7 +8,11 @@ import {
 import  { Request } from './interface.js';
 import type {ShardIdentifier, IntegriteeTrustedCallSigned} from "@encointer/types";
 
-export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType: string, options?: RequestOptions): Promise<any> =>{
+export const sendWorkerRequest = async (self: IWorker, clientRequest: any, parserType: string, options?: RequestOptions): Promise<any> =>{
+  if( !self.isOpened ) {
+    await self.open();
+  }
+
   const requestId = self.rqStack.push(parserType) + self.rsCount;
   const timeout = options && options.timeout ? options.timeout : undefined;
   return self.sendRequest(
@@ -20,9 +24,6 @@ export const sendWorkerRequest = (self: IWorker, clientRequest: any, parserType:
 }
 
 export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, _args: RequestArgs, requestOptions?: RequestOptions): Promise<T> => {
-  if( !self.isOpened ) {
-    await self.open();
-  }
   const [getterType, method, parser] = workerMethod;
   let result: Promise<any>;
   let parserType: string = requestOptions?.debug ? 'raw': parser;
@@ -37,10 +38,6 @@ export const callGetter = async <T>(self: IWorker, workerMethod: WorkerMethod, _
 }
 
 export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, direct: boolean, parser: string, options: RequestOptions = {} as RequestOptions): Promise<T> => {
-  if( !self.isOpened ) {
-    await self.open();
-  }
-
   let result: Promise<any>;
   let parserType: string = options.debug ? 'raw': parser;
 
