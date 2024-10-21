@@ -60,7 +60,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         const jsonStr = self.createType('String', returnValue.value);
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
-        console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
+        console.debug(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
         parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
