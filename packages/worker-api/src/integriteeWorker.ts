@@ -130,13 +130,13 @@ export class IntegriteeWorker extends Worker {
         const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberTrustedCall'], guessThNumberCall);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
 
-        console.log(`GuessTheNumber ${JSON.stringify(signed)}`);
+        console.debug(`GuessTheNumber ${JSON.stringify(signed)}`);
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 
     async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, requestOptions?: RequestOptions): Promise<Hash> {
         if (this.shieldingKey() == undefined) {
-            console.log(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
+            console.debug(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
             await this.getShieldingKey(requestOptions);
         }
 

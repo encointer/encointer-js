@@ -34,7 +34,6 @@ export async function getMeetupCount(api: ApiPromise, cid: CommunityIdentifier, 
 }
 
 export async function getMeetupTimeOffset(api: ApiPromise): Promise<MeetupTimeOffsetType> {
-    console.log('HUHU1337')
     return api.query["encointerCeremonies"]["meetupTimeOffset"]<MeetupTimeOffsetType>();
 }
 
@@ -62,10 +61,10 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
         getParticipantRegistration(api, cid, cIndex,address),
     ]);
 
-    console.log(`[getMeetupIndex] mCount: ${mCount}`)
-    console.log(`[getMeetupIndex] assignment: ${JSON.stringify(assignments)}`)
-    console.log(`[getMeetupIndex] assignmentCount: ${JSON.stringify(assignmentCount)}`)
-    console.log(`[getMeetupIndex] registration: ${JSON.stringify(registration)}`)
+    console.debug(`[getMeetupIndex] mCount: ${mCount}`)
+    console.debug(`[getMeetupIndex] assignment: ${JSON.stringify(assignments)}`)
+    console.debug(`[getMeetupIndex] assignmentCount: ${JSON.stringify(assignmentCount)}`)
+    console.debug(`[getMeetupIndex] registration: ${JSON.stringify(registration)}`)
 
 
     if (mCount.eq(0)) {
@@ -74,7 +73,7 @@ export async function getMeetupIndex(api: ApiPromise, cid: CommunityIdentifier, 
     }
 
     if (registration.isNone) {
-        console.log("[getMeetupIndex] participantIndex was 0");
+        console.debug("[getMeetupIndex] participantIndex was 0");
         return mCount.registry.createTypeUnsafe("MeetupIndexType", [0]) as MeetupIndexType; // don't know why the cast is necessary
     }
 
@@ -264,5 +263,5 @@ function bootstrapperOrReputableQuery(
 }
 
 function _log(msg: String) {
-    console.log(`[encointer-js:api] ${msg}`)
+    console.debug(`[encointer-js:api] ${msg}`)
 }

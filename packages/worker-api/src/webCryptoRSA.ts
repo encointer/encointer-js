@@ -43,8 +43,6 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
         ["encrypt"]
     );
 
-    console.log(`PublicKey: ${JSON.stringify(publicKey)}`);
-
     return publicKey;
 }
 

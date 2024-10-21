@@ -41,8 +41,6 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
   let result: Promise<any>;
   let parserType: string = options.debug ? 'raw': parser;
 
-  // console.log(`TrustedCall: ${JSON.stringify(call)}`);
-
   let top;
   if (direct) {
     top = self.createType('IntegriteeTrustedOperation', {
@@ -54,7 +52,7 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
     })
   }
 
-  console.log(`TrustedOperation: ${JSON.stringify(top)}`);
+  console.debug(`Sending TrustedOperation: ${JSON.stringify(top)}`);
 
   const cyphertext = await self.encrypt(top.toU8a());
 
@@ -65,7 +63,7 @@ export const sendTrustedCall = async <T>(self: IWorker, call: IntegriteeTrustedC
   const rpc = createJsonRpcRequest('author_submitExtrinsic', [r.toHex()], 1);
   result = sendWorkerRequest(self, rpc, parserType, options)
 
-  console.log(`[sendTrustedCall] sent request: ${JSON.stringify(rpc)}`);
+  console.debug(`[sendTrustedCall] sent request: ${JSON.stringify(rpc)}`);
 
   return result as Promise<T>
 }

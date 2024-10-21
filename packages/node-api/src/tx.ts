@@ -41,7 +41,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
                 }
                 unsub();
             } else {
-                console.log('txStatusChange', result.status.type)
+                console.debug('txStatusChange', result.status.type)
             }
         }
         tx.signAndSend(signer, {}, onStatusChange)
@@ -49,7 +49,7 @@ export function submitAndWatchTx(api: ApiPromise, signer: KeyringPair, tx: Submi
                 unsub = res;
             })
             .catch((err) => {
-                console.log(`{error: ${err.message}}`);
+                console.error(`{error: ${err.message}}`);
             });
     }))
 }
@@ -83,7 +83,7 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
                             message = `could not extract dispatch error: ${JSON.stringify(error)}`;
                         }
                     }
-                    console.log('txUpdateEvent', `${JSON.stringify({
+                    console.debug('txUpdateEvent', `${JSON.stringify({
                         title: `${section}.${method}`,
                         message
                     })}`);
@@ -91,7 +91,7 @@ export function extractEvents(api: ApiPromise, result: ISubmittableResult): IExt
                 }
 
             } else {
-                console.log('txUpdateEvent', `${JSON.stringify({
+                console.debug('txUpdateEvent', `${JSON.stringify({
                     title: `${section}.${method}`,
                     message: data
                 })}`);

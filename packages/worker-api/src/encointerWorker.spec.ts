@@ -44,7 +44,7 @@ describe('worker', () => {
             describe('getTotalIssuance', () => {
                 it('should return value', async () => {
                     const result = await worker.getTotalIssuance(network.chosenCid);
-                    // console.log('getTotalIssuance', result);
+                    // console.debug('getTotalIssuance', result);
                     expect(result).toBeDefined();
                 });
             });
@@ -87,7 +87,7 @@ describe('worker', () => {
             describe('getSchedulerState', () => {
                 it('should return value', async () => {
                     const result = await worker.getSchedulerState(network.chosenCid);
-                    // console.log('schedulerStateResult', result);
+                    // console.debug('schedulerStateResult', result);
                     expect(result).toBeDefined();
                 });
             });

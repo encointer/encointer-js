@@ -30,12 +30,12 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
     throw new Error(`Worker error: ${data}`);
   }
 
-  // console.log(`Getter response: ${data}`);
+  // console.debug(`Getter response: ${data}`);
   const json = JSON.parse(data);
 
   const value = hexToU8a(json["result"]);
   const returnValue = self.createType('RpcReturnValue', value);
-  console.log(`RpcReturnValue ${JSON.stringify(returnValue)}`);
+  console.debug(`RpcReturnValue ${JSON.stringify(returnValue)}`);
 
   if (returnValue.status.isError) {
     const errorMsg = self.createType('String', returnValue.value);
@@ -60,7 +60,7 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         const jsonStr = self.createType('String', returnValue.value);
         // Todo: For some reason there are 2 non-utf characters, where I don't know where
         // they come from currently.
-        console.log(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
+        console.debug(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
         parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
         break
       case 'Vault':
@@ -70,12 +70,12 @@ const parseGetterResponse = (self: IWorker, responseType: string, data: string) 
         parsedData = self.createType(responseType, returnValue.value);
         break
       case 'TrustedOperationResult':
-        console.log(`Got TrustedOperationResult`)
+        console.debug(`Got TrustedOperationResult`)
         parsedData = self.createType('Hash', returnValue.value);
         break
       default:
         parsedData = unwrapWorkerResponse(self, returnValue.value);
-        console.log(`unwrapped data ${parsedData}`);
+        console.debug(`unwrapped data ${parsedData}`);
         parsedData = self.createType(responseType, parsedData);
         break;
     }
@@ -127,7 +127,7 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     const be = new BN(outputData)
     const beArray = new Uint8Array(be.toArray());
 
-    // console.log(`${JSON.stringify({encrypted_array: beArray})}`)
+    // console.debug(`${JSON.stringify({encrypted_array: beArray})}`)
 
     return this.createType('Vec<u8>', compactAddLength(beArray))
   }
