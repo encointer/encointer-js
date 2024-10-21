@@ -130,7 +130,7 @@ export class IntegriteeWorker extends Worker {
         const call = createTrustedCall(this, ['guess_the_number', 'GuessTheNumberTrustedCall'], guessThNumberCall);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
 
-        console.log(`GuessTheNumber ${JSON.stringify(signed)}`);
+        console.debug(`GuessTheNumber ${JSON.stringify(signed)}`);
         return this.sendTrustedCall(signed, shardT, requestOptions);
     }
 

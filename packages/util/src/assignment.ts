@@ -23,7 +23,7 @@ import type {Moment} from "@polkadot/types/interfaces/runtime";
 export function assignmentFn(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, assignmentCount: u64): MeetupIndexType {
 
     if (assignmentParams.m.eq(0) || assignmentCount.eq(0)) {
-        console.log(`[assignmentFn] invalid params or assignmentCount. Returning 0`);
+        console.error(`[assignmentFn] invalid params or assignmentCount. Returning 0`);
         return participantIndex.registry.createTypeUnsafe('MeetupIndexType', [0]);
     }
 
@@ -42,7 +42,7 @@ export type ParticipantIndexes = [ParticipantIndexType, ParticipantIndexType, Pa
 export function getRegistration(pIndexes: ParticipantIndexes): Option<ParticipantRegistration> {
     const registry = pIndexes[0].registry;
 
-    console.log(`[getRegistration] pIndexes: ${JSON.stringify(pIndexes)}`);
+    console.debug(`[getRegistration] pIndexes: ${JSON.stringify(pIndexes)}`);
 
     if (!pIndexes[0].eq(0)) {
         return registry.createTypeUnsafe('Option<ParticipantRegistration>', [[pIndexes[0], 'Bootstrapper']]);
@@ -77,7 +77,7 @@ export function computeMeetupIndex(
     }
 
     if (registration.index.eq(0)) {
-        console.log("[computeMeetupIndex] supplied registration with participantIndex = 0. returning...")
+        console.warn("[computeMeetupIndex] supplied registration with participantIndex = 0. returning...")
         return registration.index;
     } else {
         pIndex = registration.index.subn(1) as ParticipantIndexType;
@@ -87,12 +87,12 @@ export function computeMeetupIndex(
         (pIndex: ParticipantIndexType, params: AssignmentParams) => meetupIndex(pIndex, params, meetupCount);
 
     if (registration.registrationType.isBootstrapper) {
-        console.log("[computeMeetupIndex] is bootstrapper.")
+        console.debug("[computeMeetupIndex] is bootstrapper.")
         if (pIndex.lt(assignmentCount.bootstrappers)) {
             return meetupIndexFn(pIndex, assignments.bootstrappersReputables)
         }
     } else if (registration.registrationType.isReputable) {
-        console.log("[computeMeetupIndex] is reputable")
+        console.debug("[computeMeetupIndex] is reputable")
         if (pIndex.lt(assignmentCount.reputables)) {
             return meetupIndexFn(
                 pIndex.add(assignmentCount.bootstrappers) as ParticipantIndexType,
@@ -100,12 +100,12 @@ export function computeMeetupIndex(
             )
         }
     } else if (registration.registrationType.isEndorsee) {
-        console.log("[computeMeetupIndex] is endorsee.")
+        console.debug("[computeMeetupIndex] is endorsee.")
         if (pIndex.lt(assignmentCount.endorsees)) {
             return meetupIndexFn(pIndex, assignments.endorsees);
         }
     } else if (registration.registrationType.isNewbie) {
-        console.log("[computeMeetupIndex] is endorsee.")
+        console.debug("[computeMeetupIndex] is endorsee.")
         if (pIndex.lt(assignmentCount.newbies)){
             return meetupIndexFn(pIndex, assignments.newbies);
         }
@@ -123,13 +123,13 @@ export function computeMeetupIndex(
  */
 export function meetupIndex(participantIndex: ParticipantIndexType, assignmentParams: AssignmentParams, meetupCount: MeetupIndexType): MeetupIndexType {
 
-    console.log(`[meetupIndex] executing assignmentFn`);
+    console.debug(`[meetupIndex] executing assignmentFn`);
 
     const result = assignmentFn(participantIndex, assignmentParams, meetupCount);
 
     const mIndex = result.addn(1) as MeetupIndexType
 
-    console.log(`[meetupIndex] mIndex (=assignmentFn result + 1): ${JSON.stringify(mIndex)}`);
+    console.debug(`[meetupIndex] mIndex (=assignmentFn result + 1): ${JSON.stringify(mIndex)}`);
 
     return mIndex;
 }
@@ -149,7 +149,7 @@ export function meetupLocation(meetupIndex: MeetupIndexType, locations: Vec<Loca
     const len: u64 = registry.createTypeUnsafe('u64', [locations.length]);
 
     if (len.eq(0)) {
-        console.log(`[meetup_location]: Locations empty: ${len}`)
+        console.debug(`[meetup_location]: Locations empty: ${len}`)
         return registry.createTypeUnsafe('Option<Location>', [])
     }
 
@@ -158,7 +158,7 @@ export function meetupLocation(meetupIndex: MeetupIndexType, locations: Vec<Loca
     if (location_index < len) {
         return registry.createTypeUnsafe('Option<Location>', [locations[location_index.toNumber()]])
     } else {
-        console.log(`[meetup_location]: Location index is out of bounds ${location_index}. Locations length: ${len}`)
+        console.debug(`[meetup_location]: Location index is out of bounds ${location_index}. Locations length: ${len}`)
         return registry.createTypeUnsafe('Option<Location>', [])
     }
 }
