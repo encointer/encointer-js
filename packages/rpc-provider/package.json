@@ -1,0 +1,43 @@
+{
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/api/issues",
+  "description": "Transport providers for the API",
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://github.com/polkadot-js/api/tree/master/packages/rpc-provider#readme",
+  "license": "Apache-2.0",
+  "name": "@polkadot/rpc-provider",
+  "repository": {
+    "directory": "packages/rpc-provider",
+    "type": "git",
+    "url": "https://github.com/polkadot-js/api.git"
+  },
+  "sideEffects": [
+    "./packageDetect.js",
+    "./packageDetect.cjs"
+  ],
+  "type": "module",
+  "version": "11.2.1",
+  "main": "index.js",
+  "dependencies": {
+    "@polkadot/keyring": "^12.6.2",
+    "@polkadot/types": "11.2.1",
+    "@polkadot/types-support": "11.2.1",
+    "@polkadot/util": "^12.6.2",
+    "@polkadot/util-crypto": "^12.6.2",
+    "@polkadot/x-fetch": "^12.6.2",
+    "@polkadot/x-global": "^12.6.2",
+    "@polkadot/x-ws": "^12.6.2",
+    "eventemitter3": "^5.0.1",
+    "mock-socket": "^9.3.1",
+    "nock": "^13.5.0",
+    "tslib": "^2.6.2"
+  },
+  "devDependencies": {
+    "@substrate/connect": "0.8.10"
+  },
+  "optionalDependencies": {
+    "@substrate/connect": "0.8.10"
+  }
+}
