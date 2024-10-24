@@ -2208,6 +2208,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot/rpc-provider@workspace:packages/rpc-provider":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/rpc-provider@workspace:packages/rpc-provider"
+  dependencies:
+    "@polkadot/keyring": "npm:^12.6.2"
+    "@polkadot/types": "npm:11.2.1"
+    "@polkadot/types-support": "npm:11.2.1"
+    "@polkadot/util": "npm:^12.6.2"
+    "@polkadot/util-crypto": "npm:^12.6.2"
+    "@polkadot/x-fetch": "npm:^12.6.2"
+    "@polkadot/x-global": "npm:^12.6.2"
+    "@polkadot/x-ws": "npm:^12.6.2"
+    "@substrate/connect": "npm:0.8.10"
+    eventemitter3: "npm:^5.0.1"
+    mock-socket: "npm:^9.3.1"
+    nock: "npm:^13.5.0"
+    tslib: "npm:^2.6.2"
+  dependenciesMeta:
+    "@substrate/connect":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@polkadot/typegen@npm:11.2.1":
   version: 11.2.1
   resolution: "@polkadot/typegen@npm:11.2.1"
