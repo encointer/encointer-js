@@ -6,13 +6,20 @@ import {compactAddLength, hexToU8a} from '@polkadot/util';
 
 import {options as encointerOptions} from '@encointer/node-api';
 
-import type {EnclaveFingerprint, RpcReturnValue, Vault} from '@encointer/types';
+import type {
+    EnclaveFingerprint,
+    RpcReturnValue,
+    TrustedOperationStatus,
+    Vault
+} from '@encointer/types';
 
-import { type WorkerOptions} from './interface.js';
+import {type WorkerOptions} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {u8} from "@polkadot/types-codec";
 import BN from "bn.js";
 import {WsProvider} from "@polkadot/api";
+import type {Hash} from "@polkadot/types/interfaces/runtime";
+import {Keyring} from "@polkadot/keyring";
 
 export class Worker {
 
@@ -20,11 +27,15 @@ export class Worker {
 
     #shieldingKey?: CryptoKey;
 
+    #keyring?: Keyring;
+
     #ws: WsProvider;
 
     constructor(url: string, options: WorkerOptions = {} as WorkerOptions) {
         this.#registry = new TypeRegistry();
         this.#ws = new WsProvider(url);
+        this.#keyring = (options.keyring || undefined);
+
 
         if (options.types != undefined) {
             this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
@@ -51,6 +62,16 @@ export class Worker {
 
         return this.createType('Vec<u8>', compactAddLength(beArray))
     }
+
+
+    public keyring(): Keyring | undefined {
+        return this.#keyring;
+    }
+
+    public setKeyring(keyring: Keyring): void {
+        this.#keyring = keyring;
+    }
+
 
     public registry(): TypeRegistry {
         return this.#registry
@@ -126,4 +147,49 @@ export class Worker {
 
         return returnValue;
     }
+
+    public async subscribe(method: string, params: unknown[]): Promise<Hash> {
+        await this.isReady();
+
+        return new Promise((async resolve => {
+            // @ts-ignore
+            const onStatusChange = (error, result: string) => {
+                console.debug(`DirectRequestStatus: error ${JSON.stringify(error)}`)
+                console.debug(`DirectRequestStatus: ${JSON.stringify(result)}`)
+
+                const value = hexToU8a(result);
+                const returnValue = this.createType('RpcReturnValue', value);
+
+                if (returnValue.isError) {
+                    const errorMsg = this.createType('String', returnValue.value);
+                    throw new Error(`DirectRequestStatus is Error ${errorMsg}`);
+                }
+                if (returnValue.isOk) {
+                    const hash = this.createType('Hash', returnValue.value);
+                    resolve(hash)
+                }
+
+                if (returnValue.isTrustedOperationStatus) {
+                    const status = returnValue.asTrustedOperationStatus;
+                    const hash = this.createType('Hash', returnValue.value);
+                    if (connection_can_be_closed(status)) {
+                        resolve(hash)
+                    }
+                }
+            }
+
+            try {
+                const res = await this.#ws.subscribe('type',
+                    method, params, onStatusChange
+                );
+                console.debug(`{result: ${res}`);
+            } catch (err) {
+                console.error(`{error: ${err}}`);
+            }
+        }))
+    }
+}
+
+function connection_can_be_closed(status: TrustedOperationStatus): boolean {
+    return !(status.isSubmitted || status.isFuture || status.isReady || status.isBroadCast || status.isInvalid)
 }

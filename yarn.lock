@@ -804,6 +804,7 @@ __metadata:
     "@peculiar/webcrypto": "npm:^1.4.6"
     "@polkadot/api": "npm:^11.2.1"
     "@polkadot/keyring": "npm:^12.6.2"
+    "@polkadot/rpc-provider": "npm:^11.2.1"
     "@polkadot/types": "npm:^11.2.1"
     "@polkadot/util": "npm:^12.6.2"
     "@polkadot/util-crypto": "npm:^12.6.2"
@@ -2208,7 +2209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/rpc-provider@workspace:packages/rpc-provider":
+"@polkadot/rpc-provider@npm:^11.2.1, @polkadot/rpc-provider@workspace:packages/rpc-provider":
   version: 0.0.0-use.local
   resolution: "@polkadot/rpc-provider@workspace:packages/rpc-provider"
   dependencies:

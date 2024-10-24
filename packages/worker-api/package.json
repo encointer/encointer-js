@@ -28,6 +28,7 @@
     "@peculiar/webcrypto": "^1.4.6",
     "@polkadot/api": "^11.2.1",
     "@polkadot/keyring": "^12.6.2",
+    "@polkadot/rpc-provider": "^11.2.1",
     "@polkadot/types": "^11.2.1",
     "@polkadot/util": "^12.6.2",
     "@polkadot/util-crypto": "^12.6.2",

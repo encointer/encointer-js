@@ -22,6 +22,12 @@ export interface IWorker extends WebSocketAsPromised {
   registry: () => TypeRegistry
 }
 
+export interface IWorkerBase {
+  createType: (apiType: string, obj?: any) => any;
+  encrypt: (data: Uint8Array) => Promise<Vec<u8>>
+  registry: () => TypeRegistry
+}
+
 export interface ISubmittableGetter<W extends Worker, Type> {
 
   worker: W;
