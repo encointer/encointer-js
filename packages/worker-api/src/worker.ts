@@ -32,8 +32,12 @@ export class Worker {
 
   constructor(url: string, options: WorkerOptions = {} as WorkerOptions) {
     this.#registry = new TypeRegistry();
-    this.#ws = new WsProvider(url);
     this.#keyring = (options.keyring || undefined);
+
+    // We want to pass the custom node's websocket implementation into the provider
+    // in our integration tests, so that we can accept the workers self-signed
+    // certificate.
+    this.#ws = new WsProvider(url, 100, undefined, undefined, undefined, options.createWebSocket);
 
     if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);

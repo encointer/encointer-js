@@ -1,23 +1,19 @@
 // Copyright 2017-2024 @polkadot/rpc-provider authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import type { Class } from '@polkadot/util/types';
+import type { Class } from '@polkadot/util/types';
 import type { EndpointStats, JsonRpcResponse, ProviderInterface, ProviderInterfaceCallback, ProviderInterfaceEmitCb, ProviderInterfaceEmitted, ProviderStats } from '../types.js';
 
 import { EventEmitter } from 'eventemitter3';
 
-import { isNull, isUndefined, logger, noop, objectSpread, stringify } from '@polkadot/util';
-// import { xglobal } from '@polkadot/x-global';
-// import { WebSocket } from '@polkadot/x-ws';
+import {isChildClass, isNull, isUndefined, logger, noop, objectSpread, stringify} from '@polkadot/util';
+import { xglobal } from '@polkadot/x-global';
+import { WebSocket } from '@polkadot/x-ws';
 
 import { RpcCoder } from '../coder/index.js';
 import defaults from '../defaults.js';
 import { DEFAULT_CAPACITY, LRUCache } from '../lru.js';
 import { getWSErrorString } from './errors.js';
-
-import WS from 'websocket';
-
-const {w3cwebsocket: WebSocket} = WS;
 
 interface SubscriptionHandler {
   callback: ProviderInterfaceCallback;
@@ -98,6 +94,11 @@ export class WsProvider implements ProviderInterface {
   readonly #stats: ProviderStats;
   readonly #waitingForId: Record<string, JsonRpcResponse<unknown>> = {};
 
+  // @encointer's only customization so that we can pass in
+  // node's websocket implementation in our integration tests
+  // to accept the worker's self-signed certificate.
+  readonly #createWebsocket?: (url: string) => WebSocket;
+
   #autoConnectMs: number;
   #endpointIndex: number;
   #endpointStats: EndpointStats;
@@ -113,7 +114,7 @@ export class WsProvider implements ProviderInterface {
    * @param {Record<string, string>} headers The headers provided to the underlying WebSocket
    * @param {number} [timeout] Custom timeout value used per request . Defaults to `DEFAULT_TIMEOUT_MS`
    */
-  constructor (endpoint: string | string[] = defaults.WS_URL, autoConnectMs: number | false = RETRY_DELAY, headers: Record<string, string> = {}, timeout?: number, cacheCapacity?: number) {
+  constructor (endpoint: string | string[] = defaults.WS_URL, autoConnectMs: number | false = RETRY_DELAY, headers: Record<string, string> = {}, timeout?: number, cacheCapacity?: number, createWebsocket?: (url: string) => WebSocket) {
     const endpoints = Array.isArray(endpoint)
       ? endpoint
       : [endpoint];
@@ -141,6 +142,7 @@ export class WsProvider implements ProviderInterface {
     };
     this.#endpointStats = defaultEndpointStats();
     this.#timeout = timeout || DEFAULT_TIMEOUT_MS;
+    this.#createWebsocket = createWebsocket;
 
     if (autoConnectMs && autoConnectMs > 0) {
       this.connectWithRetry().catch(noop);
@@ -211,24 +213,20 @@ export class WsProvider implements ProviderInterface {
     try {
       this.#endpointIndex = this.selectEndpointIndex(this.#endpoints);
 
-      // // the as here is Deno-specific - not available on the globalThis
-      // this.#websocket = typeof xglobal.WebSocket !== 'undefined' && isChildClass(xglobal.WebSocket as unknown as Class<WebSocket>, WebSocket)
-      //   ? new WebSocket(this.endpoint)
-      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //   // @ts-ignore - WS may be an instance of ws, which supports options
-      //   : new WebSocket(this.endpoint, undefined, {
-      //     headers: this.#headers
-      //   });
 
-      // @ts-ignore
-      this.#websocket = new WebSocket(
-          this.endpoint,
-          undefined,
-          undefined,
-          undefined,
-          // Allow the worker's self-signed certificate
-          { rejectUnauthorized: false }
-      );
+      if (this.#createWebsocket !== undefined) {
+        this.#websocket = this.#createWebsocket(this.endpoint);
+      } else {
+        // the as here is Deno-specific - not available on the globalThis
+        this.#websocket = typeof xglobal.WebSocket !== 'undefined' && isChildClass(xglobal.WebSocket as unknown as Class<WebSocket>, WebSocket)
+            ? new WebSocket(this.endpoint)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore - WS may be an instance of ws, which supports options
+            : new WebSocket(this.endpoint, undefined, {
+              headers: this.#headers
+            });
+
+      }
 
       if (this.#websocket) {
         this.#websocket.onclose = this.#onSocketClose;

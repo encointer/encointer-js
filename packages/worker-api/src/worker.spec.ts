@@ -3,13 +3,30 @@ import {localDockerNetwork} from './testUtils/networks.js';
 import { Worker } from './worker.js';
 import bs58 from "bs58";
 
+import WS from 'websocket';
+
+const {w3cwebsocket: WebSocket} = WS;
+
 describe('worker', () => {
   const network = localDockerNetwork();
   let worker: Worker;
   beforeAll(async () => {
     jest.setTimeout(90000);
     await cryptoWaitReady();
-    worker = new Worker(network.worker);
+    worker = new Worker(network.worker,
+        {
+          // @ts-ignore
+          createWebSocket: (url) => new WebSocket(
+              url,
+              undefined,
+              undefined,
+              undefined,
+              // Allow the worker's self-signed certificate, needed in non-reverse proxy setups
+              // where we talk to the worker directly.
+              { rejectUnauthorized: false }
+          ),
+        }
+    );
   });
 
   afterAll(async () => {

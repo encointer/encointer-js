@@ -4,9 +4,9 @@ import {localDockerNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import {type KeyringPair} from "@polkadot/keyring/types";
 
-// import WS from 'websocket';
+import WS from 'websocket';
 
-// const {w3cwebsocket: WebSocket} = WS;
+const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
     const network = localDockerNetwork();
@@ -24,15 +24,14 @@ describe('worker', () => {
         worker = new IntegriteeWorker(network.worker, {
             keyring: keyring,
             // @ts-ignore
-            // createWebSocket: (url) => new WebSocket(
-            //     url,
-            //     undefined,
-            //     undefined,
-            //     undefined,
-            //     // Allow the worker's self-signed certificate
-            //     { rejectUnauthorized: false }
-            // ),
-            // api: null,
+            createWebSocket: (url) => new WebSocket(
+                url,
+                undefined,
+                undefined,
+                undefined,
+                // Allow the worker's self-signed certificate
+                { rejectUnauthorized: false }
+            ),
         });
     });
 
