@@ -64,7 +64,7 @@ export class IntegriteeWorker extends Worker {
             'Request', { shard, cyphertext: cyphertext }
         );
 
-        const hash = await this.send('author_submitAndWatchExtrinsic', [r.toHex()])
+        const hash = await this.subscribe('author_submitAndWatchExtrinsic', [r.toHex()])
 
         console.debug(`[sendTrustedCall] sent result: ${JSON.stringify(r)}`);
 

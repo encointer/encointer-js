@@ -174,13 +174,14 @@ export class Worker {
                 const res = await this.#ws.subscribe('type',
                     method, params, onStatusChange
                 );
+                console.debug(`{res: ${res}`);
                 let returnValue = this.resultToRpcReturnValue(res as string);
                 console.debug(`{result: ${res}`);
                 let topHash = this.createType('Hash', returnValue.value)
-
-                resolve({hash: topHash})
+                console.debug(`{topHash: ${topHash}`);
             } catch (err) {
-                console.error(`{error: ${err}}`);
+                console.error(err);
+                throw(err)
             }
         }))
     }
@@ -196,7 +197,7 @@ export class Worker {
 
         if (returnValue.status.isError) {
             const errorMsg = this.createType('String', returnValue.value);
-            throw new Error(`RPC Error: ${errorMsg}`);
+            throw new Error(`RPC: ${errorMsg}`);
         }
 
         return returnValue;
