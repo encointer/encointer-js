@@ -41,9 +41,9 @@ export class Worker implements IWorkerBase {
     this.#registry = new TypeRegistry();
     this.#keyring = (options.keyring || undefined);
 
-    // We want to pass the custom node's websocket implementation into the provider
+    // We want to pass arguments to NodeJS' websocket implementation into the provider
     // in our integration tests, so that we can accept the workers self-signed
-    // certificate.
+    // certificate. Hence, we inject the factory function.
     this.#ws = new WsProvider(url, 100, undefined, undefined, undefined, options.createWebSocket);
 
     if (options.types != undefined) {
