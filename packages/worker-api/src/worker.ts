@@ -178,11 +178,12 @@ export class Worker implements IWorkerBase {
 
     return new Promise( async (resolve, reject) => {
       const onStatusChange = (error: Error | null, result: string) => {
-        console.log(`DirectRequestStatus: error ${JSON.stringify(error)}`)
-        console.log(`DirectRequestStatus: ${JSON.stringify(result)}`)
+        if (error !== null) {
+          throw new Error(`Callback Error: ${error.message}`);
+        }
 
-        const value = hexToU8a(result);
-        const directRequestStatus = this.createType('DirectRequestStatus', value);
+        console.debug(`DirectRequestStatus: ${JSON.stringify(result)}`)
+        const directRequestStatus = this.createType('DirectRequestStatus', result);
 
         if (directRequestStatus.isError) {
           const errorMsg = this.createType('String', directRequestStatus.value);
@@ -197,7 +198,7 @@ export class Worker implements IWorkerBase {
           console.log(`TrustedOperationStatus: ${directRequestStatus}`)
           const status = directRequestStatus.asTrustedOperationStatus;
           if (connection_can_be_closed(status)) {
-            resolve({})
+            resolve(status)
           }
         }
       }
@@ -206,8 +207,6 @@ export class Worker implements IWorkerBase {
         const res = await this.#ws.subscribe(method,
             method, params, onStatusChange
         );
-        // let returnValue = this.resultToRpcReturnValue(res as string);
-        // console.debug(`Subscription RpcReturnValue ${JSON.stringify(returnValue)}`);
         let topHash = this.createType('Hash', res);
         console.debug(`resHash: ${topHash}`);
       } catch (err) {
