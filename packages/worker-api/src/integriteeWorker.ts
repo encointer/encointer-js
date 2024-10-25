@@ -133,36 +133,11 @@ export class IntegriteeWorker extends Worker {
             await this.getShieldingKey();
         }
 
-        return this.submitAndWatch(call, shard, true);
-    }
+        const top = this.createType('IntegriteeTrustedOperation', {
+            direct_call: call
+        })
 
-    async submitAndWatch(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier, direct: boolean): Promise<Hash> {
-        let top;
-        if (direct) {
-            top = this.createType('IntegriteeTrustedOperation', {
-                direct_call: call
-            })
-        } else {
-            top = this.createType('IntegriteeTrustedOperation', {
-                indirect_call: call
-            })
-        }
-
-        console.debug(`Sending TrustedOperation: ${JSON.stringify(top)}`);
-
-        const cyphertext = await this.encrypt(top.toU8a());
-
-        const r = this.createType(
-            'Request', { shard, cyphertext: cyphertext }
-        );
-
-        const returnValue = await this.subscribe('author_submitAndWatchExtrinsic', [r.toHex()])
-
-        // const returnValue = await this.send('author_submitExtrinsic', [r.toHex()])
-
-        console.debug(`[sendTrustedCall] result: ${JSON.stringify(returnValue)}`);
-
-        return this.createType('Hash', returnValue.value);
+        return this.submitAndWatchTop(top, shard);
     }
 }
 

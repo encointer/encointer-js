@@ -10,14 +10,20 @@ import type {
   ShardIdentifier
 } from "@encointer/types";
 
-export interface GenericGetter {
-  toHex(): string
-}
-
 export interface IWorkerBase {
   createType: (apiType: string, obj?: any) => any;
   encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
+}
+
+export interface GenericGetter {
+  toU8a(): Uint8Array,
+  toHex(): string
+}
+
+export interface GenericTop {
+  toU8a(): Uint8Array,
+  toHex(): string
 }
 
 export interface ISubmittableGetter<W extends IWorkerBase, Type> {
@@ -65,8 +71,3 @@ export interface PublicGetterArgs {
 }
 
 export type PublicGetterParams = GuessTheNumberPublicGetter | null
-
-export interface RequestOptions {
-  timeout?: number;
-  debug?: boolean;
-}

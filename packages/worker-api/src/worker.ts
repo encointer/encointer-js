@@ -13,12 +13,13 @@ import type {
   Vault
 } from '@encointer/types';
 
-import {type GenericGetter, type IWorkerBase, type WorkerOptions} from './interface.js';
+import {type GenericGetter, type GenericTop, type IWorkerBase, type WorkerOptions} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {Bytes, u8} from "@polkadot/types-codec";
 import BN from "bn.js";
 import {WsProvider} from "./rpc-provider/src/index.js";
 import {Keyring} from "@polkadot/keyring";
+import type {Hash} from "@polkadot/types/interfaces/runtime";
 
 export class Worker implements IWorkerBase {
 
@@ -141,6 +142,25 @@ export class Worker implements IWorkerBase {
     const response = await this.send('state_executeGetter', [r.toHex()])
     const value = unwrapWorkerResponse(this, response.value)
     return this.createType(returnType, value);
+  }
+
+  async submitAndWatchTop<Top extends GenericTop>(top: Top, shard: ShardIdentifier): Promise<Hash> {
+
+    console.debug(`Sending TrustedOperation: ${JSON.stringify(top)}`);
+
+    const cyphertext = await this.encrypt(top.toU8a());
+
+    const r = this.createType(
+        'Request', { shard, cyphertext: cyphertext }
+    );
+
+    const returnValue = await this.subscribe('author_submitAndWatchExtrinsic', [r.toHex()])
+
+    // const returnValue = await this.send('author_submitExtrinsic', [r.toHex()])
+
+    console.debug(`[sendTrustedCall] result: ${JSON.stringify(returnValue)}`);
+
+    return this.createType('Hash', returnValue.value);
   }
 
 
