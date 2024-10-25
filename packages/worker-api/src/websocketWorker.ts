@@ -144,8 +144,9 @@ export class Worker {
         return new Promise((async resolve => {
             // @ts-ignore
             const onStatusChange = (error, result: string) => {
-                console.debug(`DirectRequestStatus: error ${JSON.stringify(error)}`)
-                console.debug(`DirectRequestStatus: ${JSON.stringify(result)}`)
+                resolve({hash: "mz hash"})
+                console.log(`DirectRequestStatus: error ${JSON.stringify(error)}`)
+                console.log(`DirectRequestStatus: ${JSON.stringify(result)}`)
 
                 const value = hexToU8a(result);
                 const returnValue = this.createType('RpcReturnValue', value);
@@ -171,14 +172,13 @@ export class Worker {
             }
 
             try {
-                const res = await this.#ws.subscribe('type',
+                const res = await this.#ws.subscribe('Hash',
                     method, params, onStatusChange
                 );
-                console.debug(`{res: ${res}`);
                 let returnValue = this.resultToRpcReturnValue(res as string);
-                console.debug(`{result: ${res}`);
+                console.debug(`Subscription RpcReturnValue ${JSON.stringify(returnValue)}`);
                 let topHash = this.createType('Hash', returnValue.value)
-                console.debug(`{topHash: ${topHash}`);
+                console.debug(`topHash: ${topHash}`);
             } catch (err) {
                 console.error(err);
                 throw(err)
