@@ -814,7 +814,6 @@ __metadata:
     "@types/bs58": "npm:^4.0.4"
     bs58: "npm:^4.0.1"
     eventemitter3: "npm:^5.0.1"
-    promised-map: "npm:^1.0.0"
     tslib: "npm:^2.6.2"
     websocket: "npm:^1.0.34"
   peerDependencies:
@@ -12696,13 +12695,6 @@ __metadata:
     err-code: "npm:^2.0.2"
     retry: "npm:^0.12.0"
   checksum: 10/96e1a82453c6c96eef53a37a1d6134c9f2482f94068f98a59145d0986ca4e497bf110a410adf73857e588165eab3899f0ebcf7b3890c1b3ce802abc0d65967d4
-  languageName: node
-  linkType: hard
-
-"promised-map@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "promised-map@npm:1.0.0"
-  checksum: 10/716cc4b1be07467ee8ad204eb572d3149e12dd00a60e2267c7505261ce7756e45fcbfc4fcef606c0ffa56fa4984d8e4c5dbb411d21ed30730bd889f1264dd1d3
   languageName: node
   linkType: hard
 
