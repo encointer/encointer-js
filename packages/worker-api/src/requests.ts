@@ -1,5 +1,4 @@
 import {
-    createJsonRpcRequest,
     type IWorkerBase, type PublicGetterParams, type TrustedGetterParams,
     type TrustedSignerOptions
 } from "./interface.js";
@@ -49,18 +48,6 @@ export async function signTrustedGetter(self: IWorkerBase, account: AddressOrPai
     console.debug(`Signed TrustedGetter: ${JSON.stringify(g)}`);
     return g;
 }
-
-export const createGetterRpc = (self: IWorkerBase, getter: IntegriteeGetter, shard: ShardIdentifier) => {
-    const r = self.createType(
-        'Request', {
-            shard: shard,
-            cyphertext: getter.toHex()
-        }
-    );
-
-    return createJsonRpcRequest('state_executeGetter', [r.toHex()], 1);
-}
-
 
 export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs | GuessTheNumberTrustedCall);
 

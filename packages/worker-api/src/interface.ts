@@ -22,7 +22,6 @@ export interface IWorker extends WebSocketAsPromised {
 }
 
 export interface GenericGetter {
-
   toHex(): string
 }
 
@@ -43,22 +42,6 @@ export interface ISubmittableGetter<W extends IWorkerBase, Type> {
   returnType: string,
 
   send(): Promise<Type>;
-}
-
-export interface JsonRpcRequest {
-  jsonrpc: string;
-  method: string;
-  params?: any;
-  id: number | string;
-}
-
-export function createJsonRpcRequest(method: string, params: any, id: number | string): JsonRpcRequest {
-  return {
-    jsonrpc: '2.0',
-    method: method,
-    params: params,
-    id: id
-  };
 }
 
 export interface WorkerOptions {
@@ -94,17 +77,7 @@ export interface PublicGetterArgs {
 
 export type PublicGetterParams = GuessTheNumberPublicGetter | null
 
-export type RequestArgs = PublicGetterArgs | TrustedGetterArgs |  { }
-
 export interface RequestOptions {
   timeout?: number;
   debug?: boolean;
 }
-
-export enum Request {
-  TrustedGetter,
-  PublicGetter,
-  Worker
-}
-
-export type WorkerMethod = [ Request, string, string ]
