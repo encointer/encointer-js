@@ -40,6 +40,7 @@ export const localDockerNetwork = () => {
     worker: 'wss://127.0.0.1:2000',
     genesisHash: '0x388c446a804e24e77ae89f5bb099edb60cacc2ac7c898ce175bdaa08629c1439',
     mrenclave: 'GopQCtWihHQ8Xw1sZP6DTWMDQuaijSBE2NM8GU2U4Erc',
+    shard: 'GopQCtWihHQ8Xw1sZP6DTWMDQuaijSBE2NM8GU2U4Erc',
     chosenCid: 'GopQCtWihHQ8Xw1sZP6DTWMDQuaijSBE2NM8GU2U4Erc',
     customTypes: {},
     palletOverrides: {}
