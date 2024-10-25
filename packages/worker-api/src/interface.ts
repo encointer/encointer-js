@@ -42,8 +42,6 @@ export interface ISubmittableGetter<W extends IWorkerBase, Type> {
 
   returnType: string,
 
-  into_rpc(): JsonRpcRequest;
-
   send(): Promise<Type>;
 }
 

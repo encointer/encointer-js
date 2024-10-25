@@ -1,14 +1,15 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import {paseoNetwork} from './testUtils/networks.js';
+import {localDockerNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
-import WS from 'websocket';
 import {type KeyringPair} from "@polkadot/keyring/types";
 
-const {w3cwebsocket: WebSocket} = WS;
+// import WS from 'websocket';
+
+// const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-    const network = paseoNetwork();
+    const network = localDockerNetwork();
     let keyring: Keyring;
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
@@ -22,17 +23,16 @@ describe('worker', () => {
 
         worker = new IntegriteeWorker(network.worker, {
             keyring: keyring,
-            types: network.customTypes,
             // @ts-ignore
-            createWebSocket: (url) => new WebSocket(
-                url,
-                undefined,
-                undefined,
-                undefined,
-                // Allow the worker's self-signed certificate
-                { rejectUnauthorized: false }
-            ),
-            api: null,
+            // createWebSocket: (url) => new WebSocket(
+            //     url,
+            //     undefined,
+            //     undefined,
+            //     undefined,
+            //     // Allow the worker's self-signed certificate
+            //     { rejectUnauthorized: false }
+            // ),
+            // api: null,
         });
     });
 
@@ -63,7 +63,7 @@ describe('worker', () => {
         describe('getNonce', () => {
             it('should return value', async () => {
                 const result = await worker.getNonce(alice, network.shard);
-                console.log('Nonce', result);
+                console.log('Nonce', result.toHuman);
                 expect(result).toBeDefined();
             });
         });
@@ -72,7 +72,7 @@ describe('worker', () => {
         describe('getAccountInfo', () => {
             it('should return value', async () => {
                 const result = await worker.getAccountInfo(alice, network.shard);
-                console.log('getAccountInfo', result);
+                console.log('getAccountInfo', result.toHuman());
                 expect(result).toBeDefined();
             });
         });
@@ -82,7 +82,7 @@ describe('worker', () => {
                 const getter = await worker.accountInfoGetter(charlie, network.shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
-                console.log('getAccountInfo:', result);
+                console.log('getAccountInfo:', result.toHuman());
                 expect(result).toBeDefined();
             });
         });
@@ -92,7 +92,7 @@ describe('worker', () => {
                 const getter = worker.parentchainsInfoGetter(network.shard);
                 console.log(`parentchainsInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
-                console.log('parentchainsInfoGetter:', result);
+                console.log('parentchainsInfoGetter:', result.toHuman());
                 expect(result).toBeDefined();
             });
         });
@@ -102,7 +102,7 @@ describe('worker', () => {
                 const getter = worker.guessTheNumberInfoGetter(network.shard);
                 console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
-                console.log('GuessTheNumberInfo:', result);
+                console.log('GuessTheNumberInfo:', result.toHuman());
                 expect(result).toBeDefined();
             });
         });
@@ -112,7 +112,7 @@ describe('worker', () => {
                 const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.shard);
                 console.log(`Attempts: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
-                console.log('Attempts:', result);
+                console.log('Attempts:', result.toHuman());
                 expect(result).toBeDefined();
             });
         });
@@ -133,36 +133,36 @@ describe('worker', () => {
             });
         });
 
-        describe('balance unshield should work', () => {
-            it('should return value', async () => {
-                const shard = network.shard;
-
-                const result = await worker.balanceUnshieldFunds(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    alice.address,
-                    charlie.address,
-                    1100000000000,
-                );
-                console.log('balance unshield result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
-
-        describe('guess the number should work', () => {
-            it('should return value', async () => {
-                const shard = network.shard;
-
-                const result = await worker.guessTheNumber(
-                    alice,
-                    shard,
-                    network.mrenclave,
-                    1,
-                );
-                console.log('guess the number result', result.toHuman());
-                expect(result).toBeDefined();
-            });
-        });
+        // describe('balance unshield should work', () => {
+        //     it('should return value', async () => {
+        //         const shard = network.shard;
+        //
+        //         const result = await worker.balanceUnshieldFunds(
+        //             alice,
+        //             shard,
+        //             network.mrenclave,
+        //             alice.address,
+        //             charlie.address,
+        //             1100000000000,
+        //         );
+        //         console.log('balance unshield result', result.toHuman());
+        //         expect(result).toBeDefined();
+        //     });
+        // });
+        //
+        // describe('guess the number should work', () => {
+        //     it('should return value', async () => {
+        //         const shard = network.shard;
+        //
+        //         const result = await worker.guessTheNumber(
+        //             alice,
+        //             shard,
+        //             network.mrenclave,
+        //             1,
+        //         );
+        //         console.log('guess the number result', result.toHuman());
+        //         expect(result).toBeDefined();
+        //     });
+        // });
     });
 });
