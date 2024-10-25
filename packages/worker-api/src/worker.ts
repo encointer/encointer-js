@@ -13,14 +13,14 @@ import type {
   Vault
 } from '@encointer/types';
 
-import {type GenericGetter, type WorkerOptions} from './interface.js';
+import {type GenericGetter, type IWorkerBase, type WorkerOptions} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {Bytes, u8} from "@polkadot/types-codec";
 import BN from "bn.js";
 import {WsProvider} from "./rpc-provider/src/index.js";
 import {Keyring} from "@polkadot/keyring";
 
-export class Worker {
+export class Worker implements IWorkerBase {
 
   readonly #registry: TypeRegistry;
 

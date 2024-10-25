@@ -1,4 +1,3 @@
-import WebSocketAsPromised from 'websocket-as-promised';
 import {Keyring} from "@polkadot/keyring";
 import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, u32, Vec} from "@polkadot/types";
@@ -10,16 +9,6 @@ import type {
   IntegriteeGetter,
   ShardIdentifier
 } from "@encointer/types";
-
-export interface IWorker extends WebSocketAsPromised {
-  rsCount: number;
-  rqStack: string[];
-  keyring: () => Keyring | undefined;
-  createType: (apiType: string, obj?: any) => any;
-  open: () => Promise<Event>;
-  encrypt: (data: Uint8Array) => Promise<Vec<u8>>
-  registry: () => TypeRegistry
-}
 
 export interface GenericGetter {
   toHex(): string

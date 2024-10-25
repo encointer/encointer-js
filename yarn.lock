@@ -804,16 +804,22 @@ __metadata:
     "@peculiar/webcrypto": "npm:^1.4.6"
     "@polkadot/api": "npm:^11.2.1"
     "@polkadot/keyring": "npm:^12.6.2"
-    "@polkadot/rpc-provider": "npm:^11.2.1"
     "@polkadot/types": "npm:^11.2.1"
+    "@polkadot/types-support": "npm:11.2.1"
     "@polkadot/util": "npm:^12.6.2"
     "@polkadot/util-crypto": "npm:^12.6.2"
     "@polkadot/wasm-crypto": "npm:^7.3.2"
+    "@polkadot/x-fetch": "npm:^12.6.2"
+    "@polkadot/x-global": "npm:^12.6.2"
+    "@polkadot/x-ws": "npm:^12.6.2"
     "@types/bs58": "npm:^4.0.4"
     bs58: "npm:^4.0.1"
+    eventemitter3: "npm:^5.0.1"
+    mock-socket: "npm:^9.3.1"
+    nock: "npm:^13.5.0"
     promised-map: "npm:^1.0.0"
+    tslib: "npm:^2.6.2"
     websocket: "npm:^1.0.34"
-    websocket-as-promised: "npm:^2.0.1"
   peerDependencies:
     "@polkadot/x-randomvalues": ^12.3.2
   languageName: unknown
@@ -2208,29 +2214,6 @@ __metadata:
   checksum: 10/015b1f304bceffce4fbdf94d8354a15fa16f08960199c2243b9825db57f98e4431ff35a575550f183d96a08b14e0a7e0da14c12f58e5045ba033865373e228ee
   languageName: node
   linkType: hard
-
-"@polkadot/rpc-provider@npm:^11.2.1, @polkadot/rpc-provider@workspace:packages/rpc-provider":
-  version: 0.0.0-use.local
-  resolution: "@polkadot/rpc-provider@workspace:packages/rpc-provider"
-  dependencies:
-    "@polkadot/keyring": "npm:^12.6.2"
-    "@polkadot/types": "npm:11.2.1"
-    "@polkadot/types-support": "npm:11.2.1"
-    "@polkadot/util": "npm:^12.6.2"
-    "@polkadot/util-crypto": "npm:^12.6.2"
-    "@polkadot/x-fetch": "npm:^12.6.2"
-    "@polkadot/x-global": "npm:^12.6.2"
-    "@polkadot/x-ws": "npm:^12.6.2"
-    "@substrate/connect": "npm:0.8.10"
-    eventemitter3: "npm:^5.0.1"
-    mock-socket: "npm:^9.3.1"
-    nock: "npm:^13.5.0"
-    tslib: "npm:^2.6.2"
-  dependenciesMeta:
-    "@substrate/connect":
-      optional: true
-  languageName: unknown
-  linkType: soft
 
 "@polkadot/typegen@npm:11.2.1":
   version: 11.2.1
@@ -4861,13 +4844,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chnl@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "chnl@npm:1.2.0"
-  checksum: 10/78044132c0a002b40f4e388407d57d4e767b223bcc1f7dcb108ecb188a8999c0b6a366e0871070c0e661648f8aca9dc1bd42a8f39c893c272c9935bb92ad82c9
-  languageName: node
-  linkType: hard
-
 "chokidar@npm:^3.4.0":
   version: 3.5.2
   resolution: "chokidar@npm:3.5.2"
@@ -6243,30 +6219,6 @@ __metadata:
   dependencies:
     is-arrayish: "npm:^0.2.1"
   checksum: 10/d547740aa29c34e753fb6fed2c5de81802438529c12b3673bd37b6bb1fe49b9b7abdc3c11e6062fe625d8a296b3cf769a80f878865e25e685f787763eede3ffb
-  languageName: node
-  linkType: hard
-
-"es-abstract@npm:^1.17.0-next.0":
-  version: 1.18.0
-  resolution: "es-abstract@npm:1.18.0"
-  dependencies:
-    call-bind: "npm:^1.0.2"
-    es-to-primitive: "npm:^1.2.1"
-    function-bind: "npm:^1.1.1"
-    get-intrinsic: "npm:^1.1.1"
-    has: "npm:^1.0.3"
-    has-symbols: "npm:^1.0.2"
-    is-callable: "npm:^1.2.3"
-    is-negative-zero: "npm:^2.0.1"
-    is-regex: "npm:^1.1.2"
-    is-string: "npm:^1.0.5"
-    object-inspect: "npm:^1.9.0"
-    object-keys: "npm:^1.1.1"
-    object.assign: "npm:^4.1.2"
-    string.prototype.trimend: "npm:^1.0.4"
-    string.prototype.trimstart: "npm:^1.0.4"
-    unbox-primitive: "npm:^1.0.0"
-  checksum: 10/98b2dd3778d0bc36b86302603681f26432aad85d2019834a09d5221ca350600eb4b1e95915d442644cfcc422d5996a806c13ca30435655150f4a4e081b5960cb
   languageName: node
   linkType: hard
 
@@ -8842,7 +8794,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-callable@npm:^1.1.4, is-callable@npm:^1.2.3, is-callable@npm:^1.2.4":
+"is-callable@npm:^1.1.4, is-callable@npm:^1.2.4":
   version: 1.2.4
   resolution: "is-callable@npm:1.2.4"
   checksum: 10/4e3d8c08208475e74a4108a9dc44dbcb74978782e38a1d1b55388342a4824685765d95917622efa2ca1483f7c4dbec631dd979cbb3ebd239f57a75c83a46d99f
@@ -9127,7 +9079,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-regex@npm:^1.1.2, is-regex@npm:^1.1.4":
+"is-regex@npm:^1.1.4":
   version: 1.1.4
   resolution: "is-regex@npm:1.1.4"
   dependencies:
@@ -12733,13 +12685,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise-controller@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "promise-controller@npm:1.0.0"
-  checksum: 10/80e1a43d377ab15e4bfd61a9826fb6feec50fde69f583544bf67fd2dad191b5190c39509d13180dd3adfd9449e651e0fb727cd827a2bf0ffc6bd3c0874dc619f
-  languageName: node
-  linkType: hard
-
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -12754,17 +12699,6 @@ __metadata:
     err-code: "npm:^2.0.2"
     retry: "npm:^0.12.0"
   checksum: 10/96e1a82453c6c96eef53a37a1d6134c9f2482f94068f98a59145d0986ca4e497bf110a410adf73857e588165eab3899f0ebcf7b3890c1b3ce802abc0d65967d4
-  languageName: node
-  linkType: hard
-
-"promise.prototype.finally@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "promise.prototype.finally@npm:3.1.2"
-  dependencies:
-    define-properties: "npm:^1.1.3"
-    es-abstract: "npm:^1.17.0-next.0"
-    function-bind: "npm:^1.1.1"
-  checksum: 10/e0b6e94d32dd11ee3a3fdcac1aa9a2cc0d1af9391fc34fe3bd169cb365b35851e85f7e4ba47b20538974d08cd855c86f68aa214c7b12d31ca07c084b428781fd
   languageName: node
   linkType: hard
 
@@ -15117,7 +15051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unbox-primitive@npm:^1.0.0, unbox-primitive@npm:^1.0.1":
+"unbox-primitive@npm:^1.0.1":
   version: 1.0.1
   resolution: "unbox-primitive@npm:1.0.1"
   dependencies:
@@ -15677,18 +15611,6 @@ __metadata:
   bin:
     webpack: bin/webpack.js
   checksum: 10/242ebb9b96b8d26e5c71d4e1a7458b3daea25ef0e477bc307dc44ff11dd3b8a7fa43c66811efd7947be2401a0dba1c0362bc55c9e2ea0eec15f643d3e237f600
-  languageName: node
-  linkType: hard
-
-"websocket-as-promised@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "websocket-as-promised@npm:2.0.1"
-  dependencies:
-    chnl: "npm:^1.2.0"
-    promise-controller: "npm:^1.0.0"
-    promise.prototype.finally: "npm:^3.1.2"
-    promised-map: "npm:^1.0.0"
-  checksum: 10/68dfd25be95e648e18ac1cb996562f0fb1738850e7b1ec3bc3d641833b8dc30dfc1e02f63c5c245a6b64d09ad1bbe5326a3652e8ba38d00833f1e521bbeba0a7
   languageName: node
   linkType: hard
 
