@@ -1,120 +1,53 @@
 import type {Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
-import {Keyring} from '@polkadot/keyring'
 import {compactAddLength, hexToU8a} from '@polkadot/util';
 
-import WebSocketAsPromised from 'websocket-as-promised';
 
 import {options as encointerOptions} from '@encointer/node-api';
-import {parseI64F64} from '@encointer/util';
 
-import type {EnclaveFingerprint, Vault} from '@encointer/types';
+import type {
+  EnclaveFingerprint,
+  RpcReturnValue, ShardIdentifier,
+  TrustedOperationStatus,
+  Vault
+} from '@encointer/types';
 
-import {type RequestOptions, type IWorker, Request, type WorkerOptions} from './interface.js';
-import {parseBalance} from './parsers.js';
-import {callGetter} from './sendRequest.js';
+import {type GenericGetter, type WorkerOptions} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
-import type {u8} from "@polkadot/types-codec";
+import type {Bytes, u8} from "@polkadot/types-codec";
 import BN from "bn.js";
+import {WsProvider} from "./rpc-provider/src/index.js";
+import {Keyring} from "@polkadot/keyring";
 
-const unwrapWorkerResponse = (self: IWorker, data: string) => {
-  /// Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
-  /// instantiates the <type> with its default value.
-  const dataTyped = self.createType('Option<WorkerEncoded>', data)
-  return dataTyped.unwrapOrDefault();
-}
-
-const parseGetterResponse = (self: IWorker, responseType: string, data: string) => {
-  if (data === 'Could not decode request') {
-    throw new Error(`Worker error: ${data}`);
-  }
-
-  // console.debug(`Getter response: ${data}`);
-  const json = JSON.parse(data);
-
-  const value = hexToU8a(json["result"]);
-  const returnValue = self.createType('RpcReturnValue', value);
-  console.debug(`RpcReturnValue ${JSON.stringify(returnValue)}`);
-
-  if (returnValue.status.isError) {
-    const errorMsg = self.createType('String', returnValue.value);
-    throw new Error(`RPC Error: ${errorMsg}`);
-  }
-
-  let parsedData: any;
-  try {
-    switch (responseType) {
-      case 'raw':
-        parsedData = unwrapWorkerResponse(self, returnValue.value);
-        break;
-      case 'BalanceEntry':
-        parsedData = unwrapWorkerResponse(self, returnValue.value);
-        parsedData = parseBalance(self, parsedData);
-        break;
-      case 'I64F64':
-        parsedData = unwrapWorkerResponse(self, returnValue.value);
-        parsedData = parseI64F64(self.createType('i128', parsedData));
-        break;
-      case 'CryptoKey':
-        const jsonStr = self.createType('String', returnValue.value);
-        // Todo: For some reason there are 2 non-utf characters, where I don't know where
-        // they come from currently.
-        console.debug(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
-        parsedData = parseWebCryptoRSA(jsonStr.toJSON().substring(2));
-        break
-      case 'Vault':
-        parsedData = self.createType(responseType, returnValue.value);
-        break
-      case 'EnclaveFingerprint':
-        parsedData = self.createType(responseType, returnValue.value);
-        break
-      case 'TrustedOperationResult':
-        console.debug(`Got TrustedOperationResult`)
-        parsedData = self.createType('Hash', returnValue.value);
-        break
-      default:
-        parsedData = unwrapWorkerResponse(self, returnValue.value);
-        console.debug(`unwrapped data ${parsedData}`);
-        parsedData = self.createType(responseType, parsedData);
-        break;
-    }
-  } catch (err) {
-    throw new Error(`Can't parse into ${responseType}:\n${err}`);
-  }
-  return parsedData;
-}
-
-export class Worker extends WebSocketAsPromised implements IWorker {
+export class Worker {
 
   readonly #registry: TypeRegistry;
 
+  #shieldingKey?: CryptoKey;
+
   #keyring?: Keyring;
 
-  #shieldingKey?: CryptoKey
-
-  rsCount: number;
-
-  rqStack: string[];
+  #ws: WsProvider;
 
   constructor(url: string, options: WorkerOptions = {} as WorkerOptions) {
-    super(url, {
-      createWebSocket: (options.createWebSocket || undefined),
-      packMessage: (data: any) => JSON.stringify(data),
-      unpackMessage: (data: any) => parseGetterResponse(this, this.rqStack.shift() || '', data),
-      attachRequestId: (data: any): any => data,
-      extractRequestId: () => this.rsCount = ++this.rsCount
-    });
-    this.#keyring = (options.keyring || undefined);
     this.#registry = new TypeRegistry();
-    this.rsCount = 0;
-    this.rqStack = [] as string[]
+    this.#ws = new WsProvider(url);
+    this.#keyring = (options.keyring || undefined);
 
     if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
     } else {
       this.#registry.register(encointerOptions().types as RegistryTypes);
     }
+  }
+
+  public async isReady(): Promise<WsProvider> {
+    return this.#ws.isReady
+  }
+
+  public async closeWs(): Promise<void> {
+    return this.#ws.disconnect()
   }
 
   public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
@@ -132,17 +65,6 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     return this.createType('Vec<u8>', compactAddLength(beArray))
   }
 
-  public async closeWs(): Promise<void> {
-    await this.close()
-  }
-
-  public registry(): TypeRegistry {
-    return this.#registry
-  }
-
-  public createType(apiType: string, obj?: any): any {
-    return this.#registry.createType(apiType as never, obj)
-  }
 
   public keyring(): Keyring | undefined {
     return this.#keyring;
@@ -150,6 +72,15 @@ export class Worker extends WebSocketAsPromised implements IWorker {
 
   public setKeyring(keyring: Keyring): void {
     this.#keyring = keyring;
+  }
+
+
+  public registry(): TypeRegistry {
+    return this.#registry
+  }
+
+  public createType(apiType: string, obj?: any): any {
+    return this.#registry.createType(apiType as never, obj)
   }
 
   public shieldingKey(): CryptoKey | undefined {
@@ -160,17 +91,135 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     this.#shieldingKey = shieldingKey;
   }
 
-  public async getShieldingKey(options: RequestOptions = {} as RequestOptions): Promise<CryptoKey> {
-    const key = await callGetter<CryptoKey>(this, [Request.Worker, 'author_getShieldingKey', 'CryptoKey'], {}, options)
+  public async getShieldingKey(): Promise<CryptoKey> {
+    const res = await this.send(
+        'author_getShieldingKey',[]
+    );
+
+    const jsonStr = this.createType('String', res.value);
+    // Todo: For some reason there are 2 non-utf characters, where I don't know where
+    // they come from currently.
+    // console.debug(`Got shielding key: ${jsonStr.toJSON().substring(2)}`);
+    const key = await parseWebCryptoRSA(jsonStr.toJSON().substring(2));
+
+    // @ts-ignore
     this.setShieldingKey(key);
+    // @ts-ignore
     return key;
   }
 
-  public async getShardVault(options: RequestOptions = {} as RequestOptions): Promise<Vault> {
-    return await callGetter<Vault>(this, [Request.Worker, 'author_getShardVault', 'Vault'], {}, options)
+  public async getShardVault(): Promise<Vault> {
+    const res = await this.send(
+        'author_getShardVault',[]
+    );
+
+    console.debug(`Got vault key: ${JSON.stringify(res)}`);
+    return this.createType('Vault', res.value);
   }
 
-  public async getFingerprint(options: RequestOptions = {} as RequestOptions): Promise<EnclaveFingerprint> {
-    return await callGetter<EnclaveFingerprint>(this, [Request.Worker, 'author_getFingerprint', 'EnclaveFingerprint'], {}, options)
+  public async getFingerprint(): Promise<EnclaveFingerprint> {
+    const res = await this.send(
+        'author_getFingerprint',[]
+    );
+
+    console.debug(`Got fingerprint: ${res}`);
+
+    return this.createType('EnclaveFingerprint', res.value);
   }
+
+  public async sendGetter<Getter extends GenericGetter, R>(getter: Getter, shard: ShardIdentifier, returnType: string): Promise<R> {
+    const r = this.createType(
+        'Request', {
+          shard: shard,
+          cyphertext: getter.toHex()
+        }
+    );
+    const response = await this.send('state_executeGetter', [r.toHex()])
+    const value = unwrapWorkerResponse(this, response.value)
+    return this.createType(returnType, value);
+  }
+
+
+  public async send(method: string, params: unknown[]): Promise<RpcReturnValue> {
+    await this.isReady();
+    const result = await this.#ws.send(
+        method, params
+    );
+
+    return this.resultToRpcReturnValue(result);
+  }
+
+  public async subscribe(method: string, params: unknown[]): Promise<any> {
+    await this.isReady();
+
+    return new Promise( async (resolve, reject) => {
+      const onStatusChange = (error: Error | null, result: string) => {
+        console.log(`DirectRequestStatus: error ${JSON.stringify(error)}`)
+        console.log(`DirectRequestStatus: ${JSON.stringify(result)}`)
+
+        const value = hexToU8a(result);
+        const directRequestStatus = this.createType('DirectRequestStatus', value);
+
+        if (directRequestStatus.isError) {
+          const errorMsg = this.createType('String', directRequestStatus.value);
+          throw new Error(`DirectRequestStatus is Error ${errorMsg}`);
+        }
+        if (directRequestStatus.isOk) {
+          // const hash = this.createType('Hash', directRequestStatus.value);
+          resolve({})
+        }
+
+        if (directRequestStatus.isTrustedOperationStatus) {
+          console.log(`TrustedOperationStatus: ${directRequestStatus}`)
+          const status = directRequestStatus.asTrustedOperationStatus;
+          if (connection_can_be_closed(status)) {
+            resolve({})
+          }
+        }
+      }
+
+      try {
+        const res = await this.#ws.subscribe(method,
+            method, params, onStatusChange
+        );
+        // let returnValue = this.resultToRpcReturnValue(res as string);
+        // console.debug(`Subscription RpcReturnValue ${JSON.stringify(returnValue)}`);
+        let topHash = this.createType('Hash', res);
+        console.debug(`resHash: ${topHash}`);
+      } catch (err) {
+        console.error(err);
+        reject(err);
+      }
+    })
+  }
+
+  resultToRpcReturnValue(result: string): RpcReturnValue {
+    if (result === 'Could not decode request') {
+      throw new Error(`Worker error: ${result}`);
+    }
+
+    const value = hexToU8a(result);
+    const returnValue = this.createType('RpcReturnValue', value);
+    console.debug(`RpcReturnValue ${JSON.stringify(returnValue)}`);
+
+    if (returnValue.status.isError) {
+      const errorMsg = this.createType('String', returnValue.value);
+      throw new Error(`RPC: ${errorMsg}`);
+    }
+
+    return returnValue;
+  }
+}
+
+function connection_can_be_closed(status: TrustedOperationStatus): boolean {
+  return !(status.isSubmitted || status.isFuture || status.isReady || status.isBroadCast || status.isInvalid)
+}
+
+/**
+ * Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
+ * instantiates the <type> with its default value.
+ */
+function unwrapWorkerResponse (self: Worker, data: Bytes) {
+  const dataTyped = self.createType('Option<WorkerEncoded>', data)
+  return dataTyped.unwrapOrDefault();
 }
