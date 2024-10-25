@@ -1,6 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {localDockerNetwork} from './testUtils/networks.js';
-import { Worker } from './websocketWorker.js';
+import { Worker } from './worker.js';
 import bs58 from "bs58";
 
 describe('worker', () => {

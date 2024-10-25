@@ -8,7 +8,7 @@ import {
     type TrustedGetterArgs, type TrustedGetterParams,
     type TrustedSignerOptions,
 } from './interface.js';
-import {Worker} from "./websocketWorker.js";
+import {Worker} from "./worker.js";
 import {
     createSignedGetter,
     createTrustedCall,
