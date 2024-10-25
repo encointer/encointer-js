@@ -33,13 +33,10 @@
     "@polkadot/util": "^12.6.2",
     "@polkadot/util-crypto": "^12.6.2",
     "@polkadot/wasm-crypto": "^7.3.2",
-    "@polkadot/x-fetch": "^12.6.2",
     "@polkadot/x-global": "^12.6.2",
     "@polkadot/x-ws": "^12.6.2",
     "bs58": "^4.0.1",
     "eventemitter3": "^5.0.1",
-    "mock-socket": "^9.3.1",
-    "nock": "^13.5.0",
     "promised-map": "^1.0.0",
     "tslib": "^2.6.2",
     "websocket": "^1.0.34"
