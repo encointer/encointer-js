@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import {paseoNetwork} from './testUtils/networks.js';
 import { Worker } from './websocketWorker.js';
+import bs58 from "bs58";
 
 describe('worker', () => {
   const network = paseoNetwork();
@@ -10,6 +11,10 @@ describe('worker', () => {
     await cryptoWaitReady();
 
     worker = new Worker(network.worker);
+  });
+
+  afterAll(async () => {
+    await worker.closeWs()
   });
 
   // skip it, as this requires a worker (and hence a node) to be running
@@ -34,9 +39,10 @@ describe('worker', () => {
 
     describe('getFingerprint', () => {
       it('should return value', async () => {
-        const result = await worker.getFingerprint();
-        console.log('Fingerprint', result.toString());
-        expect(result).toBeDefined();
+        const mrenclave = await worker.getFingerprint();
+
+        console.log('Fingerprint', bs58.encode(mrenclave.toU8a()));
+        expect(mrenclave).toBeDefined();
       });
     });
   });

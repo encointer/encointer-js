@@ -49,7 +49,7 @@ describe('worker', () => {
 
         describe('getNonce', () => {
             it('should return value', async () => {
-                const result = await worker.getNonce(alice, network.mrenclave);
+                const result = await worker.getNonce(alice, network.shard);
                 console.log(`Nonce: ${JSON.stringify(result)}`);
                 expect(result).toBeDefined();
             });
@@ -58,7 +58,7 @@ describe('worker', () => {
 
         describe('getAccountInfo', () => {
             it('should return value', async () => {
-                const result = await worker.getAccountInfo(alice, network.mrenclave);
+                const result = await worker.getAccountInfo(alice, network.shard);
                 console.log(`getAccountInfo: ${JSON.stringify(result)}`);
                 expect(result).toBeDefined();
             });
@@ -66,7 +66,7 @@ describe('worker', () => {
 
         describe('accountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.accountInfoGetter(charlie, network.mrenclave);
+                const getter = await worker.accountInfoGetter(charlie, network.shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log(`getAccountInfo: ${JSON.stringify(result)}`);
@@ -77,7 +77,7 @@ describe('worker', () => {
 
         describe('balance unshield should work', () => {
             it('should return value', async () => {
-                const shard = network.chosenCid;
+                const shard = network.shard;
 
                 const result = await worker.balanceUnshieldFunds(
                     alice,
