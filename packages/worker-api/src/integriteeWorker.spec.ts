@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import {localDockerNetwork} from './testUtils/networks.js';
+import {paseoNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import WS from 'websocket';
 import {type KeyringPair} from "@polkadot/keyring/types";
@@ -8,7 +8,7 @@ import {type KeyringPair} from "@polkadot/keyring/types";
 const {w3cwebsocket: WebSocket} = WS;
 
 describe('worker', () => {
-    const network = localDockerNetwork();
+    const network = paseoNetwork();
     let keyring: Keyring;
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
@@ -40,7 +40,7 @@ describe('worker', () => {
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
-    describe.skip('needs worker and node running', () => {
+    describe('needs worker and node running', () => {
         describe('getWorkerPubKey', () => {
             it('should return value', async () => {
                 const result = await worker.getShieldingKey();
@@ -59,7 +59,7 @@ describe('worker', () => {
 
         describe('getNonce', () => {
             it('should return value', async () => {
-                const result = await worker.getNonce(alice, network.mrenclave);
+                const result = await worker.getNonce(alice, network.shard);
                 console.log('Nonce', result);
                 expect(result).toBeDefined();
             });
@@ -68,7 +68,7 @@ describe('worker', () => {
 
         describe('getAccountInfo', () => {
             it('should return value', async () => {
-                const result = await worker.getAccountInfo(alice, network.mrenclave);
+                const result = await worker.getAccountInfo(alice, network.shard);
                 console.log('getAccountInfo', result);
                 expect(result).toBeDefined();
             });
@@ -76,7 +76,7 @@ describe('worker', () => {
 
         describe('accountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.accountInfoGetter(charlie, network.mrenclave);
+                const getter = await worker.accountInfoGetter(charlie, network.shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo:', result);
@@ -86,7 +86,7 @@ describe('worker', () => {
 
         describe('parentchainsInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.parentchainsInfoGetter(network.mrenclave);
+                const getter = worker.parentchainsInfoGetter(network.shard);
                 console.log(`parentchainsInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('parentchainsInfoGetter:', result);
@@ -96,7 +96,7 @@ describe('worker', () => {
 
         describe('guessTheNumberInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.guessTheNumberInfoGetter(network.mrenclave);
+                const getter = worker.guessTheNumberInfoGetter(network.shard);
                 console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('GuessTheNumberInfo:', result);
@@ -106,7 +106,7 @@ describe('worker', () => {
 
         describe('guessTheNumberAttemptsGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.mrenclave);
+                const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.shard);
                 console.log(`Attempts: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('Attempts:', result);
@@ -116,7 +116,7 @@ describe('worker', () => {
 
         describe('balance transfer should work', () => {
             it('should return value', async () => {
-                const shard = network.chosenCid;
+                const shard = network.shard;
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
@@ -132,7 +132,7 @@ describe('worker', () => {
 
         describe('balance unshield should work', () => {
             it('should return value', async () => {
-                const shard = network.chosenCid;
+                const shard = network.shard;
 
                 const result = await worker.balanceUnshieldFunds(
                     alice,
@@ -149,7 +149,7 @@ describe('worker', () => {
 
         describe('guess the number should work', () => {
             it('should return value', async () => {
-                const shard = network.chosenCid;
+                const shard = network.shard;
 
                 const result = await worker.guessTheNumber(
                     alice,
