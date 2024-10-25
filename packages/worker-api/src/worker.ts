@@ -159,7 +159,7 @@ export class Worker implements IWorkerBase {
         'Request', { shard, cyphertext: cyphertext }
     );
 
-    const returnValue = await this.subscribe('author_submitAndWatchExtrinsic', [r.toHex()])
+    const returnValue = await this.submitAndWatch([r.toHex()])
 
     console.debug(`[sendTrustedCall] result: ${JSON.stringify(returnValue)}`);
 
@@ -176,7 +176,7 @@ export class Worker implements IWorkerBase {
     return this.resultToRpcReturnValue(result);
   }
 
-  public async subscribe(method: string, params: unknown[]): Promise<TrustedCallResult> {
+  public async submitAndWatch(params: unknown[]): Promise<TrustedCallResult> {
     await this.isReady();
 
     let topHash: Hash;
@@ -207,8 +207,8 @@ export class Worker implements IWorkerBase {
       }
 
       try {
-        const res = await this.#ws.subscribe(method,
-            method, params, onStatusChange
+        const res = await this.#ws.subscribe('author_submitAndWatchExtrinsic',
+            'author_submitAndWatchExtrinsic', params, onStatusChange
         );
         topHash = this.createType('Hash', res);
         console.debug(`topHash: ${topHash}`);
