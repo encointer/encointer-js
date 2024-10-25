@@ -36,6 +36,9 @@ describe('worker', () => {
         });
     });
 
+    afterAll(async () => {
+        await worker.closeWs()
+    });
 
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?

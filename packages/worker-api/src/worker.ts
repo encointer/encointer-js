@@ -132,6 +132,10 @@ export class Worker extends WebSocketAsPromised implements IWorker {
     return this.createType('Vec<u8>', compactAddLength(beArray))
   }
 
+  public async closeWs(): Promise<void> {
+    await this.close()
+  }
+
   public registry(): TypeRegistry {
     return this.#registry
   }
