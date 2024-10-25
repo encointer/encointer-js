@@ -805,7 +805,6 @@ __metadata:
     "@polkadot/api": "npm:^11.2.1"
     "@polkadot/keyring": "npm:^12.6.2"
     "@polkadot/types": "npm:^11.2.1"
-    "@polkadot/types-support": "npm:11.2.1"
     "@polkadot/util": "npm:^12.6.2"
     "@polkadot/util-crypto": "npm:^12.6.2"
     "@polkadot/wasm-crypto": "npm:^7.3.2"
