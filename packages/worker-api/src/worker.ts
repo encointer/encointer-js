@@ -10,7 +10,7 @@ import type {
   EnclaveFingerprint,
   RpcReturnValue, ShardIdentifier,
   TrustedOperationStatus,
-  Vault
+  Vault, Request
 } from '@encointer/types';
 
 import {
@@ -159,7 +159,7 @@ export class Worker implements IWorkerBase {
         'Request', { shard, cyphertext: cyphertext }
     );
 
-    const returnValue = await this.submitAndWatch([r.toHex()])
+    const returnValue = await this.submitAndWatch(r)
 
     console.debug(`[sendTrustedCall] result: ${JSON.stringify(returnValue)}`);
 
@@ -176,7 +176,7 @@ export class Worker implements IWorkerBase {
     return this.resultToRpcReturnValue(result);
   }
 
-  public async submitAndWatch(params: unknown[]): Promise<TrustedCallResult> {
+  public async submitAndWatch(request: Request): Promise<TrustedCallResult> {
     await this.isReady();
 
     let topHash: Hash;
@@ -208,7 +208,7 @@ export class Worker implements IWorkerBase {
 
       try {
         const res = await this.#ws.subscribe('author_submitAndWatchExtrinsic',
-            'author_submitAndWatchExtrinsic', params, onStatusChange
+            'author_submitAndWatchExtrinsic', [request.toHex()], onStatusChange
         );
         topHash = this.createType('Hash', res);
         console.debug(`topHash: ${topHash}`);
