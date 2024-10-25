@@ -183,33 +183,25 @@ export class Worker implements IWorkerBase {
 
     return new Promise( async (resolve, reject) => {
       const onStatusChange = (error: Error | null, result: string) => {
-        if (error !== null) {
-          throw new Error(`Callback Error: ${error.message}`);
+        if (error) {
+          reject(new Error(`Callback Error: ${error.message}`));
+          return;
         }
 
-        console.debug(`DirectRequestStatus: ${JSON.stringify(result)}`)
+        console.debug(`DirectRequestStatus: ${JSON.stringify(result)}`);
         const directRequestStatus = this.createType('DirectRequestStatus', result);
 
         if (directRequestStatus.isError) {
           const errorMsg = this.createType('String', directRequestStatus.value);
-          throw new Error(`DirectRequestStatus is Error ${errorMsg}`);
-        }
-
-        if (directRequestStatus.isOk) {
-          resolve({
-            topHash: topHash,
-            status: undefined
-          })
-        }
-
-        if (directRequestStatus.isTrustedOperationStatus) {
-          console.log(`TrustedOperationStatus: ${directRequestStatus}`)
+          reject(new Error(`DirectRequestStatus is Error: ${errorMsg}`));
+        } else if (directRequestStatus.isOk) {
+          resolve({topHash, status: undefined});
+        } else if (directRequestStatus.isTrustedOperationStatus) {
+          console.log(`TrustedOperationStatus: ${directRequestStatus}`);
           const status = directRequestStatus.asTrustedOperationStatus;
+
           if (connection_can_be_closed(status)) {
-            resolve({
-              topHash: topHash,
-              status: status
-            })
+            resolve({topHash, status});
           }
         }
       }
