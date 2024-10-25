@@ -38,11 +38,11 @@
     "bs58": "^4.0.1",
     "eventemitter3": "^5.0.1",
     "promised-map": "^1.0.0",
-    "tslib": "^2.6.2",
-    "websocket": "^1.0.34"
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@types/bs58": "^4.0.4"
+    "@types/bs58": "^4.0.4",
+    "websocket": "^1.0.34"
   },
   "peerDependencies": {
     "@polkadot/x-randomvalues": "^12.3.2"
