@@ -155,41 +155,38 @@ export class Worker {
 
         return new Promise( async (resolve, reject) => {
             const onStatusChange = (error: Error | null, result: string) => {
-                resolve({hash: "mz hash"})
                 console.log(`DirectRequestStatus: error ${JSON.stringify(error)}`)
                 console.log(`DirectRequestStatus: ${JSON.stringify(result)}`)
 
                 const value = hexToU8a(result);
-                const returnValue = this.createType('RpcReturnValue', value);
+                const directRequestStatus = this.createType('DirectRequestStatus', value);
 
-                if (returnValue.isError) {
-                    const errorMsg = this.createType('String', returnValue.value);
+                if (directRequestStatus.isError) {
+                    const errorMsg = this.createType('String', directRequestStatus.value);
                     throw new Error(`DirectRequestStatus is Error ${errorMsg}`);
                 }
-                if (returnValue.isOk) {
-                    const hash = this.createType('Hash', returnValue.value);
-                    resolve({hash: hash})
+                if (directRequestStatus.isOk) {
+                    // const hash = this.createType('Hash', directRequestStatus.value);
+                    resolve({})
                 }
 
-                if (returnValue.isTrustedOperationStatus) {
-                    const status = returnValue.asTrustedOperationStatus;
-                    const hash = this.createType('Hash', returnValue.value);
+                if (directRequestStatus.isTrustedOperationStatus) {
+                    console.log(`TrustedOperationStatus: ${directRequestStatus}`)
+                    const status = directRequestStatus.asTrustedOperationStatus;
                     if (connection_can_be_closed(status)) {
-                        resolve({hash: hash})
+                        resolve({})
                     }
                 }
-
-                throw( new Error(`Hello: ${JSON.stringify(returnValue)}`));
             }
 
             try {
-                const res = await this.#ws.subscribe('Hash',
+                const res = await this.#ws.subscribe(method,
                     method, params, onStatusChange
                 );
-                let returnValue = this.resultToRpcReturnValue(res as string);
-                console.debug(`Subscription RpcReturnValue ${JSON.stringify(returnValue)}`);
-                let topHash = this.createType('Hash', returnValue.value)
-                console.debug(`topHash: ${topHash}`);
+                // let returnValue = this.resultToRpcReturnValue(res as string);
+                // console.debug(`Subscription RpcReturnValue ${JSON.stringify(returnValue)}`);
+                let topHash = this.createType('Hash', res);
+                console.debug(`resHash: ${topHash}`);
             } catch (err) {
                 console.error(err);
                 reject(err);
