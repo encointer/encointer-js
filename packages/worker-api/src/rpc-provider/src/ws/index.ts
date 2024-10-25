@@ -1,19 +1,23 @@
 // Copyright 2017-2024 @polkadot/rpc-provider authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Class } from '@polkadot/util/types';
+// import type { Class } from '@polkadot/util/types';
 import type { EndpointStats, JsonRpcResponse, ProviderInterface, ProviderInterfaceCallback, ProviderInterfaceEmitCb, ProviderInterfaceEmitted, ProviderStats } from '../types.js';
 
 import { EventEmitter } from 'eventemitter3';
 
-import { isChildClass, isNull, isUndefined, logger, noop, objectSpread, stringify } from '@polkadot/util';
-import { xglobal } from '@polkadot/x-global';
-import { WebSocket } from '@polkadot/x-ws';
+import { isNull, isUndefined, logger, noop, objectSpread, stringify } from '@polkadot/util';
+// import { xglobal } from '@polkadot/x-global';
+// import { WebSocket } from '@polkadot/x-ws';
 
 import { RpcCoder } from '../coder/index.js';
 import defaults from '../defaults.js';
 import { DEFAULT_CAPACITY, LRUCache } from '../lru.js';
 import { getWSErrorString } from './errors.js';
+
+import WS from 'websocket';
+
+const {w3cwebsocket: WebSocket} = WS;
 
 interface SubscriptionHandler {
   callback: ProviderInterfaceCallback;
@@ -86,6 +90,7 @@ export class WsProvider implements ProviderInterface {
   readonly #callCache: LRUCache;
   readonly #coder: RpcCoder;
   readonly #endpoints: string[];
+  // @ts-ignore -
   readonly #headers: Record<string, string>;
   readonly #eventemitter: EventEmitter;
   readonly #handlers: Record<string, WsStateAwaiting> = {};
@@ -206,14 +211,24 @@ export class WsProvider implements ProviderInterface {
     try {
       this.#endpointIndex = this.selectEndpointIndex(this.#endpoints);
 
-      // the as here is Deno-specific - not available on the globalThis
-      this.#websocket = typeof xglobal.WebSocket !== 'undefined' && isChildClass(xglobal.WebSocket as unknown as Class<WebSocket>, WebSocket)
-        ? new WebSocket(this.endpoint)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - WS may be an instance of ws, which supports options
-        : new WebSocket(this.endpoint, undefined, {
-          headers: this.#headers
-        });
+      // // the as here is Deno-specific - not available on the globalThis
+      // this.#websocket = typeof xglobal.WebSocket !== 'undefined' && isChildClass(xglobal.WebSocket as unknown as Class<WebSocket>, WebSocket)
+      //   ? new WebSocket(this.endpoint)
+      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //   // @ts-ignore - WS may be an instance of ws, which supports options
+      //   : new WebSocket(this.endpoint, undefined, {
+      //     headers: this.#headers
+      //   });
+
+      // @ts-ignore
+      this.#websocket = new WebSocket(
+          this.endpoint,
+          undefined,
+          undefined,
+          undefined,
+          // Allow the worker's self-signed certificate
+          { rejectUnauthorized: false }
+      );
 
       if (this.#websocket) {
         this.#websocket.onclose = this.#onSocketClose;
