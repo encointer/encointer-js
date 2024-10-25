@@ -7,8 +7,9 @@ import type {
   GuessTheNumberPublicGetter,
   GuessTheNumberTrustedGetter,
   IntegriteeGetter,
-  ShardIdentifier
+  ShardIdentifier, TrustedOperationStatus
 } from "@encointer/types";
+import type {Hash} from "@polkadot/types/interfaces/runtime";
 
 export interface IWorkerBase {
   createType: (apiType: string, obj?: any) => any;
@@ -24,6 +25,11 @@ export interface GenericGetter {
 export interface GenericTop {
   toU8a(): Uint8Array,
   toHex(): string
+}
+
+export interface TrustedCallResult {
+  topHash?: Hash,
+  status?: TrustedOperationStatus,
 }
 
 export interface ISubmittableGetter<W extends IWorkerBase, Type> {

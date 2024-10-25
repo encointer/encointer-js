@@ -13,7 +13,13 @@ import type {
   Vault
 } from '@encointer/types';
 
-import {type GenericGetter, type GenericTop, type IWorkerBase, type WorkerOptions} from './interface.js';
+import {
+  type GenericGetter,
+  type GenericTop,
+  type IWorkerBase,
+  type TrustedCallResult,
+  type WorkerOptions
+} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {Bytes, u8} from "@polkadot/types-codec";
 import BN from "bn.js";
@@ -144,10 +150,9 @@ export class Worker implements IWorkerBase {
     return this.createType(returnType, value);
   }
 
-  async submitAndWatchTop<Top extends GenericTop>(top: Top, shard: ShardIdentifier): Promise<Hash> {
+  async submitAndWatchTop<Top extends GenericTop>(top: Top, shard: ShardIdentifier): Promise<TrustedCallResult> {
 
     console.debug(`Sending TrustedOperation: ${JSON.stringify(top)}`);
-
     const cyphertext = await this.encrypt(top.toU8a());
 
     const r = this.createType(
@@ -156,11 +161,9 @@ export class Worker implements IWorkerBase {
 
     const returnValue = await this.subscribe('author_submitAndWatchExtrinsic', [r.toHex()])
 
-    // const returnValue = await this.send('author_submitExtrinsic', [r.toHex()])
-
     console.debug(`[sendTrustedCall] result: ${JSON.stringify(returnValue)}`);
 
-    return this.createType('Hash', returnValue.value);
+    return returnValue;
   }
 
 
@@ -173,8 +176,10 @@ export class Worker implements IWorkerBase {
     return this.resultToRpcReturnValue(result);
   }
 
-  public async subscribe(method: string, params: unknown[]): Promise<any> {
+  public async subscribe(method: string, params: unknown[]): Promise<TrustedCallResult> {
     await this.isReady();
+
+    let topHash: Hash;
 
     return new Promise( async (resolve, reject) => {
       const onStatusChange = (error: Error | null, result: string) => {
@@ -189,16 +194,22 @@ export class Worker implements IWorkerBase {
           const errorMsg = this.createType('String', directRequestStatus.value);
           throw new Error(`DirectRequestStatus is Error ${errorMsg}`);
         }
+
         if (directRequestStatus.isOk) {
-          // const hash = this.createType('Hash', directRequestStatus.value);
-          resolve({})
+          resolve({
+            topHash: topHash,
+            status: undefined
+          })
         }
 
         if (directRequestStatus.isTrustedOperationStatus) {
           console.log(`TrustedOperationStatus: ${directRequestStatus}`)
           const status = directRequestStatus.asTrustedOperationStatus;
           if (connection_can_be_closed(status)) {
-            resolve(status)
+            resolve({
+              topHash: topHash,
+              status: status
+            })
           }
         }
       }
@@ -207,8 +218,8 @@ export class Worker implements IWorkerBase {
         const res = await this.#ws.subscribe(method,
             method, params, onStatusChange
         );
-        let topHash = this.createType('Hash', res);
-        console.debug(`resHash: ${topHash}`);
+        topHash = this.createType('Hash', res);
+        console.debug(`topHash: ${topHash}`);
       } catch (err) {
         console.error(err);
         reject(err);

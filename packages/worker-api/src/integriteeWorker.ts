@@ -1,4 +1,3 @@
-import type {Hash} from '@polkadot/types/interfaces/runtime';
 import type {
     ShardIdentifier,
     IntegriteeTrustedCallSigned,
@@ -11,7 +10,7 @@ import {
     type TrustedGetterArgs,
     type TrustedSignerOptions,
     type PublicGetterArgs,
-    type PublicGetterParams, type TrustedGetterParams,
+    type PublicGetterParams, type TrustedGetterParams, type TrustedCallResult,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {
@@ -81,7 +80,7 @@ export class IntegriteeWorker extends Worker {
         to: String,
         amount: number,
         signerOptions?: TrustedSignerOptions,
-    ): Promise<Hash> {
+    ): Promise<TrustedCallResult> {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceTransferArgs', [from, to, amount])
@@ -98,7 +97,7 @@ export class IntegriteeWorker extends Worker {
         toPublicAddress: string,
         amount: number,
         signerOptions?: TrustedSignerOptions,
-    ): Promise<Hash> {
+    ): Promise<TrustedCallResult> {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
 
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
@@ -114,7 +113,7 @@ export class IntegriteeWorker extends Worker {
         mrenclave: string,
         guess: number,
         signerOptions?: TrustedSignerOptions,
-    ): Promise<Hash> {
+    ): Promise<TrustedCallResult> {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
 
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
@@ -127,7 +126,7 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT);
     }
 
-    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier): Promise<Hash> {
+    async sendTrustedCall(call: IntegriteeTrustedCallSigned, shard: ShardIdentifier): Promise<TrustedCallResult> {
         if (this.shieldingKey() == undefined) {
             console.debug(`[sentTrustedCall] Setting the shielding pubKey of the worker.`)
             await this.getShieldingKey();
