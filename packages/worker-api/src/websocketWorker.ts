@@ -18,7 +18,6 @@ import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
 import type {u8} from "@polkadot/types-codec";
 import BN from "bn.js";
 import {WsProvider} from "@polkadot/api";
-import type {Hash} from "@polkadot/types/interfaces/runtime";
 import {Keyring} from "@polkadot/keyring";
 
 export class Worker {
@@ -136,23 +135,10 @@ export class Worker {
             method, params
         );
 
-        if (result === 'Could not decode request') {
-            throw new Error(`Worker error: ${result}`);
-        }
-
-        const value = hexToU8a(result);
-        const returnValue = this.createType('RpcReturnValue', value);
-        console.debug(`RpcReturnValue ${JSON.stringify(returnValue)}`);
-
-        if (returnValue.status.isError) {
-            const errorMsg = this.createType('String', returnValue.value);
-            throw new Error(`RPC Error: ${errorMsg}`);
-        }
-
-        return returnValue;
+        return this.resultToRpcReturnValue(result);
     }
 
-    public async subscribe(method: string, params: unknown[]): Promise<Hash> {
+    public async subscribe(method: string, params: unknown[]): Promise<any> {
         await this.isReady();
 
         return new Promise((async resolve => {
@@ -170,27 +156,50 @@ export class Worker {
                 }
                 if (returnValue.isOk) {
                     const hash = this.createType('Hash', returnValue.value);
-                    resolve(hash)
+                    resolve({hash: hash})
                 }
 
                 if (returnValue.isTrustedOperationStatus) {
                     const status = returnValue.asTrustedOperationStatus;
                     const hash = this.createType('Hash', returnValue.value);
                     if (connection_can_be_closed(status)) {
-                        resolve(hash)
+                        resolve({hash: hash})
                     }
                 }
+
+                throw( new Error(`Hello: ${JSON.stringify(returnValue)}`));
             }
 
             try {
                 const res = await this.#ws.subscribe('type',
                     method, params, onStatusChange
                 );
+                let returnValue = this.resultToRpcReturnValue(res as string);
                 console.debug(`{result: ${res}`);
+                let topHash = this.createType('Hash', returnValue.value)
+
+                resolve({hash: topHash})
             } catch (err) {
                 console.error(`{error: ${err}}`);
             }
         }))
+    }
+
+    resultToRpcReturnValue(result: string): RpcReturnValue {
+        if (result === 'Could not decode request') {
+            throw new Error(`Worker error: ${result}`);
+        }
+
+        const value = hexToU8a(result);
+        const returnValue = this.createType('RpcReturnValue', value);
+        console.debug(`RpcReturnValue ${JSON.stringify(returnValue)}`);
+
+        if (returnValue.status.isError) {
+            const errorMsg = this.createType('String', returnValue.value);
+            throw new Error(`RPC Error: ${errorMsg}`);
+        }
+
+        return returnValue;
     }
 }
 

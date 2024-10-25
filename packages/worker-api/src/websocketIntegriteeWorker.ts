@@ -68,6 +68,6 @@ export class IntegriteeWorker extends Worker {
 
         console.debug(`[sendTrustedCall] sent result: ${JSON.stringify(r)}`);
 
-        return hash;
+        return hash.hash;
     }
 }
