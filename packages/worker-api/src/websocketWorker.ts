@@ -8,14 +8,14 @@ import {options as encointerOptions} from '@encointer/node-api';
 
 import type {
     EnclaveFingerprint,
-    RpcReturnValue,
+    RpcReturnValue, ShardIdentifier,
     TrustedOperationStatus,
     Vault
 } from '@encointer/types';
 
-import {type WorkerOptions} from './interface.js';
+import {type GenericGetter, type WorkerOptions} from './interface.js';
 import {encryptWithPublicKey, parseWebCryptoRSA} from "./webCryptoRSA.js";
-import type {u8} from "@polkadot/types-codec";
+import type {Bytes, u8} from "@polkadot/types-codec";
 import BN from "bn.js";
 import {WsProvider} from "@polkadot/api";
 import {Keyring} from "@polkadot/keyring";
@@ -128,6 +128,18 @@ export class Worker {
         return this.createType('EnclaveFingerprint', res.value);
     }
 
+    public async sendGetter<Getter extends GenericGetter, R>(getter: Getter, shard: ShardIdentifier, returnType: string): Promise<R> {
+        const r = this.createType(
+            'Request', {
+                shard: shard,
+                cyphertext: getter.toHex()
+            }
+        );
+        const response = await this.send('state_executeGetter', [r.toHex()])
+        const value = unwrapWorkerResponse(this, response.value)
+        return this.createType(returnType, value);
+    }
+
 
     public async send(method: string, params: unknown[]): Promise<RpcReturnValue> {
         await this.isReady();
@@ -206,4 +218,13 @@ export class Worker {
 
 function connection_can_be_closed(status: TrustedOperationStatus): boolean {
     return !(status.isSubmitted || status.isFuture || status.isReady || status.isBroadCast || status.isInvalid)
+}
+
+/**
+ * Defaults to return `[]`, which is fine as `createType(api.registry, <type>, [])`
+ * instantiates the <type> with its default value.
+ */
+function unwrapWorkerResponse (self: Worker, data: Bytes) {
+    const dataTyped = self.createType('Option<WorkerEncoded>', data)
+    return dataTyped.unwrapOrDefault();
 }

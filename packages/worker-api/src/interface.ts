@@ -4,7 +4,6 @@ import type {u8} from "@polkadot/types-codec";
 import type {TypeRegistry, u32, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
-import {Worker} from "./worker.js";
 import type {
   GuessTheNumberPublicGetter,
   GuessTheNumberTrustedGetter,
@@ -22,13 +21,18 @@ export interface IWorker extends WebSocketAsPromised {
   registry: () => TypeRegistry
 }
 
+export interface GenericGetter {
+
+  toHex(): string
+}
+
 export interface IWorkerBase {
   createType: (apiType: string, obj?: any) => any;
   encrypt: (data: Uint8Array) => Promise<Vec<u8>>
   registry: () => TypeRegistry
 }
 
-export interface ISubmittableGetter<W extends Worker, Type> {
+export interface ISubmittableGetter<W extends IWorkerBase, Type> {
 
   worker: W;
 

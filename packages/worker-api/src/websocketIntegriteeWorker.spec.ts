@@ -47,6 +47,34 @@ describe('worker', () => {
             });
         });
 
+        describe('getNonce', () => {
+            it('should return value', async () => {
+                const result = await worker.getNonce(alice, network.mrenclave);
+                console.log(`Nonce: ${JSON.stringify(result)}`);
+                expect(result).toBeDefined();
+            });
+        });
+
+
+        describe('getAccountInfo', () => {
+            it('should return value', async () => {
+                const result = await worker.getAccountInfo(alice, network.mrenclave);
+                console.log(`getAccountInfo: ${JSON.stringify(result)}`);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('accountInfoGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.accountInfoGetter(charlie, network.mrenclave);
+                console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log(`getAccountInfo: ${JSON.stringify(result)}`);
+                expect(result).toBeDefined();
+            });
+        });
+
+
         describe('balance unshield should work', () => {
             it('should return value', async () => {
                 const shard = network.chosenCid;
