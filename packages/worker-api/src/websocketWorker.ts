@@ -153,9 +153,8 @@ export class Worker {
     public async subscribe(method: string, params: unknown[]): Promise<any> {
         await this.isReady();
 
-        return new Promise((async resolve => {
-            // @ts-ignore
-            const onStatusChange = (error, result: string) => {
+        return new Promise( async (resolve, reject) => {
+            const onStatusChange = (error: Error | null, result: string) => {
                 resolve({hash: "mz hash"})
                 console.log(`DirectRequestStatus: error ${JSON.stringify(error)}`)
                 console.log(`DirectRequestStatus: ${JSON.stringify(result)}`)
@@ -193,9 +192,9 @@ export class Worker {
                 console.debug(`topHash: ${topHash}`);
             } catch (err) {
                 console.error(err);
-                throw(err)
+                reject(err);
             }
-        }))
+        })
     }
 
     resultToRpcReturnValue(result: string): RpcReturnValue {
