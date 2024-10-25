@@ -48,6 +48,10 @@ export class Worker {
         return this.#ws.isReady
     }
 
+    public async closeWs(): Promise<void> {
+        return this.#ws.disconnect()
+    }
+
     public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
         const dataBE = new BN(data);
         const dataArrayBE = new Uint8Array(dataBE.toArray());
