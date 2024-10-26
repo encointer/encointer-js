@@ -19,12 +19,12 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.15.2",
+  "version": "0.16.0-alpha.0",
   "main": "index.js",
   "dependencies": {
-    "@encointer/node-api": "^0.15.2",
-    "@encointer/types": "^0.15.2",
-    "@encointer/util": "^0.15.2",
+    "@encointer/node-api": "^0.16.0-alpha.0",
+    "@encointer/types": "^0.16.0-alpha.0",
+    "@encointer/util": "^0.16.0-alpha.0",
     "@peculiar/webcrypto": "^1.4.6",
     "@polkadot/api": "^11.2.1",
     "@polkadot/keyring": "^12.6.2",
@@ -32,13 +32,15 @@
     "@polkadot/util": "^12.6.2",
     "@polkadot/util-crypto": "^12.6.2",
     "@polkadot/wasm-crypto": "^7.3.2",
+    "@polkadot/x-global": "^12.6.2",
+    "@polkadot/x-ws": "^12.6.2",
     "bs58": "^4.0.1",
-    "promised-map": "^1.0.0",
-    "websocket": "^1.0.34",
-    "websocket-as-promised": "^2.0.1"
+    "eventemitter3": "^5.0.1",
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@types/bs58": "^4.0.4"
+    "@types/bs58": "^4.0.4",
+    "websocket": "^1.0.34"
   },
   "peerDependencies": {
     "@polkadot/x-randomvalues": "^12.3.2"

@@ -39,8 +39,9 @@ export const localDockerNetwork = () => {
     chain: 'ws://127.0.0.1:9944',
     worker: 'wss://127.0.0.1:2000',
     genesisHash: '0x388c446a804e24e77ae89f5bb099edb60cacc2ac7c898ce175bdaa08629c1439',
-    mrenclave: 'GopQCtWihHQ8Xw1sZP6DTWMDQuaijSBE2NM8GU2U4Erc',
-    chosenCid: 'GopQCtWihHQ8Xw1sZP6DTWMDQuaijSBE2NM8GU2U4Erc',
+    mrenclave: 'BrFk2gARyQxD56NLpDKVbZinDmD1Twt1GwMsEyQuWshx',
+    shard: 'BrFk2gARyQxD56NLpDKVbZinDmD1Twt1GwMsEyQuWshx',
+    chosenCid: 'BrFk2gARyQxD56NLpDKVbZinDmD1Twt1GwMsEyQuWshx',
     customTypes: {},
     palletOverrides: {}
   };
@@ -52,8 +53,8 @@ export const paseoNetwork = () => {
     // reverse proxy to the worker
     worker: 'wss://scv1.paseo.api.incognitee.io:443',
     genesisHash: '',
-    mrenclave: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
-    // abused as shard vault
+    mrenclave: '5BUCG8UXdgjWDDFQUd5kuRwnubDnMFhYEdbgxDZTnrBx',
+    shard: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
     chosenCid: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
     customTypes: {},
     palletOverrides: {}

@@ -1,6 +1,5 @@
 import {
-    createJsonRpcRequest,
-    type IWorker, type PublicGetterParams, type TrustedGetterParams,
+    type IWorkerBase, type PublicGetterParams, type TrustedGetterParams,
     type TrustedSignerOptions
 } from "./interface.js";
 import type {
@@ -17,7 +16,7 @@ import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
-export const createIntegriteeGetterPublic = (self: IWorker, request: string, publicGetterParams: PublicGetterParams) => {
+export const createIntegriteeGetterPublic = (self: IWorkerBase, request: string, publicGetterParams: PublicGetterParams) => {
     const g = self.createType('IntegriteeGetter', {
         public: {
             [request]: publicGetterParams ,
@@ -26,18 +25,18 @@ export const createIntegriteeGetterPublic = (self: IWorker, request: string, pub
     return g;
 }
 
-export const createSignedGetter = async (self: IWorker, request: string, account: AddressOrPair, trustedGetterParams: TrustedGetterParams, options: TrustedSignerOptions) => {
+export const createSignedGetter = async (self: IWorkerBase, request: string, account: AddressOrPair, trustedGetterParams: TrustedGetterParams, options: TrustedSignerOptions) => {
     const trustedGetter = createTrustedGetter(self, request, trustedGetterParams);
     return await signTrustedGetter(self, account, trustedGetter, options);
 }
 
-export const createTrustedGetter = (self: IWorker, request: string, params: TrustedGetterParams) => {
+export const createTrustedGetter = (self: IWorkerBase, request: string, params: TrustedGetterParams) => {
     return self.createType('IntegriteeTrustedGetter', {
         [request]: params
     });
 }
 
-export async function signTrustedGetter(self: IWorker, account: AddressOrPair, getter: IntegriteeTrustedGetter, options?: TrustedSignerOptions): Promise<IntegriteeGetter> {
+export async function signTrustedGetter(self: IWorkerBase, account: AddressOrPair, getter: IntegriteeTrustedGetter, options?: TrustedSignerOptions): Promise<IntegriteeGetter> {
     const signature = await signPayload(account, getter.toU8a(), options?.signer);
     const g = self.createType('IntegriteeGetter', {
         trusted: {
@@ -50,24 +49,12 @@ export async function signTrustedGetter(self: IWorker, account: AddressOrPair, g
     return g;
 }
 
-export const createGetterRpc = (self: IWorker, getter: IntegriteeGetter, shard: ShardIdentifier) => {
-    const r = self.createType(
-        'Request', {
-            shard: shard,
-            cyphertext: getter.toHex()
-        }
-    );
-
-    return createJsonRpcRequest('state_executeGetter', [r.toHex()], 1);
-}
-
-
 export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs | GuessTheNumberTrustedCall);
 
 export type TrustedCallVariant = [string, string]
 
 export const createTrustedCall = (
-    self: IWorker,
+    self: IWorkerBase,
     trustedCall: TrustedCallVariant,
     params: TrustedCallArgs
 ): IntegriteeTrustedCall => {
@@ -79,7 +66,7 @@ export const createTrustedCall = (
 }
 
 export const signTrustedCall = async (
-    self: IWorker,
+    self: IWorkerBase,
     call: IntegriteeTrustedCall,
     account: AddressOrPair,
     shard: ShardIdentifier,
