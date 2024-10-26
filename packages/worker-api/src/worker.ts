@@ -197,7 +197,7 @@ export class Worker implements IWorkerBase {
         } else if (directRequestStatus.isOk) {
           resolve({topHash, status: undefined});
         } else if (directRequestStatus.isTrustedOperationStatus) {
-          console.log(`TrustedOperationStatus: ${directRequestStatus}`);
+          console.debug(`TrustedOperationStatus: ${directRequestStatus}`);
           const status = directRequestStatus.asTrustedOperationStatus;
 
           if (status.isInvalid || status.isUsurped || status.isDropped) {
