@@ -358,8 +358,6 @@ export class WsProvider implements ProviderInterface {
         };
 
         l.debug(() => ['calling', method, body]);
-        console.log(`['calling', ${method}, ${body}]`);
-        console.log(`setting handler for id=${id}`);
 
         this.#handlers[id] = {
           callback,
@@ -501,8 +499,6 @@ export class WsProvider implements ProviderInterface {
 
     const response = JSON.parse(message.data) as JsonRpcResponse<string>;
 
-    console.log(`Json Response: ${JSON.stringify(response)}`);
-
     return isUndefined(response.method)
       ? this.#onSocketMessageResult(response)
       : this.#onSocketMessageSubscribe(response);
@@ -511,13 +507,8 @@ export class WsProvider implements ProviderInterface {
   #onSocketMessageResult = (response: JsonRpcResponse<string>): void => {
     const handler = this.#handlers[response.id];
 
-    console.log(`Json Result: ${JSON.stringify(response)}`);
-    console.log(`handler: ${JSON.stringify(this.#handlers)}`);
-
-
     if (!handler) {
       l.debug(() => `Unable to find handler for id=${response.id}`);
-      console.log(`Unable to find handler for id=${response.id}`);
 
       return;
     }
@@ -532,15 +523,11 @@ export class WsProvider implements ProviderInterface {
 
       if (subscription) {
         const subId = `${subscription.type}::${result}`;
-        console.log(`subId: ${subId}`);
-        console.log(`it is as subscription: ${JSON.stringify(subscription)}}`);
 
         this.#subscriptions[subId] = objectSpread({}, subscription, {
           method,
           params
         });
-
-        console.log(`subscriptions: ${JSON.stringify(this.#subscriptions)}`);
 
         // if we have a result waiting for this subscription already
         if (this.#waitingForId[subId]) {
@@ -571,7 +558,6 @@ export class WsProvider implements ProviderInterface {
       this.#waitingForId[subId] = response;
 
       l.debug(() => `Unable to find handler for subscription=${subId}`);
-      console.log(`Unable to find handler for subscription=${subId}`);
 
       return;
     }
@@ -580,16 +566,10 @@ export class WsProvider implements ProviderInterface {
     delete this.#waitingForId[subId];
 
     try {
-      console.log(`Decoding Response=${subId}`);
-
       const result = this.#coder.decodeResponse(response);
-
-      console.log(`Decoded Response=${subId}`);
 
       handler.callback(null, result);
     } catch (error) {
-      console.log(`Failed to decode response=${(error as Error).message}`);
-
       this.#endpointStats.errors++;
       this.#stats.total.errors++;
 
