@@ -200,6 +200,11 @@ export class Worker implements IWorkerBase {
           console.log(`TrustedOperationStatus: ${directRequestStatus}`);
           const status = directRequestStatus.asTrustedOperationStatus;
 
+          if (status.isInvalid || status.isUsurped || status.isDropped) {
+            console.debug(`Trusted operation failed to execute: ${status.toHuman()}`);
+            resolve({topHash, status});
+          }
+
           if (connection_can_be_closed(status)) {
             resolve({topHash, status});
           }
