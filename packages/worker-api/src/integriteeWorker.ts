@@ -3,7 +3,7 @@ import type {
     IntegriteeTrustedCallSigned,
     IntegriteeGetter,
     GuessTheNumberInfo,
-    GuessTheNumberTrustedCall, GuessTheNumberPublicGetter, GuessTheNumberTrustedGetter, AttemptsArg,
+    GuessTheNumberTrustedCall, GuessTheNumberPublicGetter, GuessTheNumberTrustedGetter, AttemptsArg, ParentchainsInfo,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -46,11 +46,11 @@ export class IntegriteeWorker extends Worker {
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
     }
 
-    public parentchainsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
+    public parentchainsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, ParentchainsInfo> {
         const publicGetterArgs = {
             shard: shard,
         }
-        return submittablePublicGetter<IntegriteeWorker, GuessTheNumberInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
+        return submittablePublicGetter<IntegriteeWorker, ParentchainsInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
     }
 
     public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
