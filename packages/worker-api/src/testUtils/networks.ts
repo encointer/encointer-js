@@ -53,9 +53,23 @@ export const paseoNetwork = () => {
     // reverse proxy to the worker
     worker: 'wss://scv1.paseo.api.incognitee.io:443',
     genesisHash: '',
-    mrenclave: '5BUCG8UXdgjWDDFQUd5kuRwnubDnMFhYEdbgxDZTnrBx',
-    shard: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
-    chosenCid: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
+    mrenclave: '2ooKBw46r9nx2o9s1Dt9FQvNa5D3mpSY6PRziBoADofx',
+    shard: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7d',
+    chosenCid: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7d',
+    customTypes: {},
+    palletOverrides: {}
+  };
+};
+
+export const kusamaNetwork = () => {
+  return {
+    chain: 'wss://kusama.api.integritee.network:433',
+    // reverse proxy to the worker
+    worker: 'wss://scv1.integritee-kusama.api.incognitee.io:443',
+    genesisHash: '',
+    mrenclave: '2ooKBw46r9nx2o9s1Dt9FQvNa5D3mpSY6PRziBoADofx',
+    shard: '5wePd1LYa5M49ghuhnp41SP1RwtPVcsuvcf7JzjHcbXg',
+    chosenCid: '5wePd1LYa5M49ghuhnp41SP1RwtPVcsuvcf7JzjHcbXg',
     customTypes: {},
     palletOverrides: {}
   };
