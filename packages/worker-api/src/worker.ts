@@ -44,7 +44,7 @@ export class Worker implements IWorkerBase {
     // We want to pass arguments to NodeJS' websocket implementation into the provider
     // in our integration tests, so that we can accept the workers self-signed
     // certificate. Hence, we inject the factory function.
-    this.#ws = new WsProvider(url, 100, undefined, undefined, undefined, options.createWebSocket);
+    this.#ws = new WsProvider(url, 100, undefined, undefined, undefined, options?.createWebSocket);
 
     if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
