@@ -3,7 +3,7 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
-import type { Enum, Option, Struct, Vec, u32 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Balance, H160, Moment } from '@polkadot/types/interfaces/runtime';
@@ -13,17 +13,26 @@ export interface AttemptsArg extends Struct {
   readonly origin: AccountId;
 }
 
-/** @name BalanceSetBalanceArgs */
-export interface BalanceSetBalanceArgs extends ITuple<[AccountId, AccountId, BalanceType, BalanceType]> {}
-
 /** @name BalanceShieldArgs */
 export interface BalanceShieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ParentchainId]> {}
 
 /** @name BalanceTransferArgs */
 export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, BalanceType]> {}
 
+/** @name BalanceTransferWithNoteArgs */
+export interface BalanceTransferWithNoteArgs extends ITuple<[AccountId, AccountId, BalanceType, Text]> {}
+
 /** @name BalanceUnshieldArgs */
 export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
+
+/** @name BucketIndex */
+export interface BucketIndex extends u32 {}
+
+/** @name BucketInfo */
+export interface BucketInfo extends Struct {
+  readonly index: BucketIndex;
+  readonly bytes: u32;
+}
 
 /** @name GuessArgs */
 export interface GuessArgs extends ITuple<[AccountId, GuessType]> {}
@@ -91,7 +100,7 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex8: boolean;
   readonly isUnusedIndex9: boolean;
   readonly isParentchainsInfo: boolean;
-  readonly isUnusedIndex11: boolean;
+  readonly isNoteBucketsInfo: boolean;
   readonly isUnusedIndex12: boolean;
   readonly isUnusedIndex13: boolean;
   readonly isUnusedIndex14: boolean;
@@ -132,7 +141,7 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberPublicGetter;
-  readonly type: 'SomeValue' | 'TotalIssuance' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'SomeValue' | 'TotalIssuance' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedCall */
@@ -147,8 +156,8 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly asBalanceUnshield: BalanceUnshieldArgs;
   readonly isBalanceShield: boolean;
   readonly asBalanceShield: BalanceShieldArgs;
-  readonly isBalanceSetBalance: boolean;
-  readonly asBalanceSetBalance: BalanceSetBalanceArgs;
+  readonly isBalanceTransferWithNote: boolean;
+  readonly asBalanceTransferWithNote: BalanceTransferWithNoteArgs;
   readonly isUnusedIndex6: boolean;
   readonly isUnusedIndex7: boolean;
   readonly isUnusedIndex8: boolean;
@@ -195,7 +204,7 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedCall;
-  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceSetBalance' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceTransferWithNote' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedCallSigned */
@@ -218,7 +227,8 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex7: boolean;
   readonly isUnusedIndex8: boolean;
   readonly isUnusedIndex9: boolean;
-  readonly isUnusedIndex10: boolean;
+  readonly isNotesFor: boolean;
+  readonly asNotesFor: NotesForArgs;
   readonly isUnusedIndex11: boolean;
   readonly isUnusedIndex12: boolean;
   readonly isUnusedIndex13: boolean;
@@ -260,7 +270,7 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedGetter;
-  readonly type: 'AccountInfo' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'AccountInfo' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedGetterSigned */
@@ -280,7 +290,28 @@ export interface IntegriteeTrustedOperation extends Enum {
   readonly type: 'IndirectCall' | 'DirectCall' | 'Get';
 }
 
+/** @name NoteIndex */
+export interface NoteIndex extends u64 {}
+
+/** @name NotesBucketInfo */
+export interface NotesBucketInfo extends Struct {
+  readonly first: BucketInfo;
+  readonly last: BucketInfo;
+}
+
+/** @name NotesForArgs */
+export interface NotesForArgs extends ITuple<[AccountId, BucketIndex]> {}
+
 /** @name TimestampSetArgs */
 export interface TimestampSetArgs extends ITuple<[AccountId, H160, BalanceType]> {}
+
+/** @name TrustedNote */
+export interface TrustedNote extends Enum {
+  readonly isTrustedCall: boolean;
+  readonly asTrustedCall: Bytes;
+  readonly isSgxRuntimeEvent: boolean;
+  readonly asSgxRuntimeEvent: Bytes;
+  readonly type: 'TrustedCall' | 'SgxRuntimeEvent';
+}
 
 export type PHANTOM_INTEGRITEEWORKER = 'integriteeWorker';

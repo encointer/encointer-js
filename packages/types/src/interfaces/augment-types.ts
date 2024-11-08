@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
-import type { AttemptsArg, BalanceSetBalanceArgs, BalanceShieldArgs, BalanceTransferArgs, BalanceUnshieldArgs, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, TimestampSetArgs } from '@encointer/types/interfaces/integriteeWorker';
+import type { AttemptsArg, BalanceShieldArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, TimestampSetArgs, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardIdentifier, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
@@ -168,9 +168,9 @@ declare module '@polkadot/types/types/registry' {
     Balance: Balance;
     BalanceEntry: BalanceEntry;
     BalanceOf: BalanceOf;
-    BalanceSetBalanceArgs: BalanceSetBalanceArgs;
     BalanceShieldArgs: BalanceShieldArgs;
     BalanceTransferArgs: BalanceTransferArgs;
+    BalanceTransferWithNoteArgs: BalanceTransferWithNoteArgs;
     BalanceType: BalanceType;
     BalanceUnshieldArgs: BalanceUnshieldArgs;
     BeefyAuthoritySet: BeefyAuthoritySet;
@@ -226,6 +226,8 @@ declare module '@polkadot/types/types/registry' {
     BridgedBlockNumber: BridgedBlockNumber;
     BridgedHeader: BridgedHeader;
     BridgeMessageId: BridgeMessageId;
+    BucketIndex: BucketIndex;
+    BucketInfo: BucketInfo;
     BufferedSessionChange: BufferedSessionChange;
     BusinessData: BusinessData;
     BusinessIdentifier: BusinessIdentifier;
@@ -813,6 +815,9 @@ declare module '@polkadot/types/types/registry' {
     NominatorIndex: NominatorIndex;
     NominatorIndexCompact: NominatorIndexCompact;
     NotConnectedPeer: NotConnectedPeer;
+    NoteIndex: NoteIndex;
+    NotesBucketInfo: NotesBucketInfo;
+    NotesForArgs: NotesForArgs;
     NpApiError: NpApiError;
     NpPoolId: NpPoolId;
     Null: Null;
@@ -1221,6 +1226,7 @@ declare module '@polkadot/types/types/registry' {
     TreasuryProposal: TreasuryProposal;
     TrieId: TrieId;
     TrieIndex: TrieIndex;
+    TrustedNote: TrustedNote;
     TrustedOperationStatus: TrustedOperationStatus;
     Type: Type;
     u128: u128;
