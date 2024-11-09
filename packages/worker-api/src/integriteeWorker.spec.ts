@@ -130,6 +130,21 @@ describe('worker', () => {
                 console.log('balance transfer result', JSON.stringify(result));
                 expect(result).toBeDefined();
             });
+
+            it('should return value with note', async () => {
+                const shard = network.shard;
+                const result = await worker.trustedBalanceTransfer(
+                    alice,
+                    shard,
+                    network.mrenclave,
+                    alice.address,
+                    charlie.address,
+                    1100000000000,
+                    "My test note"
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
         });
 
         // race condition so skipped
