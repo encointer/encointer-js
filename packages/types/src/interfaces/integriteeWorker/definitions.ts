@@ -14,7 +14,7 @@ export default {
         unused_index_8: null,
         unused_index_9: null,
         parentchains_info: null,
-        unused_index_11: null,
+        note_buckets_info: null,
         unused_index_12: null,
         unused_index_13: null,
         unused_index_14: null,
@@ -68,7 +68,7 @@ export default {
         unused_index_7: null,
         unused_index_8: null,
         unused_index_9: null,
-        unused_index_10: null,
+        notes_for: 'NotesForArgs',
         unused_index_11: null,
         unused_index_12: null,
         unused_index_13: null,
@@ -140,7 +140,7 @@ export default {
         balance_transfer: 'BalanceTransferArgs',
         balance_unshield: 'BalanceUnshieldArgs',
         balance_shield: 'BalanceShieldArgs',
-        balance_set_balance: 'BalanceSetBalanceArgs',
+        balance_transfer_with_note: 'BalanceTransferWithNoteArgs',
         unused_index_6: null,
         unused_index_7: null,
         unused_index_8: null,
@@ -190,9 +190,26 @@ export default {
     },
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
     BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
+    BalanceTransferWithNoteArgs: '(AccountId, AccountId, BalanceType, String)',
     BalanceShieldArgs: '(AccountId, AccountId, BalanceType, ParentchainId)',
     BalanceUnshieldArgs: '(AccountId, AccountId, BalanceType, ShardIdentifier)',
-    BalanceSetBalanceArgs: '(AccountId, AccountId, BalanceType, BalanceType)',
+    NotesForArgs: '(AccountId, BucketIndex)',
+    BucketIndex: 'u32',
+    NoteIndex: 'u64',
+    TrustedNote: {
+      _enum: {
+        TrustedCall: 'Vec<u8>',
+        SgxRuntimeEvent: 'Vec<u8>'
+      }
+    },
+    BucketInfo: {
+      index: 'BucketIndex',
+      bytes: 'u32',
+    },
+    NotesBucketInfo: {
+      first: 'BucketInfo',
+      last: 'BucketInfo',
+    },
     GuessTheNumberPublicGetter: {
       _enum: {
         guess_the_number_info: null,

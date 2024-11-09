@@ -1,7 +1,7 @@
 import type {Vec} from '@polkadot/types';
 import {TypeRegistry} from '@polkadot/types';
 import type {RegistryTypes} from '@polkadot/types/types';
-import {compactAddLength, hexToU8a} from '@polkadot/util';
+import {compactAddLength, hexToString, hexToU8a} from '@polkadot/util';
 
 
 import {options as encointerOptions} from '@encointer/node-api';
@@ -215,8 +215,17 @@ export class Worker implements IWorkerBase {
         const res = await this.#ws.subscribe('author_submitAndWatchExtrinsic',
             'author_submitAndWatchExtrinsic', [request.toHex()], onStatusChange
         );
-        topHash = this.createType('Hash', res);
-        console.debug(`topHash: ${topHash}`);
+
+        console.debug(`return value: ${res}`);
+
+        try {
+          topHash = this.createType('Hash', res);
+          console.debug(`topHash: ${topHash}`);
+        } catch (e) {
+          console.warn(`Could not return trusted call return value. It is probably an error`);
+          // Fixe: if the worker fully implements JSON_RPC2.0, the error should have a dedicated field.
+          reject(hexToString(res as string));
+        }
       } catch (err) {
         console.error(err);
         reject(err);

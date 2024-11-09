@@ -3,7 +3,12 @@ import type {
     IntegriteeTrustedCallSigned,
     IntegriteeGetter,
     GuessTheNumberInfo,
-    GuessTheNumberTrustedCall, GuessTheNumberPublicGetter, GuessTheNumberTrustedGetter, AttemptsArg, ParentchainsInfo,
+    GuessTheNumberTrustedCall,
+    GuessTheNumberPublicGetter,
+    GuessTheNumberTrustedGetter,
+    AttemptsArg,
+    ParentchainsInfo,
+    TrustedNote, NotesBucketInfo,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -24,6 +29,7 @@ import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type { AccountInfo } from "@polkadot/types/interfaces/system";
 import type {u32} from "@polkadot/types-codec";
 import {asString} from "@encointer/util";
+import {Vec} from "@polkadot/types";
 
 export class IntegriteeWorker extends Worker {
 
@@ -53,6 +59,24 @@ export class IntegriteeWorker extends Worker {
         return submittablePublicGetter<IntegriteeWorker, ParentchainsInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
     }
 
+    public noteBucketsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, NotesBucketInfo> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+        return submittablePublicGetter<IntegriteeWorker, NotesBucketInfo>(this, 'note_buckets_info', publicGetterArgs, null, 'NotesBucketInfo');
+    }
+
+
+    public async notesForTrustedGetter(accountOrPubKey: AddressOrPair, bucketIndex: number, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Vec<TrustedNote>>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: accountOrPubKey,
+            signer: signerOptions?.signer,
+        }
+        const notesForArgs = this.createType('NotesForArgs', [asString(accountOrPubKey), bucketIndex]);
+        return await submittableTrustedGetter<IntegriteeWorker, Vec<TrustedNote>>(this, 'notes_for', accountOrPubKey, trustedGetterArgs, notesForArgs,'Vec<TrustedNote>');
+    }
+
     public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
         const publicGetterArgs = {
             shard: shard,
@@ -79,12 +103,21 @@ export class IntegriteeWorker extends Worker {
         from: String,
         to: String,
         amount: number,
+        note?: string,
         signerOptions?: TrustedSignerOptions,
     ): Promise<TrustedCallResult> {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
-        const params = this.createType('BalanceTransferArgs', [from, to, amount])
-        const call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
+
+        let call;
+        if (note == null) {
+            const params = this.createType('BalanceTransferArgs', [from, to, amount])
+            call = createTrustedCall(this, ['balance_transfer', 'BalanceTransferArgs'], params);
+        } else {
+            const params = this.createType('BalanceTransferWithNoteArgs', [from, to, amount, note])
+            call = createTrustedCall(this, ['balance_transfer_with_note', 'BalanceTransferWithNoteArgs'], params);
+        }
+
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
         return this.sendTrustedCall(signed, shardT);
     }
