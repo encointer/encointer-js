@@ -295,8 +295,8 @@ export interface NoteIndex extends u64 {}
 
 /** @name NotesBucketInfo */
 export interface NotesBucketInfo extends Struct {
-  readonly first: BucketInfo;
-  readonly last: BucketInfo;
+  readonly first: Option<BucketInfo>;
+  readonly last: Option<BucketInfo>;
 }
 
 /** @name NotesForArgs */

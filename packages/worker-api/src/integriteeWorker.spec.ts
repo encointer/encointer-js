@@ -140,11 +140,11 @@ describe('worker', () => {
             it('should return balance transfer with note as note', async () => {
                 const shard = network.shard;
                 const result = await worker.trustedBalanceTransfer(
-                    charlie,
+                    alice,
                     shard,
                     network.mrenclave,
-                    charlie.address,
                     alice.address,
+                    charlie.address,
                     1100000000000,
                     "My test note"
                 );

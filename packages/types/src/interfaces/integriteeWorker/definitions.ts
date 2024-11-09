@@ -207,8 +207,8 @@ export default {
       bytes: 'u32',
     },
     NotesBucketInfo: {
-      first: 'BucketInfo',
-      last: 'BucketInfo',
+      first: 'Option<BucketInfo>',
+      last: 'Option<BucketInfo>',
     },
     GuessTheNumberPublicGetter: {
       _enum: {
