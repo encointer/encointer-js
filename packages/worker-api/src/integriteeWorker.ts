@@ -63,7 +63,7 @@ export class IntegriteeWorker extends Worker {
         const publicGetterArgs = {
             shard: shard,
         }
-        return submittablePublicGetter<IntegriteeWorker, NotesBucketInfo>(this, 'note_buckets_info', publicGetterArgs, null, 'ParentchainsInfo');
+        return submittablePublicGetter<IntegriteeWorker, NotesBucketInfo>(this, 'note_buckets_info', publicGetterArgs, null, 'NotesBucketInfo');
     }
 
 
@@ -73,8 +73,8 @@ export class IntegriteeWorker extends Worker {
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
-        const notesForArgs = this.createType('NotesForArgs', (asString(accountOrPubKey), bucketIndex));
-        return await submittableTrustedGetter<IntegriteeWorker, Vec<TrustedNote>>(this, 'notes_for', accountOrPubKey, trustedGetterArgs, notesForArgs,'u8');
+        const notesForArgs = this.createType('NotesForArgs', [asString(accountOrPubKey), bucketIndex]);
+        return await submittableTrustedGetter<IntegriteeWorker, Vec<TrustedNote>>(this, 'notes_for', accountOrPubKey, trustedGetterArgs, notesForArgs,'Vec<TrustedNote>');
     }
 
     public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
