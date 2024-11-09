@@ -42,7 +42,7 @@ describe('worker', () => {
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
-    describe.skip('needs worker and node running', () => {
+    describe('needs worker and node running', () => {
         describe('getWorkerPubKey', () => {
             it('should return value', async () => {
                 const result = await worker.getShieldingKey();
@@ -140,11 +140,11 @@ describe('worker', () => {
             it('should return balance transfer with note as note', async () => {
                 const shard = network.shard;
                 const result = await worker.trustedBalanceTransfer(
-                    charlie,
+                    alice,
                     shard,
                     network.mrenclave,
-                    charlie.address,
                     alice.address,
+                    charlie.address,
                     1100000000000,
                     "My test note"
                 );
