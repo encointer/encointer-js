@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
-import type { AttemptsArg, BalanceShieldArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, TimestampSetArgs, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
+import type { AttemptsArg, BalanceShieldArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardIdentifier, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
@@ -1205,6 +1205,7 @@ declare module '@polkadot/types/types/registry' {
     TAssetDepositBalance: TAssetDepositBalance;
     Text: Text;
     Timepoint: Timepoint;
+    TimestampedTrustedNote: TimestampedTrustedNote;
     TimestampSetArgs: TimestampSetArgs;
     TokenError: TokenError;
     TombstoneContractInfo: TombstoneContractInfo;

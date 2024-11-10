@@ -196,15 +196,23 @@ export default {
     NotesForArgs: '(AccountId, BucketIndex)',
     BucketIndex: 'u32',
     NoteIndex: 'u64',
+    TimestampedTrustedNote: {
+      timestamp: 'Moment',
+      version: 'u16',
+      note: 'TrustedNote'
+    },
     TrustedNote: {
       _enum: {
-        TrustedCall: 'Vec<u8>',
-        SgxRuntimeEvent: 'Vec<u8>'
+        SuccessfulTrustedCall: 'Vec<u8>',
+        SgxRuntimeEvent: 'Vec<u8>',
+        String: 'Text'
       }
     },
     BucketInfo: {
       index: 'BucketIndex',
       bytes: 'u32',
+      begins_at: 'Moment',
+      ends_at: 'Moment',
     },
     NotesBucketInfo: {
       first: 'Option<BucketInfo>',
