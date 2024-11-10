@@ -3,7 +3,7 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
-import type { Bytes, Enum, Option, Struct, Text, Vec, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, Vec, u16, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Balance, H160, Moment } from '@polkadot/types/interfaces/runtime';
@@ -32,6 +32,8 @@ export interface BucketIndex extends u32 {}
 export interface BucketInfo extends Struct {
   readonly index: BucketIndex;
   readonly bytes: u32;
+  readonly begins_at: Moment;
+  readonly ends_at: Moment;
 }
 
 /** @name GuessArgs */
@@ -302,16 +304,25 @@ export interface NotesBucketInfo extends Struct {
 /** @name NotesForArgs */
 export interface NotesForArgs extends ITuple<[AccountId, BucketIndex]> {}
 
+/** @name TimestampedTrustedNote */
+export interface TimestampedTrustedNote extends Struct {
+  readonly timestamp: Moment;
+  readonly version: u16;
+  readonly note: TrustedNote;
+}
+
 /** @name TimestampSetArgs */
 export interface TimestampSetArgs extends ITuple<[AccountId, H160, BalanceType]> {}
 
 /** @name TrustedNote */
 export interface TrustedNote extends Enum {
-  readonly isTrustedCall: boolean;
-  readonly asTrustedCall: Bytes;
+  readonly isSuccessfulTrustedCall: boolean;
+  readonly asSuccessfulTrustedCall: Bytes;
   readonly isSgxRuntimeEvent: boolean;
   readonly asSgxRuntimeEvent: Bytes;
-  readonly type: 'TrustedCall' | 'SgxRuntimeEvent';
+  readonly isText: boolean;
+  readonly asText: Text;
+  readonly type: 'SuccessfulTrustedCall' | 'SgxRuntimeEvent' | 'Text';
 }
 
 export type PHANTOM_INTEGRITEEWORKER = 'integriteeWorker';

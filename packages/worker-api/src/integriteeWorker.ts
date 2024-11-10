@@ -8,7 +8,7 @@ import type {
     GuessTheNumberTrustedGetter,
     AttemptsArg,
     ParentchainsInfo,
-    TrustedNote, NotesBucketInfo,
+    NotesBucketInfo, TimestampedTrustedNote,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -67,14 +67,14 @@ export class IntegriteeWorker extends Worker {
     }
 
 
-    public async notesForTrustedGetter(accountOrPubKey: AddressOrPair, bucketIndex: number, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Vec<TrustedNote>>> {
+    public async notesForTrustedGetter(accountOrPubKey: AddressOrPair, bucketIndex: number, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Vec<TimestampedTrustedNote>>> {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
             signer: signerOptions?.signer,
         }
         const notesForArgs = this.createType('NotesForArgs', [asString(accountOrPubKey), bucketIndex]);
-        return await submittableTrustedGetter<IntegriteeWorker, Vec<TrustedNote>>(this, 'notes_for', accountOrPubKey, trustedGetterArgs, notesForArgs,'Vec<TrustedNote>');
+        return await submittableTrustedGetter<IntegriteeWorker, Vec<TimestampedTrustedNote>>(this, 'notes_for', accountOrPubKey, trustedGetterArgs, notesForArgs,'Vec<TimestampedTrustedNote>');
     }
 
     public guessTheNumberInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, GuessTheNumberInfo> {
