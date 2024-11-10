@@ -139,6 +139,7 @@ describe('worker', () => {
         describe('should return note of the executed trusted call', () => {
             it('should return balance transfer with note as note', async () => {
                 const shard = network.shard;
+                const testNote = "My test note";
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
@@ -146,7 +147,7 @@ describe('worker', () => {
                     alice.address,
                     charlie.address,
                     1100000000000,
-                    "My test note"
+                    testNote
                 );
                 console.log('balance transfer result', JSON.stringify(result));
                 expect(result).toBeDefined();
@@ -159,10 +160,15 @@ describe('worker', () => {
                 // equal to 1 for a clean start, but it is more for subsequent runs.
                 expect(notes.length).toBeGreaterThanOrEqual(1);
 
-                // Check that the most recent node is the one we just send before
-                expect(notes.pop()!.timestamp.toNumber() < Date.now());
+                // Check that the most recent note is the one we just sent before
+                const note = notes.pop()!;
+                expect(note.note.isSuccessfulTrustedCall);
+                const call = worker.createType('IntegriteeTrustedCall', note.note.asSuccessfulTrustedCall);
+                expect(call.isBalanceTransferWithNote);
+                expect(call.asBalanceTransferWithNote[3].toString()).toEqual(testNote)
+                expect(note.timestamp.toNumber() < Date.now());
                 const oneMinuteMs = 60 * 1000;
-                expect(notes.pop()!.timestamp.toNumber() > Date.now() - oneMinuteMs);
+                expect(note.timestamp.toNumber() > Date.now() - oneMinuteMs);
             });
         });
 
