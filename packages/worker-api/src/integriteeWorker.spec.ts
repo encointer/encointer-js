@@ -155,7 +155,14 @@ describe('worker', () => {
                 console.log(`notesForTrustedGetter: ${JSON.stringify(getter)}`);
                 const notes = await getter.send();
                 console.log('notesForTrustedGetter:', notes.toHuman());
+
+                // equal to 1 for a clean start, but it is more for subsequent runs.
                 expect(notes.length).toBeGreaterThanOrEqual(1);
+
+                // Check that the most recent node is the one we just send before
+                expect(notes.pop()!.timestamp.toNumber() < Date.now());
+                const oneMinuteMs = 60 * 1000;
+                expect(notes.pop()!.timestamp.toNumber() > Date.now() - oneMinuteMs);
             });
         });
 
