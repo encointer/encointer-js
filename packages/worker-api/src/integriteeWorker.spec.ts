@@ -211,7 +211,7 @@ describe('worker', () => {
         });
 
         // race condition so skipped
-        describe.skip('session proxies (delegates) should work', () => {
+        describe.only('session proxies (delegates) should work', () => {
             it('add delegate should work', async () => {
                 const shard = network.shard;
                 const now = new Date();
@@ -230,6 +230,16 @@ describe('worker', () => {
                 );
                 console.log('add session proxy', JSON.stringify(result));
                 expect(result).toBeDefined();
+            });
+
+            it('AccountInfoAndProxiesGetter should return new proxy', async () => {
+                const getter = await worker.accountInfoAndSessionProxiesGetter(alice, network.shard);
+                console.log(`accountInfoAndSessionProxies: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('accountInfoAndSessionProxies:', result.toHuman());
+                const data = worker.createType('AccountInfoAndSessionProxies', result);
+                const expected_role = worker.createType('SessionProxyRole', 'Any');
+                expect(data.session_proxies[0].role).toEqual(expected_role);
             });
 
             it('call as delegate should work', async () => {

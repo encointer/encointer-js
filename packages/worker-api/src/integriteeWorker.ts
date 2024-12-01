@@ -6,6 +6,7 @@ import type {
     GuessTheNumberTrustedCall,
     GuessTheNumberPublicGetter,
     GuessTheNumberTrustedGetter,
+    AccountInfoAndSessionProxies,
     AttemptsArg,
     ParentchainsInfo,
     NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole,
@@ -51,6 +52,16 @@ export class IntegriteeWorker extends Worker {
             signer: signerOptions?.signer,
         }
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
+    }
+
+    public async accountInfoAndSessionProxiesGetter(accountOrPubKey: AddressOrPair, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfoAndSessionProxies>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfoAndSessionProxies>(this, 'account_info_and_session_proxies', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfoAndSessionProxies');
     }
 
     public parentchainsInfoGetter(shard: string): SubmittableGetter<IntegriteeWorker, ParentchainsInfo> {

@@ -7,6 +7,7 @@ import type { Bytes, Enum, Option, Struct, Text, Vec, u16, u32, u64 } from '@pol
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type {AccountId, Balance, H160, Moment} from '@polkadot/types/interfaces/runtime';
+import type {AccountInfo} from "@polkadot/types/interfaces/system";
 
 /** @name AttemptsArg */
 export interface AttemptsArg extends Struct {
@@ -44,6 +45,12 @@ export interface SessionProxyCredentials extends Struct {
   readonly role: SessionProxyRole;
   readonly expiry: Option<Moment>;
   readonly seed: Uint8Array;
+}
+
+/** @name AccountInfoAndSessionProxies */
+export interface AccountInfoAndSessionProxies extends Struct {
+  readonly account_info: AccountInfo;
+  readonly session_proxies: Vec<SessionProxyCredentials>;
 }
 
 /** @name BalanceUnshieldArgs */

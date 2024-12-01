@@ -59,7 +59,7 @@ export default {
     IntegriteeTrustedGetter: {
       _enum: {
         account_info: 'AccountId',
-        unused_index_1: null,
+        account_info_and_session_proxies: 'AccountId',
         unused_index_2: null,
         unused_index_3: null,
         unused_index_4: null,
@@ -248,6 +248,10 @@ export default {
       seed: 'H256',
     },
     AddSessionProxyArgs: '(AccountId, AccountId, SessionProxyCredentials)',
+    AccountInfoAndSessionProxies: {
+      account_info: 'AccountInfo',
+      session_proxies: 'Vec<SessionProxyCredentials>'
+    },
     SendNoteArgs: '(AccountId, AccountId, String)',
     GuessTheNumberTrustedCall: {
       _enum: {
