@@ -157,7 +157,7 @@ export default {
         unused_index_17: null,
         unused_index_18: null,
         unused_index_19: null,
-        send_node: 'SendNoteArgs',
+        send_note: 'SendNoteArgs',
         unused_index_21: null,
         unused_index_22: null,
         unused_index_23: null,

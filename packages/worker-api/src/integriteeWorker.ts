@@ -163,6 +163,23 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT);
     }
 
+    public async trustedSendNote(
+      account: AddressOrPair,
+      shard: string,
+      mrenclave: string,
+      from: String,
+      to: String,
+      note: string,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        const params = this.createType('SendNoteArgs', [from, to, note])
+        const call = createTrustedCall(this, ['send_note', 'SendNoteArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
     public async guessTheNumber(
         account: AddressOrPair,
         shard: string,

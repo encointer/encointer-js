@@ -254,6 +254,26 @@ describe('worker', () => {
                 expect(status.isInSidechainBlock).toBeTruthy();
             });
         });
+
+        // race condition so skipped
+        describe.only('send note should work', () => {
+            it('send note included', async () => {
+                const shard = network.shard;
+                const result = await worker.trustedSendNote(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  charlie.address,
+                  "Hoi"
+                );
+                console.log('send note', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInSidechainBlock).toBeTruthy();
+            });
+        });
+
         // race condition so skipped
         describe.skip('balance transfer should work', () => {
             it('should return value', async () => {
