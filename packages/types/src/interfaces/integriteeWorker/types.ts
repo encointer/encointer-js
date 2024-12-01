@@ -6,7 +6,7 @@ import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces
 import type { Bytes, Enum, Option, Struct, Text, Vec, u16, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, Balance, H160, Moment } from '@polkadot/types/interfaces/runtime';
+import type {AccountId, Balance, H160, Moment} from '@polkadot/types/interfaces/runtime';
 
 /** @name AttemptsArg */
 export interface AttemptsArg extends Struct {
@@ -21,6 +21,30 @@ export interface BalanceTransferArgs extends ITuple<[AccountId, AccountId, Balan
 
 /** @name BalanceTransferWithNoteArgs */
 export interface BalanceTransferWithNoteArgs extends ITuple<[AccountId, AccountId, BalanceType, Text]> {}
+
+/** @name SendNoteArgs */
+export interface SendNoteArgs extends ITuple<[AccountId, AccountId, Text]> {}
+
+/** @name AddSessionProxyArgs */
+export interface AddSessionProxyArgs extends ITuple<[AccountId, AccountId, SessionProxyCredentials]> {}
+
+/** @name SessionProxyRole */
+export interface SessionProxyRole extends Enum {
+  readonly isReadBalance: boolean;
+  readonly isReadAny: boolean;
+  readonly isNonTransfer: boolean;
+  readonly isAny: boolean;
+  readonly isTransferAllowance: boolean;
+  readonly asTransferAllowance: Balance;
+  readonly type: 'ReadBalance' | 'ReadAny' | 'NonTransfer' | 'Any' | 'TransferAllowance';
+}
+
+/** @name SessionProxyCredentials */
+export interface SessionProxyCredentials extends Struct {
+  readonly role: SessionProxyRole;
+  readonly expiry: Option<Moment>;
+  readonly seed: Uint8Array;
+}
 
 /** @name BalanceUnshieldArgs */
 export interface BalanceUnshieldArgs extends ITuple<[AccountId, AccountId, BalanceType, ShardIdentifier]> {}
@@ -174,7 +198,8 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex17: boolean;
   readonly isUnusedIndex18: boolean;
   readonly isUnusedIndex19: boolean;
-  readonly isUnusedIndex20: boolean;
+  readonly isSendNote: boolean;
+  readonly asSendNote: SendNoteArgs;
   readonly isUnusedIndex21: boolean;
   readonly isUnusedIndex22: boolean;
   readonly isUnusedIndex23: boolean;
@@ -184,7 +209,8 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex27: boolean;
   readonly isUnusedIndex28: boolean;
   readonly isUnusedIndex29: boolean;
-  readonly isUnusedIndex30: boolean;
+  readonly isAddSessionProxy: boolean;
+  readonly asAddSessionProxy: AddSessionProxyArgs;
   readonly isUnusedIndex31: boolean;
   readonly isUnusedIndex32: boolean;
   readonly isUnusedIndex33: boolean;
@@ -221,6 +247,8 @@ export interface IntegriteeTrustedCallSigned extends Struct {
 export interface IntegriteeTrustedGetter extends Enum {
   readonly isAccountInfo: boolean;
   readonly asAccountInfo: AccountId;
+  readonly isAccountInfoAndSessionProxies: boolean;
+  readonly asAccountInfoAndSessionProxies: AccountId;
   readonly isUnusedIndex1: boolean;
   readonly isUnusedIndex2: boolean;
   readonly isUnusedIndex3: boolean;

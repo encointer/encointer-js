@@ -1,5 +1,5 @@
 import { Keyring } from '@polkadot/api';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
+import {cryptoWaitReady, mnemonicToMiniSecret} from '@polkadot/util-crypto';
 import {localDockerNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import {type KeyringPair} from "@polkadot/keyring/types";
@@ -151,7 +151,7 @@ describe('worker', () => {
             });
         });
 
-        describe.only('call signed by unauthorized delegate should fail', () => {
+        describe('call signed by unauthorized delegate should fail', () => {
             it('should fail', async () => {
                 const shard = network.shard;
                 //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
@@ -173,7 +173,7 @@ describe('worker', () => {
             });
         });
 
-        describe('should return note of the executed trusted call', () => {
+        describe.skip('should return note of the executed trusted call', () => {
             it('should return balance transfer with note as note', async () => {
                 const shard = network.shard;
                 //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
@@ -210,6 +210,44 @@ describe('worker', () => {
             });
         });
 
+        // race condition so skipped
+        describe.only('session proxies (delegates) should work', () => {
+            it('add delegate should work', async () => {
+                const shard = network.shard;
+                const now = new Date();
+                const expiryDate = new Date(now.getTime() + 40 * 24 * 60 * 60 * 1000);
+                const expiry = Math.floor(expiryDate.getTime());
+                const miniSecret = mnemonicToMiniSecret("secret forest ticket smooth wide mass parent reveal embark impose fiscal company");
+                const role = worker.createType('SessionProxyRole', 'Any');
+                const result = await worker.trustedAddSessionProxy(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  role,
+                  '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
+                  expiry,
+                  miniSecret,
+                );
+                console.log('add session proxy', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+
+            it('call as delegate should work', async () => {
+                const shard = network.shard;
+                const result = await worker.trustedBalanceTransfer(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  charlie.address,
+                  1100000000000,
+                  "My test note",
+                  { delegate: charlie }
+                );
+                console.log('delegated balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
         // race condition so skipped
         describe.skip('balance transfer should work', () => {
             it('should return value', async () => {

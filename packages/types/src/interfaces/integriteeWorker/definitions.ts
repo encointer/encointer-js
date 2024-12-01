@@ -157,7 +157,7 @@ export default {
         unused_index_17: null,
         unused_index_18: null,
         unused_index_19: null,
-        unused_index_20: null,
+        send_node: 'SendNoteArgs',
         unused_index_21: null,
         unused_index_22: null,
         unused_index_23: null,
@@ -167,7 +167,7 @@ export default {
         unused_index_27: null,
         unused_index_28: null,
         unused_index_29: null,
-        unused_index_30: null,
+        add_session_proxy: 'AddSessionProxyArgs',
         unused_index_31: null,
         unused_index_32: null,
         unused_index_33: null,
@@ -233,6 +233,22 @@ export default {
     AttemptsArg: {
       origin: 'AccountId'
     },
+    SessionProxyRole: {
+      _enum: {
+        readBalance: null,
+        readAny: null,
+        nonTransfer: null,
+        any: null,
+        transferAllowance: 'Balance'
+      }
+    },
+    SessionProxyCredentials: {
+      role: 'SessionProxyRole',
+      expiry: 'Moment',
+      seed: 'H256',
+    },
+    AddSessionProxyArgs: '(AccountId, AccountId, SessionProxyCredentials)',
+    SendNoteArgs: '(AccountId, AccountId, String)',
     GuessTheNumberTrustedCall: {
       _enum: {
         set_winnings: 'GuessTheNumberSetWinningsArgs',

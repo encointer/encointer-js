@@ -8,7 +8,7 @@ import type {
     GuessTheNumberTrustedGetter,
     AttemptsArg,
     ParentchainsInfo,
-    NotesBucketInfo, TimestampedTrustedNote,
+    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -138,6 +138,28 @@ export class IntegriteeWorker extends Worker {
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedAddSessionProxy(
+      account: AddressOrPair,
+      shard: string,
+      mrenclave: string,
+      role: SessionProxyRole,
+      delegate: AddressOrPair,
+      expiry: number,
+      seed: Uint8Array,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        const credentials = this.createType('SessionProxyCredentials', [role, expiry, seed])
+        const params = this.createType('AddSessionProxyArgs', [asString(account), asString(delegate), credentials])
+        const call = createTrustedCall(this, ['add_session_proxy', 'AddSessionProxyArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+
+        console.debug(`AddSessionProxy ${JSON.stringify(signed)}`);
         return this.sendTrustedCall(signed, shardT);
     }
 
