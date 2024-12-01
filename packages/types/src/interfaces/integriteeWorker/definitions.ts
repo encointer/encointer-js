@@ -244,7 +244,7 @@ export default {
     },
     SessionProxyCredentials: {
       role: 'SessionProxyRole',
-      expiry: 'Moment',
+      expiry: 'Option<Moment>',
       seed: 'H256',
     },
     AddSessionProxyArgs: '(AccountId, AccountId, SessionProxyCredentials)',
