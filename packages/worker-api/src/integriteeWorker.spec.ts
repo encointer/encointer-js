@@ -211,7 +211,7 @@ describe('worker', () => {
         });
 
         // race condition so skipped
-        describe.only('session proxies (delegates) should work', () => {
+        describe.skip('session proxies (delegates) should work', () => {
             it('add delegate should work', async () => {
                 const shard = network.shard;
                 const now = new Date();
