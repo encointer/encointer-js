@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=18.14"
   },
+  "gitHead": "1fa54c11ec73869718b9de521a143969c4cacc02",
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/util#readme",
   "license": "MIT",
   "name": "@encointer/util",
@@ -20,7 +21,7 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.18.0-alpha.0",
+  "version": "0.18.0-alpha.1",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.18.9",
