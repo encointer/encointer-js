@@ -211,7 +211,7 @@ describe('worker', () => {
         });
 
         // race condition so skipped
-        describe.only('session proxies (delegates) should work', () => {
+        describe.skip('session proxies (delegates) should work', () => {
             it('add delegate should work', async () => {
                 const shard = network.shard;
                 const now = new Date();
@@ -234,18 +234,24 @@ describe('worker', () => {
 
             it('call as delegate should work', async () => {
                 const shard = network.shard;
+                const localKeyring = new Keyring({ type: "sr25519", ss58Format: 42 });
+                const delegate = localKeyring.addFromMnemonic("secret forest ticket smooth wide mass parent reveal embark impose fiscal company", {
+                    name: "fresh",
+                });
                 const result = await worker.trustedBalanceTransfer(
                   alice,
                   shard,
                   network.mrenclave,
                   alice.address,
-                  charlie.address,
+                  '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
                   1100000000000,
                   "My test note",
-                  { delegate: charlie }
+                  { delegate: delegate }
                 );
                 console.log('delegated balance transfer result', JSON.stringify(result));
                 expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInSidechainBlock).toBeTruthy();
             });
         });
         // race condition so skipped
