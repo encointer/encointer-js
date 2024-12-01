@@ -113,6 +113,7 @@ export default {
     },
     IntegriteeTrustedGetterSigned: {
       getter: 'IntegriteeTrustedGetter',
+      delegate: 'Option<AccountId>',
       signature: 'MultiSignature'
     },
     IntegriteeGetter: {
@@ -131,6 +132,7 @@ export default {
     IntegriteeTrustedCallSigned: {
       call: 'IntegriteeTrustedCall',
       nonce: 'u32',
+      delegate: 'Option<AccountId>',
       signature: 'MultiSignature'
     },
     IntegriteeTrustedCall: {

@@ -213,6 +213,7 @@ export interface IntegriteeTrustedCall extends Enum {
 export interface IntegriteeTrustedCallSigned extends Struct {
   readonly call: IntegriteeTrustedCall;
   readonly nonce: u32;
+  readonly delegate: Option<AccountId>,
   readonly signature: MultiSignature;
 }
 
@@ -278,6 +279,7 @@ export interface IntegriteeTrustedGetter extends Enum {
 /** @name IntegriteeTrustedGetterSigned */
 export interface IntegriteeTrustedGetterSigned extends Struct {
   readonly getter: IntegriteeTrustedGetter;
+  readonly delegate: Option<AccountId>
   readonly signature: MultiSignature;
 }
 

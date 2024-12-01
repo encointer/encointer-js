@@ -41,6 +41,7 @@ export async function signTrustedGetter(self: IWorkerBase, account: AddressOrPai
     const g = self.createType('IntegriteeGetter', {
         trusted: {
             getter,
+            delegate: null,
             signature: {Sr25519: signature},
         }
     });
@@ -83,6 +84,7 @@ export const signTrustedCall = async (
     return self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
+        delegate: null,
         signature: {Sr25519: signature},
     });
 }
