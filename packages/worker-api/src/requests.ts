@@ -11,7 +11,7 @@ import type {
     IntegriteeTrustedGetter,
     ShardIdentifier
 } from "@encointer/types";
-import {signPayload} from "@encointer/util";
+import {asString, signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
 import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
@@ -37,10 +37,12 @@ export const createTrustedGetter = (self: IWorkerBase, request: string, params: 
 }
 
 export async function signTrustedGetter(self: IWorkerBase, account: AddressOrPair, getter: IntegriteeTrustedGetter, options?: TrustedSignerOptions): Promise<IntegriteeGetter> {
-    const signature = await signPayload(account, getter.toU8a(), options?.signer);
+    // delegate overrides signer extension option
+    const signature = await signPayload(options?.delegate ? options.delegate : account, getter.toU8a(), options?.delegate ? undefined : options?.signer);
     const g = self.createType('IntegriteeGetter', {
         trusted: {
             getter,
+            delegate: options?.delegate ? asString(options.delegate) : null,
             signature: {Sr25519: signature},
         }
     });
@@ -78,11 +80,13 @@ export const signTrustedCall = async (
 
     const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...hash.toU8a(), ...shard.toU8a()]);
 
-    const signature = await signPayload(account, payload, options?.signer);
+    // delegate overrides signer extension option
+    const signature = await signPayload(options?.delegate ? options.delegate : account, payload, options?.delegate ? undefined : options?.signer);
 
     return self.createType('IntegriteeTrustedCallSigned', {
         call: call,
         nonce: nonce,
+        delegate: options?.delegate ? asString(options.delegate) : null,
         signature: {Sr25519: signature},
     });
 }
