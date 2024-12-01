@@ -5,6 +5,7 @@ import { IntegriteeWorker } from './integriteeWorker.js';
 import {type KeyringPair} from "@polkadot/keyring/types";
 
 import WS from 'websocket';
+import type {AccountInfo} from "@polkadot/types/interfaces/system";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -78,11 +79,25 @@ describe('worker', () => {
 
         describe('accountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.accountInfoGetter(charlie, network.shard);
+                const getter = await worker.accountInfoGetter(alice, network.shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo:', result.toHuman());
                 expect(result).toBeDefined();
+                const info = result as AccountInfo;
+                expect(info.data.free.toBigInt()).toBeGreaterThan(0);
+            });
+
+            it('should fall back to default if signed by unauthorized delegate', async () => {
+                const getter = await worker.accountInfoGetter(alice, network.shard, { delegate: charlie });
+                console.log(`AccountInfoGetter with unauthorized signature: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('getAccountInfo:', result.toHuman());
+                expect(result).toBeDefined();
+                const info = result as AccountInfo;
+                console.log("parsed: ", info.data.free);
+                // we don't forward errors here. instead, failures are mapped to default, which is zero
+                expect(info.data.free.toBigInt()).toEqual(BigInt(0));
             });
         });
 
@@ -133,6 +148,28 @@ describe('worker', () => {
                 const result = await getter.send();
                 console.log('Attempts:', result.toHuman());
                 expect(result).toBeDefined();
+            });
+        });
+
+        describe.only('call signed by unauthorized delegate should fail', () => {
+            it('should fail', async () => {
+                const shard = network.shard;
+                //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
+                const testNote = "My test note";
+                const result = await worker.trustedBalanceTransfer(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  charlie.address,
+                  1100000000000,
+                  testNote,
+                  { delegate: charlie}
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInvalid).toBeTruthy();
             });
         });
 

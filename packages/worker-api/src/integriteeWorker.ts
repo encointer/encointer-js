@@ -47,6 +47,7 @@ export class IntegriteeWorker extends Worker {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
             signer: signerOptions?.signer,
         }
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'account_info', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfo');
@@ -194,7 +195,7 @@ export class SubmittableGetter<W extends Worker, Type> implements ISubmittableGe
 async function submittableTrustedGetter<W extends Worker, T>(self: W, request: string, account: AddressOrPair, args: TrustedGetterArgs, trustedGetterParams: TrustedGetterParams, returnType: string): Promise<SubmittableGetter<W, T>> {
     const {shard} = args;
     const shardT = self.createType('ShardIdentifier', bs58.decode(shard));
-    const signedGetter = await createSignedGetter(self, request, account, trustedGetterParams, { signer: args?.signer })
+    const signedGetter = await createSignedGetter(self, request, account, trustedGetterParams, { signer: args?.signer, delegate: args?.delegate });
     return new SubmittableGetter<W, T>(self, shardT, signedGetter, returnType);
 }
 

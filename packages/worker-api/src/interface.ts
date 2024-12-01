@@ -54,6 +54,7 @@ export interface WorkerOptions {
 export interface TrustedGetterArgs {
   shard: string;
   account: AddressOrPair;
+  delegate?: AddressOrPair;
   signer?: Signer
 }
 
@@ -65,8 +66,11 @@ export type TrustedGetterParams = string | GuessTheNumberTrustedGetter | null
  * In the future, this might include other things.
  */
 export interface TrustedSignerOptions {
-  // If this is null, we assume that the account is a Pair.
+  // use signer extension? If this is null, we assume that the account is a Pair.
   signer?: Signer;
+
+  // use session proxy pair?
+  delegate?: AddressOrPair
 
   // If the nonce is null, it will be fetched.
   nonce?: u32;
