@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=18.14"
   },
+  "gitHead": "1fa54c11ec73869718b9de521a143969c4cacc02",
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/types#readme",
   "license": "GPL-3.0-or-later",
   "name": "@encointer/types",
@@ -18,7 +19,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.17.0-alpha.2",
+  "version": "0.18.0-alpha.3",
   "main": "index.js",
   "scripts": {
     "generate:defs": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces  --input ./src/interfaces",
