@@ -83,6 +83,7 @@ export class IntegriteeWorker extends Worker {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
             signer: signerOptions?.signer,
         }
         const notesForArgs = this.createType('NotesForArgs', [asString(accountOrPubKey), bucketIndex]);
@@ -101,6 +102,7 @@ export class IntegriteeWorker extends Worker {
         const trustedGetterArgs = {
             shard: shard,
             account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
             signer: signerOptions?.signer,
         }
         const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
