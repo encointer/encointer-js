@@ -19,7 +19,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.18.0-alpha.3",
+  "version": "0.18.0",
   "main": "index.js",
   "scripts": {
     "generate:defs": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces  --input ./src/interfaces",
