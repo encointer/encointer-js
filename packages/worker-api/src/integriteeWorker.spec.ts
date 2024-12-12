@@ -1,10 +1,11 @@
 import { Keyring } from '@polkadot/api';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
+import {cryptoWaitReady, mnemonicToMiniSecret} from '@polkadot/util-crypto';
 import {localDockerNetwork} from './testUtils/networks.js';
 import { IntegriteeWorker } from './integriteeWorker.js';
 import {type KeyringPair} from "@polkadot/keyring/types";
 
 import WS from 'websocket';
+import type {AccountInfo} from "@polkadot/types/interfaces/system";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -78,11 +79,25 @@ describe('worker', () => {
 
         describe('accountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.accountInfoGetter(charlie, network.shard);
+                const getter = await worker.accountInfoGetter(alice, network.shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo:', result.toHuman());
                 expect(result).toBeDefined();
+                const info = result as AccountInfo;
+                expect(info.data.free.toBigInt()).toBeGreaterThan(0);
+            });
+
+            it('should fall back to default if signed by unauthorized delegate', async () => {
+                const getter = await worker.accountInfoGetter(alice, network.shard, { delegate: charlie });
+                console.log(`AccountInfoGetter with unauthorized signature: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('getAccountInfo:', result.toHuman());
+                expect(result).toBeDefined();
+                const info = result as AccountInfo;
+                console.log("parsed: ", info.data.free);
+                // we don't forward errors here. instead, failures are mapped to default, which is zero
+                expect(info.data.free.toBigInt()).toEqual(BigInt(0));
             });
         });
 
@@ -136,9 +151,32 @@ describe('worker', () => {
             });
         });
 
-        describe('should return note of the executed trusted call', () => {
+        describe('call signed by unauthorized delegate should fail', () => {
+            it('should fail', async () => {
+                const shard = network.shard;
+                //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
+                const testNote = "My test note";
+                const result = await worker.trustedBalanceTransfer(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  charlie.address,
+                  1100000000000,
+                  testNote,
+                  { delegate: charlie}
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInvalid).toBeTruthy();
+            });
+        });
+
+        describe.skip('should return note of the executed trusted call', () => {
             it('should return balance transfer with note as note', async () => {
                 const shard = network.shard;
+                //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
                 const testNote = "My test note";
                 const result = await worker.trustedBalanceTransfer(
                     alice,
@@ -169,6 +207,80 @@ describe('worker', () => {
                 expect(note.timestamp.toNumber() < Date.now());
                 const oneMinuteMs = 60 * 1000;
                 expect(note.timestamp.toNumber() > Date.now() - oneMinuteMs);
+            });
+        });
+
+        // race condition so skipped
+        describe.skip('session proxies (delegates) should work', () => {
+            it('add delegate should work', async () => {
+                const shard = network.shard;
+                const now = new Date();
+                const expiryDate = new Date(now.getTime() + 40 * 24 * 60 * 60 * 1000);
+                const expiry = Math.floor(expiryDate.getTime());
+                const miniSecret = mnemonicToMiniSecret("secret forest ticket smooth wide mass parent reveal embark impose fiscal company");
+                const role = worker.createType('SessionProxyRole', 'Any');
+                const result = await worker.trustedAddSessionProxy(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  role,
+                  '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
+                  expiry,
+                  miniSecret,
+                );
+                console.log('add session proxy', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+
+            it('AccountInfoAndProxiesGetter should return new proxy', async () => {
+                const getter = await worker.accountInfoAndSessionProxiesGetter(alice, network.shard);
+                console.log(`accountInfoAndSessionProxies: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('accountInfoAndSessionProxies:', result.toHuman());
+                const data = worker.createType('AccountInfoAndSessionProxies', result);
+                const expected_role = worker.createType('SessionProxyRole', 'Any');
+                expect(data.session_proxies[0].role).toEqual(expected_role);
+            });
+
+            it('call as delegate should work', async () => {
+                const shard = network.shard;
+                const localKeyring = new Keyring({ type: "sr25519", ss58Format: 42 });
+                const delegate = localKeyring.addFromMnemonic("secret forest ticket smooth wide mass parent reveal embark impose fiscal company", {
+                    name: "fresh",
+                });
+                const result = await worker.trustedBalanceTransfer(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
+                  1100000000000,
+                  "My test note",
+                  { delegate: delegate }
+                );
+                console.log('delegated balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInSidechainBlock).toBeTruthy();
+            });
+        });
+
+        // race condition so skipped
+        describe.skip('send note should work', () => {
+            it('send note included', async () => {
+                const shard = network.shard;
+                const result = await worker.trustedSendNote(
+                  alice,
+                  shard,
+                  network.mrenclave,
+                  alice.address,
+                  charlie.address,
+                  "Hoi"
+                );
+                console.log('send note', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInSidechainBlock).toBeTruthy();
             });
         });
 

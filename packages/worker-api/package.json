@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=18.14"
   },
+  "gitHead": "1fa54c11ec73869718b9de521a143969c4cacc02",
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/worker-api#readme",
   "license": "GPL-3.0-or-later",
   "name": "@encointer/worker-api",
@@ -19,12 +20,12 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.17.0-alpha.2",
+  "version": "0.18.0-alpha.3",
   "main": "index.js",
   "dependencies": {
-    "@encointer/node-api": "^0.17.0-alpha.2",
-    "@encointer/types": "^0.17.0-alpha.2",
-    "@encointer/util": "^0.17.0-alpha.2",
+    "@encointer/node-api": "^0.18.0-alpha.3",
+    "@encointer/types": "^0.18.0-alpha.3",
+    "@encointer/util": "^0.18.0-alpha.3",
     "@peculiar/webcrypto": "^1.4.6",
     "@polkadot/api": "^11.2.1",
     "@polkadot/keyring": "^12.6.2",
