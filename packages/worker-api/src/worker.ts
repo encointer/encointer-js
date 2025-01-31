@@ -43,16 +43,15 @@ export class Worker implements IWorkerBase {
 
   constructor(
       endpoint: string | string[],
-      autoConnectMs: number = RETRY_DELAY,
-      timeout: number = DEFAULT_TIMEOUT_MS,
-      options: WorkerOptions = {} as WorkerOptions) {
+      options: WorkerOptions = {} as WorkerOptions
+  ) {
     this.#registry = new TypeRegistry();
     this.#keyring = (options.keyring || undefined);
 
     // We want to pass arguments to NodeJS' websocket implementation into the provider
     // in our integration tests, so that we can accept the workers self-signed
     // certificate. Hence, we inject the factory function.
-    this.#ws = new WsProvider(endpoint, autoConnectMs, undefined, timeout, undefined, options.createWebSocket);
+    this.#ws = new WsProvider(endpoint, options.autoConnectMs || RETRY_DELAY, undefined, options.timeout || DEFAULT_TIMEOUT_MS, undefined, options.createWebSocket);
 
     if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
