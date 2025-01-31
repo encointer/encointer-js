@@ -26,6 +26,7 @@ import BN from "bn.js";
 import {WsProvider} from "./rpc-provider/src/index.js";
 import {Keyring} from "@polkadot/keyring";
 import type {Hash} from "@polkadot/types/interfaces/runtime";
+import type {EndpointStats, ProviderStats} from "@encointer/worker-api/rpc-provider/src/types.js";
 
 const RETRY_DELAY = 2_500;
 const DEFAULT_TIMEOUT_MS = 60 * 1000;
@@ -73,6 +74,18 @@ export class Worker implements IWorkerBase {
     return this.#ws.connectWithRetry()
   }
 
+  public get isConnected(): boolean {
+    return this.#ws.isConnected
+  }
+
+  public get wsStats(): ProviderStats {
+    return this.#ws.stats
+  }
+
+  public get endpointStats(): EndpointStats {
+    return this.#ws.endpointStats
+  }
+
   public async encrypt(data: Uint8Array): Promise<Vec<u8>> {
     const dataBE = new BN(data);
     const dataArrayBE = new Uint8Array(dataBE.toArray());
@@ -96,7 +109,6 @@ export class Worker implements IWorkerBase {
   public setKeyring(keyring: Keyring): void {
     this.#keyring = keyring;
   }
-
 
   public registry(): TypeRegistry {
     return this.#registry
