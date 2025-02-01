@@ -46,9 +46,11 @@ export interface ISubmittableGetter<W extends IWorkerBase, Type> {
 }
 
 export interface WorkerOptions {
+  autoConnectMs?: number,
+  timeout?: number,
+  createWebSocket?: (url: string) => WebSocket;
   keyring?: Keyring;
   types?: RegistryTypes;
-  createWebSocket?: (url: string) => WebSocket;
 }
 
 export interface TrustedGetterArgs {
