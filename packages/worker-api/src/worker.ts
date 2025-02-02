@@ -39,7 +39,15 @@ export class Worker implements IWorkerBase {
 
   #keyring?: Keyring;
 
+  readonly #endpoint: string | string[]
+
   #ws: WsProvider;
+
+  readonly #autoConnectMs: number;
+
+  readonly #timeoutMs: number
+
+  readonly #createWebSocket?: (url: string) => WebSocket
 
   constructor(
       endpoint: string | string[],
@@ -51,7 +59,12 @@ export class Worker implements IWorkerBase {
     // We want to pass arguments to NodeJS' websocket implementation into the provider
     // in our integration tests, so that we can accept the workers self-signed
     // certificate. Hence, we inject the factory function.
-    this.#ws = new WsProvider(endpoint, options.autoConnectMs || RETRY_DELAY, undefined, options.timeout || DEFAULT_TIMEOUT_MS, undefined, options.createWebSocket);
+    this.#endpoint = endpoint;
+    this.#autoConnectMs = options.autoConnectMs || RETRY_DELAY;
+    this.#timeoutMs = options.timeout || DEFAULT_TIMEOUT_MS;
+    this.#createWebSocket = options.createWebSocket;
+
+    this.#ws = new WsProvider(this.#endpoint, this.#autoConnectMs, undefined, this.#timeoutMs, undefined, this.#createWebSocket);
 
     if (options.types != undefined) {
       this.#registry.register(encointerOptions({types: options.types}).types as RegistryTypes);
@@ -69,9 +82,34 @@ export class Worker implements IWorkerBase {
   }
 
   public async connect(): Promise<void> {
+    if (this.#ws.isConnected) {
+      throw new Error('Websocket is already connected');
+    }
+
     // retry is after `autoConnectMs` from the constructor.
     return this.#ws.connectWithRetry()
   }
+
+  /**
+   * Open a new websocket connection with the same params as given
+   * to the constructor.
+   */
+  public async reconnect(): Promise<void> {
+    if (this.#ws.isConnected) {
+      throw new Error('Websocket is already connected');
+    }
+
+    this.#ws = new WsProvider(this.#endpoint, this.#autoConnectMs, undefined, this.#timeoutMs, undefined, this.#createWebSocket);
+
+    if (this.#autoConnectMs === 0) {
+      // need to manually connect as the provides
+      // does not do it automatically if this is 0.
+      await this.#ws.connect();
+    } else {
+      await this.#ws.isReady
+    }
+  }
+
 
   public get isConnected(): boolean {
     return this.#ws.isConnected
