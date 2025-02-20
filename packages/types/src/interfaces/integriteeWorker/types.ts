@@ -6,7 +6,7 @@ import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces
 import type { Bytes, Enum, Option, Struct, Text, Vec, u16, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, AssetId, Balance, H160, H256, Moment } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, H160, H256, Moment } from '@polkadot/types/interfaces/runtime';
 import type { AccountInfo } from '@polkadot/types/interfaces/system';
 
 /** @name AccountInfoAndSessionProxies */
@@ -19,19 +19,19 @@ export interface AccountInfoAndSessionProxies extends Struct {
 export interface AddSessionProxyArgs extends ITuple<[AccountId, AccountId, SessionProxyCredentials]> {}
 
 /** @name AssetBalanceArg */
-export interface AssetBalanceArg extends ITuple<[AccountId, AssetId]> {}
+export interface AssetBalanceArg extends ITuple<[AccountId, IntegriteeAssetId]> {}
 
 /** @name AssetsShieldArgs */
-export interface AssetsShieldArgs extends ITuple<[AccountId, AccountId, AssetId, BalanceType, ParentchainId]> {}
+export interface AssetsShieldArgs extends ITuple<[AccountId, AccountId, IntegriteeAssetId, BalanceType, ParentchainId]> {}
 
 /** @name AssetsTransferArgs */
-export interface AssetsTransferArgs extends ITuple<[AccountId, AccountId, AssetId, BalanceType]> {}
+export interface AssetsTransferArgs extends ITuple<[AccountId, AccountId, IntegriteeAssetId, BalanceType]> {}
 
 /** @name AssetsTransferWithNoteArgs */
-export interface AssetsTransferWithNoteArgs extends ITuple<[AccountId, AccountId, AssetId, BalanceType, Text]> {}
+export interface AssetsTransferWithNoteArgs extends ITuple<[AccountId, AccountId, IntegriteeAssetId, BalanceType, Text]> {}
 
 /** @name AssetsUnshieldArgs */
-export interface AssetsUnshieldArgs extends ITuple<[AccountId, AccountId, AssetId, BalanceType, ShardIdentifier]> {}
+export interface AssetsUnshieldArgs extends ITuple<[AccountId, AccountId, IntegriteeAssetId, BalanceType, ShardIdentifier]> {}
 
 /** @name AttemptsArg */
 export interface AttemptsArg extends Struct {
@@ -111,6 +111,43 @@ export interface GuessTheNumberTrustedGetter extends Enum {
 /** @name GuessType */
 export interface GuessType extends u32 {}
 
+/** @name IntegriteeAssetId */
+export interface IntegriteeAssetId extends Enum {
+  readonly isUnusedIndex0: boolean;
+  readonly isUnusedIndex1: boolean;
+  readonly isUnusedIndex2: boolean;
+  readonly isUnusedIndex3: boolean;
+  readonly isUnusedIndex4: boolean;
+  readonly isUnusedIndex5: boolean;
+  readonly isUnusedIndex6: boolean;
+  readonly isUnusedIndex7: boolean;
+  readonly isUnusedIndex8: boolean;
+  readonly isUnusedIndex9: boolean;
+  readonly isUsdt: boolean;
+  readonly isUnusedIndex11: boolean;
+  readonly isUnusedIndex12: boolean;
+  readonly isUnusedIndex13: boolean;
+  readonly isUnusedIndex14: boolean;
+  readonly isUnusedIndex15: boolean;
+  readonly isUnusedIndex16: boolean;
+  readonly isUnusedIndex17: boolean;
+  readonly isUnusedIndex18: boolean;
+  readonly isUnusedIndex19: boolean;
+  readonly isUsdc: boolean;
+  readonly isUsdcE: boolean;
+  readonly isUnusedIndex22: boolean;
+  readonly isUnusedIndex23: boolean;
+  readonly isUnusedIndex24: boolean;
+  readonly isUnusedIndex25: boolean;
+  readonly isUnusedIndex26: boolean;
+  readonly isUnusedIndex27: boolean;
+  readonly isUnusedIndex28: boolean;
+  readonly isUnusedIndex29: boolean;
+  readonly isEth: boolean;
+  readonly isWeth: boolean;
+  readonly type: 'UnusedIndex0' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'Usdt' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'Usdc' | 'UsdcE' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'Eth' | 'Weth';
+}
+
 /** @name IntegriteeGetter */
 export interface IntegriteeGetter extends Enum {
   readonly isPublic: boolean;
@@ -125,7 +162,7 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isSomeValue: boolean;
   readonly isTotalIssuance: boolean;
   readonly isUndistributedFees: boolean;
-  readonly asUndistributedFees: Option<AssetId>;
+  readonly asUndistributedFees: Option<IntegriteeAssetId>;
   readonly isUnusedIndex3: boolean;
   readonly isUnusedIndex4: boolean;
   readonly isUnusedIndex5: boolean;
@@ -164,7 +201,7 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex38: boolean;
   readonly isUnusedIndex39: boolean;
   readonly isAssetTotalIssuance: boolean;
-  readonly asAssetTotalIssuance: AssetId;
+  readonly asAssetTotalIssuance: IntegriteeAssetId;
   readonly isUnusedIndex41: boolean;
   readonly isUnusedIndex42: boolean;
   readonly isUnusedIndex43: boolean;

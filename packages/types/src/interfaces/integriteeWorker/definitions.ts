@@ -5,7 +5,7 @@ export default {
       _enum: {
         some_value: null,
         total_issuance: null,
-        undistributed_fees: 'Option<AssetId>',
+        undistributed_fees: 'Option<IntegriteeAssetId>',
         unused_index_3: null,
         unused_index_4: null,
         unused_index_5: null,
@@ -43,7 +43,7 @@ export default {
         unused_index_37: null,
         unused_index_38: null,
         unused_index_39: null,
-        asset_total_issuance: 'AssetId',
+        asset_total_issuance: 'IntegriteeAssetId',
         unused_index_41: null,
         unused_index_42: null,
         unused_index_43: null,
@@ -191,10 +191,10 @@ export default {
       }
     },
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
-    AssetsTransferArgs: '(AccountId, AccountId, AssetId, BalanceType)',
-    AssetsUnshieldArgs: '(AccountId, AccountId, AssetId, BalanceType, ShardIdentifier)',
-    AssetsShieldArgs: '(AccountId, AccountId, AssetId, BalanceType, ParentchainId)',
-    AssetsTransferWithNoteArgs: '(AccountId, AccountId, AssetId, BalanceType, String)',
+    AssetsTransferArgs: '(AccountId, AccountId, IntegriteeAssetId, BalanceType)',
+    AssetsUnshieldArgs: '(AccountId, AccountId, IntegriteeAssetId, BalanceType, ShardIdentifier)',
+    AssetsShieldArgs: '(AccountId, AccountId, IntegriteeAssetId, BalanceType, ParentchainId)',
+    AssetsTransferWithNoteArgs: '(AccountId, AccountId, IntegriteeAssetId, BalanceType, String)',
     BalanceTransferArgs: '(AccountId, AccountId, BalanceType)',
     BalanceTransferWithNoteArgs: '(AccountId, AccountId, BalanceType, String)',
     BalanceShieldThroughEnclaveBridgePalletArgs: '(AccountId, AccountId, BalanceType)',
@@ -236,7 +236,7 @@ export default {
         attempts: 'AttemptsArg'
       }
     },
-    AssetBalanceArg: '(AccountId, AssetId)',
+    AssetBalanceArg: '(AccountId, IntegriteeAssetId)',
     AttemptsArg: {
       origin: 'AccountId'
     },
@@ -279,5 +279,41 @@ export default {
     },
     GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
     GuessArgs: '(AccountId, GuessType)',
+    IntegriteeAssetId: {
+      _enum: {
+        unused_index_0: null,
+        unused_index_1: null,
+        unused_index_2: null,
+        unused_index_3: null,
+        unused_index_4: null,
+        unused_index_5: null,
+        unused_index_6: null,
+        unused_index_7: null,
+        unused_index_8: null,
+        unused_index_9: null,
+        USDT: null,
+        unused_index_11: null,
+        unused_index_12: null,
+        unused_index_13: null,
+        unused_index_14: null,
+        unused_index_15: null,
+        unused_index_16: null,
+        unused_index_17: null,
+        unused_index_18: null,
+        unused_index_19: null,
+        USDC: null,
+        USDC_E: null,
+        unused_index_22: null,
+        unused_index_23: null,
+        unused_index_24: null,
+        unused_index_25: null,
+        unused_index_26: null,
+        unused_index_27: null,
+        unused_index_28: null,
+        unused_index_29: null,
+        ETH: null,
+        WETH: null,
+      }
+    },
   }
 }
