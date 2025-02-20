@@ -29,7 +29,7 @@ export interface AssetId extends Enum {
   readonly isUnusedIndex18: boolean;
   readonly isUnusedIndex19: boolean;
   readonly isUsdc: boolean;
-  readonly isUsedE: boolean;
+  readonly isUsdcE: boolean;
   readonly isUnusedIndex22: boolean;
   readonly isUnusedIndex23: boolean;
   readonly isUnusedIndex24: boolean;
@@ -40,7 +40,7 @@ export interface AssetId extends Enum {
   readonly isUnusedIndex29: boolean;
   readonly isEth: boolean;
   readonly isWeth: boolean;
-  readonly type: 'UnusedIndex0' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'Usdt' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'Usdc' | 'UsedE' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'Eth' | 'Weth';
+  readonly type: 'UnusedIndex0' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'Usdt' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'Usdc' | 'UsdcE' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'Eth' | 'Weth';
 }
 
 /** @name DirectRequestStatus */

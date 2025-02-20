@@ -5,7 +5,7 @@ export default {
       _enum: {
         some_value: null,
         total_issuance: null,
-        unused_index_2: null,
+        undistributed_fees: 'Option<AssetId>',
         unused_index_3: null,
         unused_index_4: null,
         unused_index_5: null,
@@ -43,7 +43,7 @@ export default {
         unused_index_37: null,
         unused_index_38: null,
         unused_index_39: null,
-        unused_index_40: null,
+        asset_total_issuance: 'AssetId',
         unused_index_41: null,
         unused_index_42: null,
         unused_index_43: null,
@@ -98,7 +98,7 @@ export default {
         unused_index_37: null,
         unused_index_38: null,
         unused_index_39: null,
-        unused_index_40: null,
+        asset_balance: 'AssetBalanceArg',
         unused_index_41: null,
         unused_index_42: null,
         unused_index_43: null,
@@ -236,6 +236,7 @@ export default {
         attempts: 'AttemptsArg'
       }
     },
+    AssetBalanceArg: '(AccountId, AssetId)',
     AttemptsArg: {
       origin: 'AccountId'
     },

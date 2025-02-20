@@ -18,6 +18,9 @@ export interface AccountInfoAndSessionProxies extends Struct {
 /** @name AddSessionProxyArgs */
 export interface AddSessionProxyArgs extends ITuple<[AccountId, AccountId, SessionProxyCredentials]> {}
 
+/** @name AssetBalanceArg */
+export interface AssetBalanceArg extends ITuple<[AccountId, AssetId]> {}
+
 /** @name AssetsShieldArgs */
 export interface AssetsShieldArgs extends ITuple<[AccountId, AccountId, AssetId, BalanceType, ParentchainId]> {}
 
@@ -121,7 +124,8 @@ export interface IntegriteeGetter extends Enum {
 export interface IntegriteePublicGetter extends Enum {
   readonly isSomeValue: boolean;
   readonly isTotalIssuance: boolean;
-  readonly isUnusedIndex2: boolean;
+  readonly isUndistributedFees: boolean;
+  readonly asUndistributedFees: Option<AssetId>;
   readonly isUnusedIndex3: boolean;
   readonly isUnusedIndex4: boolean;
   readonly isUnusedIndex5: boolean;
@@ -159,7 +163,8 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex37: boolean;
   readonly isUnusedIndex38: boolean;
   readonly isUnusedIndex39: boolean;
-  readonly isUnusedIndex40: boolean;
+  readonly isAssetTotalIssuance: boolean;
+  readonly asAssetTotalIssuance: AssetId;
   readonly isUnusedIndex41: boolean;
   readonly isUnusedIndex42: boolean;
   readonly isUnusedIndex43: boolean;
@@ -171,7 +176,7 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberPublicGetter;
-  readonly type: 'SomeValue' | 'TotalIssuance' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'SomeValue' | 'TotalIssuance' | 'UndistributedFees' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetTotalIssuance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedCall */
@@ -298,7 +303,8 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex37: boolean;
   readonly isUnusedIndex38: boolean;
   readonly isUnusedIndex39: boolean;
-  readonly isUnusedIndex40: boolean;
+  readonly isAssetBalance: boolean;
+  readonly asAssetBalance: AssetBalanceArg;
   readonly isUnusedIndex41: boolean;
   readonly isUnusedIndex42: boolean;
   readonly isUnusedIndex43: boolean;
@@ -310,7 +316,7 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedGetter;
-  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetBalance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedGetterSigned */
