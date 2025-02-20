@@ -186,7 +186,7 @@ export class IntegriteeWorker extends Worker {
         let call;
         if (note == null) {
             const params = this.createType('AssetsTransferArgs', [from, to, asset, amount])
-            call = createTrustedCall(this, ['asset_transfer', 'AssetsTransferArgs'], params);
+            call = createTrustedCall(this, ['assets_transfer', 'AssetsTransferArgs'], params);
         } else {
             const params = this.createType('AssetsTransferWithNoteArgs', [from, to, asset, amount, note])
             call = createTrustedCall(this, ['assets_transfer_with_note', 'AssetsTransferWithNoteArgs'], params);

@@ -66,6 +66,21 @@ describe('worker', () => {
                 console.log('Alice Balance', result.toNumber());
                 expect(result).toBeDefined();
             });
+
+            it('should return value', async () => {
+                const shard = network.shard;
+                const result = await worker.trustedAssetTransfer(
+                    alice,
+                    shard,
+                    network.mrenclave,
+                    alice.address,
+                    charlie.address,
+                    1000000,
+                    "USDC.e"
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
         });
     });
 

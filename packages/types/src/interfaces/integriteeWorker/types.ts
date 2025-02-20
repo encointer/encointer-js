@@ -270,8 +270,8 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex39: boolean;
   readonly isUnusedIndex40: boolean;
   readonly isUnusedIndex41: boolean;
-  readonly isAssetTransfer: boolean;
-  readonly asAssetTransfer: AssetsTransferArgs;
+  readonly isAssetsTransfer: boolean;
+  readonly asAssetsTransfer: AssetsTransferArgs;
   readonly isAssetsUnshield: boolean;
   readonly asAssetsUnshield: AssetsUnshieldArgs;
   readonly isAssetsShield: boolean;
@@ -284,7 +284,7 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedCall;
-  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceTransferWithNote' | 'BalanceShieldThroughEnclaveBridgePallet' | 'BalanceUnshieldThroughEnclaveBridgePallet' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'SendNote' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'AddSessionProxy' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'AssetTransfer' | 'AssetsUnshield' | 'AssetsShield' | 'AssetsTransferWithNote' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceTransferWithNote' | 'BalanceShieldThroughEnclaveBridgePallet' | 'BalanceUnshieldThroughEnclaveBridgePallet' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'SendNote' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'AddSessionProxy' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'AssetsTransfer' | 'AssetsUnshield' | 'AssetsShield' | 'AssetsTransferWithNote' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedCallSigned */

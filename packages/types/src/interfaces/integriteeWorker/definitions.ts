@@ -179,7 +179,7 @@ export default {
         unused_index_39: null,
         unused_index_40: null,
         unused_index_41: null,
-        asset_transfer: 'AssetsTransferArgs',
+        assets_transfer: 'AssetsTransferArgs',
         assets_unshield: 'AssetsUnshieldArgs',
         assets_shield: 'AssetsShieldArgs',
         assets_transfer_with_note: 'AssetsTransferWithNoteArgs',
