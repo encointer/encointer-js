@@ -168,6 +168,34 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT);
     }
 
+    public async trustedAssetTransfer(
+        account: AddressOrPair,
+        shard: string,
+        mrenclave: string,
+        from: String,
+        to: String,
+        amount: number,
+        assetId: AssetIdStr,
+        note?: string,
+        signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        let asset = assetIdFromString(assetId, this.registry());
+
+        let call;
+        if (note == null) {
+            const params = this.createType('AssetsTransferArgs', [from, to, asset, amount])
+            call = createTrustedCall(this, ['asset_transfer', 'AssetsTransferArgs'], params);
+        } else {
+            const params = this.createType('AssetsTransferWithNoteArgs', [from, to, asset, amount, note])
+            call = createTrustedCall(this, ['assets_transfer_with_note', 'AssetsTransferWithNoteArgs'], params);
+        }
+
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
     public async balanceUnshieldFunds(
         account: AddressOrPair,
         shard: string,
@@ -182,6 +210,26 @@ export class IntegriteeWorker extends Worker {
         const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
         const params = this.createType('BalanceUnshieldArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, ['balance_unshield', 'BalanceUnshieldArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async assetUnshieldFunds(
+        account: AddressOrPair,
+        shard: string,
+        mrenclave: string,
+        fromIncognitoAddress: string,
+        toPublicAddress: string,
+        amount: number,
+        assetId: AssetIdStr,
+        signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions);
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+        let asset = assetIdFromString(assetId, this.registry());
+
+        const params = this.createType('AssetsUnshieldArgs', [fromIncognitoAddress, toPublicAddress, asset, amount, shardT])
+        const call = createTrustedCall(this, ['assets_unshield', 'AssetsUnshieldArgs'], params);
         const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
         return this.sendTrustedCall(signed, shardT);
     }
