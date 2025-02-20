@@ -214,6 +214,31 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT);
     }
 
+    /**
+     * Use enclave bridge instead of shard vault account. Only do this if you know what you're doing.
+     */
+    public async balanceUnshieldThroughEnclaveBridgePalletFunds(
+        account: AddressOrPair,
+        shard: string,
+        mrenclave: string,
+        fromIncognitoAddress: string,
+        toPublicAddress: string,
+        amount: number,
+        signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = this.createType('ShardIdentifier', bs58.decode(shard));
+
+        const params = this.createType('BalanceUnshieldThroughEnclaveBridgePalletArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
+        const call = createTrustedCall(this, [
+            'balance_unshieldbalance_unshield_through_enclave_bridge_pallet',
+            'BalanceUnshieldThroughEnclaveBridgePalletArgs'
+        ], params);
+
+        const signed = await signTrustedCall(this, call, account, shardT, mrenclave, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
     public async assetUnshieldFunds(
         account: AddressOrPair,
         shard: string,
