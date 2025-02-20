@@ -98,7 +98,7 @@ export default {
         unused_index_37: null,
         unused_index_38: null,
         unused_index_39: null,
-        asset_balance: 'AssetBalanceArg',
+        asset_balance: 'AssetBalanceArgs',
         unused_index_41: null,
         unused_index_42: null,
         unused_index_43: null,
@@ -236,7 +236,7 @@ export default {
         attempts: 'AttemptsArg'
       }
     },
-    AssetBalanceArg: '(AccountId, IntegriteeAssetId)',
+    AssetBalanceArgs: '(AccountId, IntegriteeAssetId)',
     AttemptsArg: {
       origin: 'AccountId'
     },

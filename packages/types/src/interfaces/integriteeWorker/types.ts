@@ -18,8 +18,8 @@ export interface AccountInfoAndSessionProxies extends Struct {
 /** @name AddSessionProxyArgs */
 export interface AddSessionProxyArgs extends ITuple<[AccountId, AccountId, SessionProxyCredentials]> {}
 
-/** @name AssetBalanceArg */
-export interface AssetBalanceArg extends ITuple<[AccountId, IntegriteeAssetId]> {}
+/** @name AssetBalanceArgs */
+export interface AssetBalanceArgs extends ITuple<[AccountId, IntegriteeAssetId]> {}
 
 /** @name AssetsShieldArgs */
 export interface AssetsShieldArgs extends ITuple<[AccountId, AccountId, IntegriteeAssetId, BalanceType, ParentchainId]> {}
@@ -341,7 +341,7 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex38: boolean;
   readonly isUnusedIndex39: boolean;
   readonly isAssetBalance: boolean;
-  readonly asAssetBalance: AssetBalanceArg;
+  readonly asAssetBalance: AssetBalanceArgs;
   readonly isUnusedIndex41: boolean;
   readonly isUnusedIndex42: boolean;
   readonly isUnusedIndex43: boolean;
