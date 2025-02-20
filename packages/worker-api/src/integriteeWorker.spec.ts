@@ -42,7 +42,7 @@ describe('worker', () => {
 
     // Todo: add proper CI to test this too.
     describe('assets', () => {
-        describe.skip('assetBalanceGetter', () => {
+        describe('assetBalanceGetter', () => {
             it('should return value', async () => {
                 const getter = await worker.assetBalanceGetter(
                     alice, "USDC.e", network.shard
@@ -63,7 +63,7 @@ describe('worker', () => {
 
                 const result = await getter.send();
 
-                console.log('Alice Balance', result.toHuman());
+                console.log('Alice Balance', result.toNumber());
                 expect(result).toBeDefined();
             });
         });

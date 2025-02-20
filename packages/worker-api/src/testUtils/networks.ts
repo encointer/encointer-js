@@ -39,9 +39,9 @@ export const localDockerNetwork = () => {
     chain: 'ws://127.0.0.1:9944',
     worker: 'wss://127.0.0.1:2000',
     genesisHash: '0x388c446a804e24e77ae89f5bb099edb60cacc2ac7c898ce175bdaa08629c1439',
-    mrenclave: 'AcZpHUDPPoCJV5PmVpLbESHKgMapHUcvZ15rjgSX2Bt2',
-    shard: 'AcZpHUDPPoCJV5PmVpLbESHKgMapHUcvZ15rjgSX2Bt2',
-    chosenCid: 'AcZpHUDPPoCJV5PmVpLbESHKgMapHUcvZ15rjgSX2Bt2',
+    mrenclave: 'CzVFr4C2AkW4twozTHZkxsiJGJfGrDq2SFwVwz4MW5L2',
+    shard: 'CzVFr4C2AkW4twozTHZkxsiJGJfGrDq2SFwVwz4MW5L2',
+    chosenCid: 'CzVFr4C2AkW4twozTHZkxsiJGJfGrDq2SFwVwz4MW5L2',
     customTypes: {},
     palletOverrides: {}
   };
