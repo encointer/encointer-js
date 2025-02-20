@@ -1,11 +1,12 @@
 import {Keyring} from "@polkadot/keyring";
-import type {u8} from "@polkadot/types-codec";
+import type {Option, u8} from "@polkadot/types-codec";
 import type {TypeRegistry, u32, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {
+  AssetBalanceArgs,
   GuessTheNumberPublicGetter,
-  GuessTheNumberTrustedGetter,
+  GuessTheNumberTrustedGetter, IntegriteeAssetId,
   IntegriteeGetter,
   ShardIdentifier, TrustedOperationStatus
 } from "@encointer/types";
@@ -82,4 +83,4 @@ export interface PublicGetterArgs {
   shard: string;
 }
 
-export type PublicGetterParams = GuessTheNumberPublicGetter | null
+export type PublicGetterParams = GuessTheNumberPublicGetter | null | Option<IntegriteeAssetId> | IntegriteeAssetId | AssetBalanceArgs

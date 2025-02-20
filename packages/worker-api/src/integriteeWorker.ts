@@ -31,6 +31,8 @@ import type { AccountInfo } from "@polkadot/types/interfaces/system";
 import type {u32} from "@polkadot/types-codec";
 import {asString} from "@encointer/util";
 import {Vec} from "@polkadot/types";
+import {assetIdFromString, type AssetIdStr} from "@encointer/worker-api/utils/assetId.js";
+import type {Balance} from "@polkadot/types/interfaces/runtime";
 
 export class IntegriteeWorker extends Worker {
 
@@ -78,6 +80,36 @@ export class IntegriteeWorker extends Worker {
         return submittablePublicGetter<IntegriteeWorker, NotesBucketInfo>(this, 'note_buckets_info', publicGetterArgs, null, 'NotesBucketInfo');
     }
 
+    public undistributedFeesGetter(shard: string, assetId: AssetIdStr | null): SubmittableGetter<IntegriteeWorker, Balance> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+
+        let maybeAsset = assetId != null ?  assetIdFromString(assetId as AssetIdStr, this.registry()) : null;
+        const getterParams =  this.createType('Option<IntegriteeAssetId>', maybeAsset);
+        return submittablePublicGetter<IntegriteeWorker, Balance>(this, 'undistributed_fees', publicGetterArgs, getterParams, 'Balance');
+    }
+
+    public assetTotalIssuanceGetter(shard: string, assetId: AssetIdStr): SubmittableGetter<IntegriteeWorker, Balance> {
+        const publicGetterArgs = {
+            shard: shard,
+        }
+
+        let asset = assetIdFromString(assetId, this.registry());
+        return submittablePublicGetter<IntegriteeWorker, Balance>(this, 'asset_total_issuance', publicGetterArgs, asset, 'Balance');
+    }
+
+    public async assetBalanceGetter(accountOrPubKey: AddressOrPair, assetId: AssetIdStr, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Balance>> {
+        const trustedGetterArgs = {
+            shard: shard,
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        let asset = assetIdFromString(assetId, this.registry());
+        const assetBalanceArgs = this.createType('AssetBalanceArgs', [asString(accountOrPubKey), asset]);
+        return await submittableTrustedGetter<IntegriteeWorker, Balance>(this, 'asset_balance', accountOrPubKey, trustedGetterArgs, assetBalanceArgs,'Balance');
+    }
 
     public async notesForTrustedGetter(accountOrPubKey: AddressOrPair, bucketIndex: number, shard: string, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, Vec<TimestampedTrustedNote>>> {
         const trustedGetterArgs = {
