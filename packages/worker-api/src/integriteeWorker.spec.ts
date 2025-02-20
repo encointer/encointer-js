@@ -40,6 +40,35 @@ describe('worker', () => {
         await worker.closeWs()
     });
 
+    // Todo: add proper CI to test this too.
+    describe('assets', () => {
+        describe.skip('assetBalanceGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.assetBalanceGetter(
+                    alice, "USDC.e", network.shard
+                );
+
+                const result = await getter.send();
+
+                console.log('Alice Balance', result.toHuman());
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('assetIssuanceGetter', () => {
+            it('should return value', async () => {
+                const getter = worker.assetTotalIssuanceGetter(
+                    network.shard, "USDC.e"
+                );
+
+                const result = await getter.send();
+
+                console.log('Alice Balance', result.toHuman());
+                expect(result).toBeDefined();
+            });
+        });
+    });
+
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
