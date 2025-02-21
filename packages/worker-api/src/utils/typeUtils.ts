@@ -1,10 +1,7 @@
 import type {EnclaveFingerprint, IntegriteeAssetId, ShardIdentifier} from "@encointer/types";
 import type {TypeRegistry} from "@polkadot/types";
-import type {MrenclaveArg, ShardIdentifierArg} from "@encointer/worker-api";
+import type {AssetIdStr, MrenclaveArg, ShardIdentifierArg} from "@encointer/worker-api";
 import bs58 from "bs58";
-
-
-export type AssetIdStr = "USDT" | "usdt" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth"
 
 export function assetIdFromString(assetId: AssetIdStr, registry: TypeRegistry): IntegriteeAssetId {
     // The values below correspond to the enum indexes.

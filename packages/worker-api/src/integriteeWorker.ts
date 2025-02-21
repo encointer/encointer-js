@@ -20,7 +20,7 @@ import {
     type TrustedGetterParams,
     type TrustedCallResult,
     type ShardIdentifierArg,
-    type MrenclaveArg,
+    type MrenclaveArg, type AssetIdStr,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {
@@ -36,7 +36,6 @@ import {asString} from "@encointer/util";
 import {Vec} from "@polkadot/types";
 import {
     assetIdFromString,
-    type AssetIdStr,
     enclaveFingerprintFromArg,
     shardIdentifierFromArg
 } from "@encointer/worker-api/utils/typeUtils.js";

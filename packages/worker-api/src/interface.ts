@@ -33,6 +33,9 @@ export interface TrustedCallResult {
   status?: TrustedOperationStatus,
 }
 
+// All the assets we support and string variations of it.
+export type AssetIdStr = "USDT" | "usdt" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth"
+
 // If it is a string, we assume that it is base58 encoded.
 export type ShardIdentifierArg = string | ShardIdentifier | EnclaveFingerprint | H256 | Hash;
 
