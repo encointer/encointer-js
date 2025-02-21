@@ -67,7 +67,32 @@ describe('worker', () => {
         });
 
         describe('assetIssuanceGetter', () => {
-            it('should return value', async () => {
+            it('should return value with asset', async () => {
+                const asset = "USDC.e";
+                const getter = worker.undistributedFeesGetter(
+                    shard, asset
+                );
+
+                const result = await getter.send();
+
+                console.log(`Undistributed ${asset} fees: ${result.toNumber()}`);
+                expect(result).toBeDefined();
+            });
+
+            it('should return value without asset', async () => {
+                const getter = worker.undistributedFeesGetter(
+                    shard, null
+                );
+
+                const result = await getter.send();
+
+                console.log(`Undistributed native fees: ${result.toNumber()}`);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('undistributed fees', () => {
+            it('should return asset value', async () => {
                 const getter = worker.assetTotalIssuanceGetter(
                     shard, "USDC.e"
                 );
@@ -78,6 +103,7 @@ describe('worker', () => {
                 expect(result).toBeDefined();
             });
         });
+
 
         describe.skip('trusted assets transfer', () => {
             it('trusted assets transfer works', async () => {
