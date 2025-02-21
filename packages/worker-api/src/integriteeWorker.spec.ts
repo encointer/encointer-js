@@ -6,6 +6,7 @@ import {type KeyringPair} from "@polkadot/keyring/types";
 
 import WS from 'websocket';
 import type {AccountInfo} from "@polkadot/types/interfaces/system";
+import type {EnclaveFingerprint, ShardIdentifier} from "@encointer/types";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -15,6 +16,11 @@ describe('worker', () => {
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
     let charlie: KeyringPair;
+
+    // dynamically get shard/fingerprint
+    let shard: ShardIdentifier;
+    let fingerprint: EnclaveFingerprint;
+
     beforeAll(async () => {
         jest.setTimeout(90000);
         await cryptoWaitReady();
@@ -34,10 +40,102 @@ describe('worker', () => {
                 { rejectUnauthorized: false }
             ),
         });
+
+        // can alternatively set the hardcoded shard from the network here if desired.
+        // Might be valuable to ensure that a specific shard is used.
+        shard = await worker.getShard();
+        fingerprint = await worker.getFingerprint();
     });
 
     afterAll(async () => {
         await worker.closeWs()
+    });
+
+    // Todo: add proper CI to test this too.
+    describe.skip('assets', () => {
+        describe('assetBalanceGetter', () => {
+            it('should return value', async () => {
+                const getter = await worker.assetBalanceGetter(
+                    alice, "USDC.e", shard
+                );
+
+                const result = await getter.send();
+
+                console.log('Alice Balance', result.toHuman());
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('assetIssuanceGetter', () => {
+            it('should return value with asset', async () => {
+                const asset = "USDC.e";
+                const getter = worker.undistributedFeesGetter(
+                    shard, asset
+                );
+
+                const result = await getter.send();
+
+                console.log(`Undistributed ${asset} fees: ${result.toNumber()}`);
+                expect(result).toBeDefined();
+            });
+
+            it('should return value without asset', async () => {
+                const getter = worker.undistributedFeesGetter(
+                    shard, null
+                );
+
+                const result = await getter.send();
+
+                console.log(`Undistributed native fees: ${result.toNumber()}`);
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe('undistributed fees', () => {
+            it('should return asset value', async () => {
+                const getter = worker.assetTotalIssuanceGetter(
+                    shard, "USDC.e"
+                );
+
+                const result = await getter.send();
+
+                console.log('Alice Balance', result.toNumber());
+                expect(result).toBeDefined();
+            });
+        });
+
+
+        describe.skip('trusted assets transfer', () => {
+            it('trusted assets transfer works', async () => {
+                const result = await worker.trustedAssetTransfer(
+                    alice,
+                    shard,
+                    fingerprint,
+                    alice.address,
+                    charlie.address,
+                    1000000,
+                    "USDC.e"
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe.skip('unshield assets transfer', () => {
+            it('assets unshield works', async () => {
+                const result = await worker.assetUnshieldFunds(
+                    alice,
+                    shard,
+                    fingerprint,
+                    alice.address,
+                    alice.address,
+                    1000000,
+                    "USDC.e"
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
     });
 
     // skip it, as this requires a worker (and hence a node) to be running
@@ -333,6 +431,25 @@ describe('worker', () => {
                 expect(result).toBeDefined();
             });
         });
+
+        describe('balance unshield through enclave bridge should work', () => {
+            // Getting a missing privileges error in case a shard vault has been set.
+            it('should be invalid', async () => {
+                const shard = network.shard;
+
+                const result = await worker.balanceUnshieldThroughEnclaveBridgePalletFunds(
+                    alice,
+                    shard,
+                    fingerprint,
+                    alice.address,
+                    charlie.address,
+                    1100000000000,
+                );
+                console.log('balance unshield result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
+
 
         // race condition, so skipped
         describe.skip('guess the number should work', () => {

@@ -199,6 +199,16 @@ export class Worker implements IWorkerBase {
     return this.createType('EnclaveFingerprint', res.value);
   }
 
+  public async getShard(): Promise<ShardIdentifier> {
+    const res = await this.send(
+        'author_getShard',[]
+    );
+
+    console.debug(`Got shard: ${res}`);
+
+    return this.createType('ShardIdentifier', res.value);
+  }
+
   public async sendGetter<Getter extends GenericGetter, R>(getter: Getter, shard: ShardIdentifier, returnType: string): Promise<R> {
     const r = this.createType(
         'Request', {

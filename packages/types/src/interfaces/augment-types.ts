@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
-import type { AttemptsArg, BalanceShieldArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
+import type { AccountInfoAndSessionProxies, AddSessionProxyArgs, AssetBalanceArgs, AssetsShieldArgs, AssetsTransferArgs, AssetsTransferWithNoteArgs, AssetsUnshieldArgs, AttemptsArg, BalanceShieldArgs, BalanceShieldThroughEnclaveBridgePalletArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BalanceUnshieldThroughEnclaveBridgePalletArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeAssetId, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, SendNoteArgs, SessionProxyCredentials, SessionProxyRole, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardIdentifier, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
@@ -94,6 +94,7 @@ declare module '@polkadot/types/types/registry' {
     AccountIdOf: AccountIdOf;
     AccountIndex: AccountIndex;
     AccountInfo: AccountInfo;
+    AccountInfoAndSessionProxies: AccountInfoAndSessionProxies;
     AccountInfoWithDualRefCount: AccountInfoWithDualRefCount;
     AccountInfoWithProviders: AccountInfoWithProviders;
     AccountInfoWithRefCount: AccountInfoWithRefCount;
@@ -110,6 +111,7 @@ declare module '@polkadot/types/types/registry' {
     ActiveIndex: ActiveIndex;
     ActiveRecovery: ActiveRecovery;
     Address: Address;
+    AddSessionProxyArgs: AddSessionProxyArgs;
     AliveContractInfo: AliveContractInfo;
     AllowedSlots: AllowedSlots;
     AnnouncementSigner: AnnouncementSigner;
@@ -124,6 +126,7 @@ declare module '@polkadot/types/types/registry' {
     AssetApproval: AssetApproval;
     AssetApprovalKey: AssetApprovalKey;
     AssetBalance: AssetBalance;
+    AssetBalanceArgs: AssetBalanceArgs;
     AssetDestroyWitness: AssetDestroyWitness;
     AssetDetails: AssetDetails;
     AssetId: AssetId;
@@ -133,6 +136,10 @@ declare module '@polkadot/types/types/registry' {
     AssetInstanceV2: AssetInstanceV2;
     AssetMetadata: AssetMetadata;
     AssetOptions: AssetOptions;
+    AssetsShieldArgs: AssetsShieldArgs;
+    AssetsTransferArgs: AssetsTransferArgs;
+    AssetsTransferWithNoteArgs: AssetsTransferWithNoteArgs;
+    AssetsUnshieldArgs: AssetsUnshieldArgs;
     Assignment: Assignment;
     AssignmentCount: AssignmentCount;
     AssignmentId: AssignmentId;
@@ -169,10 +176,12 @@ declare module '@polkadot/types/types/registry' {
     BalanceEntry: BalanceEntry;
     BalanceOf: BalanceOf;
     BalanceShieldArgs: BalanceShieldArgs;
+    BalanceShieldThroughEnclaveBridgePalletArgs: BalanceShieldThroughEnclaveBridgePalletArgs;
     BalanceTransferArgs: BalanceTransferArgs;
     BalanceTransferWithNoteArgs: BalanceTransferWithNoteArgs;
     BalanceType: BalanceType;
     BalanceUnshieldArgs: BalanceUnshieldArgs;
+    BalanceUnshieldThroughEnclaveBridgePalletArgs: BalanceUnshieldThroughEnclaveBridgePalletArgs;
     BeefyAuthoritySet: BeefyAuthoritySet;
     BeefyCommitment: BeefyCommitment;
     BeefyCompactSignedCommitment: BeefyCompactSignedCommitment;
@@ -675,6 +684,7 @@ declare module '@polkadot/types/types/registry' {
     InstantiateReturnValueTo267: InstantiateReturnValueTo267;
     InstructionV2: InstructionV2;
     InstructionWeights: InstructionWeights;
+    IntegriteeAssetId: IntegriteeAssetId;
     IntegriteeGetter: IntegriteeGetter;
     IntegriteePublicGetter: IntegriteePublicGetter;
     IntegriteeTrustedCall: IntegriteeTrustedCall;
@@ -1040,6 +1050,7 @@ declare module '@polkadot/types/types/registry' {
     SealV0: SealV0;
     SeatHolder: SeatHolder;
     SeedOf: SeedOf;
+    SendNoteArgs: SendNoteArgs;
     ServiceQuality: ServiceQuality;
     SessionIndex: SessionIndex;
     SessionInfo: SessionInfo;
@@ -1060,6 +1071,8 @@ declare module '@polkadot/types/types/registry' {
     SessionKeys9: SessionKeys9;
     SessionKeys9B: SessionKeys9B;
     SessionPhase: SessionPhase;
+    SessionProxyCredentials: SessionProxyCredentials;
+    SessionProxyRole: SessionProxyRole;
     SessionStatus: SessionStatus;
     SetId: SetId;
     SetIndex: SetIndex;

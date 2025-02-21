@@ -1,15 +1,16 @@
 import {Keyring} from "@polkadot/keyring";
-import type {u8} from "@polkadot/types-codec";
+import type {Option, u8} from "@polkadot/types-codec";
 import type {TypeRegistry, u32, Vec} from "@polkadot/types";
 import type {RegistryTypes, Signer} from "@polkadot/types/types";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 import type {
+  AssetBalanceArgs, EnclaveFingerprint,
   GuessTheNumberPublicGetter,
-  GuessTheNumberTrustedGetter,
+  GuessTheNumberTrustedGetter, IntegriteeAssetId,
   IntegriteeGetter,
   ShardIdentifier, TrustedOperationStatus
 } from "@encointer/types";
-import type {Hash} from "@polkadot/types/interfaces/runtime";
+import type {H256, Hash} from "@polkadot/types/interfaces/runtime";
 
 export interface IWorkerBase {
   createType: (apiType: string, obj?: any) => any;
@@ -31,6 +32,15 @@ export interface TrustedCallResult {
   topHash?: Hash,
   status?: TrustedOperationStatus,
 }
+
+// All the assets we support and string variations of it.
+export type AssetIdStr = "USDT" | "usdt" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth"
+
+// If it is a string, we assume that it is base58 encoded.
+export type ShardIdentifierArg = string | ShardIdentifier | EnclaveFingerprint | H256 | Hash;
+
+// If it is a string, we assume that it is base58 encoded.
+export type MrenclaveArg = string | ShardIdentifier | EnclaveFingerprint | H256 | Hash;
 
 export interface ISubmittableGetter<W extends IWorkerBase, Type> {
 
@@ -54,7 +64,7 @@ export interface WorkerOptions {
 }
 
 export interface TrustedGetterArgs {
-  shard: string;
+  shard: ShardIdentifier;
   account: AddressOrPair;
   delegate?: AddressOrPair;
   signer?: Signer
@@ -79,7 +89,7 @@ export interface TrustedSignerOptions {
 }
 
 export interface PublicGetterArgs {
-  shard: string;
+  shard: ShardIdentifier;
 }
 
-export type PublicGetterParams = GuessTheNumberPublicGetter | null
+export type PublicGetterParams = GuessTheNumberPublicGetter | null | Option<IntegriteeAssetId> | IntegriteeAssetId | AssetBalanceArgs
