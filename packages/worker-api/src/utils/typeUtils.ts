@@ -1,5 +1,7 @@
-import type {IntegriteeAssetId} from "@encointer/types";
+import type {EnclaveFingerprint, IntegriteeAssetId, ShardIdentifier} from "@encointer/types";
 import type {TypeRegistry} from "@polkadot/types";
+import type {MrenclaveArg, ShardIdentifierArg} from "@encointer/worker-api";
+import bs58 from "bs58";
 
 
 export type AssetIdStr = "USDT" | "usdt" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth"
@@ -27,3 +29,20 @@ export function assetIdFromString(assetId: AssetIdStr, registry: TypeRegistry): 
     }
 
 }
+
+export function shardIdentifierFromArg(shard: ShardIdentifierArg, registry: TypeRegistry): ShardIdentifier {
+     if (typeof shard === "string") {
+       return registry.createType('ShardIdentifier', bs58.decode(shard));
+     } else {
+         return shard as ShardIdentifier
+     }
+}
+
+export function enclaveFingerprintFromArg(fingerprint: MrenclaveArg, registry: TypeRegistry): EnclaveFingerprint {
+    if (typeof fingerprint === "string") {
+        return registry.createType('EnclaveFingerprint', bs58.decode(fingerprint));
+    } else {
+        return fingerprint as EnclaveFingerprint
+    }
+}
+

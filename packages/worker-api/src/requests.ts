@@ -4,7 +4,7 @@ import {
 } from "./interface.js";
 import type {
     BalanceTransferArgs,
-    BalanceUnshieldArgs, GuessTheNumberTrustedCall,
+    BalanceUnshieldArgs, EnclaveFingerprint, GuessTheNumberTrustedCall,
     IntegriteeGetter,
     IntegriteeTrustedCall,
     IntegriteeTrustedCallSigned,
@@ -13,7 +13,6 @@ import type {
 } from "@encointer/types";
 import {asString, signPayload} from "@encointer/util";
 import type {u32} from "@polkadot/types";
-import bs58 from "bs58";
 import type {AddressOrPair} from "@polkadot/api-base/types/submittable";
 
 export const createIntegriteeGetterPublic = (self: IWorkerBase, request: string, publicGetterParams: PublicGetterParams) => {
@@ -72,13 +71,11 @@ export const signTrustedCall = async (
     call: IntegriteeTrustedCall,
     account: AddressOrPair,
     shard: ShardIdentifier,
-    mrenclave: string,
+    mrenclave: EnclaveFingerprint,
     nonce: u32,
     options?: TrustedSignerOptions,
 ): Promise<IntegriteeTrustedCallSigned> => {
-    const hash = self.createType('Hash', bs58.decode(mrenclave));
-
-    const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...hash.toU8a(), ...shard.toU8a()]);
+    const payload = Uint8Array.from([...call.toU8a(), ...nonce.toU8a(), ...mrenclave.toU8a(), ...shard.toU8a()]);
 
     // delegate overrides signer extension option
     const signature = await signPayload(options?.delegate ? options.delegate : account, payload, options?.delegate ? undefined : options?.signer);
