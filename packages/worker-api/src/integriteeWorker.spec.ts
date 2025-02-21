@@ -6,6 +6,7 @@ import {type KeyringPair} from "@polkadot/keyring/types";
 
 import WS from 'websocket';
 import type {AccountInfo} from "@polkadot/types/interfaces/system";
+import type {EnclaveFingerprint, ShardIdentifier} from "@encointer/types";
 
 const {w3cwebsocket: WebSocket} = WS;
 
@@ -15,6 +16,11 @@ describe('worker', () => {
     let worker: IntegriteeWorker;
     let alice: KeyringPair;
     let charlie: KeyringPair;
+
+    // dynamically get shard/fingerprint
+    let shard: ShardIdentifier;
+    let fingerprint: EnclaveFingerprint;
+
     beforeAll(async () => {
         jest.setTimeout(90000);
         await cryptoWaitReady();
@@ -34,6 +40,11 @@ describe('worker', () => {
                 { rejectUnauthorized: false }
             ),
         });
+
+        // can alternatively set the hardcoded shard from the network here if desired.
+        // Might be valuable to ensure that a specific shard is used.
+        shard = await worker.getShard();
+        fingerprint = await worker.getFingerprint();
     });
 
     afterAll(async () => {
@@ -41,11 +52,11 @@ describe('worker', () => {
     });
 
     // Todo: add proper CI to test this too.
-    describe('assets', () => {
+    describe.skip('assets', () => {
         describe('assetBalanceGetter', () => {
             it('should return value', async () => {
                 const getter = await worker.assetBalanceGetter(
-                    alice, "USDC.e", network.shard
+                    alice, "USDC.e", shard
                 );
 
                 const result = await getter.send();
@@ -58,7 +69,7 @@ describe('worker', () => {
         describe('assetIssuanceGetter', () => {
             it('should return value', async () => {
                 const getter = worker.assetTotalIssuanceGetter(
-                    network.shard, "USDC.e"
+                    shard, "USDC.e"
                 );
 
                 const result = await getter.send();
@@ -66,15 +77,32 @@ describe('worker', () => {
                 console.log('Alice Balance', result.toNumber());
                 expect(result).toBeDefined();
             });
+        });
 
-            it('should return value', async () => {
-                const shard = network.shard;
+        describe.skip('trusted assets transfer', () => {
+            it('trusted assets transfer works', async () => {
                 const result = await worker.trustedAssetTransfer(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     alice.address,
                     charlie.address,
+                    1000000,
+                    "USDC.e"
+                );
+                console.log('balance transfer result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
+
+        describe.skip('unshield assets transfer', () => {
+            it('assets unshield works', async () => {
+                const result = await worker.assetUnshieldFunds(
+                    alice,
+                    shard,
+                    fingerprint,
+                    alice.address,
+                    alice.address,
                     1000000,
                     "USDC.e"
                 );
@@ -87,7 +115,7 @@ describe('worker', () => {
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
-    describe.skip('needs worker and node running', () => {
+    describe('needs worker and node running', () => {
         describe('getWorkerPubKey', () => {
             it('should return value', async () => {
                 const result = await worker.getShieldingKey();
@@ -377,6 +405,25 @@ describe('worker', () => {
                 expect(result).toBeDefined();
             });
         });
+
+        describe('balance unshield through enclave bridge should work', () => {
+            // Getting a missing privileges error in case a shard vault has been set.
+            it('should be invalid', async () => {
+                const shard = network.shard;
+
+                const result = await worker.balanceUnshieldThroughEnclaveBridgePalletFunds(
+                    alice,
+                    shard,
+                    fingerprint,
+                    alice.address,
+                    charlie.address,
+                    1100000000000,
+                );
+                console.log('balance unshield result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+        });
+
 
         // race condition, so skipped
         describe.skip('guess the number should work', () => {

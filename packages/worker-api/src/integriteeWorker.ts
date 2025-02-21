@@ -243,7 +243,7 @@ export class IntegriteeWorker extends Worker {
 
         const params = this.createType('BalanceUnshieldThroughEnclaveBridgePalletArgs', [fromIncognitoAddress, toPublicAddress, amount, shardT])
         const call = createTrustedCall(this, [
-            'balance_unshieldbalance_unshield_through_enclave_bridge_pallet',
+            'balance_unshield_through_enclave_bridge_pallet',
             'BalanceUnshieldThroughEnclaveBridgePalletArgs'
         ], params);
 
