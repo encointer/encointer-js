@@ -53,6 +53,15 @@ describe('worker', () => {
       });
     });
 
+    describe('getShard', () => {
+      it('should return value', async () => {
+        const shard = await worker.getShard();
+
+        console.log('Shard', bs58.encode(shard.toU8a()));
+        expect(shard).toBeDefined();
+      });
+    });
+
     describe('getFingerprint', () => {
       it('should return value', async () => {
         const mrenclave = await worker.getFingerprint();
