@@ -15,7 +15,7 @@ export default {
         unused_index_9: null,
         parentchains_info: null,
         note_buckets_info: null,
-        unused_index_12: null,
+        shard_info: null,
         unused_index_13: null,
         unused_index_14: null,
         unused_index_15: null,

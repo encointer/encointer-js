@@ -13,7 +13,7 @@ import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony,
 import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
 import type { AccountInfoAndSessionProxies, AddSessionProxyArgs, AssetBalanceArgs, AssetsShieldArgs, AssetsTransferArgs, AssetsTransferWithNoteArgs, AssetsUnshieldArgs, AttemptsArg, BalanceShieldArgs, BalanceShieldThroughEnclaveBridgePalletArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BalanceUnshieldThroughEnclaveBridgePalletArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeAssetId, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, SendNoteArgs, SessionProxyCredentials, SessionProxyRole, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
-import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardIdentifier, TrustedOperationStatus, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
+import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardConfig, ShardIdentifier, ShardInfo, ShardMode, ShardSignerStatus, ShardStatus, TrustedOperationStatus, UpgradableShardConfig, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
 import type { BitVec, Bool, Bytes, F32, F64, I128, I16, I256, I32, I64, I8, ISize, Json, Null, OptionBool, Raw, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, f32, f64, i128, i16, i256, i32, i64, i8, isize, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types-codec';
 import type { TAssetConversion } from '@polkadot/types/interfaces/assetConversion';
@@ -1076,7 +1076,12 @@ declare module '@polkadot/types/types/registry' {
     SessionStatus: SessionStatus;
     SetId: SetId;
     SetIndex: SetIndex;
+    ShardConfig: ShardConfig;
     ShardIdentifier: ShardIdentifier;
+    ShardInfo: ShardInfo;
+    ShardMode: ShardMode;
+    ShardSignerStatus: ShardSignerStatus;
+    ShardStatus: ShardStatus;
     Si0Field: Si0Field;
     Si0LookupTypeId: Si0LookupTypeId;
     Si0Path: Si0Path;
@@ -1263,6 +1268,7 @@ declare module '@polkadot/types/types/registry' {
     UnlockChunk: UnlockChunk;
     UnrewardedRelayer: UnrewardedRelayer;
     UnrewardedRelayersState: UnrewardedRelayersState;
+    UpgradableShardConfig: UpgradableShardConfig;
     UpgradeGoAhead: UpgradeGoAhead;
     UpgradeRestriction: UpgradeRestriction;
     UpwardMessage: UpwardMessage;

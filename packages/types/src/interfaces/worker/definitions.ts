@@ -64,5 +64,36 @@ export default {
       creation_block_number: 'Option<BlockNumber>',
       creation_timestamp: 'Option<Moment>',
     },
+    ShardInfo: {
+      config: 'Option<UpgradableShardConfig>',
+      config_updated_at: 'Option<BlockNumber>',
+      status: 'Option<ShardStatus>',
+      mode: 'ShardMode',
+    },
+    UpgradableShardConfig: {
+      active_config: 'ShardConfig',
+      pending_upgrade: 'Option<ShardConfig>',
+      upgrade_at: 'Option<BlockNumber>',
+    },
+    ShardConfig: {
+      enclave_fingerprint: 'EnclaveFingerprint',
+      max_instances: 'Option<u32>',
+      authorities: 'Option<Vec<AccountId>>',
+      maintenance_mode: 'bool'
+    },
+    ShardStatus: 'Vec<ShardSignerStatus>',
+    ShardSignerStatus: {
+      signer: 'AccountId',
+      fingerprint: 'EnclaveFingerprint',
+      last_activity: 'BlockNumber',
+    },
+    ShardMode: {
+      _enum: {
+        Initializing: null,
+        Normal: null,
+        MaintenanceOngoing: null,
+        Retired: null,
+      }
+    },
   }
 }

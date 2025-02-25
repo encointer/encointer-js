@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { CommunityIdentifier } from '@encointer/types/interfaces/community';
-import type { Bytes, Enum, Option, Struct, Text, bool, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId, BlockNumber, H256, Hash, Moment } from '@polkadot/types/interfaces/runtime';
 
@@ -68,8 +68,43 @@ export interface RpcReturnValue extends Struct {
   readonly status: DirectRequestStatus;
 }
 
+/** @name ShardConfig */
+export interface ShardConfig extends Struct {
+  readonly enclave_fingerprint: EnclaveFingerprint;
+  readonly max_instances: Option<u32>;
+  readonly authorities: Option<Vec<AccountId>>;
+  readonly maintenance_mode: bool;
+}
+
 /** @name ShardIdentifier */
 export interface ShardIdentifier extends Hash {}
+
+/** @name ShardInfo */
+export interface ShardInfo extends Struct {
+  readonly config: Option<UpgradableShardConfig>;
+  readonly config_updated_at: Option<BlockNumber>;
+  readonly status: Option<ShardStatus>;
+  readonly mode: ShardMode;
+}
+
+/** @name ShardMode */
+export interface ShardMode extends Enum {
+  readonly isInitializing: boolean;
+  readonly isNormal: boolean;
+  readonly isMaintenanceOngoing: boolean;
+  readonly isRetired: boolean;
+  readonly type: 'Initializing' | 'Normal' | 'MaintenanceOngoing' | 'Retired';
+}
+
+/** @name ShardSignerStatus */
+export interface ShardSignerStatus extends Struct {
+  readonly signer: AccountId;
+  readonly fingerprint: EnclaveFingerprint;
+  readonly last_activity: BlockNumber;
+}
+
+/** @name ShardStatus */
+export interface ShardStatus extends Vec<ShardSignerStatus> {}
 
 /** @name TrustedOperationStatus */
 export interface TrustedOperationStatus extends Enum {
@@ -86,6 +121,13 @@ export interface TrustedOperationStatus extends Enum {
   readonly isDropped: boolean;
   readonly isInvalid: boolean;
   readonly type: 'Submitted' | 'Future' | 'Ready' | 'BroadCast' | 'InSidechainBlock' | 'Retracted' | 'FinalityTimeout' | 'Finalized' | 'Usurped' | 'Dropped' | 'Invalid';
+}
+
+/** @name UpgradableShardConfig */
+export interface UpgradableShardConfig extends Struct {
+  readonly active_config: ShardConfig;
+  readonly pending_upgrade: Option<ShardConfig>;
+  readonly upgrade_at: Option<BlockNumber>;
 }
 
 /** @name Vault */
