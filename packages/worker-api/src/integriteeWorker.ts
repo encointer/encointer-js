@@ -9,7 +9,7 @@ import type {
     AccountInfoAndSessionProxies,
     AttemptsArg,
     ParentchainsInfo,
-    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole,
+    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -78,6 +78,13 @@ export class IntegriteeWorker extends Worker {
             shard: shardIdentifierFromArg(shard, this.registry()),
         }
         return submittablePublicGetter<IntegriteeWorker, ParentchainsInfo>(this, 'parentchains_info', publicGetterArgs, null, 'ParentchainsInfo');
+    }
+
+    public shardInfoGetter(shard: ShardIdentifierArg): SubmittableGetter<IntegriteeWorker, ShardInfo> {
+        const publicGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+        }
+        return submittablePublicGetter<IntegriteeWorker, ShardInfo>(this, 'shard_info', publicGetterArgs, null, 'ShardInfo');
     }
 
     public noteBucketsInfoGetter(shard: ShardIdentifierArg): SubmittableGetter<IntegriteeWorker, NotesBucketInfo> {
