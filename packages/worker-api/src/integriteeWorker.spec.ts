@@ -141,7 +141,7 @@ describe('worker', () => {
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
-    describe.skip('needs worker and node running', () => {
+    describe('needs worker and node running', () => {
         describe('getWorkerPubKey', () => {
             it('should return value', async () => {
                 const result = await worker.getShieldingKey();
@@ -160,7 +160,7 @@ describe('worker', () => {
 
         describe('getNonce', () => {
             it('should return value', async () => {
-                const result = await worker.getNonce(alice, network.shard);
+                const result = await worker.getNonce(alice, shard);
                 console.log('Nonce', result.toHuman);
                 expect(result).toBeDefined();
             });
@@ -169,7 +169,7 @@ describe('worker', () => {
 
         describe('getAccountInfo', () => {
             it('should return value', async () => {
-                const result = await worker.getAccountInfo(alice, network.shard);
+                const result = await worker.getAccountInfo(alice, shard);
                 console.log('getAccountInfo', result.toHuman());
                 expect(result).toBeDefined();
             });
@@ -177,7 +177,7 @@ describe('worker', () => {
 
         describe('accountInfoGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.accountInfoGetter(alice, network.shard);
+                const getter = await worker.accountInfoGetter(alice, shard);
                 console.log(`AccountInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo:', result.toHuman());
@@ -187,7 +187,7 @@ describe('worker', () => {
             });
 
             it('should fall back to default if signed by unauthorized delegate', async () => {
-                const getter = await worker.accountInfoGetter(alice, network.shard, { delegate: charlie });
+                const getter = await worker.accountInfoGetter(alice, shard, { delegate: charlie });
                 console.log(`AccountInfoGetter with unauthorized signature: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('getAccountInfo:', result.toHuman());
@@ -201,7 +201,7 @@ describe('worker', () => {
 
         describe('parentchainsInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.parentchainsInfoGetter(network.shard);
+                const getter = worker.parentchainsInfoGetter(shard);
                 console.log(`parentchainsInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('parentchainsInfoGetter:', result.toHuman());
@@ -209,9 +209,19 @@ describe('worker', () => {
             });
         });
 
+        describe('shardInfoGetter', () => {
+            it('should return value', async () => {
+                const getter = worker.shardInfoGetter(shard);
+                console.log(`shardInfoGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('shardInfoGetter:', result.toHuman());
+                expect(result).toBeDefined();
+            });
+        });
+
         describe('noteBucketsInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.noteBucketsInfoGetter(network.shard);
+                const getter = worker.noteBucketsInfoGetter(shard);
                 console.log(`noteBucketsInfoGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('noteBucketsInfoGetter:', result.toHuman());
@@ -221,7 +231,7 @@ describe('worker', () => {
 
         describe('notesForTrustedGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.notesForTrustedGetter(alice, 0, network.shard);
+                const getter = await worker.notesForTrustedGetter(alice, 0, shard);
                 console.log(`notesForTrustedGetter: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('notesForTrustedGetter:', result.toHuman());
@@ -231,7 +241,7 @@ describe('worker', () => {
 
         describe('guessTheNumberInfoGetter', () => {
             it('should return value', async () => {
-                const getter = worker.guessTheNumberInfoGetter(network.shard);
+                const getter = worker.guessTheNumberInfoGetter(shard);
                 console.log(`GuessTheNumberInfo: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('GuessTheNumberInfo:', result.toHuman());
@@ -241,7 +251,7 @@ describe('worker', () => {
 
         describe('guessTheNumberAttemptsGetter', () => {
             it('should return value', async () => {
-                const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, network.shard);
+                const getter = await worker.guessTheNumberAttemptsTrustedGetter(charlie, shard);
                 console.log(`Attempts: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('Attempts:', result.toHuman());
@@ -251,13 +261,13 @@ describe('worker', () => {
 
         describe('call signed by unauthorized delegate should fail', () => {
             it('should fail', async () => {
-                const shard = network.shard;
+
                 //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
                 const testNote = "My test note";
                 const result = await worker.trustedBalanceTransfer(
                   alice,
                   shard,
-                  network.mrenclave,
+                  fingerprint,
                   alice.address,
                   charlie.address,
                   1100000000000,
@@ -273,13 +283,13 @@ describe('worker', () => {
 
         describe.skip('should return note of the executed trusted call', () => {
             it('should return balance transfer with note as note', async () => {
-                const shard = network.shard;
+
                 //const testNote = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
                 const testNote = "My test note";
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     alice.address,
                     charlie.address,
                     1100000000000,
@@ -288,7 +298,7 @@ describe('worker', () => {
                 console.log('balance transfer result', JSON.stringify(result));
                 expect(result).toBeDefined();
 
-                const getter = await worker.notesForTrustedGetter(alice, 0, network.shard);
+                const getter = await worker.notesForTrustedGetter(alice, 0, shard);
                 console.log(`notesForTrustedGetter: ${JSON.stringify(getter)}`);
                 const notes = await getter.send();
                 console.log('notesForTrustedGetter:', notes.toHuman());
@@ -311,7 +321,7 @@ describe('worker', () => {
         // race condition so skipped
         describe.skip('session proxies (delegates) should work', () => {
             it('add delegate should work', async () => {
-                const shard = network.shard;
+
                 const now = new Date();
                 const expiryDate = new Date(now.getTime() + 40 * 24 * 60 * 60 * 1000);
                 const expiry = Math.floor(expiryDate.getTime());
@@ -320,7 +330,7 @@ describe('worker', () => {
                 const result = await worker.trustedAddSessionProxy(
                   alice,
                   shard,
-                  network.mrenclave,
+                  fingerprint,
                   role,
                   '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
                   expiry,
@@ -331,7 +341,7 @@ describe('worker', () => {
             });
 
             it('AccountInfoAndProxiesGetter should return new proxy', async () => {
-                const getter = await worker.accountInfoAndSessionProxiesGetter(alice, network.shard);
+                const getter = await worker.accountInfoAndSessionProxiesGetter(alice, shard);
                 console.log(`accountInfoAndSessionProxies: ${JSON.stringify(getter)}`);
                 const result = await getter.send();
                 console.log('accountInfoAndSessionProxies:', result.toHuman());
@@ -341,7 +351,7 @@ describe('worker', () => {
             });
 
             it('call as delegate should work', async () => {
-                const shard = network.shard;
+
                 const localKeyring = new Keyring({ type: "sr25519", ss58Format: 42 });
                 const delegate = localKeyring.addFromMnemonic("secret forest ticket smooth wide mass parent reveal embark impose fiscal company", {
                     name: "fresh",
@@ -349,7 +359,7 @@ describe('worker', () => {
                 const result = await worker.trustedBalanceTransfer(
                   alice,
                   shard,
-                  network.mrenclave,
+                  fingerprint,
                   alice.address,
                   '5DwH48esFAmQWjaae7zvzzAbhRgS4enS7tfUPTbGr6ZFnW7R',
                   1100000000000,
@@ -366,11 +376,11 @@ describe('worker', () => {
         // race condition so skipped
         describe.skip('send note should work', () => {
             it('send note included', async () => {
-                const shard = network.shard;
+
                 const result = await worker.trustedSendNote(
                   alice,
                   shard,
-                  network.mrenclave,
+                  fingerprint,
                   alice.address,
                   charlie.address,
                   "Hoi"
@@ -385,11 +395,11 @@ describe('worker', () => {
         // race condition so skipped
         describe.skip('balance transfer should work', () => {
             it('should return value', async () => {
-                const shard = network.shard;
+
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     alice.address,
                     charlie.address,
                     1100000000000
@@ -399,11 +409,11 @@ describe('worker', () => {
             });
 
             it('should return value with note', async () => {
-                const shard = network.shard;
+
                 const result = await worker.trustedBalanceTransfer(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     alice.address,
                     charlie.address,
                     1100000000000,
@@ -417,12 +427,12 @@ describe('worker', () => {
         // race condition so skipped
         describe.skip('balance unshield should work', () => {
             it('should return value', async () => {
-                const shard = network.shard;
+
 
                 const result = await worker.balanceUnshieldFunds(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     alice.address,
                     charlie.address,
                     1100000000000,
@@ -435,7 +445,7 @@ describe('worker', () => {
         describe('balance unshield through enclave bridge should work', () => {
             // Getting a missing privileges error in case a shard vault has been set.
             it('should be invalid', async () => {
-                const shard = network.shard;
+
 
                 const result = await worker.balanceUnshieldThroughEnclaveBridgePalletFunds(
                     alice,
@@ -454,12 +464,12 @@ describe('worker', () => {
         // race condition, so skipped
         describe.skip('guess the number should work', () => {
             it('should return value', async () => {
-                const shard = network.shard;
+
 
                 const result = await worker.guessTheNumber(
                     alice,
                     shard,
-                    network.mrenclave,
+                    fingerprint,
                     1,
                 );
                 console.log('guess the number result', JSON.stringify(result));
