@@ -38,7 +38,7 @@ import {
     assetIdFromString,
     enclaveFingerprintFromArg,
     shardIdentifierFromArg
-} from "@encointer/worker-api/utils/typeUtils.js";
+} from "./utils/typeUtils.js";
 import type {Balance} from "@polkadot/types/interfaces/runtime";
 
 export class IntegriteeWorker extends Worker {
