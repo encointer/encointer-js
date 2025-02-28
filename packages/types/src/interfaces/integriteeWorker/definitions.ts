@@ -60,7 +60,7 @@ export default {
       _enum: {
         account_info: 'AccountId',
         account_info_and_session_proxies: 'AccountId',
-        unused_index_2: null,
+        account_essentials: 'AccountId',
         unused_index_3: null,
         unused_index_4: null,
         unused_index_5: null,
@@ -258,6 +258,15 @@ export default {
     AccountInfoAndSessionProxies: {
       account_info: 'AccountInfo',
       session_proxies: 'Vec<SessionProxyCredentials>'
+    },
+    AccountEssentials: {
+      account_info: 'AccountInfo',
+      session_proxies: 'Vec<SessionProxyCredentials>',
+      asset_balances: 'Vec<IntegriteeAssetBalance>',
+    },
+    IntegriteeAssetBalance: {
+      asset_id: 'IntegriteeAssetId',
+      balance: 'Balance',
     },
     SendNoteArgs: '(AccountId, AccountId, String)',
     GuessTheNumberTrustedCall: {
