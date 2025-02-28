@@ -9,6 +9,13 @@ import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Balance, H160, H256, Moment } from '@polkadot/types/interfaces/runtime';
 import type { AccountInfo } from '@polkadot/types/interfaces/system';
 
+/** @name AccountEssentials */
+export interface AccountEssentials extends Struct {
+  readonly account_info: AccountInfo;
+  readonly session_proxies: Vec<SessionProxyCredentials>;
+  readonly asset_balances: Vec<IntegriteeAssetBalance>;
+}
+
 /** @name AccountInfoAndSessionProxies */
 export interface AccountInfoAndSessionProxies extends Struct {
   readonly account_info: AccountInfo;
@@ -110,6 +117,12 @@ export interface GuessTheNumberTrustedGetter extends Enum {
 
 /** @name GuessType */
 export interface GuessType extends u32 {}
+
+/** @name IntegriteeAssetBalance */
+export interface IntegriteeAssetBalance extends Struct {
+  readonly asset_id: IntegriteeAssetId;
+  readonly balance: Balance;
+}
 
 /** @name IntegriteeAssetId */
 export interface IntegriteeAssetId extends Enum {
@@ -301,7 +314,8 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly asAccountInfo: AccountId;
   readonly isAccountInfoAndSessionProxies: boolean;
   readonly asAccountInfoAndSessionProxies: AccountId;
-  readonly isUnusedIndex2: boolean;
+  readonly isAccountEssentials: boolean;
+  readonly asAccountEssentials: AccountId;
   readonly isUnusedIndex3: boolean;
   readonly isUnusedIndex4: boolean;
   readonly isUnusedIndex5: boolean;
@@ -353,7 +367,7 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedGetter;
-  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetBalance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'AccountEssentials' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetBalance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
 }
 
 /** @name IntegriteeTrustedGetterSigned */

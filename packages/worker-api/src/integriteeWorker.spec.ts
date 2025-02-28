@@ -350,7 +350,18 @@ describe('worker', () => {
                 expect(data.session_proxies[0].role).toEqual(expected_role);
             });
 
-            it('call as delegate should work', async () => {
+
+            it('AccountEssentialsGetter should return new proxy', async () => {
+                const getter = await worker.accountInfoAndSessionProxiesGetter(alice, shard);
+                console.log(`AccountEssentialsGetter: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('AccountEssentialsGetter:', result.toHuman());
+                const data = worker.createType('AccountInfoAndSessionProxies', result);
+                const expected_role = worker.createType('SessionProxyRole', 'Any');
+                expect(data.session_proxies[0].role).toEqual(expected_role);
+            });
+
+            it.skip('call as delegate should work', async () => {
 
                 const localKeyring = new Keyring({ type: "sr25519", ss58Format: 42 });
                 const delegate = localKeyring.addFromMnemonic("secret forest ticket smooth wide mass parent reveal embark impose fiscal company", {

@@ -9,7 +9,7 @@ import type {
     AccountInfoAndSessionProxies,
     AttemptsArg,
     ParentchainsInfo,
-    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo,
+    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo, AccountEssentials,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -71,6 +71,16 @@ export class IntegriteeWorker extends Worker {
             signer: signerOptions?.signer,
         }
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfoAndSessionProxies>(this, 'account_info_and_session_proxies', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountInfoAndSessionProxies');
+    }
+
+    public async accountEssentialsGetter(accountOrPubKey: AddressOrPair, shard: ShardIdentifierArg, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountEssentials>> {
+        const trustedGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        return await submittableTrustedGetter<IntegriteeWorker, AccountEssentials>(this, 'account_essentials', accountOrPubKey, trustedGetterArgs, asString(accountOrPubKey), 'AccountEssentials');
     }
 
     public parentchainsInfoGetter(shard: ShardIdentifierArg): SubmittableGetter<IntegriteeWorker, ParentchainsInfo> {
