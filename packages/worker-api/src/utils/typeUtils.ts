@@ -9,6 +9,9 @@ export function assetIdFromString(assetId: AssetIdStr, registry: TypeRegistry): 
         case "USDT":
         case "usdt":
             return registry.createType("IntegriteeAssetId", 10);
+        case "USDT.e":
+        case "usdt.e":
+            return registry.createType("IntegriteeAssetId", 11);
         case "USDC":
         case "usdc":
             return registry.createType("IntegriteeAssetId", 20);
