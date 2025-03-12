@@ -301,7 +301,7 @@ export default {
         unused_index_8: null,
         unused_index_9: null,
         USDT: null,
-        unused_index_11: null,
+        USDT_E: null,
         unused_index_12: null,
         unused_index_13: null,
         unused_index_14: null,

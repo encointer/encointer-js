@@ -137,7 +137,7 @@ export interface IntegriteeAssetId extends Enum {
   readonly isUnusedIndex8: boolean;
   readonly isUnusedIndex9: boolean;
   readonly isUsdt: boolean;
-  readonly isUnusedIndex11: boolean;
+  readonly isUsdtE: boolean;
   readonly isUnusedIndex12: boolean;
   readonly isUnusedIndex13: boolean;
   readonly isUnusedIndex14: boolean;
@@ -158,7 +158,7 @@ export interface IntegriteeAssetId extends Enum {
   readonly isUnusedIndex29: boolean;
   readonly isEth: boolean;
   readonly isWeth: boolean;
-  readonly type: 'UnusedIndex0' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'Usdt' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'Usdc' | 'UsdcE' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'Eth' | 'Weth';
+  readonly type: 'UnusedIndex0' | 'UnusedIndex1' | 'UnusedIndex2' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'Usdt' | 'UsdtE' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'Usdc' | 'UsdcE' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'Eth' | 'Weth';
 }
 
 /** @name IntegriteeGetter */

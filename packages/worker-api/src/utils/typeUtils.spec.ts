@@ -30,6 +30,16 @@ describe('utils', () => {
             expect(asset_id.isUsdt);
         })
 
+        it('USDT.e works', () => {
+            const asset_id = assetIdFromString("USDT.e", registry);
+            expect(asset_id.isUsdtE);
+        })
+
+        it('usdt.e works', () => {
+            const asset_id = assetIdFromString("usdt.e", registry);
+            expect(asset_id.isUsdtE);
+        })
+
         it('USDC works', () => {
             const asset_id = assetIdFromString("USDC", registry);
             expect(asset_id.isUsdc);
