@@ -79,6 +79,26 @@ describe('utils', () => {
             const asset_id = assetIdFromString("weth", registry);
             expect(asset_id.isWeth);
         })
+
+        it('BTC works', () => {
+            const asset_id = assetIdFromString("BTC", registry);
+            expect(asset_id.isBtc);
+        })
+
+        it('btc works', () => {
+            const asset_id = assetIdFromString("btc", registry);
+            expect(asset_id.isBtc);
+        })
+
+        it('WBTC.e works', () => {
+            const asset_id = assetIdFromString("WBTC.e", registry);
+            expect(asset_id.isWbtcE);
+        })
+
+        it('wbtc.e works', () => {
+            const asset_id = assetIdFromString("wbtc.e", registry);
+            expect(asset_id.isWbtcE);
+        })
     })
 
     describe('Create ShardIdentifier', () => {
