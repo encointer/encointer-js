@@ -34,7 +34,7 @@ export interface TrustedCallResult {
 }
 
 // All the assets we support and string variations of it.
-export type AssetIdStr = "USDT" | "usdt" | "USDT.e" | "usdt.e" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth"
+export type AssetIdStr = "USDT" | "usdt" | "USDT.e" | "usdt.e" | "USDC" | "usdc" | "USDC.e" | "usdc.e" | "ETH" | "eth" | "WETH" | "weth" | "BTC" | "btc" | "WBTC.e" | "wbtc.e"
 
 // If it is a string, we assume that it is base58 encoded.
 export type ShardIdentifierArg = string | ShardIdentifier | EnclaveFingerprint | H256 | Hash;

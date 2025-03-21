@@ -24,6 +24,12 @@ export function assetIdFromString(assetId: AssetIdStr, registry: TypeRegistry): 
         case "WETH":
         case "weth":
             return registry.createType("IntegriteeAssetId", 31);
+        case "BTC":
+        case "btc":
+            return registry.createType("IntegriteeAssetId", 36);
+        case "WBTC.e":
+        case "wbtc.e":
+            return registry.createType("IntegriteeAssetId", 37);
         default:
             throw new Error("Unknown asset id");
     }

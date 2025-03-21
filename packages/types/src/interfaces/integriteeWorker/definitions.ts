@@ -322,6 +322,12 @@ export default {
         unused_index_29: null,
         ETH: null,
         WETH: null,
+        unused_index_32: null,
+        unused_index_33: null,
+        unused_index_34: null,
+        unused_index_35: null,
+        BTC: null,
+        WBTC_E: null,
       }
     },
   }
