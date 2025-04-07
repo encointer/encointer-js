@@ -60,6 +60,16 @@ describe('utils', () => {
             expect(asset_id.isUsdcE);
         })
 
+        it('EURC.e works', () => {
+            const asset_id = assetIdFromString("EURC.e", registry);
+            expect(asset_id.isEurcE);
+        })
+
+        it('eurc.e works', () => {
+            const asset_id = assetIdFromString("eurc.e", registry);
+            expect(asset_id.isEurcE);
+        })
+
         it('ETH works', () => {
             const asset_id = assetIdFromString("ETH", registry);
             expect(asset_id.isEth);

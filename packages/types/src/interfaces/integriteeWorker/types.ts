@@ -149,7 +149,7 @@ export interface IntegriteeAssetId extends Enum {
   readonly isUsdc: boolean;
   readonly isUsdcE: boolean;
   readonly isUnusedIndex22: boolean;
-  readonly isUnusedIndex23: boolean;
+  readonly isEurcE: boolean;
   readonly isUnusedIndex24: boolean;
   readonly isUnusedIndex25: boolean;
   readonly isUnusedIndex26: boolean;
