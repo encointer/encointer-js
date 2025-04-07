@@ -18,6 +18,9 @@ export function assetIdFromString(assetId: AssetIdStr, registry: TypeRegistry): 
         case "USDC.e":
         case "usdc.e":
             return registry.createType("IntegriteeAssetId", 21);
+        case "EURC.e":
+        case "eurc.e":
+            return registry.createType("IntegriteeAssetId", 23);
         case "ETH":
         case "eth":
             return registry.createType("IntegriteeAssetId", 30);

@@ -313,7 +313,7 @@ export default {
         USDC: null,
         USDC_E: null,
         unused_index_22: null,
-        unused_index_23: null,
+        EURC_E: null,
         unused_index_24: null,
         unused_index_25: null,
         unused_index_26: null,
