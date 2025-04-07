@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=18.14"
   },
-  "gitHead": "1fa54c11ec73869718b9de521a143969c4cacc02",
+  "gitHead": "b13799d17d7a5781562fc3b38eee4bb8917ac4e3",
   "homepage": "https://github.com/encointer/encointer-js/tree/master/packages/node-api#readme",
   "license": "GPL-3.0-or-later",
   "name": "@encointer/node-api",
