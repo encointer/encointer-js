@@ -328,6 +328,10 @@ export default {
         unused_index_35: null,
         BTC: null,
         WBTC_E: null,
+        unused_index_38: null,
+        unused_index_39: null,
+        PEPE_E: null,
+        unused_index_41: null,
       }
     },
   }
