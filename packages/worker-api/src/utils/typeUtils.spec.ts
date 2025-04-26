@@ -109,6 +109,16 @@ describe('utils', () => {
             const asset_id = assetIdFromString("wbtc.e", registry);
             expect(asset_id.isWbtcE);
         })
+
+        it('PEPE.e works', () => {
+            const asset_id = assetIdFromString("PEPE.e", registry);
+            expect(asset_id.isPepeE);
+        })
+
+        it('pepe.e works', () => {
+            const asset_id = assetIdFromString("pepe.e", registry);
+            expect(asset_id.isPepeE);
+        })
     })
 
     describe('Create ShardIdentifier', () => {
