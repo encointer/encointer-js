@@ -32,7 +32,7 @@
     "@polkadot/util": "^12.6.2"
   },
   "devDependencies": {
-    "@polkadot/typegen": "11.2.1",
+    "@polkadot/typegen": "16.4.2",
     "@types/node": "^20.3.1",
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
