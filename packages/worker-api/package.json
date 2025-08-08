@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/bs58": "^4.0.4",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.35"
   },
   "peerDependencies": {
     "@polkadot/x-randomvalues": "^12.3.2"
