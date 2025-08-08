@@ -26,7 +26,7 @@
     "@encointer/node-api": "^0.19.3-alpha.2",
     "@encointer/types": "^0.19.3-alpha.2",
     "@encointer/util": "^0.19.3-alpha.2",
-    "@peculiar/webcrypto": "^1.4.6",
+    "@peculiar/webcrypto": "^1.5.0",
     "@polkadot/api": "^16.4.3",
     "@polkadot/keyring": "^13.5.4",
     "@polkadot/types": "^16.4.3",

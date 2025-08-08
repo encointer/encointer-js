@@ -888,7 +888,7 @@ __metadata:
     "@encointer/node-api": "npm:^0.19.3-alpha.2"
     "@encointer/types": "npm:^0.19.3-alpha.2"
     "@encointer/util": "npm:^0.19.3-alpha.2"
-    "@peculiar/webcrypto": "npm:^1.4.6"
+    "@peculiar/webcrypto": "npm:^1.5.0"
     "@polkadot/api": "npm:^16.4.3"
     "@polkadot/keyring": "npm:^13.5.4"
     "@polkadot/types": "npm:^16.4.3"
@@ -1971,6 +1971,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@peculiar/asn1-schema@npm:^2.3.13":
+  version: 2.4.0
+  resolution: "@peculiar/asn1-schema@npm:2.4.0"
+  dependencies:
+    asn1js: "npm:^3.0.6"
+    pvtsutils: "npm:^1.3.6"
+    tslib: "npm:^2.8.1"
+  checksum: 10/026d586282e480d6cb69edd94f1e0a5dd59e696fe13ca469dc4afc9f1e6d6ec85ec2affdf02a402c694e2f27fb5e3422c9ac64a6bcc68fcb21835565fb7838a9
+  languageName: node
+  linkType: hard
+
 "@peculiar/asn1-schema@npm:^2.3.8":
   version: 2.3.8
   resolution: "@peculiar/asn1-schema@npm:2.3.8"
@@ -1991,16 +2002,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/webcrypto@npm:^1.4.6":
-  version: 1.4.6
-  resolution: "@peculiar/webcrypto@npm:1.4.6"
+"@peculiar/webcrypto@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@peculiar/webcrypto@npm:1.5.0"
   dependencies:
     "@peculiar/asn1-schema": "npm:^2.3.8"
     "@peculiar/json-schema": "npm:^1.1.12"
     pvtsutils: "npm:^1.3.5"
     tslib: "npm:^2.6.2"
-    webcrypto-core: "npm:^1.7.9"
-  checksum: 10/c1700b585cac0a161539f0060c97d52dc0d99c6e05a40b01ec714a83bfdb54708e615cd5a1fe4c9f22c617fdf05936de2f552dd33e856a2d1c5b0f39ec25ccab
+    webcrypto-core: "npm:^1.8.0"
+  checksum: 10/a6658390c37b1d386f46066e796985eb56f6f86a772e1373c364ec9a8257adf8623f156596613d2828b489e2b5f32f9d2b0820289b4981646001cba7d21ae2f6
   languageName: node
   linkType: hard
 
@@ -4728,7 +4739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1js@npm:^3.0.1, asn1js@npm:^3.0.5":
+"asn1js@npm:^3.0.5":
   version: 3.0.5
   resolution: "asn1js@npm:3.0.5"
   dependencies:
@@ -4736,6 +4747,17 @@ __metadata:
     pvutils: "npm:^1.1.3"
     tslib: "npm:^2.4.0"
   checksum: 10/17fb0302432186631550de9606a4622ec366646d072cde9cdf4bcafa47bd2425e157eeb7b1377ee6520f8b46687b4ecaee31cf0ad2fa494361a1938b2ed53194
+  languageName: node
+  linkType: hard
+
+"asn1js@npm:^3.0.6":
+  version: 3.0.6
+  resolution: "asn1js@npm:3.0.6"
+  dependencies:
+    pvtsutils: "npm:^1.3.6"
+    pvutils: "npm:^1.1.3"
+    tslib: "npm:^2.8.1"
+  checksum: 10/2b283dd87662b3276ccc3e68db041c1062f629d9454b24fc2c141ad07c400ae50e02ee78f8c8a67043aa7d430e949d4616b8921178243932167bc2c9e861b972
   languageName: node
   linkType: hard
 
@@ -13886,6 +13908,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pvtsutils@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "pvtsutils@npm:1.3.6"
+  dependencies:
+    tslib: "npm:^2.8.1"
+  checksum: 10/d45b12f8526e13ecf15fe09b30cde65501f3300fd2a07c11b28a966d434d1f767c8a61597ecba2e19c7eb19ca0c740341a6babc67a4f741e08b1ef1095c71663
+  languageName: node
+  linkType: hard
+
 "pvutils@npm:^1.1.3":
   version: 1.1.3
   resolution: "pvutils@npm:1.1.3"
@@ -16821,16 +16852,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webcrypto-core@npm:^1.7.9":
-  version: 1.7.9
-  resolution: "webcrypto-core@npm:1.7.9"
+"webcrypto-core@npm:^1.8.0":
+  version: 1.8.1
+  resolution: "webcrypto-core@npm:1.8.1"
   dependencies:
-    "@peculiar/asn1-schema": "npm:^2.3.8"
+    "@peculiar/asn1-schema": "npm:^2.3.13"
     "@peculiar/json-schema": "npm:^1.1.12"
-    asn1js: "npm:^3.0.1"
+    asn1js: "npm:^3.0.5"
     pvtsutils: "npm:^1.3.5"
-    tslib: "npm:^2.6.2"
-  checksum: 10/515140c6330024f49142a8dd7d84cdb5adddfc09827b6d3aad5fdec398038465fe8f2b48a3a2d9f67a34ab2ac5324c150ec68d552c9313b65a3130d23629da16
+    tslib: "npm:^2.7.0"
+  checksum: 10/1a03144cb0b34433da0ebff79b1f8b81a17e4edee32614ae310af2b92e97cec24fcf82319a457798fa2c2259808d9cdaecda186655e4ec2616adf8669ffa505c
   languageName: node
   linkType: hard
 
