@@ -875,9 +875,9 @@ __metadata:
     "@babel/runtime": "npm:^7.18.9"
     "@polkadot/util": "npm:^13.5.4"
     "@polkadot/util-crypto": "npm:^13.5.4"
-    "@types/bn.js": "npm:^5.1.5"
+    "@types/bn.js": "npm:^5.2.0"
     assert: "npm:^2.1.0"
-    bn.js: "npm:^5.2.1"
+    bn.js: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -3229,16 +3229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bn.js@npm:^5.1.5":
-  version: 5.1.5
-  resolution: "@types/bn.js@npm:5.1.5"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/9719330c86aeae0a6a447c974cf0f853ba3660ede20de61f435b03d699e30e6d8b35bf71a8dc9fdc8317784438e83177644ba068ed653d0ae0106e1ecbfe289e
-  languageName: node
-  linkType: hard
-
-"@types/bn.js@npm:^5.1.6":
+"@types/bn.js@npm:^5.1.6, @types/bn.js@npm:^5.2.0":
   version: 5.2.0
   resolution: "@types/bn.js@npm:5.2.0"
   dependencies:
@@ -4981,6 +4972,13 @@ __metadata:
   version: 5.2.1
   resolution: "bn.js@npm:5.2.1"
   checksum: 10/7a7e8764d7a6e9708b8b9841b2b3d6019cc154d2fc23716d0efecfe1e16921b7533c6f7361fb05471eab47986c4aa310c270f88e3507172104632ac8df2cfd84
+  languageName: node
+  linkType: hard
+
+"bn.js@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "bn.js@npm:5.2.2"
+  checksum: 10/51ebb2df83b33e5d8581165206e260d5e9c873752954616e5bf3758952b84d7399a9c6d00852815a0aeefb1150a7f34451b62d4287342d457fa432eee869e83e
   languageName: node
   linkType: hard
 
