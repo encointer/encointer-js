@@ -19,22 +19,22 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.19.3",
+  "version": "0.19.4-alpha.0",
   "main": "index.js",
   "scripts": {
     "generate:defs": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-defs --package @encointer/types/interfaces  --input ./src/interfaces",
     "generate:meta": "node --experimental-specifier-resolution=node --loader ts-node/esm  ../../node_modules/.bin/polkadot-types-from-chain --endpoint wss://kusama.api.encointer.org --output ./src/interfaces"
   },
   "dependencies": {
-    "@polkadot/api": "^11.2.1",
-    "@polkadot/types": "^11.2.1",
-    "@polkadot/types-codec": "^11.2.1",
-    "@polkadot/util": "^12.6.2"
+    "@polkadot/api": "^16.4.3",
+    "@polkadot/types": "^16.4.3",
+    "@polkadot/types-codec": "^16.4.3",
+    "@polkadot/util": "^13.5.4"
   },
   "devDependencies": {
-    "@polkadot/typegen": "11.2.1",
+    "@polkadot/typegen": "16.4.3",
     "@types/node": "^20.3.1",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.9.2"
   }
 }

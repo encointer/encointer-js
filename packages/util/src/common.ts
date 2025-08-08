@@ -79,7 +79,7 @@ export function asString(addressOrPair: AddressOrPair): string {
   return isKeyringPair(addressOrPair) ? addressOrPair.address : addressOrPair.toString();
 }
 
-export function isKeyringPair (account: string | IKeyringPair | AccountId | Address): account is IKeyringPair {
+export function isKeyringPair (account: string | IKeyringPair | AccountId | Address | AddressOrPair): account is IKeyringPair {
   return isFunction((account as IKeyringPair).sign);
 }
 

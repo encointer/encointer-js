@@ -21,14 +21,14 @@
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
-  "version": "0.19.3",
+  "version": "0.19.4-alpha.0",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.18.9",
-    "@polkadot/util": "^12.6.2",
-    "@polkadot/util-crypto": "^12.6.2",
-    "@types/bn.js": "^5.1.5",
-    "assert": "^2.0.0",
-    "bn.js": "^5.2.1"
+    "@polkadot/util": "^13.5.4",
+    "@polkadot/util-crypto": "^13.5.4",
+    "@types/bn.js": "^5.2.0",
+    "assert": "^2.1.0",
+    "bn.js": "^5.2.2"
   }
 }
