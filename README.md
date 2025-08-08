@@ -71,7 +71,7 @@ console.log('Bob owns:', balance);
 ```
 
 # Update deps
-Usually, we update the deps when we require a new `@polkadot/version`. The following paradigm should ensure a smooth process.
+Usually, we update the deps when we require a `@polkadot` update. The following paradigm should ensure a smooth process.
 
 1. Always use `yarn upgrade-interactive` to ensure that packages are updated in **all** workspace libs.
 2. Upgrade all `@polkadot/*` deps except `@polkadot/dev` (dev might screw with the build process).
