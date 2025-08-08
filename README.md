@@ -71,21 +71,20 @@ console.log('Bob owns:', balance);
 ```
 
 # Update deps
-Usually, we update the deps, when we require a new `@polkadot/version`. The following paradigm should
-ensure a smooth process.
+Usually, we update the deps when we require a new `@polkadot/version`. The following paradigm should ensure a smooth process.
 
-1. Always use `yarn upgrade-interactive` to ensure that packages are update in **all** workspace libs.
+1. Always use `yarn upgrade-interactive` to ensure that packages are updated in **all** workspace libs.
 2. Upgrade all `@polkadot/*` deps except `@polkadot/dev` (dev might screw with the build process).
 3. Run `yarn generate:types`.
 4. Check if `yarn build` and `yarn test` works (optional: check integration tests).
-5. Ensure that `bn.js` version matches upstream. In the past, we had issues with the codec of our fixed point stuff because of a mismatch here.
+5. Ensure that `bn.js` version matches the one from the `@polkadot/api` GitHub repo. In the past, we had issues with the codec of our fixed point stuff because of a mismatch here.
 
 If everything works, we could stop here. If not (or if we want to do our chores), we do:
 
 1. Update `typescript` and `tslib` and see if build and test works
 2. Update other unproblematic libs (aka all deps introduced by our code)
    - If `@peculiar/webcrypto` is updated, we might want to check that the Incognitee Frontend still works
-3. Finally, we could update our build and testing framework libs (babel and jest).
+3. Finally, we could update our build and testing framework libs (babel, node and jest).
 
 # Publish to npm
 
