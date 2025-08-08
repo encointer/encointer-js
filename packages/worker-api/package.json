@@ -40,7 +40,7 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@types/bs58": "^4.0.4",
+    "@types/bs58": "^5.0.0",
     "websocket": "^1.0.35"
   },
   "peerDependencies": {

@@ -897,7 +897,7 @@ __metadata:
     "@polkadot/wasm-crypto": "npm:^7.4.1"
     "@polkadot/x-global": "npm:^13.5.4"
     "@polkadot/x-ws": "npm:^13.5.4"
-    "@types/bs58": "npm:^4.0.4"
+    "@types/bs58": "npm:^5.0.0"
     bs58: "npm:^6.0.0"
     eventemitter3: "npm:^5.0.1"
     tslib: "npm:^2.8.1"
@@ -3266,13 +3266,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bs58@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "@types/bs58@npm:4.0.4"
+"@types/bs58@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@types/bs58@npm:5.0.0"
   dependencies:
-    "@types/node": "npm:*"
-    base-x: "npm:^3.0.6"
-  checksum: 10/9cac5a00343756f887ad906c10c71464620d352af40ff61373dcede434880a769be8b78380b890e9b13506851af4611ab59e7d4b7159af04f445e1fd5c34e3d0
+    bs58: "npm:*"
+  checksum: 10/5b33ed60d8fe5541cfe6263f3e15e1a705c299f6831712b063cb7f0ad5bf1bbbf6db13b88c16b470c84f20b631b8bdd939414101a6a903ad1231b88d62d987b4
   languageName: node
   linkType: hard
 
@@ -4932,15 +4931,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base-x@npm:^3.0.6":
-  version: 3.0.8
-  resolution: "base-x@npm:3.0.8"
-  dependencies:
-    safe-buffer: "npm:^5.0.1"
-  checksum: 10/92b95493e636999d6505d9c5abfa049fce1bdde9327f733c5984e712cdb98482d2d45410e4ac1d04e5a004545e46898674f405db04c9555ba3e35fc00b150bf4
-  languageName: node
-  linkType: hard
-
 "base-x@npm:^5.0.0":
   version: 5.0.1
   resolution: "base-x@npm:5.0.1"
@@ -5122,7 +5112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bs58@npm:^6.0.0":
+"bs58@npm:*, bs58@npm:^6.0.0":
   version: 6.0.0
   resolution: "bs58@npm:6.0.0"
   dependencies:
@@ -14677,7 +14667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:~5.2.0":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.1.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: 10/32872cd0ff68a3ddade7a7617b8f4c2ae8764d8b7d884c651b74457967a9e0e886267d3ecc781220629c44a865167b61c375d2da6c720c840ecd73f45d5d9451
