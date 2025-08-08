@@ -849,7 +849,7 @@ __metadata:
     "@encointer/types": "npm:^0.19.3-alpha.2"
     "@polkadot/api": "npm:^16.4.3"
     "@polkadot/util-crypto": "npm:^13.5.4"
-    tslib: "npm:^2.6.2"
+    tslib: "npm:^2.8.1"
   languageName: unknown
   linkType: soft
 
@@ -864,7 +864,7 @@ __metadata:
     "@polkadot/util": "npm:^13.5.4"
     "@types/node": "npm:^20.3.1"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.4.5"
+    typescript: "npm:5.9.2"
   languageName: unknown
   linkType: soft
 
@@ -900,7 +900,7 @@ __metadata:
     "@types/bs58": "npm:^4.0.4"
     bs58: "npm:^4.0.1"
     eventemitter3: "npm:^5.0.1"
-    tslib: "npm:^2.6.2"
+    tslib: "npm:^2.8.1"
     websocket: "npm:^1.0.34"
   peerDependencies:
     "@polkadot/x-randomvalues": ^12.3.2
@@ -14525,7 +14525,7 @@ __metadata:
     lerna: "npm:^8.1.2"
     ts-jest: "npm:^29.1.0"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.4.5"
+    typescript: "npm:^5.9.2"
   languageName: unknown
   linkType: soft
 
