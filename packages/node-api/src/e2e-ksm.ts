@@ -109,6 +109,14 @@ describe('node-api', () => {
             console.log(result.toHuman());
             // expect(result[0]).toStrictEqual({ controller: "", url: "..."});
         });
+
+        it('bazaar.GetOfferings should return 0 offerings', async () => {
+            // @ts-ignore
+            const result = await api.rpc.encointer.bazaarGetOfferings(cidLeu);
+            expect(result.length).toBe(0);
+            console.log(result.toHuman());
+            // expect(result[0]).toStrictEqual({ controller: "", url: "..."});
+        });
     });
 });
 
