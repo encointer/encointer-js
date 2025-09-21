@@ -9,13 +9,13 @@ import type { AccountId } from '@polkadot/types/interfaces/runtime';
 /** @name Business */
 export interface Business extends Struct {
   readonly controller: AccountId;
-  readonly business_data: BusinessData;
+  readonly businessData: BusinessData;
 }
 
 /** @name BusinessData */
 export interface BusinessData extends Struct {
   readonly url: PalletString;
-  readonly last_oid: u32;
+  readonly lastOid: u32;
 }
 
 /** @name BusinessIdentifier */
