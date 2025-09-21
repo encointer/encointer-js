@@ -10,12 +10,12 @@ export default {
             businessData: 'BusinessData',
         },
         BusinessData: {
-            url: 'PalletString',
+            url: 'Text',
             lastOid: 'u32'
         },
         OfferingIdentifier: 'u32',
         OfferingData: {
-            url: 'PalletString'
+            url: 'Text'
         }
     }
 }
