@@ -26,7 +26,7 @@ import {
     getStartOfAttestingPhase,
     getParticipantRegistration,
     getMeetupTimeOffset,
-} from './encointer-api';
+} from './ceremony-api';
 import {Moment} from "@polkadot/types/interfaces/runtime";
 
 describe('node-api', () => {

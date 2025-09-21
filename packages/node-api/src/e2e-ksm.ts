@@ -11,7 +11,7 @@ import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
     getMeetupTimeOffset,
     getNextMeetupTime,
-} from './encointer-api.js';
+} from './ceremony-api.js';
 
 describe('node-api', () => {
     let api: ApiPromise;
