@@ -6,6 +6,12 @@ import type { CommunityIdentifier } from '@encointer/types/interfaces/community'
 import type { Struct, u32 } from '@polkadot/types-codec';
 import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
+/** @name Business */
+export interface Business extends Struct {
+  readonly controller: AccountId;
+  readonly business_data: BusinessData;
+}
+
 /** @name BusinessData */
 export interface BusinessData extends Struct {
   readonly url: PalletString;

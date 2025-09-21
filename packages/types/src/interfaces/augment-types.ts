@@ -6,7 +6,7 @@
 import '@polkadot/types/types/registry';
 
 import type { BalanceEntry, BalanceType, Demurrage } from '@encointer/types/interfaces/balances';
-import type { BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
+import type { Business, BusinessData, BusinessIdentifier, OfferingData, OfferingIdentifier } from '@encointer/types/interfaces/bazaar';
 import type { Assignment, AssignmentCount, AssignmentParams, Attestation, AttestationIndexType, CeremonyIndexType, CeremonyPhaseType, ClaimOfAttendance, ClaimOfAttendanceSigningPayload, CommunityCeremonyStats, CommunityReputation, Meetup, MeetupAssignment, MeetupIndexType, MeetupResult, MeetupTimeOffsetType, ParticipantIndexType, ParticipantRegistration, ProofOfAttendance, RegistrationType, Reputation } from '@encointer/types/interfaces/ceremony';
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
@@ -254,6 +254,7 @@ declare module '@polkadot/types/types/registry' {
     BucketIndex: BucketIndex;
     BucketInfo: BucketInfo;
     BufferedSessionChange: BufferedSessionChange;
+    Business: Business;
     BusinessData: BusinessData;
     BusinessIdentifier: BusinessIdentifier;
     Bytes: Bytes;

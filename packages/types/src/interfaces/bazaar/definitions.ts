@@ -5,11 +5,15 @@ export default {
             communityIdentifier: 'CommunityIdentifier',
             controller: 'AccountId'
         },
-        OfferingIdentifier: 'u32',
+        Business: {
+            controller: 'AccountId',
+            business_data: 'BusinessData',
+        },
         BusinessData: {
             url: 'PalletString',
             last_oid: 'u32'
         },
+        OfferingIdentifier: 'u32',
         OfferingData: {
             url: 'PalletString'
         }
