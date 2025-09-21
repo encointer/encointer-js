@@ -17,11 +17,11 @@ describe('node-api', () => {
     let api: ApiPromise;
     let cidLeu: CommunityIdentifier;
 
-    const chain = 'ws://127.0.0.1:9944';
+    const chain = 'wss://kusama.api.encointer.org';
     beforeAll(async () => {
         await cryptoWaitReady();
 
-        const provider = new WsProvider('wss://kusama.api.encointer.org');
+        const provider = new WsProvider(chain);
         try {
             api = await ApiPromise.create({
                 ...options(),
