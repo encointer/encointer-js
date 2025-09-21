@@ -6,12 +6,13 @@ import type {
     CommunityIdentifier,
     Location,
 } from "@encointer/types";
-import { stringToDegree } from '@encointer/types';
+import {stringToDegree} from '@encointer/types';
 import {cryptoWaitReady} from "@polkadot/util-crypto";
 import {
     getMeetupTimeOffset,
     getNextMeetupTime,
 } from './ceremony-api.js';
+import {getBusinesses} from './bazaar-api.js';
 
 describe('node-api', () => {
     let api: ApiPromise;
@@ -73,6 +74,24 @@ describe('node-api', () => {
         });
     });
 
+    describe('bazaar-api', () => {
+        it('bazaar.GetBusinesses should return 1 business', async () => {
+            // @ts-ignore
+            const result = await getBusinesses(api, cidLeu);
+            expect(result.length).toBe(1);
+            console.log("BusinessResult", result.toHuman());
+
+            let business = api.createType("Business", {
+                controller: "CcZpQp6RdZiHzuEqdyiQJqHUvJsN13QPY113UGyEQgeYeDn",
+                businessData: {
+                    url: "Qmb3mRYRK6nwf3MXULPRHAQHAfkGs38UJ7voXLPN9gngqa",
+                    lastOid: 1
+                }
+            });
+            expect(result.pop()!.toHuman()).toStrictEqual(business.toHuman());
+        });
+    });
+
     describe('rpc', () => {
         // These tests predominantly verify that we have correct rpc/type definitions
         describe('encointer', () => {
@@ -81,6 +100,14 @@ describe('node-api', () => {
                 const cidNames = await api.rpc.encointer.getAllCommunities();
                 expect(cidNames[0].cid).toStrictEqual(cidLeu);
             });
+        });
+
+        it('bazaar.GetBusinesses should return 1 business', async () => {
+            // @ts-ignore
+            const result = await api.rpc.encointer.bazaarGetBusinesses(cidLeu);
+            expect(result.length).toBe(1);
+            console.log(result.toHuman());
+            // expect(result[0]).toStrictEqual({ controller: "", url: "..."});
         });
     });
 });
