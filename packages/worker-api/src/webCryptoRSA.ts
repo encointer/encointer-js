@@ -33,9 +33,9 @@ export async function encryptWithPublicKey(
     return globalThis.crypto.subtle.encrypt({ name: "RSA-OAEP" }, publicKey, data);
 }
 
-function toBase64Url(buf: Uint8Array): string {
-    return Buffer.from(buf)
-        .toString("base64")
+function toBase64Url(uint8Array: Uint8Array): string {
+    const base64String = btoa(String.fromCharCode(...uint8Array));
+    return base64String
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
