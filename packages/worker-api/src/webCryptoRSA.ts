@@ -1,74 +1,42 @@
-import BN from "bn.js";
-import { Crypto } from "@peculiar/webcrypto";
-
 /**
- * Provides crypto the browser via the native crypto, and in the node-js environment (like our tests)
- * via the `@peculiar/webcrypto` polyfill.
+ * Import an RSA public key from modulus+exponent byte arrays.
  */
-let cryptoProvider: any;
-
-if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
-    cryptoProvider = window.crypto;
-} else {
-    cryptoProvider = new Crypto();
-}
-
-/**
- * Type depending on our environment browser vs. node-js.
- */
-type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
-
-
-export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
+export async function parseWebCryptoRSA(data: string): Promise<CryptoKey> {
     const keyJson = JSON.parse(data);
 
-    // Convert Base64url-encoded components to ArrayBuffer
-    const nArrayBuffer = new Uint8Array(new BN(keyJson.n, 'le').toArray());
-    const eArrayBuffer = new Uint8Array(new BN(keyJson.e, 'le').toArray());
+    const nB64Url = toBase64Url(Uint8Array.from(keyJson.n));
+    const eB64Url = toBase64Url(Uint8Array.from(keyJson.e));
 
-    // Import the components into CryptoKey
-    const publicKey = await cryptoProvider.subtle.importKey(
+    const jwk = {
+        kty: "RSA",
+        n: nB64Url,
+        e: eB64Url,
+        ext: true,
+    };
+
+    // Debug check
+    // console.log("Importing JWK:", jwk);
+
+    return globalThis.crypto.subtle.importKey(
         "jwk",
-        {
-            kty: "RSA",
-            e: uint8ArrayToBase64Url(eArrayBuffer),
-            n: uint8ArrayToBase64Url(nArrayBuffer),
-            ext: true,
-        },
-        {
-            name: "RSA-OAEP",
-            hash: "SHA-256",
-        },
+        jwk,
+        { name: "RSA-OAEP", hash: "SHA-256" },
         true,
         ["encrypt"]
     );
-
-    return publicKey;
 }
 
-export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
-    const encryptedData = await cryptoProvider.subtle.encrypt(
-        {
-            name: "RSA-OAEP",
-        },
-        publicKey,
-        data
-    );
-
-    // console.log(`EncryptedData: ${JSON.stringify({encrypted: buf2hex(encryptedData)})}`);
-
-    return encryptedData;
+export async function encryptWithPublicKey(
+    data: Uint8Array,
+    publicKey: CryptoKey
+): Promise<ArrayBuffer> {
+    return globalThis.crypto.subtle.encrypt({ name: "RSA-OAEP" }, publicKey, data);
 }
 
-
-function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
-    const base64String = btoa(String.fromCharCode(...uint8Array));
-    return base64String
+function toBase64Url(buf: Uint8Array): string {
+    return Buffer.from(buf)
+        .toString("base64")
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
-}
-
-export function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
