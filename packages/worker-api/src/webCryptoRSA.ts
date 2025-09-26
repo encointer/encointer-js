@@ -1,41 +1,53 @@
+import BN from "bn.js";
+
 /**
  * Import an RSA public key from modulus+exponent byte arrays.
  */
 export async function parseWebCryptoRSA(data: string): Promise<CryptoKey> {
     const keyJson = JSON.parse(data);
 
-    const nB64Url = toBase64Url(Uint8Array.from(keyJson.n));
-    const eB64Url = toBase64Url(Uint8Array.from(keyJson.e));
+    // Convert Base64url-encoded components to ArrayBuffer
+    const nArrayBuffer = new Uint8Array(new BN(keyJson.n, 'le').toArray());
+    const eArrayBuffer = new Uint8Array(new BN(keyJson.e, 'le').toArray());
 
-    const jwk = {
-        kty: "RSA",
-        n: nB64Url,
-        e: eB64Url,
-        ext: true,
-    };
-
-    // Debug check
-    // console.log("Importing JWK:", jwk);
-
-    return globalThis.crypto.subtle.importKey(
+    // Import the components into CryptoKey
+    const publicKey = await globalThis.crypto.subtle.importKey(
         "jwk",
-        jwk,
-        { name: "RSA-OAEP", hash: "SHA-256" },
+        {
+            kty: "RSA",
+            e: uint8ArrayToBase64Url(eArrayBuffer),
+            n: uint8ArrayToBase64Url(nArrayBuffer),
+            ext: true,
+        },
+        {
+            name: "RSA-OAEP",
+            hash: "SHA-256",
+        },
         true,
         ["encrypt"]
     );
+
+    return publicKey;
 }
 
-export async function encryptWithPublicKey(
-    data: Uint8Array,
-    publicKey: CryptoKey
-): Promise<ArrayBuffer> {
-    return globalThis.crypto.subtle.encrypt({ name: "RSA-OAEP" }, publicKey, data);
+export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
+    const encryptedData = await globalThis.crypto.subtle.encrypt(
+        {
+            name: "RSA-OAEP",
+        },
+        publicKey,
+        data
+    );
+
+    // console.log(`EncryptedData: ${JSON.stringify({encrypted: buf2hex(encryptedData)})}`);
+
+    return encryptedData;
 }
 
-function toBase64Url(buf: Uint8Array): string {
-    return Buffer.from(buf)
-        .toString("base64")
+
+function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
+    const base64String = btoa(String.fromCharCode(...uint8Array));
+    return base64String
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
