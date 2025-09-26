@@ -8,7 +8,6 @@ import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
 import type { AccountId, Balance, H160, H256, Hash, Moment } from '@polkadot/types/interfaces/runtime';
 import type { AccountInfo } from '@polkadot/types/interfaces/system';
-import { CID as IpfsCid } from 'multiformats/cid';
 
 /** @name AccountEssentials */
 export interface AccountEssentials extends Struct {
@@ -81,6 +80,9 @@ export interface ConversationId extends u32 {}
 /** @name CreditClassId */
 export interface CreditClassId extends u32 {}
 
+/** @name CreditClassInfoArg */
+export interface CreditClassInfoArg extends CreditsArg {}
+
 /** @name CreditsArg */
 export interface CreditsArg extends Struct {
   readonly origin: AccountId;
@@ -122,7 +124,7 @@ export interface CreditsTrustedGetter extends Enum {
   readonly isCredits: boolean;
   readonly asCredits: CreditsArg;
   readonly isCreditClassInfo: boolean;
-  readonly asCreditClassInfo: CreditsArg;
+  readonly asCreditClassInfo: CreditClassInfoArg;
   readonly type: 'Credits' | 'CreditClassInfo';
 }
 
@@ -288,7 +290,9 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberPublicGetter;
-  readonly type: 'SomeValue' | 'TotalIssuance' | 'UndistributedFees' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'ShardInfo' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetTotalIssuance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly isCredits: boolean;
+  readonly asCredits: CreditsTrustedGetter;
+  readonly type: 'SomeValue' | 'TotalIssuance' | 'UndistributedFees' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'ShardInfo' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetTotalIssuance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber' | 'Credits';
 }
 
 /** @name IntegriteeTrustedCall */
@@ -484,17 +488,9 @@ export interface RelayedNoteRequest extends Struct {
   readonly maybe_encryption_key: Option<H256>;
 }
 
+/** @name RelayedNoteRetrievalHere */
 export interface RelayedNoteRetrievalHere extends Struct {
-  readonly msg: String;
-}
-
-export interface RelayedNoteRetrievalIpfs extends Struct {
-  readonly cid: IpfsCid;
-  readonly encryption_key: H256;
-}
-
-export interface RelayedNoteRetrievalUndeclared extends Struct {
-  readonly encryption_key: H256;
+  readonly msg: Text;
 }
 
 /** @name RelayedNoteRetrievalInfo */
@@ -506,7 +502,17 @@ export interface RelayedNoteRetrievalInfo extends Enum {
   readonly isUndeclared: boolean;
   readonly asUndeclared: RelayedNoteRetrievalUndeclared;
   readonly type: 'Here' | 'Ipfs' | 'Undeclared';
+}
 
+/** @name RelayedNoteRetrievalIpfs */
+export interface RelayedNoteRetrievalIpfs extends Struct {
+  readonly ipfs_hash: Bytes;
+  readonly encryption_key: H256;
+}
+
+/** @name RelayedNoteRetrievalUndeclared */
+export interface RelayedNoteRetrievalUndeclared extends Struct {
+  readonly encryption_key: H256;
 }
 
 /** @name SendNoteArgs */

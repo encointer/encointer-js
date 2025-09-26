@@ -54,6 +54,7 @@ export default {
         unused_index_48: null,
         unused_index_49: null,
         guess_the_number: 'GuessTheNumberPublicGetter',
+        credits: 'CreditsTrustedGetter',
       }
     },
     IntegriteeTrustedGetter: {
@@ -241,13 +242,14 @@ export default {
     CreditsTrustedGetter: {
       _enum: {
         credits: 'CreditsArg',
-        credit_class_info: 'CreditsArg'
+        credit_class_info: 'CreditClassInfoArg'
       }
     },
     CreditsArg: {
       origin: 'AccountId',
       class_id: 'CreditClassId'
     },
+    CreditClassInfoArg: 'CreditsArg',
     AssetBalanceArgs: '(AccountId, IntegriteeAssetId)',
     AttemptsArg: {
       origin: 'AccountId'
@@ -296,6 +298,23 @@ export default {
       note_relay_type: 'NoteRelayType',
       msg: 'Text',
       maybe_encryption_key: 'Option<H256>',
+    },
+    RelayedNoteRetrievalInfo: {
+      _enum: {
+        Here: 'RelayedNoteRetrievalHere',
+        Ipfs: 'RelayedNoteRetrievalIpfs',
+        Undeclared: 'RelayedNoteRetrievalUndeclared',
+      }
+    },
+    RelayedNoteRetrievalHere: {
+      msg: 'Text',
+    },
+    RelayedNoteRetrievalIpfs: {
+      ipfs_hash: 'Vec<u8>',
+      encryption_key: 'H256',
+    },
+    RelayedNoteRetrievalUndeclared: {
+      encryption_key: 'H256',
     },
     GuessTheNumberTrustedCall: {
       _enum: {

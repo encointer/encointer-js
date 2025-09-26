@@ -541,6 +541,13 @@ describe('worker', () => {
                 console.log('credits mint result', JSON.stringify(result));
                 expect(result).toBeDefined();
             });
+            it('credits info getter should return value', async () => {
+                const getter = await worker.creditsCreditClassInfoTrustedGetter(charlie, shard);
+                console.log(`CreditClassInfo: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('CreditClassInfo:', result.toHuman());
+                expect(result).toBeDefined();
+            });
             it('claim should work', async () => {
                 const secret = worker.createType('H256', '0xb4fff03b36c5fd0a2b015e1f8d171a4c2054db615fcd302842337ff7aac76b47');
                 const result = await worker.trustedCreditsClaim(
@@ -551,6 +558,13 @@ describe('worker', () => {
                   secret
                 );
                 console.log('credits claim result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+            it('credits should return value', async () => {
+                const getter = await worker.creditsCreditsTrustedGetter(charlie, shard);
+                console.log(`Credits: ${JSON.stringify(getter)}`);
+                const result = await getter.send();
+                console.log('Credits:', result.toHuman());
                 expect(result).toBeDefined();
             });
             it('redeem should work', async () => {

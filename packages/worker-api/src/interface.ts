@@ -8,7 +8,7 @@ import type {
   GuessTheNumberPublicGetter,
   GuessTheNumberTrustedGetter, IntegriteeAssetId,
   IntegriteeGetter,
-  ShardIdentifier, TrustedOperationStatus, RelayedNoteRequest
+  ShardIdentifier, TrustedOperationStatus, RelayedNoteRequest, CreditsTrustedGetter
 } from "@encointer/types";
 import type {H256, Hash} from "@polkadot/types/interfaces/runtime";
 
@@ -81,7 +81,7 @@ export interface TrustedGetterArgs {
   signer?: Signer
 }
 
-export type TrustedGetterParams = string | GuessTheNumberTrustedGetter | null
+export type TrustedGetterParams = string | GuessTheNumberTrustedGetter | CreditsTrustedGetter | null
 
 /**
  * Signer options.

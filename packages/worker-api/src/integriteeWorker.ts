@@ -10,6 +10,7 @@ import type {
     AttemptsArg,
     ParentchainsInfo, RelayedNoteRequest,
     NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo, AccountEssentials, CreditsTrustedCall,
+    CreditsArg, CreditsTrustedGetter, CreditClassInfoArg,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -166,6 +167,30 @@ export class IntegriteeWorker extends Worker {
         const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
         const getterParams = guessTheNumberTrustedGetter(this, 'attempts', args);
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
+    }
+
+    public async creditsCreditsTrustedGetter(accountOrPubKey: AddressOrPair, shard: ShardIdentifierArg, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+        const trustedGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        const args = this.createType('CreditsArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = creditsTrustedGetter(this, 'credits', args);
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'credits', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
+    }
+
+    public async creditsCreditClassInfoTrustedGetter(accountOrPubKey: AddressOrPair, shard: ShardIdentifierArg, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+        const trustedGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        const args = this.createType('CreditClassInfoArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = creditsTrustedGetter(this, 'credit_class_info', args);
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'credits', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
     }
 
     public async trustedBalanceTransfer(
@@ -555,6 +580,18 @@ function guessTheNumberCall(
         [variant]: self.createType(argType, params)
     });
 }
+
+function creditsTrustedGetter(
+  self: Worker,
+  getterVariant: string,
+  params: CreditsTrustedGetterParams
+): CreditsTrustedGetter {
+    return self.createType('CreditsTrustedGetter', {
+        [getterVariant]: params
+    });
+}
+
+export type CreditsTrustedGetterParams = CreditsArg | CreditClassInfoArg | null;
 
 function creditsCall(
   self: Worker,
