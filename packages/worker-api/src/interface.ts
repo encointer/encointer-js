@@ -8,7 +8,7 @@ import type {
   GuessTheNumberPublicGetter,
   GuessTheNumberTrustedGetter, IntegriteeAssetId,
   IntegriteeGetter,
-  ShardIdentifier, TrustedOperationStatus
+  ShardIdentifier, TrustedOperationStatus, RelayedNoteRequest
 } from "@encointer/types";
 import type {H256, Hash} from "@polkadot/types/interfaces/runtime";
 
@@ -49,6 +49,9 @@ export type ShardIdentifierArg = string | ShardIdentifier | EnclaveFingerprint |
 
 // If it is a string, we assume that it is base58 encoded.
 export type MrenclaveArg = string | ShardIdentifier | EnclaveFingerprint | H256 | Hash;
+
+// If it is a string, we assume that it is base58 encoded.
+export type HashArg = string | H256 | Hash;
 
 export interface ISubmittableGetter<W extends IWorkerBase, Type> {
 

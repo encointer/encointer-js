@@ -900,6 +900,7 @@ __metadata:
     "@types/bs58": "npm:^5.0.0"
     bs58: "npm:^6.0.0"
     eventemitter3: "npm:^5.0.1"
+    multiformats: "npm:^13.4.1"
     tslib: "npm:^2.8.1"
     websocket: "npm:^1.0.35"
   peerDependencies:
@@ -12259,6 +12260,13 @@ __metadata:
   bin:
     multicast-dns: cli.js
   checksum: 10/e9add8035fb7049ccbc87b1b069f05bb3b31e04fe057bf7d0116739d81295165afc2568291a4a962bee01a5074e475996816eed0f50c8110d652af5abb74f95a
+  languageName: node
+  linkType: hard
+
+"multiformats@npm:^13.4.1":
+  version: 13.4.1
+  resolution: "multiformats@npm:13.4.1"
+  checksum: 10/8e1d0b285f72e145c8ef6539ec02c5060d98cb377c2f891142d32dea89697bc3eaaf8670df4c828627dd365e3c108dba17538c9f988f34649b7b059f14ca3cea
   languageName: node
   linkType: hard
 

@@ -141,7 +141,7 @@ describe('worker', () => {
     // skip it, as this requires a worker (and hence a node) to be running
     // To my knowledge jest does not have an option to run skipped tests specifically, does it?
     // Todo: add proper CI to test this too.
-    describe.skip('needs worker and node running', () => {
+    describe('needs worker and node running', () => {
         describe('getWorkerPubKey', () => {
             it('should return value', async () => {
                 const result = await worker.getShieldingKey();
@@ -404,6 +404,32 @@ describe('worker', () => {
         });
 
         // race condition so skipped
+        describe('send relayed note using ipfs should work', () => {
+            it('send relayed note using ipfs included', async () => {
+                const relay_type = worker.createType('NoteRelayType', 'Ipfs');
+                const request = worker.createType('RelayedNoteRequest', {
+                    allow_onchain_fallback: false,
+                    relay_type: relay_type,
+                    msg: "Hoi",
+                    maybe_encryption_key: null,
+                })
+                const result = await worker.trustedSendRelayedNote(
+                  alice,
+                  shard,
+                  fingerprint,
+                  alice.address,
+                  charlie.address,
+                  0,
+                  request
+                );
+                console.log('send note', JSON.stringify(result));
+                expect(result).toBeDefined();
+                const status = worker.createType('TrustedOperationStatus', result.status);
+                expect(status.isInSidechainBlock).toBeTruthy();
+            });
+        });
+
+        // race condition so skipped
         describe.skip('balance transfer should work', () => {
             it('should return value', async () => {
 
@@ -487,5 +513,70 @@ describe('worker', () => {
                 expect(result).toBeDefined();
             });
         });
+
+        // race condition, so skipped
+        describe('credits should work', () => {
+            const classId= 1;
+            it('create class should work', async () => {
+                const result = await worker.trustedCreditsCreateClass(
+                  alice,
+                  shard,
+                  fingerprint,
+                  classId,
+                );
+                console.log('credits create class result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+            it('mint should work', async () => {
+                // commitment must be the blake2_256 hash of secret
+                const commitment = worker.createType('H256', '0xb915e7f63e15011938bdb96b07f941924a048468e88aae581fe4732a9a2244c3');
+                const result = await worker.trustedCreditsMint(
+                  alice,
+                  shard,
+                  fingerprint,
+                  classId,
+                  commitment,
+                  1000,
+                );
+                console.log('credits mint result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+            it('claim should work', async () => {
+                const secret = worker.createType('H256', '0xb4fff03b36c5fd0a2b015e1f8d171a4c2054db615fcd302842337ff7aac76b47');
+                const result = await worker.trustedCreditsClaim(
+                  charlie,
+                  shard,
+                  fingerprint,
+                  classId,
+                  secret
+                );
+                console.log('credits claim result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+            it('redeem should work', async () => {
+                const result = await worker.trustedCreditsRedeem(
+                  alice,
+                  shard,
+                  fingerprint,
+                  classId,
+                  charlie.address,
+                  500
+                );
+                console.log('credits redeem result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+            it('destroy class should work', async () => {
+                const result = await worker.trustedCreditsDestroyClass(
+                  alice,
+                  shard,
+                  fingerprint,
+                  classId,
+                );
+                console.log('credits destroy class result', JSON.stringify(result));
+                expect(result).toBeDefined();
+            });
+
+        });
+
     });
 });

@@ -109,6 +109,7 @@ export default {
         unused_index_48: null,
         unused_index_49: null,
         guess_the_number: 'GuessTheNumberTrustedGetter',
+        credits: 'CreditsTrustedGetter',
       }
     },
     IntegriteeTrustedGetterSigned: {
@@ -158,8 +159,8 @@ export default {
         unused_index_18: null,
         unused_index_19: null,
         send_note: 'SendNoteArgs',
-        unused_index_21: null,
-        unused_index_22: null,
+        send_relayed_note: 'SendRelayedNoteArgs',
+        send_relayed_note_stripped: 'SendRelayedNoteStrippedArgs',
         unused_index_23: null,
         unused_index_24: null,
         unused_index_25: null,
@@ -187,7 +188,8 @@ export default {
         unused_index_47: null,
         unused_index_48: null,
         unused_index_49: null,
-        guess_the_number: 'GuessTheNumberTrustedCall'
+        guess_the_number: 'GuessTheNumberTrustedCall',
+        credits: 'CreditsTrustedCall'
       }
     },
     TimestampSetArgs: '(AccountId, H160, BalanceType)',
@@ -236,6 +238,16 @@ export default {
         attempts: 'AttemptsArg'
       }
     },
+    CreditsTrustedGetter: {
+      _enum: {
+        credits: 'CreditsArg',
+        credit_class_info: 'CreditsArg'
+      }
+    },
+    CreditsArg: {
+      origin: 'AccountId',
+      class_id: 'CreditClassId'
+    },
     AssetBalanceArgs: '(AccountId, IntegriteeAssetId)',
     AttemptsArg: {
       origin: 'AccountId'
@@ -269,6 +281,22 @@ export default {
       balance: 'Balance',
     },
     SendNoteArgs: '(AccountId, AccountId, String)',
+    SendRelayedNoteArgs: '(AccountId, AccountId, ConversationId, RelayedNoteRequest)',
+    SendRelayedNoteStrippedArgs: '(AccountId, AccountId, ConversationId, RelayedNoteRetrievalInfo)',
+    ConversationId: 'u32',
+    NoteRelayType: {
+      _enum: {
+        Here: null,
+        Ipfs: null,
+        Undeclared: null,
+      }
+    },
+    RelayedNoteRequest: {
+      allow_onchain_fallback: 'bool',
+      note_relay_type: 'NoteRelayType',
+      msg: 'Text',
+      maybe_encryption_key: 'Option<H256>',
+    },
     GuessTheNumberTrustedCall: {
       _enum: {
         set_winnings: 'GuessTheNumberSetWinningsArgs',
@@ -288,6 +316,21 @@ export default {
     },
     GuessTheNumberSetWinningsArgs: '(AccountId, Balance)',
     GuessArgs: '(AccountId, GuessType)',
+    CreditClassId: 'u32',
+    CreditsTrustedCall: {
+      _enum: {
+        create_class: 'CreditsCreateClassArgs',
+        destroy_class: 'CreditsDestroyClassArgs',
+        claim: 'CreditsClaimArgs',
+        mint: 'CreditsMintArgs',
+        redeem: 'CreditsRedeemArgs',
+      }
+    },
+    CreditsCreateClassArgs: '(AccountId, CreditClassId)',
+    CreditsDestroyClassArgs: '(AccountId, CreditClassId)',
+    CreditsClaimArgs: '(AccountId, CreditClassId, Hash)',
+    CreditsMintArgs: '(AccountId, CreditClassId, AccountId, Balance)',
+    CreditsRedeemArgs: '(AccountId, CreditClassId, AccountId, Balance)',
     IntegriteeAssetId: {
       _enum: {
         unused_index_0: null,

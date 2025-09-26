@@ -4,7 +4,7 @@ import {
 } from "./interface.js";
 import type {
     BalanceTransferArgs,
-    BalanceUnshieldArgs, EnclaveFingerprint, GuessTheNumberTrustedCall,
+    BalanceUnshieldArgs, CreditsTrustedCall, EnclaveFingerprint, GuessTheNumberTrustedCall,
     IntegriteeGetter,
     IntegriteeTrustedCall,
     IntegriteeTrustedCallSigned,
@@ -50,7 +50,7 @@ export async function signTrustedGetter(self: IWorkerBase, account: AddressOrPai
     return g;
 }
 
-export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs | GuessTheNumberTrustedCall);
+export type TrustedCallArgs = (BalanceTransferArgs | BalanceUnshieldArgs | GuessTheNumberTrustedCall | CreditsTrustedCall);
 
 export type TrustedCallVariant = [string, string]
 
