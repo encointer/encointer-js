@@ -36,6 +36,7 @@
     "@polkadot/x-ws": "^13.5.4",
     "bs58": "^6.0.0",
     "eventemitter3": "^5.0.1",
+    "multiformats": "^13.4.1",
     "tslib": "^2.8.1"
   },
   "devDependencies": {

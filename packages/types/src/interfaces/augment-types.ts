@@ -11,7 +11,7 @@ import type { Assignment, AssignmentCount, AssignmentParams, Attestation, Attest
 import type { FixedI64F64, IpfsCid, PalletString } from '@encointer/types/interfaces/common';
 import type { AnnouncementSigner, Bip340, CidDigest, CidName, CommunityCeremony, CommunityIdentifier, CommunityMetadataType, CommunityRules, DegreeFixed, DegreeRpc, GeoHash, Location, LocationRpc, NominalIncomeType } from '@encointer/types/interfaces/community';
 import type { EncointerBalanceTransferArgs, EncointerGetter, EncointerGetterArgs, EncointerPublicGetter, EncointerTrustedCall, EncointerTrustedCallSigned, EncointerTrustedGetter, EncointerTrustedGetterSigned, GrantReputationArgs, RegisterAttestationsArgs, RegisterParticipantArgs } from '@encointer/types/interfaces/encointerWorker';
-import type { AccountEssentials, AccountInfoAndSessionProxies, AddSessionProxyArgs, AssetBalanceArgs, AssetsShieldArgs, AssetsTransferArgs, AssetsTransferWithNoteArgs, AssetsUnshieldArgs, AttemptsArg, BalanceShieldArgs, BalanceShieldThroughEnclaveBridgePalletArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BalanceUnshieldThroughEnclaveBridgePalletArgs, BucketIndex, BucketInfo, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeAssetBalance, IntegriteeAssetId, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NotesBucketInfo, NotesForArgs, SendNoteArgs, SessionProxyCredentials, SessionProxyRole, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
+import type { AccountEssentials, AccountInfoAndSessionProxies, AddSessionProxyArgs, AssetBalanceArgs, AssetsShieldArgs, AssetsTransferArgs, AssetsTransferWithNoteArgs, AssetsUnshieldArgs, AttemptsArg, BalanceShieldArgs, BalanceShieldThroughEnclaveBridgePalletArgs, BalanceTransferArgs, BalanceTransferWithNoteArgs, BalanceUnshieldArgs, BalanceUnshieldThroughEnclaveBridgePalletArgs, BucketIndex, BucketInfo, ConversationId, CreditClassId, CreditClassInfoArg, CreditsArg, CreditsClaimArgs, CreditsCreateClassArgs, CreditsDestroyClassArgs, CreditsMintArgs, CreditsRedeemArgs, CreditsTrustedCall, CreditsTrustedGetter, GuessArgs, GuessTheNumberInfo, GuessTheNumberPublicGetter, GuessTheNumberSetWinningsArgs, GuessTheNumberTrustedCall, GuessTheNumberTrustedGetter, GuessType, IntegriteeAssetBalance, IntegriteeAssetId, IntegriteeGetter, IntegriteePublicGetter, IntegriteeTrustedCall, IntegriteeTrustedCallSigned, IntegriteeTrustedGetter, IntegriteeTrustedGetterSigned, IntegriteeTrustedOperation, NoteIndex, NoteRelayType, NotesBucketInfo, NotesForArgs, RelayedNoteRequest, RelayedNoteRetrievalHere, RelayedNoteRetrievalInfo, RelayedNoteRetrievalIpfs, RelayedNoteRetrievalUndeclared, SendNoteArgs, SendRelayedNoteArgs, SendRelayedNoteStrippedArgs, SessionProxyCredentials, SessionProxyRole, TimestampSetArgs, TimestampedTrustedNote, TrustedNote } from '@encointer/types/interfaces/integriteeWorker';
 import type { SchedulerState, SystemNumber } from '@encointer/types/interfaces/scheduler';
 import type { DirectRequestStatus, Enclave, EnclaveFingerprint, GetterArgs, ParentchainId, ParentchainInfo, ParentchainsInfo, Request, RpcReturnValue, ShardConfig, ShardIdentifier, ShardInfo, ShardMode, ShardSignerStatus, ShardStatus, TrustedOperationStatus, UpgradableShardConfig, Vault, WorkerEncoded } from '@encointer/types/interfaces/worker';
 import type { Data, StorageKey } from '@polkadot/types';
@@ -393,6 +393,7 @@ declare module '@polkadot/types/types/registry' {
     ContractStorageKey: ContractStorageKey;
     ContractStorageLayout: ContractStorageLayout;
     ContractTypeSpec: ContractTypeSpec;
+    ConversationId: ConversationId;
     Conviction: Conviction;
     CoreAssignment: CoreAssignment;
     CoreIndex: CoreIndex;
@@ -400,6 +401,16 @@ declare module '@polkadot/types/types/registry' {
     CoreState: CoreState;
     CrateVersion: CrateVersion;
     CreatedBlock: CreatedBlock;
+    CreditClassId: CreditClassId;
+    CreditClassInfoArg: CreditClassInfoArg;
+    CreditsArg: CreditsArg;
+    CreditsClaimArgs: CreditsClaimArgs;
+    CreditsCreateClassArgs: CreditsCreateClassArgs;
+    CreditsDestroyClassArgs: CreditsDestroyClassArgs;
+    CreditsMintArgs: CreditsMintArgs;
+    CreditsRedeemArgs: CreditsRedeemArgs;
+    CreditsTrustedCall: CreditsTrustedCall;
+    CreditsTrustedGetter: CreditsTrustedGetter;
     CustomMetadata15: CustomMetadata15;
     CustomValueMetadata15: CustomValueMetadata15;
     Data: Data;
@@ -900,6 +911,7 @@ declare module '@polkadot/types/types/registry' {
     NominatorIndexCompact: NominatorIndexCompact;
     NotConnectedPeer: NotConnectedPeer;
     NoteIndex: NoteIndex;
+    NoteRelayType: NoteRelayType;
     NotesBucketInfo: NotesBucketInfo;
     NotesForArgs: NotesForArgs;
     NpApiError: NpApiError;
@@ -1090,6 +1102,11 @@ declare module '@polkadot/types/types/registry' {
     RelayBlockNumber: RelayBlockNumber;
     RelayChainBlockNumber: RelayChainBlockNumber;
     RelayChainHash: RelayChainHash;
+    RelayedNoteRequest: RelayedNoteRequest;
+    RelayedNoteRetrievalHere: RelayedNoteRetrievalHere;
+    RelayedNoteRetrievalInfo: RelayedNoteRetrievalInfo;
+    RelayedNoteRetrievalIpfs: RelayedNoteRetrievalIpfs;
+    RelayedNoteRetrievalUndeclared: RelayedNoteRetrievalUndeclared;
     RelayerId: RelayerId;
     RelayHash: RelayHash;
     Releases: Releases;
@@ -1149,6 +1166,8 @@ declare module '@polkadot/types/types/registry' {
     SeatHolder: SeatHolder;
     SeedOf: SeedOf;
     SendNoteArgs: SendNoteArgs;
+    SendRelayedNoteArgs: SendRelayedNoteArgs;
+    SendRelayedNoteStrippedArgs: SendRelayedNoteStrippedArgs;
     ServiceQuality: ServiceQuality;
     SessionIndex: SessionIndex;
     SessionInfo: SessionInfo;

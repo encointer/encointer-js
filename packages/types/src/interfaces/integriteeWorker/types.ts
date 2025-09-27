@@ -3,10 +3,10 @@
 
 import type { BalanceType } from '@encointer/types/interfaces/balances';
 import type { ParentchainId, ShardIdentifier } from '@encointer/types/interfaces/worker';
-import type { Bytes, Enum, Option, Struct, Text, Vec, u16, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, Enum, Option, Struct, Text, Vec, bool, u16, u32, u64 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { MultiSignature } from '@polkadot/types/interfaces/extrinsics';
-import type { AccountId, Balance, H160, H256, Moment } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, H160, H256, Hash, Moment } from '@polkadot/types/interfaces/runtime';
 import type { AccountInfo } from '@polkadot/types/interfaces/system';
 
 /** @name AccountEssentials */
@@ -72,6 +72,60 @@ export interface BucketInfo extends Struct {
   readonly bytes: u32;
   readonly begins_at: Moment;
   readonly ends_at: Moment;
+}
+
+/** @name ConversationId */
+export interface ConversationId extends u32 {}
+
+/** @name CreditClassId */
+export interface CreditClassId extends u32 {}
+
+/** @name CreditClassInfoArg */
+export interface CreditClassInfoArg extends CreditsArg {}
+
+/** @name CreditsArg */
+export interface CreditsArg extends Struct {
+  readonly origin: AccountId;
+  readonly class_id: CreditClassId;
+}
+
+/** @name CreditsClaimArgs */
+export interface CreditsClaimArgs extends ITuple<[AccountId, CreditClassId, Hash]> {}
+
+/** @name CreditsCreateClassArgs */
+export interface CreditsCreateClassArgs extends ITuple<[AccountId, CreditClassId]> {}
+
+/** @name CreditsDestroyClassArgs */
+export interface CreditsDestroyClassArgs extends ITuple<[AccountId, CreditClassId]> {}
+
+/** @name CreditsMintArgs */
+export interface CreditsMintArgs extends ITuple<[AccountId, CreditClassId, AccountId, Balance, Option<Moment>]> {}
+
+/** @name CreditsRedeemArgs */
+export interface CreditsRedeemArgs extends ITuple<[AccountId, CreditClassId, AccountId, Balance]> {}
+
+/** @name CreditsTrustedCall */
+export interface CreditsTrustedCall extends Enum {
+  readonly isCreateClass: boolean;
+  readonly asCreateClass: CreditsCreateClassArgs;
+  readonly isDestroyClass: boolean;
+  readonly asDestroyClass: CreditsDestroyClassArgs;
+  readonly isClaim: boolean;
+  readonly asClaim: CreditsClaimArgs;
+  readonly isMint: boolean;
+  readonly asMint: CreditsMintArgs;
+  readonly isRedeem: boolean;
+  readonly asRedeem: CreditsRedeemArgs;
+  readonly type: 'CreateClass' | 'DestroyClass' | 'Claim' | 'Mint' | 'Redeem';
+}
+
+/** @name CreditsTrustedGetter */
+export interface CreditsTrustedGetter extends Enum {
+  readonly isCredits: boolean;
+  readonly asCredits: CreditsArg;
+  readonly isCreditClassInfo: boolean;
+  readonly asCreditClassInfo: CreditClassInfoArg;
+  readonly type: 'Credits' | 'CreditClassInfo';
 }
 
 /** @name GuessArgs */
@@ -236,7 +290,9 @@ export interface IntegriteePublicGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberPublicGetter;
-  readonly type: 'SomeValue' | 'TotalIssuance' | 'UndistributedFees' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'ShardInfo' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetTotalIssuance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly isCredits: boolean;
+  readonly asCredits: CreditsTrustedGetter;
+  readonly type: 'SomeValue' | 'TotalIssuance' | 'UndistributedFees' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'ParentchainsInfo' | 'NoteBucketsInfo' | 'ShardInfo' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetTotalIssuance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber' | 'Credits';
 }
 
 /** @name IntegriteeTrustedCall */
@@ -271,8 +327,10 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex19: boolean;
   readonly isSendNote: boolean;
   readonly asSendNote: SendNoteArgs;
-  readonly isUnusedIndex21: boolean;
-  readonly isUnusedIndex22: boolean;
+  readonly isSendRelayedNote: boolean;
+  readonly asSendRelayedNote: SendRelayedNoteArgs;
+  readonly isSendRelayedNoteStripped: boolean;
+  readonly asSendRelayedNoteStripped: SendRelayedNoteStrippedArgs;
   readonly isUnusedIndex23: boolean;
   readonly isUnusedIndex24: boolean;
   readonly isUnusedIndex25: boolean;
@@ -307,7 +365,9 @@ export interface IntegriteeTrustedCall extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedCall;
-  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceTransferWithNote' | 'BalanceShieldThroughEnclaveBridgePallet' | 'BalanceUnshieldThroughEnclaveBridgePallet' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'SendNote' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'AddSessionProxy' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'AssetsTransfer' | 'AssetsUnshield' | 'AssetsShield' | 'AssetsTransferWithNote' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly isCredits: boolean;
+  readonly asCredits: CreditsTrustedCall;
+  readonly type: 'Noop' | 'TimestampSet' | 'BalanceTransfer' | 'BalanceUnshield' | 'BalanceShield' | 'BalanceTransferWithNote' | 'BalanceShieldThroughEnclaveBridgePallet' | 'BalanceUnshieldThroughEnclaveBridgePallet' | 'UnusedIndex8' | 'UnusedIndex9' | 'UnusedIndex10' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'SendNote' | 'SendRelayedNote' | 'SendRelayedNoteStripped' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'AddSessionProxy' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'UnusedIndex40' | 'UnusedIndex41' | 'AssetsTransfer' | 'AssetsUnshield' | 'AssetsShield' | 'AssetsTransferWithNote' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber' | 'Credits';
 }
 
 /** @name IntegriteeTrustedCallSigned */
@@ -377,7 +437,9 @@ export interface IntegriteeTrustedGetter extends Enum {
   readonly isUnusedIndex49: boolean;
   readonly isGuessTheNumber: boolean;
   readonly asGuessTheNumber: GuessTheNumberTrustedGetter;
-  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'AccountEssentials' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetBalance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber';
+  readonly isCredits: boolean;
+  readonly asCredits: CreditsTrustedGetter;
+  readonly type: 'AccountInfo' | 'AccountInfoAndSessionProxies' | 'AccountEssentials' | 'UnusedIndex3' | 'UnusedIndex4' | 'UnusedIndex5' | 'UnusedIndex6' | 'UnusedIndex7' | 'UnusedIndex8' | 'UnusedIndex9' | 'NotesFor' | 'UnusedIndex11' | 'UnusedIndex12' | 'UnusedIndex13' | 'UnusedIndex14' | 'UnusedIndex15' | 'UnusedIndex16' | 'UnusedIndex17' | 'UnusedIndex18' | 'UnusedIndex19' | 'UnusedIndex20' | 'UnusedIndex21' | 'UnusedIndex22' | 'UnusedIndex23' | 'UnusedIndex24' | 'UnusedIndex25' | 'UnusedIndex26' | 'UnusedIndex27' | 'UnusedIndex28' | 'UnusedIndex29' | 'UnusedIndex30' | 'UnusedIndex31' | 'UnusedIndex32' | 'UnusedIndex33' | 'UnusedIndex34' | 'UnusedIndex35' | 'UnusedIndex36' | 'UnusedIndex37' | 'UnusedIndex38' | 'UnusedIndex39' | 'AssetBalance' | 'UnusedIndex41' | 'UnusedIndex42' | 'UnusedIndex43' | 'UnusedIndex44' | 'UnusedIndex45' | 'UnusedIndex46' | 'UnusedIndex47' | 'UnusedIndex48' | 'UnusedIndex49' | 'GuessTheNumber' | 'Credits';
 }
 
 /** @name IntegriteeTrustedGetterSigned */
@@ -401,6 +463,14 @@ export interface IntegriteeTrustedOperation extends Enum {
 /** @name NoteIndex */
 export interface NoteIndex extends u64 {}
 
+/** @name NoteRelayType */
+export interface NoteRelayType extends Enum {
+  readonly isHere: boolean;
+  readonly isIpfs: boolean;
+  readonly isUndeclared: boolean;
+  readonly type: 'Here' | 'Ipfs' | 'Undeclared';
+}
+
 /** @name NotesBucketInfo */
 export interface NotesBucketInfo extends Struct {
   readonly first: Option<BucketInfo>;
@@ -410,8 +480,49 @@ export interface NotesBucketInfo extends Struct {
 /** @name NotesForArgs */
 export interface NotesForArgs extends ITuple<[AccountId, BucketIndex]> {}
 
+/** @name RelayedNoteRequest */
+export interface RelayedNoteRequest extends Struct {
+  readonly allow_onchain_fallback: bool;
+  readonly note_relay_type: NoteRelayType;
+  readonly msg: Text;
+  readonly maybe_encryption_key: Option<H256>;
+}
+
+/** @name RelayedNoteRetrievalHere */
+export interface RelayedNoteRetrievalHere extends Struct {
+  readonly msg: Text;
+}
+
+/** @name RelayedNoteRetrievalInfo */
+export interface RelayedNoteRetrievalInfo extends Enum {
+  readonly isHere: boolean;
+  readonly asHere: RelayedNoteRetrievalHere;
+  readonly isIpfs: boolean;
+  readonly asIpfs: RelayedNoteRetrievalIpfs;
+  readonly isUndeclared: boolean;
+  readonly asUndeclared: RelayedNoteRetrievalUndeclared;
+  readonly type: 'Here' | 'Ipfs' | 'Undeclared';
+}
+
+/** @name RelayedNoteRetrievalIpfs */
+export interface RelayedNoteRetrievalIpfs extends Struct {
+  readonly ipfs_hash: Bytes;
+  readonly encryption_key: H256;
+}
+
+/** @name RelayedNoteRetrievalUndeclared */
+export interface RelayedNoteRetrievalUndeclared extends Struct {
+  readonly encryption_key: H256;
+}
+
 /** @name SendNoteArgs */
 export interface SendNoteArgs extends ITuple<[AccountId, AccountId, Text]> {}
+
+/** @name SendRelayedNoteArgs */
+export interface SendRelayedNoteArgs extends ITuple<[AccountId, AccountId, ConversationId, RelayedNoteRequest]> {}
+
+/** @name SendRelayedNoteStrippedArgs */
+export interface SendRelayedNoteStrippedArgs extends ITuple<[AccountId, AccountId, ConversationId, RelayedNoteRetrievalInfo]> {}
 
 /** @name SessionProxyCredentials */
 export interface SessionProxyCredentials extends Struct {

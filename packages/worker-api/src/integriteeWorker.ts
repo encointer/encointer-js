@@ -8,8 +8,9 @@ import type {
     GuessTheNumberTrustedGetter,
     AccountInfoAndSessionProxies,
     AttemptsArg,
-    ParentchainsInfo,
-    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo, AccountEssentials,
+    ParentchainsInfo, RelayedNoteRequest,
+    NotesBucketInfo, TimestampedTrustedNote, SessionProxyRole, ShardInfo, AccountEssentials, CreditsTrustedCall,
+    CreditsArg, CreditsTrustedGetter, CreditClassInfoArg,
 } from '@encointer/types';
 import {
     type ISubmittableGetter,
@@ -20,7 +21,9 @@ import {
     type TrustedGetterParams,
     type TrustedCallResult,
     type ShardIdentifierArg,
-    type MrenclaveArg, type AssetIdStr,
+    type MrenclaveArg,
+    type AssetIdStr,
+    type HashArg,
 } from './interface.js';
 import {Worker} from "./worker.js";
 import {
@@ -164,6 +167,30 @@ export class IntegriteeWorker extends Worker {
         const args = this.createType('AttemptsArg', {origin:  asString(accountOrPubKey)});
         const getterParams = guessTheNumberTrustedGetter(this, 'attempts', args);
         return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'guess_the_number', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
+    }
+
+    public async creditsCreditsTrustedGetter(accountOrPubKey: AddressOrPair, shard: ShardIdentifierArg, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+        const trustedGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        const args = this.createType('CreditsArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = creditsTrustedGetter(this, 'credits', args);
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'credits', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
+    }
+
+    public async creditsCreditClassInfoTrustedGetter(accountOrPubKey: AddressOrPair, shard: ShardIdentifierArg, signerOptions?: TrustedSignerOptions): Promise<SubmittableGetter<IntegriteeWorker, AccountInfo>> {
+        const trustedGetterArgs = {
+            shard: shardIdentifierFromArg(shard, this.registry()),
+            account: accountOrPubKey,
+            delegate: signerOptions?.delegate,
+            signer: signerOptions?.signer,
+        }
+        const args = this.createType('CreditClassInfoArg', {origin:  asString(accountOrPubKey)});
+        const getterParams = creditsTrustedGetter(this, 'credit_class_info', args);
+        return await submittableTrustedGetter<IntegriteeWorker, AccountInfo>(this, 'credits', accountOrPubKey, trustedGetterArgs, getterParams,'u8');
     }
 
     public async trustedBalanceTransfer(
@@ -330,6 +357,132 @@ export class IntegriteeWorker extends Worker {
         return this.sendTrustedCall(signed, shardT);
     }
 
+    public async trustedSendRelayedNote(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      from: String,
+      to: String,
+      conversation_id: number,
+      relayed_note_request: RelayedNoteRequest,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+
+        const params = this.createType('SendRelayedNoteArgs', [from, to, conversation_id, relayed_note_request])
+        const call = createTrustedCall(this, ['send_relayed_note', 'SendRelayedNoteArgs'], params);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedCreditsCreateClass(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      classId: number,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+
+        const params = this.createType('CreditsCreateClassArgs', [asString(account), classId])
+        const creditsSubCall = creditsCall(this, ['create_class', 'CreditsCreateClassArgs'], params);
+        const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+
+        console.debug(`Credits:CreateClass ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedCreditsDestroyClass(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      classId: number,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+
+        const params = this.createType('CreditsCreateClassArgs', [asString(account), classId])
+        const creditsSubCall = creditsCall(this, ['destroy_class', 'CreditsDestroyClassArgs'], params);
+        const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+
+        console.debug(`Credits:DestroyClass ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedCreditsClaim(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      classId: number,
+      secret: HashArg,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+
+        const params = this.createType('CreditsClaimArgs', [asString(account), classId, secret])
+        const creditsSubCall = creditsCall(this, ['claim', 'CreditsClaimArgs'], params);
+        const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+
+        console.debug(`Credits:Claim ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedCreditsMint(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      classId: number,
+      beneficiary: String,
+      amount: number,
+      expiry?: number,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+        const expiryParam = expiry ? this.createType('Option<Moment>', this.createType('Moment', expiry)) : this.createType('Option<Moment>', null);
+        const params = this.createType('CreditsMintArgs', [asString(account), classId, beneficiary, amount, expiryParam])
+        const creditsSubCall = creditsCall(this, ['mint', 'CreditsMintArgs'], params);
+        const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+
+        console.debug(`Credits:Mint ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
+    public async trustedCreditsRedeem(
+      account: AddressOrPair,
+      shard: ShardIdentifierArg,
+      mrenclave: MrenclaveArg,
+      classId: number,
+      owner: String,
+      amount: number,
+      signerOptions?: TrustedSignerOptions,
+    ): Promise<TrustedCallResult> {
+        const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
+        const shardT = shardIdentifierFromArg(shard, this.registry());
+        const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
+
+        const params = this.createType('CreditsRedeemArgs', [asString(account), classId, owner, amount])
+        const creditsSubCall = creditsCall(this, ['redeem', 'CreditsRedeemArgs'], params);
+        const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
+        const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);
+
+        console.debug(`Credits:Redeem ${JSON.stringify(signed)}`);
+        return this.sendTrustedCall(signed, shardT);
+    }
+
     public async guessTheNumber(
         account: AddressOrPair,
         shard: ShardIdentifierArg,
@@ -425,6 +578,30 @@ function guessTheNumberCall(
     const [variant, argType] = callVariant;
 
     return self.createType('GuessTheNumberTrustedCall', {
+        [variant]: self.createType(argType, params)
+    });
+}
+
+function creditsTrustedGetter(
+  self: Worker,
+  getterVariant: string,
+  params: CreditsTrustedGetterParams
+): CreditsTrustedGetter {
+    return self.createType('CreditsTrustedGetter', {
+        [getterVariant]: params
+    });
+}
+
+export type CreditsTrustedGetterParams = CreditsArg | CreditClassInfoArg | null;
+
+function creditsCall(
+  self: Worker,
+  callVariant: TrustedCallVariant,
+  params: TrustedCallArgs
+): CreditsTrustedCall {
+    const [variant, argType] = callVariant;
+
+    return self.createType('CreditsTrustedCall', {
         [variant]: self.createType(argType, params)
     });
 }
