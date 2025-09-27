@@ -6,5 +6,5 @@
   "publishConfig": {
     "directory": "build"
   },
-  "version": "0.19.7-alpha.1"
+  "version": "0.20.0-alpha.0"
 }
