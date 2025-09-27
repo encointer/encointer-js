@@ -348,7 +348,7 @@ export default {
     CreditsCreateClassArgs: '(AccountId, CreditClassId)',
     CreditsDestroyClassArgs: '(AccountId, CreditClassId)',
     CreditsClaimArgs: '(AccountId, CreditClassId, Hash)',
-    CreditsMintArgs: '(AccountId, CreditClassId, AccountId, Balance)',
+    CreditsMintArgs: '(AccountId, CreditClassId, AccountId, Balance, Option<Moment>)',
     CreditsRedeemArgs: '(AccountId, CreditClassId, AccountId, Balance)',
     IntegriteeAssetId: {
       _enum: {

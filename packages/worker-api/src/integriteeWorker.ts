@@ -445,13 +445,14 @@ export class IntegriteeWorker extends Worker {
       classId: number,
       beneficiary: String,
       amount: number,
+      expiry?: number,
       signerOptions?: TrustedSignerOptions,
     ): Promise<TrustedCallResult> {
         const nonce = signerOptions?.nonce ?? await this.getNonce(account, shard, signerOptions)
         const shardT = shardIdentifierFromArg(shard, this.registry());
         const fingerprint = enclaveFingerprintFromArg(mrenclave, this.registry());
-
-        const params = this.createType('CreditsMintArgs', [asString(account), classId, beneficiary, amount])
+        const expiryParam = expiry ? this.createType('Option<Moment>', this.createType('Moment', expiry)) : this.createType('Option<Moment>', null);
+        const params = this.createType('CreditsMintArgs', [asString(account), classId, beneficiary, amount, expiryParam])
         const creditsSubCall = creditsCall(this, ['mint', 'CreditsMintArgs'], params);
         const call = createTrustedCall(this, ['credits', 'CreditsTrustedCall'], creditsSubCall);
         const signed = await signTrustedCall(this, call, account, shardT, fingerprint, nonce, signerOptions);

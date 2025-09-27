@@ -99,7 +99,7 @@ export interface CreditsCreateClassArgs extends ITuple<[AccountId, CreditClassId
 export interface CreditsDestroyClassArgs extends ITuple<[AccountId, CreditClassId]> {}
 
 /** @name CreditsMintArgs */
-export interface CreditsMintArgs extends ITuple<[AccountId, CreditClassId, AccountId, Balance]> {}
+export interface CreditsMintArgs extends ITuple<[AccountId, CreditClassId, AccountId, Balance, Option<Moment>]> {}
 
 /** @name CreditsRedeemArgs */
 export interface CreditsRedeemArgs extends ITuple<[AccountId, CreditClassId, AccountId, Balance]> {}

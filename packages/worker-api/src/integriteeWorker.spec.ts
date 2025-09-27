@@ -530,6 +530,7 @@ describe('worker', () => {
             it('mint should work', async () => {
                 // commitment must be the blake2_256 hash of secret
                 const commitment = worker.createType('H256', '0xb915e7f63e15011938bdb96b07f941924a048468e88aae581fe4732a9a2244c3');
+                const expiry = Date.now() + 1000 * 60 * 60 * 24 * 30; // 30 days from now
                 const result = await worker.trustedCreditsMint(
                   alice,
                   shard,
@@ -537,6 +538,7 @@ describe('worker', () => {
                   classId,
                   commitment,
                   1000,
+                  expiry
                 );
                 console.log('credits mint result', JSON.stringify(result));
                 expect(result).toBeDefined();
