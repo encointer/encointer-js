@@ -1,25 +1,9 @@
 import BN from "bn.js";
-import { Crypto } from "@peculiar/webcrypto";
 
 /**
- * Provides crypto the browser via the native crypto, and in the node-js environment (like our tests)
- * via the `@peculiar/webcrypto` polyfill.
+ * Import an RSA public key from modulus+exponent byte arrays.
  */
-let cryptoProvider: any;
-
-if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
-    cryptoProvider = window.crypto;
-} else {
-    cryptoProvider = new Crypto();
-}
-
-/**
- * Type depending on our environment browser vs. node-js.
- */
-type CryptoKey = import("crypto").KeyObject | import("@peculiar/webcrypto").CryptoKey;
-
-
-export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
+export async function parseWebCryptoRSA(data: string): Promise<CryptoKey> {
     const keyJson = JSON.parse(data);
 
     // Convert Base64url-encoded components to ArrayBuffer
@@ -27,7 +11,7 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
     const eArrayBuffer = new Uint8Array(new BN(keyJson.e, 'le').toArray());
 
     // Import the components into CryptoKey
-    const publicKey = await cryptoProvider.subtle.importKey(
+    const publicKey = await globalThis.crypto.subtle.importKey(
         "jwk",
         {
             kty: "RSA",
@@ -47,7 +31,7 @@ export async function parseWebCryptoRSA(data: any): Promise<CryptoKey> {
 }
 
 export async function encryptWithPublicKey(data: Uint8Array, publicKey: CryptoKey): Promise<ArrayBuffer> {
-    const encryptedData = await cryptoProvider.subtle.encrypt(
+    const encryptedData = await globalThis.crypto.subtle.encrypt(
         {
             name: "RSA-OAEP",
         },
@@ -67,8 +51,4 @@ function uint8ArrayToBase64Url(uint8Array: Uint8Array): string {
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
-}
-
-export function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }

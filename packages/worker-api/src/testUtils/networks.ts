@@ -51,7 +51,7 @@ export const paseoNetwork = () => {
   return {
     chain: 'wss://rpc.ibp.network/paseo:443',
     // reverse proxy to the worker
-    worker: 'wss://scv1.paseo.api.incognitee.io:443',
+    worker: 'wss://scv1.asset-hub-paseo.api.incognitee.io:443',
     genesisHash: '',
     mrenclave: '5BUCG8UXdgjWDDFQUd5kuRwnubDnMFhYEdbgxDZTnrBx',
     shard: '5wePd1LYa5M49ghwgZXs55cepKbJKhj5xfzQGfPeMS7c',
