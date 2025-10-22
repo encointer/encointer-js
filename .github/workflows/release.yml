@@ -68,17 +68,18 @@ jobs:
             exit 1
           fi
 
-      # Publish to npm using Trusted Publishing (OIDC)
-      - name: Publish to npm
+      - name: Publish packages (npm trusted publishing)
         env:
           NPM_CONFIG_PROVENANCE: true
-          YARN_ENABLE_IMMUTABLE_INSTALLS: true
         run: |
-          yarn lerna publish from-package \
-            --yes \
-            --contents build \
-            --dist-tag ${{ steps.detect.outputs.channel }} \
-            --no-private
+          # Create tarballs of all packages that are ready to publish
+          yarn lerna exec --no-private -- npx npm pack --workspaces --pack-destination ./pack-tmp
+      
+          # Publish each tarball with the correct dist-tag
+          for pkg in ./pack-tmp/*.tgz; do
+            echo "📦 Publishing $pkg"
+            npm publish "$pkg" --provenance --access public --tag ${{ steps.detect.outputs.channel }}
+          done
 
       # Display what was published
       - name: List published packages
