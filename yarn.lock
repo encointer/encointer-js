@@ -842,18 +842,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@encointer/node-api@npm:^0.20.1-dev.2, @encointer/node-api@workspace:packages/node-api":
+"@encointer/node-api@npm:^0.20.1-dev.3, @encointer/node-api@workspace:packages/node-api":
   version: 0.0.0-use.local
   resolution: "@encointer/node-api@workspace:packages/node-api"
   dependencies:
-    "@encointer/types": "npm:^0.20.1-dev.2"
+    "@encointer/types": "npm:^0.20.1-dev.3"
     "@polkadot/api": "npm:^16.4.3"
     "@polkadot/util-crypto": "npm:^13.5.4"
     tslib: "npm:^2.8.1"
   languageName: unknown
   linkType: soft
 
-"@encointer/types@npm:^0.20.1-dev.2, @encointer/types@workspace:packages/types":
+"@encointer/types@npm:^0.20.1-dev.3, @encointer/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@encointer/types@workspace:packages/types"
   dependencies:
@@ -868,7 +868,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@encointer/util@npm:^0.20.1-dev.2, @encointer/util@workspace:packages/util":
+"@encointer/util@npm:^0.20.1-dev.3, @encointer/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@encointer/util@workspace:packages/util"
   dependencies:
@@ -885,9 +885,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@encointer/worker-api@workspace:packages/worker-api"
   dependencies:
-    "@encointer/node-api": "npm:^0.20.1-dev.2"
-    "@encointer/types": "npm:^0.20.1-dev.2"
-    "@encointer/util": "npm:^0.20.1-dev.2"
+    "@encointer/node-api": "npm:^0.20.1-dev.3"
+    "@encointer/types": "npm:^0.20.1-dev.3"
+    "@encointer/util": "npm:^0.20.1-dev.3"
     "@polkadot/api": "npm:^16.4.3"
     "@polkadot/keyring": "npm:^13.5.4"
     "@polkadot/types": "npm:^16.4.3"
