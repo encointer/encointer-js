@@ -1,0 +1,87 @@
+name: Publish Packages
+
+on:
+  push:
+    tags:
+      - 'v*'  # e.g. v1.2.3, v2.0.0-alpha.1, etc.
+
+permissions:
+  contents: read
+  id-token: write   # required for Trusted Publishing
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          registry-url: "https://registry.npmjs.org"
+
+      # Install (immutable for Yarn 3+ zero-install)
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # Detect release channel from tag — and validate it strictly
+      - name: Detect and validate release channel
+        id: detect
+        run: |
+          tag=${GITHUB_REF#refs/tags/}
+          echo "🔍 Processing tag: $tag"
+
+          if [[ "$tag" == *"-dev"* ]]; then
+            channel="dev"
+          elif [[ "$tag" == *"-alpha"* ]]; then
+            channel="alpha"
+          elif [[ "$tag" == *"-beta"* ]]; then
+            channel="beta"
+          elif [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            channel="latest"
+          else
+            echo "❌ Error: Tag '$tag' does not match any allowed suffix."
+            echo "   Allowed suffixes: -dev, -alpha, -beta, or none (for latest)."
+            exit 1
+          fi
+
+          echo "✅ Using dist-tag: $channel"
+          echo "channel=$channel" >> $GITHUB_OUTPUT
+
+      - name: Build packages
+        run: yarn build
+
+      # Safety: check that the git tree is clean (avoids Yarn cache diffs)
+      - name: Verify clean git state
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "❌ Working tree not clean. The following files differ:"
+            git status --short
+            exit 1
+          fi
+
+      - name: Create package tarballs
+        run: |
+          mkdir -p ./pack-tmp
+          npm pack --workspaces --pack-destination ./pack-tmp
+
+      - name: Publish packages (npm trusted publishing)
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          for pkg in ./pack-tmp/*.tgz; do
+            echo "📦 Publishing $pkg"
+            npm publish "$pkg" --provenance --access public --tag ${{ steps.detect.outputs.channel }}
+          done
+
+      # Display what was published
+      - name: List published packages
+        run: yarn lerna ls --json

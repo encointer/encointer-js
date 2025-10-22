@@ -86,18 +86,35 @@ If everything works, we could stop here. If not (or if we want to do our chores)
    - If `@peculiar/webcrypto` is updated, we might want to check that the Incognitee Frontend still works
 3. Finally, we could update our build and testing framework libs (babel, node and jest).
 
-# Publish to npm
+## 🚀 Releasing Packages
 
-```
-// will prompt you to select version to increase, e.g. major, minor, patch etc. (Creates git tag!)
-// Note: `lerna version` will use the `version` hook defined in the root package.json. 
-lerna version --force-publish
+This project uses **Lerna**, **Yarn Zero-Install**, and **npm Trusted Publishing** to release packages automatically through GitHub Actions.
 
-// apply changes from package.json to */build/package.json 
-yarn build
+### Local release steps
 
-// publish all changes from the build directory to npm
-lerna publish from-package --contents build
-```
+1. Bump versions and create a tag:
+   ```bash
+   lerna version --force-publish
+   ```
+    This updates all package.json files, commits the change, and creates a version tag (e.g. v1.2.3 or v1.2.3-alpha.0) and pushes the tag.
+   
+That’s it — CI takes over from here.
 
-The lerna commands have been added as scripts to the `package.json`.
+### What happens in CI
+When a tag is pushed:
+
+1. GitHub Actions checks out the code and uses the cached Yarn dependencies (Zero-Install).
+2. Versions are verified to match the git tag.
+3. All packages are built (yarn build).
+4. The workflow automatically detects whether it’s a pre-release tag (alpha, beta, dev, etc.).
+5. Lerna publishes the built packages to npm using Trusted Publishing with provenance, under the correct npm dist-tag.
+
+| Example Tag        | Published npm dist-tag |
+| ------------------ | ---------------------- |
+| `v1.2.3`           | `latest`               |
+| `v1.2.3-alpha.0`   | `alpha`                |
+| `v1.2.3-dev.2`     | `dev`                  |
+
+### Security
+This setup uses npm Trusted Publishing (OIDC) — no NPM_TOKEN is stored in CI.
+All releases include provenance metadata that proves they were built from this repository.
