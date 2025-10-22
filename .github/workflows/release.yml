@@ -80,6 +80,6 @@ jobs:
             --dist-tag ${{ steps.detect.outputs.channel }} \
             --no-private
 
-      # 8️⃣ Display what was published
+      # Display what was published
       - name: List published packages
         run: yarn lerna ls --json
