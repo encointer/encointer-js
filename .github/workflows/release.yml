@@ -3,11 +3,12 @@ name: Release Packages
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*'          # matches v1.2.3
+      - 'v*.*.*-*'        # matches v1.2.3-alpha.0
 
 permissions:
   contents: read
-  id-token: write # Required for npm Trusted Publishing
+  id-token: write # for npm Trusted Publishing
 
 jobs:
   release:
@@ -16,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Needed for Lerna version detection and tag lookup
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -29,7 +30,6 @@ jobs:
           corepack enable
           yarn config set enableImmutableInstalls false
 
-      # (Optional) Verify PnP or workspace linking
       - name: Validate Yarn setup
         run: yarn workspaces focus --all --production=false
 
@@ -39,17 +39,20 @@ jobs:
           TAG="${GITHUB_REF#refs/tags/}"
           echo "🔍 Verifying tag: $TAG"
 
+          # remove leading "v" and compare
+          VERSION="${TAG#v}"
           ROOT_VERSION=$(node -p "require('./lerna.json').version")
-          if [ "$TAG" != "v$ROOT_VERSION" ]; then
-            echo "❌ Tag ($TAG) does not match lerna.json version (v$ROOT_VERSION)"
+
+          if [ "$VERSION" != "$ROOT_VERSION" ]; then
+            echo "❌ Tag version ($VERSION) does not match lerna.json version ($ROOT_VERSION)"
             exit 1
           fi
 
-          # Verify all packages' versions match the Lerna version
+          # verify all packages' versions match the root version
           npx lerna list --json | jq -r '.[].location' | while read -r pkg; do
-            VERSION=$(node -p "require('$pkg/package.json').version")
-            if [ "$VERSION" != "$ROOT_VERSION" ]; then
-              echo "❌ Version mismatch in $pkg: expected $ROOT_VERSION, found $VERSION"
+            PKG_VERSION=$(node -p "require('$pkg/package.json').version")
+            if [ "$PKG_VERSION" != "$ROOT_VERSION" ]; then
+              echo "❌ Version mismatch in $pkg: expected $ROOT_VERSION, found $PKG_VERSION"
               exit 1
             fi
           done
@@ -59,8 +62,19 @@ jobs:
       - name: Build packages
         run: yarn build
 
-      # 🚀 Publish via Trusted Publishing
+      # 🚀 Publish to npm
       - name: Publish to npm
-        run: npx lerna publish from-package --contents build --yes
+        run: |
+          # Detect if this is a pre-release (e.g. v1.2.3-alpha.0)
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#v}"
+
+          if [[ "$VERSION" == *"-"* ]]; then
+            echo "Pre-release detected: $VERSION"
+            npx lerna publish from-package --contents build --dist-tag next --yes
+          else
+            echo "Stable release detected: $VERSION"
+            npx lerna publish from-package --contents build --yes
+          fi
         env:
           NPM_CONFIG_PROVENANCE: true
