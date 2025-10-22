@@ -68,14 +68,15 @@ jobs:
             exit 1
           fi
 
+      - name: Create package tarballs
+        run: |
+          mkdir -p ./pack-tmp
+          npm pack --workspaces --pack-destination ./pack-tmp
+
       - name: Publish packages (npm trusted publishing)
         env:
           NPM_CONFIG_PROVENANCE: true
         run: |
-          # Create tarballs of all packages that are ready to publish
-          yarn lerna exec --no-private -- npx npm pack --workspaces --pack-destination ./pack-tmp
-      
-          # Publish each tarball with the correct dist-tag
           for pkg in ./pack-tmp/*.tgz; do
             echo "📦 Publishing $pkg"
             npm publish "$pkg" --provenance --access public --tag ${{ steps.detect.outputs.channel }}
