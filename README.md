@@ -94,14 +94,9 @@ This project uses **Lerna**, **Yarn Zero-Install**, and **npm Trusted Publishing
 
 1. Bump versions and create a tag:
    ```bash
-   lerna version
+   lerna version --force-publish
    ```
-    This updates all package.json files, commits the change, and creates a version tag (e.g. v1.2.3 or v1.2.3-alpha.0).
-
-2. Push the tag to trigger the release workflow:
-   ```bash
-   git push --follow-tags
-   ```
+    This updates all package.json files, commits the change, and creates a version tag (e.g. v1.2.3 or v1.2.3-alpha.0) and pushes the tag.
    
 That’s it — CI takes over from here.
 
