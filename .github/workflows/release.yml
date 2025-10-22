@@ -1,77 +1,86 @@
-name: Release Packages
+name: Publish Packages
 
 on:
   push:
     tags:
-      - 'v*' # trigger for all tags, including prereleases
+      - 'v*'  # e.g. v1.2.3, v2.0.0-alpha.1, etc.
 
 permissions:
   contents: read
-  id-token: write # required for npm Trusted Publishing
+  id-token: write   # required for Trusted Publishing
+  packages: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: release
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # required for Lerna + version matching
+          fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org/'
+          node-version: 22
+          cache: yarn
+          registry-url: "https://registry.npmjs.org"
 
-      - name: Enable corepack / Yarn
+      # Install (immutable for Yarn 3+ zero-install)
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # Detect release channel from tag — and validate it strictly
+      - name: Detect and validate release channel
+        id: detect
         run: |
-          corepack enable
-          yarn config set enableImmutableInstalls false
+          tag=${GITHUB_REF#refs/tags/}
+          echo "🔍 Processing tag: $tag"
 
-      - name: Prepare workspace
-        run: yarn workspaces focus --all --no-production
-
-      - name: Verify tag consistency
-        run: |
-          TAG=$(git describe --tags --abbrev=0)
-          echo "Detected tag: $TAG"
-
-          VERSION=${TAG#v}
-          echo "Expected version in packages: $VERSION"
-
-          # Verify all workspace versions match
-          ERR=false
-          for PKG in $(find packages -name package.json); do
-            PKG_VERSION=$(jq -r .version "$PKG")
-            if [ "$PKG_VERSION" != "$VERSION" ]; then
-              echo "❌ Version mismatch in $PKG ($PKG_VERSION != $VERSION)"
-              ERR=true
-            fi
-          done
-          if [ "$ERR" = true ]; then
-            echo "Version mismatch detected, aborting release."
+          if [[ "$tag" == *"-dev"* ]]; then
+            channel="dev"
+          elif [[ "$tag" == *"-alpha"* ]]; then
+            channel="alpha"
+          elif [[ "$tag" == *"-beta"* ]]; then
+            channel="beta"
+          elif [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            channel="latest"
+          else
+            echo "❌ Error: Tag '$tag' does not match any allowed suffix."
+            echo "   Allowed suffixes: -dev, -alpha, -beta, or none (for latest)."
             exit 1
           fi
 
+          echo "✅ Using dist-tag: $channel"
+          echo "channel=$channel" >> $GITHUB_OUTPUT
+
+      # Build all workspaces in parallel respecting deps
       - name: Build packages
-        run: yarn build
+        run: yarn workspaces foreach -pt run build
 
-      - name: Detect prerelease channel
-        id: detect
+      # Safety: check that the git tree is clean (avoids Yarn cache diffs)
+      - name: Verify clean git state
         run: |
-          TAG=$(git describe --tags --abbrev=0)
-          VERSION=${TAG#v}
-          if [[ "$VERSION" == *-* ]]; then
-            # Extract prerelease name before the dot, e.g. "alpha" from "1.2.3-alpha.0"
-            CHANNEL=$(echo "$VERSION" | sed -E 's/^[0-9]+\.[0-9]+\.[0-9]+-([a-zA-Z0-9]+).*/\1/')
-          else
-            CHANNEL=latest
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "❌ Working tree not clean. The following files differ:"
+            git status --short
+            exit 1
           fi
-          echo "channel=$CHANNEL" >> $GITHUB_OUTPUT
-          echo "Publishing to dist-tag: $CHANNEL"
 
+      # Publish to npm using Trusted Publishing (OIDC)
       - name: Publish to npm
-        run: yarn lerna publish from-package --contents build --yes --dist-tag ${{ steps.detect.outputs.channel }}
         env:
           NPM_CONFIG_PROVENANCE: true
-          CI: true
+          YARN_ENABLE_IMMUTABLE_INSTALLS: true
+        run: |
+          yarn lerna publish from-package \
+            --yes \
+            --contents build \
+            --dist-tag ${{ steps.detect.outputs.channel }} \
+            --no-private
+
+      # 8️⃣ Display what was published
+      - name: List published packages
+        run: yarn lerna ls --json
