@@ -6,5 +6,10 @@
   "publishConfig": {
     "directory": "build"
   },
+  "command": {
+    "publish": {
+      "verifyGitStatus": false
+    }
+  },
   "version": "0.20.1-dev.4"
 }
