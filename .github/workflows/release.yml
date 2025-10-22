@@ -56,9 +56,8 @@ jobs:
           echo "✅ Using dist-tag: $channel"
           echo "channel=$channel" >> $GITHUB_OUTPUT
 
-      # Build all workspaces in parallel respecting deps
       - name: Build packages
-        run: yarn workspaces foreach -pt run build
+        run: yarn build
 
       # Safety: check that the git tree is clean (avoids Yarn cache diffs)
       - name: Verify clean git state
