@@ -114,7 +114,6 @@ When a tag is pushed:
 | `v1.2.3`           | `latest`               |
 | `v1.2.3-alpha.0`   | `alpha`                |
 | `v1.2.3-dev.2`     | `dev`                  |
-| `v1.2.3-preview.1` | `preview`              |
 
 ### Security
 This setup uses npm Trusted Publishing (OIDC) — no NPM_TOKEN is stored in CI.
