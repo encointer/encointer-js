@@ -3,12 +3,11 @@ name: Release Packages
 on:
   push:
     tags:
-      - 'v*.*.*'          # matches v1.2.3
-      - 'v*.*.*-*'        # matches v1.2.3-alpha.0
+      - 'v*' # trigger for all tags, including prereleases
 
 permissions:
   contents: read
-  id-token: write # for npm Trusted Publishing
+  id-token: write # required for npm Trusted Publishing
 
 jobs:
   release:
@@ -17,64 +16,61 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # required for Lerna + version matching
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           registry-url: 'https://registry.npmjs.org/'
 
-      # 🧶 Yarn zero-install setup
-      - name: Configure Yarn
+      - name: Enable corepack / Yarn
         run: |
           corepack enable
           yarn config set enableImmutableInstalls false
 
-      - name: Validate Yarn setup
+      - name: Prepare workspace
         run: yarn workspaces focus --all --production=false
 
-      # 🧩 Verify that tag and versions match before building
-      - name: Verify tag and package versions
+      - name: Verify tag consistency
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          echo "🔍 Verifying tag: $TAG"
+          TAG=$(git describe --tags --abbrev=0)
+          echo "Detected tag: $TAG"
 
-          # remove leading "v" and compare
-          VERSION="${TAG#v}"
-          ROOT_VERSION=$(node -p "require('./lerna.json').version")
+          VERSION=${TAG#v}
+          echo "Expected version in packages: $VERSION"
 
-          if [ "$VERSION" != "$ROOT_VERSION" ]; then
-            echo "❌ Tag version ($VERSION) does not match lerna.json version ($ROOT_VERSION)"
-            exit 1
-          fi
-
-          # verify all packages' versions match the root version
-          npx lerna list --json | jq -r '.[].location' | while read -r pkg; do
-            PKG_VERSION=$(node -p "require('$pkg/package.json').version")
-            if [ "$PKG_VERSION" != "$ROOT_VERSION" ]; then
-              echo "❌ Version mismatch in $pkg: expected $ROOT_VERSION, found $PKG_VERSION"
-              exit 1
+          # Verify all workspace versions match
+          ERR=false
+          for PKG in $(find packages -name package.json); do
+            PKG_VERSION=$(jq -r .version "$PKG")
+            if [ "$PKG_VERSION" != "$VERSION" ]; then
+              echo "❌ Version mismatch in $PKG ($PKG_VERSION != $VERSION)"
+              ERR=true
             fi
           done
-
-          echo "✅ All versions match tag $TAG"
+          if [ "$ERR" = true ]; then
+            echo "Version mismatch detected, aborting release."
+            exit 1
+          fi
 
       - name: Build packages
         run: yarn build
 
-      # 🚀 Publish to npm
-      - name: Publish to npm
+      - name: Detect prerelease channel
+        id: detect
         run: |
-          # Detect if this is a pre-release (e.g. v1.2.3-alpha.0)
-          TAG="${GITHUB_REF#refs/tags/}"
-          VERSION="${TAG#v}"
-
-          if [[ "$VERSION" == *"-"* ]]; then
-            echo "Pre-release detected: $VERSION"
-            npx lerna publish from-package --contents build --dist-tag next --yes
+          TAG=$(git describe --tags --abbrev=0)
+          VERSION=${TAG#v}
+          if [[ "$VERSION" == *-* ]]; then
+            # Extract prerelease name before the dot, e.g. "alpha" from "1.2.3-alpha.0"
+            CHANNEL=$(echo "$VERSION" | sed -E 's/^[0-9]+\.[0-9]+\.[0-9]+-([a-zA-Z0-9]+).*/\1/')
           else
-            echo "Stable release detected: $VERSION"
-            npx lerna publish from-package --contents build --yes
+            CHANNEL=latest
           fi
+          echo "channel=$CHANNEL" >> $GITHUB_OUTPUT
+          echo "Publishing to dist-tag: $CHANNEL"
+
+      - name: Publish to npm
+        run: npx lerna publish from-package --contents build --yes --dist-tag ${{ steps.detect.outputs.channel }}
         env:
           NPM_CONFIG_PROVENANCE: true
