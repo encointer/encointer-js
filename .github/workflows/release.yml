@@ -71,6 +71,6 @@ jobs:
           echo "Publishing to dist-tag: $CHANNEL"
 
       - name: Publish to npm
-        run: npx lerna publish from-package --contents build --yes --dist-tag ${{ steps.detect.outputs.channel }}
+        run: npx lerna publish from-package --contents build --yes --dist-tag ${{ steps.detect.outputs.channel }} --no-git-checks
         env:
           NPM_CONFIG_PROVENANCE: true
