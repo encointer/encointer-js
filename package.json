@@ -20,12 +20,9 @@
     "build": "./scripts/build-ts.mjs",
     "clean": "polkadot-dev-clean-build",
     "generate:types": "cd packages/types && yarn generate:defs",
-    "publish:git": "lerna version --force-publish",
-    "publish:npm": "lerna publish from-package --contents build",
     "test": "ts-node node_modules/jest/bin/jest.js",
     "test:integration": "ts-node node_modules/jest/bin/jest.js --config jest.config-integration.js",
     "test:ksm": "ts-node node_modules/jest/bin/jest.js --config jest.config-integration-ksm.js",
-    "version": "yarn install && git stage yarn.lock"
   },
   "dependencies": {
     "@types/node": "20.3.2",

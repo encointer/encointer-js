@@ -88,16 +88,16 @@ If everything works, we could stop here. If not (or if we want to do our chores)
 
 # Publish to npm
 
+We use [trusted publishing](https://docs.npmjs.com/trusted-publishers) as advised by npmjs.
+
 ```
-// will prompt you to select version to increase, e.g. major, minor, patch etc. (Creates git tag!)
-// Note: `lerna version` will use the `version` hook defined in the root package.json. 
-lerna version --force-publish
+lerna version
+git push --follow-tags
 
-// apply changes from package.json to */build/package.json 
-yarn build
-
-// publish all changes from the build directory to npm
-lerna publish from-package --contents build
+# CI:
+# → verifies tag + versions
+# → builds
+# → publishes securely via Trusted Publishing
 ```
 
 The lerna commands have been added as scripts to the `package.json`.

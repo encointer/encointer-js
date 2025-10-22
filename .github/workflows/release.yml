@@ -1,0 +1,66 @@
+name: Release Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+  id-token: write # Required for npm Trusted Publishing
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for Lerna version detection and tag lookup
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
+      # 🧶 Yarn zero-install setup
+      - name: Configure Yarn
+        run: |
+          corepack enable
+          yarn config set enableImmutableInstalls false
+
+      # (Optional) Verify PnP or workspace linking
+      - name: Validate Yarn setup
+        run: yarn workspaces focus --all --production=false
+
+      # 🧩 Verify that tag and versions match before building
+      - name: Verify tag and package versions
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "🔍 Verifying tag: $TAG"
+
+          ROOT_VERSION=$(node -p "require('./lerna.json').version")
+          if [ "$TAG" != "v$ROOT_VERSION" ]; then
+            echo "❌ Tag ($TAG) does not match lerna.json version (v$ROOT_VERSION)"
+            exit 1
+          fi
+
+          # Verify all packages' versions match the Lerna version
+          npx lerna list --json | jq -r '.[].location' | while read -r pkg; do
+            VERSION=$(node -p "require('$pkg/package.json').version")
+            if [ "$VERSION" != "$ROOT_VERSION" ]; then
+              echo "❌ Version mismatch in $pkg: expected $ROOT_VERSION, found $VERSION"
+              exit 1
+            fi
+          done
+
+          echo "✅ All versions match tag $TAG"
+
+      - name: Build packages
+        run: yarn build
+
+      # 🚀 Publish via Trusted Publishing
+      - name: Publish to npm
+        run: npx lerna publish from-package --contents build --yes
+        env:
+          NPM_CONFIG_PROVENANCE: true
