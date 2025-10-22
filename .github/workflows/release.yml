@@ -78,7 +78,8 @@ jobs:
             --yes \
             --contents build \
             --dist-tag ${{ steps.detect.outputs.channel }} \
-            --no-private
+            --no-private \
+            --no-verify-access
 
       # 8️⃣ Display what was published
       - name: List published packages
